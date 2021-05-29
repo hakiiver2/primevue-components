@@ -90,6 +90,17 @@ function getTooltipElement(el) {
     return document.getElementById(el.$_ptooltipId);
 }
 
+function escapeHtml(str) {
+    if(str) {
+        str = str.replace(/&/g, '&amp;');
+        str = str.replace(/</g, '&lt;');
+        str = str.replace(/>/g, '&gt;');
+        str = str.replace(/"/g, '&quot;');
+        str = str.replace(/'/g, '&#39;');
+    }
+    return str;
+}
+
 function create(el) {
     const id = UniqueComponentId() + '_tooltip';
     el.$_ptooltipId = id;
@@ -103,7 +114,7 @@ function create(el) {
 
     let tooltipText = document.createElement('div');
     tooltipText.className = 'p-tooltip-text';
-    tooltipText.innerHTML = el.$_ptooltipValue;
+    tooltipText.innerHTML = escapeHtml(el.$_ptooltipValue);
 
     container.appendChild(tooltipText);
     document.body.appendChild(container);

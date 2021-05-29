@@ -8,3 +8,11 @@
 ### Website
 
 Visit the [PrimeVue Website](https://www.primefaces.org/primevue/) for general information, demos and documentation.
+
+```
+npm run build-lib
+cd dist
+git add .
+git commit update
+git push
+```
