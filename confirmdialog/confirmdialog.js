@@ -15,7 +15,7 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
             breakpoints: {
                 type: Object,
                 default: null
-            }
+            },
         },
         confirmListener: null,
         closeListener: null,
@@ -70,6 +70,9 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
             },
             message() {
                 return this.confirmation ? this.confirmation.message : null;
+            },
+            autoFocus() {
+                return this.confirmation && this.confirmation.autoFocus ? this.confirmation.autoFocus : "accept";
             },
             blockScroll() {
                 return this.confirmation ? this.confirmation.blockScroll : true;
@@ -126,15 +129,16 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
             label: $options.rejectLabel,
             icon: $options.rejectIcon,
             class: $options.rejectClass,
-            onClick: _cache[1] || (_cache[1] = $event => ($options.reject()))
-          }, null, 8, ["label", "icon", "class"]),
+            onClick: _cache[1] || (_cache[1] = $event => ($options.reject())),
+            autofocus: $options.autoFocus==='reject'
+          }, null, 8, ["label", "icon", "class", "autofocus"]),
           vue.createVNode(_component_CDButton, {
             label: $options.acceptLabel,
             icon: $options.acceptIcon,
             class: $options.acceptClass,
             onClick: _cache[2] || (_cache[2] = $event => ($options.accept())),
-            autofocus: ""
-          }, null, 8, ["label", "icon", "class"])
+            autofocus: $options.autoFocus==='accept'
+          }, null, 8, ["label", "icon", "class", "autofocus"])
         ]),
         default: vue.withCtx(() => [
           vue.createVNode("i", { class: $options.iconClass }, null, 2),

@@ -4,8 +4,8 @@
         <i :class="iconClass" />
         <span class="p-confirm-dialog-message">{{message}}</span>
         <template #footer>
-            <CDButton :label="rejectLabel" :icon="rejectIcon" :class="rejectClass" @click="reject()"/>
-            <CDButton :label="acceptLabel" :icon="acceptIcon" :class="acceptClass" @click="accept()" autofocus />
+            <CDButton :label="rejectLabel" :icon="rejectIcon" :class="rejectClass" @click="reject()" :autofocus="autoFocus==='reject'"/>
+            <CDButton :label="acceptLabel" :icon="acceptIcon" :class="acceptClass" @click="accept()" :autofocus="autoFocus==='accept'" />
         </template>
     </CDialog>
 </template>
@@ -22,7 +22,7 @@ export default {
         breakpoints: {
             type: Object,
             default: null
-        }
+        },
     },
     confirmListener: null,
     closeListener: null,
@@ -77,6 +77,9 @@ export default {
         },
         message() {
             return this.confirmation ? this.confirmation.message : null;
+        },
+        autoFocus() {
+            return this.confirmation && this.confirmation.autoFocus ? this.confirmation.autoFocus : "accept";
         },
         blockScroll() {
             return this.confirmation ? this.confirmation.blockScroll : true;
