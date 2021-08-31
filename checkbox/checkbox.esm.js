@@ -4,13 +4,21 @@ import { openBlock, createBlock, createVNode, mergeProps } from 'vue';
 var script = {
     name: 'Checkbox',
     inheritAttrs: false,
-    emits: ['click', 'update:modelValue', 'change'],
+    emits: ['click', 'update:modelValue', 'change', 'input'],
     props: {
         value: null,
         modelValue: null,
         binary: Boolean,
         class: null,
-        style: null
+        style: null,
+        trueValue: {
+            type: null,
+            default: true
+        },
+        falseValue: {
+            type: null,
+            default: false
+        }
     },
     data() {
         return {
@@ -23,7 +31,7 @@ var script = {
                 let newModelValue;
 
                 if (this.binary) {
-                    newModelValue = !this.modelValue;
+                    newModelValue = this.checked ? this.falseValue : this.trueValue;
                 }
                 else {
                     if (this.checked)
@@ -35,6 +43,7 @@ var script = {
                 this.$emit('click', event);
                 this.$emit('update:modelValue', newModelValue);
                 this.$emit('change', event);
+                this.$emit('input', newModelValue);
                 this.$refs.input.focus();
             }
         },
@@ -47,7 +56,7 @@ var script = {
     },
     computed: {
         checked() {
-            return this.binary ? this.modelValue : ObjectUtils.contains(this.value, this.modelValue);
+            return this.binary ? this.modelValue === this.trueValue : ObjectUtils.contains(this.value, this.modelValue);
         },
         containerClass() {
             return ['p-checkbox p-component', this.class, {'p-checkbox-checked': this.checked, 'p-checkbox-disabled': this.$attrs.disabled, 'p-checkbox-focused': this.focused}];

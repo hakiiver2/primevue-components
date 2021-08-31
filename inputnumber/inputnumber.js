@@ -422,16 +422,25 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                             this._decimal.lastIndex = 0;
 
                             if (this.isNumeralChar(deleteChar)) {
+                                const decimalLength = this.getDecimalLength(inputValue);
+
                                 if (this._group.test(deleteChar)) {
                                     this._group.lastIndex = 0;
                                     newValueStr = inputValue.slice(0, selectionStart - 2) + inputValue.slice(selectionStart - 1);
                                 }
                                 else if (this._decimal.test(deleteChar)) {
                                     this._decimal.lastIndex = 0;
-                                    this.$refs.input.$el.setSelectionRange(selectionStart - 1, selectionStart - 1);
+
+                                    if (decimalLength) {
+                                        this.$refs.input.$el.setSelectionRange(selectionStart - 1, selectionStart - 1);
+                                    }
+                                    else {
+                                        newValueStr = inputValue.slice(0, selectionStart - 1) + inputValue.slice(selectionStart);
+                                    }
                                 }
                                 else if (decimalCharIndex > 0 && selectionStart > decimalCharIndex) {
-                                    newValueStr = inputValue.slice(0, selectionStart - 1) + '0' + inputValue.slice(selectionStart);
+                                    const insertedText = (this.minFractionDigits || 0) < decimalLength ? '' : '0';
+                                    newValueStr = inputValue.slice(0, selectionStart - 1) + insertedText + inputValue.slice(selectionStart);
                                 }
                                 else if (decimalCharIndex > 0 && decimalCharIndex === 1) {
                                     newValueStr = inputValue.slice(0, selectionStart - 1) + '0' + inputValue.slice(selectionStart);
@@ -462,16 +471,25 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                             this._decimal.lastIndex = 0;
 
                             if (this.isNumeralChar(deleteChar)) {
+                                const decimalLength = this.getDecimalLength(inputValue);
+
                                 if (this._group.test(deleteChar)) {
                                     this._group.lastIndex = 0;
                                     newValueStr = inputValue.slice(0, selectionStart) + inputValue.slice(selectionStart + 2);
                                 }
                                 else if (this._decimal.test(deleteChar)) {
                                     this._decimal.lastIndex = 0;
-                                    this.$refs.input.$el.setSelectionRange(selectionStart + 1, selectionStart + 1);
+
+                                    if (decimalLength) {
+                                        this.$refs.input.$el.setSelectionRange(selectionStart + 1, selectionStart + 1);
+                                    }
+                                    else {
+                                        newValueStr = inputValue.slice(0, selectionStart) + inputValue.slice(selectionStart + 1);
+                                    }
                                 }
                                 else if (decimalCharIndex > 0 && selectionStart > decimalCharIndex) {
-                                    newValueStr = inputValue.slice(0, selectionStart) + '0' + inputValue.slice(selectionStart + 1);
+                                    const insertedText = (this.minFractionDigits || 0) < decimalLength ? '' : '0';
+                                    newValueStr = inputValue.slice(0, selectionStart) + insertedText + inputValue.slice(selectionStart + 1);
                                 }
                                 else if (decimalCharIndex > 0 && decimalCharIndex === 1) {
                                     newValueStr = inputValue.slice(0, selectionStart) + '0' + inputValue.slice(selectionStart + 1);
@@ -565,6 +583,10 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                         newValueStr = this.insertText(inputValue, text, selectionStart, selectionEnd);
                         this.updateValue(event, newValueStr, text, 'insert');
                     }
+                    else if (decimalCharIndex === -1 && this.maxFractionDigits) {
+                        newValueStr = this.insertText(inputValue, text, selectionStart, selectionEnd);
+                        this.updateValue(event, newValueStr, text, 'insert');
+                    }
                 }
                 else {
                     const maxFractionDigits = this.numberFormat.resolvedOptions().maximumFractionDigits;
@@ -583,7 +605,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 }
             },
             insertText(value, text, start, end) {
-                let textSplit = text.split('.');
+                let textSplit = text === '.' ? text : text.split('.');
 
                 if (textSplit.length === 2) {
                     const decimalCharIndex = value.slice(start, end).search(this._decimal);
@@ -685,10 +707,10 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
 
                 if (valueStr != null) {
                     newValue = this.parseValue(valueStr);
-                    this.updateInput(newValue, insertedValueStr, operation);
-                }
+                    this.updateInput(newValue, insertedValueStr, operation, valueStr);
 
-                this.handleOnInput(event, currentValue, newValue);
+                    this.handleOnInput(event, currentValue, newValue);
+                }
             },
             handleOnInput(event, currentValue, newValue) {
                 if (this.isValueChanged(currentValue, newValue)) {
@@ -722,12 +744,16 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
 
                 return value;
             },
-            updateInput(value, insertedValueStr, operation) {
+            updateInput(value, insertedValueStr, operation, valueStr) {
                 insertedValueStr = insertedValueStr || '';
 
                 let inputValue = this.$refs.input.$el.value;
                 let newValue = this.formatValue(value);
                 let currentLength = inputValue.length;
+
+                if (newValue !== valueStr) {
+                    newValue = this.concatValues(newValue, valueStr);
+                }
 
                 if (currentLength === 0) {
                     this.$refs.input.$el.value = newValue;
@@ -788,6 +814,25 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 }
 
                 this.$refs.input.$el.setAttribute('aria-valuenow', value);
+            },
+            concatValues(val1, val2) {
+                if (val1 && val2) {
+                    let decimalCharIndex = val2.search(this._decimal);
+                    this._decimal.lastIndex = 0;
+
+                    return val1.split(this._decimal)[0] + (decimalCharIndex !== -1 ? val2.slice(decimalCharIndex) : '');
+                }
+
+                return val1;
+            },
+            getDecimalLength(value) {
+                if (value) {
+                    const valueSplit = value.split(this._decimal);
+
+                    return valueSplit.length === 2 ? valueSplit[1].length : 0;
+                }
+
+                return 0;
             },
             updateModel(event, value) {
                 this.$emit('update:modelValue', value);

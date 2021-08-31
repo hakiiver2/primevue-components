@@ -156,12 +156,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           class: "p-chips-token"
         }, [
           renderSlot(_ctx.$slots, "chip", { value: val }, () => [
-            createVNode("span", _hoisted_1, toDisplayString(val), 1),
-            createVNode("span", {
-              class: "p-chips-token-icon pi pi-times-circle",
-              onClick: $event => ($options.removeItem($event, i))
-            }, null, 8, ["onClick"])
-          ])
+            createVNode("span", _hoisted_1, toDisplayString(val), 1)
+          ]),
+          createVNode("span", {
+            class: "p-chips-token-icon pi pi-times-circle",
+            onClick: $event => ($options.removeItem($event, i))
+          }, null, 8, ["onClick"])
         ]))
       }), 128)),
       createVNode("li", _hoisted_2, [

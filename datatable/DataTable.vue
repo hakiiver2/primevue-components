@@ -19,7 +19,7 @@
         <div class="p-datatable-wrapper" :style="{maxHeight: scrollHeight}">
             <table ref="table" role="table" class="p-datatable-table">
                 <DTTableHeader :columnGroup="headerColumnGroup" :columns="columns" :rowGroupMode="rowGroupMode"
-                        :groupRowsBy="groupRowsBy" :resizableColumns="resizableColumns" :allRowsSelected="allRowsSelected" :empty="empty"
+                        :groupRowsBy="groupRowsBy" :groupRowSortField="groupRowSortField" :resizableColumns="resizableColumns" :allRowsSelected="allRowsSelected" :empty="empty"
                         :sortMode="sortMode" :sortField="d_sortField" :sortOrder="d_sortOrder" :multiSortMeta="d_multiSortMeta" :filters="d_filters" :filtersStore="filters" :filterDisplay="filterDisplay"
                         @column-click="onColumnHeaderClick($event)" @column-mousedown="onColumnHeaderMouseDown($event)" @filter-change="onFilterChange" @filter-apply="onFilterApply"
                         @column-dragstart="onColumnHeaderDragStart($event)" @column-dragover="onColumnHeaderDragOver($event)" @column-dragleave="onColumnHeaderDragLeave($event)" @column-drop="onColumnHeaderDrop($event)"
@@ -215,6 +215,10 @@ export default {
             type: String,
             default: 'download'
         },
+        exportFunction: {
+            type: Function,
+            default: null
+        },
         autoLayout: {
             type: Boolean,
             default: false
@@ -323,6 +327,7 @@ export default {
             d_sortField: this.sortField,
             d_sortOrder: this.sortOrder,
             d_multiSortMeta: this.multiSortMeta ? [...this.multiSortMeta] : [],
+            d_groupRowsSortMeta: null,
             d_selectionKeys: null,
             d_expandedRowKeys: null,
             d_columnOrder: null,
@@ -364,9 +369,12 @@ export default {
         multiSortMeta(newValue) {
             this.d_multiSortMeta = newValue;
         },
-        selection(newValue) {
-            if (this.dataKey) {
-                this.updateSelectionKeys(newValue);
+        selection: {
+            immediate: true,
+            handler(newValue) {
+                if (this.dataKey) {
+                    this.updateSelectionKeys(newValue);
+                }
             }
         },
         expandedRows(newValue) {
@@ -392,7 +400,7 @@ export default {
         }
     },
     mounted() {
-        if (this.scrollable && (this.scrollDirection !== 'vertical' || this.rowGroupMode === 'subheader')) {
+        if (this.scrollable && (this.scrollDirection !== 'vertical' || this.rowGroupMode === 'subheader' || !this.resizableColumns)) {
             this.updateScrollWidth();
         }
 
@@ -481,6 +489,15 @@ export default {
             }
         },
         sortSingle(value) {
+            if (this.groupRowsBy && this.groupRowsBy === this.sortField) {
+                this.d_multiSortMeta = [
+                    {field: this.sortField, order: this.sortOrder || this.defaultSortOrder},
+                    {field: this.d_sortField, order: this.d_sortOrder}
+                ];
+
+                return this.sortMultiple(value);
+            }
+
             let data = [...value];
 
             data.sort((data1, data2) => {
@@ -506,6 +523,15 @@ export default {
             return data;
         },
         sortMultiple(value) {
+            if (this.groupRowsBy && (this.d_groupRowsSortMeta || (this.d_multiSortMeta.length && this.groupRowsBy === this.d_multiSortMeta[0].field))) {
+                const firstSortMeta = this.d_multiSortMeta[0];
+                !this.d_groupRowsSortMeta && (this.d_groupRowsSortMeta = firstSortMeta);
+
+                if (firstSortMeta.field !== this.d_groupRowsSortMeta.field) {
+                    this.d_multiSortMeta = [this.d_groupRowsSortMeta, ...this.d_multiSortMeta];
+                }
+            }
+
             let data = [...value];
 
             data.sort((data1, data2) => {
@@ -622,7 +648,7 @@ export default {
             let filterEvent = this.createLazyLoadEvent();
             filterEvent.filteredValue = filteredValue;
             this.$emit('filter', filterEvent);
-            this.$emit('value-change', this.processedData);
+            this.$emit('value-change', filteredValue);
 
             return filteredValue;
         },
@@ -1070,7 +1096,7 @@ export default {
                 else if (this.columnResizeMode === 'expand') {
                     this.$refs.table.style.width = this.$refs.table.offsetWidth + delta + 'px';
 
-                    if (!this.scrollable) 
+                    if (!this.scrollable)
                         this.resizeColumnElement.style.width = newColumnWidth + 'px';
                     else
                         this.resizeTableCells(newColumnWidth);
@@ -1098,12 +1124,14 @@ export default {
             for (let child of children) {
                 for (let row of child.children) {
                     let resizeCell = row.children[colIndex];
-                    resizeCell.style.flex = '0 0 ' + newColumnWidth + 'px';
+                    if (resizeCell) {
+                        resizeCell.style.flex = '0 0 ' + newColumnWidth + 'px';
 
-                    if (this.columnResizeMode === 'fit') {
-                        let nextCell = resizeCell.nextElementSibling;
-                        if (nextCell) {
-                            nextCell.style.flex = '0 0 ' + nextColumnWidth + 'px';
+                        if (this.columnResizeMode === 'fit') {
+                            let nextCell = resizeCell.nextElementSibling;
+                            if (nextCell) {
+                                nextCell.style.flex = '0 0 ' + nextColumnWidth + 'px';
+                            }
                         }
                     }
                 }
@@ -1615,7 +1643,14 @@ export default {
             this.d_columnOrder = columnOrder;
         },
         updateScrollWidth() {
-            this.$refs.table.style.width = this.$refs.table.scrollWidth + 'px';
+            let parentElementHeight = DomHandler.width(this.$refs.table.parentElement);
+
+            if (this.$refs.table.scrollWidth > parentElementHeight) {
+                this.$refs.table.style.width = this.$refs.table.scrollWidth + 'px';
+            }
+            else {
+                this.$refs.table.style.width = parentElementHeight - DomHandler.calculateScrollbarWidth() + 'px';
+            }
         },
         createResponsiveStyle() {
 			if (!this.styleElement) {
@@ -1680,7 +1715,9 @@ export default {
                     'p-datatable-responsive-stack': this.responsiveLayout === 'stack',
                     'p-datatable-responsive-scroll': this.responsiveLayout === 'scroll',
                     'p-datatable-striped': this.stripedRows,
-                    'p-datatable-gridlines': this.showGridlines
+                    'p-datatable-gridlines': this.showGridlines,
+                    'p-datatable-grouped-header': this.headerColumnGroup != null,
+                    'p-datatable-grouped-footer': this.footerColumnGroup != null
                 }
             ];
         },
@@ -1693,7 +1730,7 @@ export default {
             }
 
             children.forEach(child => {
-                if (child.dynamicChildren && child.children instanceof Array)
+                if (child.children && child.children instanceof Array)
                     cols = [...cols, ...child.children];
                 else if (child.type.name === 'Column')
                     cols.push(child);
@@ -1801,10 +1838,14 @@ export default {
         },
         allRowsSelected() {
             const val = this.frozenValue ? [...this.frozenValue, ...this.processedData]: this.processedData;
-            return (val && val.length > 0 && this.selection && this.selection.length > 0 && this.selection.length === val.length);
+            const length = this.lazy ? this.totalRecords : (val ? val.length : 0);
+            return (val && length > 0 && this.selection && this.selection.length > 0 && this.selection.length === length);
         },
         attributeSelector() {
             return UniqueComponentId();
+        },
+        groupRowSortField() {
+            return this.sortMode === 'single' ? this.sortField : (this.d_groupRowsSortMeta ? this.d_groupRowsSortMeta.field : null);
         }
     },
     components: {
@@ -1942,6 +1983,24 @@ export default {
     z-index: 1;
 }
 
+.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead,
+.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot {
+    display: table;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead > tr,
+.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot > tr {
+    display: table-row;
+}
+
+.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead > tr > th,
+.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot > tr > td {
+    display: table-cell;
+}
+
 /* Resizable */
 .p-datatable-resizable > .p-datatable-wrapper {
     overflow-x: auto;
@@ -2053,6 +2112,8 @@ export default {
 
 .p-column-filter-overlay {
     position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .p-column-filter-row-items {

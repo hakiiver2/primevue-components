@@ -29,7 +29,7 @@ var script = {
 const _hoisted_1 = { class: "p-tag-value" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("span", { class: $options.containerClass }, [
+  return (vue.openBlock(), vue.createBlock("span", vue.mergeProps({ class: $options.containerClass }, _ctx.$attrs), [
     vue.renderSlot(_ctx.$slots, "default", {}, () => [
       ($props.icon)
         ? (vue.openBlock(), vue.createBlock("span", {
@@ -39,7 +39,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         : vue.createCommentVNode("", true),
       vue.createVNode("span", _hoisted_1, vue.toDisplayString($props.value), 1)
     ])
-  ], 2))
+  ], 16))
 }
 
 function styleInject(css, ref) {

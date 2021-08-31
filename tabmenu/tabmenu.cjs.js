@@ -37,7 +37,7 @@ var script = {
     },
     methods: {
         onItemClick(event, item, navigate) {
-            if (item.disabled) {
+            if (this.disabled(item)) {
                 event.preventDefault();
                 return;
             }
@@ -55,13 +55,13 @@ var script = {
         },
         getItemClass(item) {
             return ['p-tabmenuitem', item.class, {
-                'p-disabled': item.disabled
+                'p-disabled': this.disabled(item)
             }];
         },
         getRouteItemClass(item, isActive, isExactActive) {
             return ['p-tabmenuitem', item.class, {
                  'p-highlight': this.exact ? isExactActive : isActive,
-                'p-disabled': item.disabled
+                'p-disabled': this.disabled(item)
             }];
         },
         getItemIcon(item) {
@@ -69,6 +69,9 @@ var script = {
         },
         visible(item) {
             return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+        },
+        disabled(item) {
+            return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
         },
         updateInkBar() {
             let tabs = this.$refs.nav.children;
@@ -116,7 +119,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return (vue.openBlock(), vue.createBlock(vue.Fragment, {
           key: item.label + '_' + i.toString()
         }, [
-          (item.to && !item.disabled)
+          (item.to && !$options.disabled(item))
             ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                 key: 0,
                 to: item.to,
@@ -171,7 +174,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         target: item.target,
                         onClick: $event => ($options.onItemClick($event, item)),
                         role: "presentation",
-                        tabindex: item.disabled ? null : '0'
+                        tabindex: $options.disabled(item) ? null : '0'
                       }, [
                         (item.icon)
                           ? (vue.openBlock(), vue.createBlock("span", {
@@ -223,7 +226,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-tabmenu-nav {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n}\n.p-tabmenu-nav a {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: relative;\n    text-decoration: none;\n    text-decoration: none;\n    overflow: hidden;\n}\n.p-tabmenu-nav a:focus {\n    z-index: 1;\n}\n.p-tabmenu-nav .p-menuitem-text {\n    line-height: 1;\n}\n.p-tabmenu-ink-bar {\n    display: none;\n    z-index: 1;\n}\n";
+var css_248z = "\n.p-tabmenu {\n    overflow-x: auto;\n}\n.p-tabmenu-nav {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n}\n.p-tabmenu-nav a {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: relative;\n    text-decoration: none;\n    text-decoration: none;\n    overflow: hidden;\n}\n.p-tabmenu-nav a:focus {\n    z-index: 1;\n}\n.p-tabmenu-nav .p-menuitem-text {\n    line-height: 1;\n}\n.p-tabmenu-ink-bar {\n    display: none;\n    z-index: 1;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

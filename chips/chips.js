@@ -158,12 +158,12 @@ this.primevue.chips = (function (vue) {
               class: "p-chips-token"
             }, [
               vue.renderSlot(_ctx.$slots, "chip", { value: val }, () => [
-                vue.createVNode("span", _hoisted_1, vue.toDisplayString(val), 1),
-                vue.createVNode("span", {
-                  class: "p-chips-token-icon pi pi-times-circle",
-                  onClick: $event => ($options.removeItem($event, i))
-                }, null, 8, ["onClick"])
-              ])
+                vue.createVNode("span", _hoisted_1, vue.toDisplayString(val), 1)
+              ]),
+              vue.createVNode("span", {
+                class: "p-chips-token-icon pi pi-times-circle",
+                onClick: $event => ($options.removeItem($event, i))
+              }, null, 8, ["onClick"])
             ]))
           }), 128)),
           vue.createVNode("li", _hoisted_2, [

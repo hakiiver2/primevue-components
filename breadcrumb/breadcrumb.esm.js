@@ -4,7 +4,8 @@ var script$1 = {
     name: 'BreadcrumbItem',
     props: {
         item: null,
-        template: null
+        template: null,
+        exact: null
     },
     methods: {
         onClick(event, navigate) {
@@ -19,14 +20,23 @@ var script$1 = {
                 navigate(event);
             }
         },
+        containerClass(item) {
+            return [{'p-disabled': this.disabled(item)}, this.item.class];
+        },
+        linkClass(routerProps) {
+            return ['p-menuitem-link', {
+                'router-link-active': routerProps && routerProps.isActive,
+                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+            }];
+        },
         visible() {
             return (typeof this.item.visible === 'function' ? this.item.visible() : this.item.visible !== false);
+        },
+        disabled(item) {
+            return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
         }
     },
     computed: {
-        containerClass() {
-            return [{'p-disabled': this.item.disabled}, this.item.class];
-        },
         iconClass() {
             return ['p-menuitem-icon', this.item.icon];
         }
@@ -48,7 +58,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   return ($options.visible())
     ? (openBlock(), createBlock("li", {
         key: 0,
-        class: $options.containerClass
+        class: $options.containerClass($props.item)
       }, [
         (!$props.template)
           ? (openBlock(), createBlock(Fragment, { key: 0 }, [
@@ -58,10 +68,10 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     to: $props.item.to,
                     custom: ""
                   }, {
-                    default: withCtx(({navigate, href}) => [
+                    default: withCtx(({navigate, href, isActive, isExactActive}) => [
                       createVNode("a", {
                         href: href,
-                        class: "p-menuitem-link",
+                        class: $options.linkClass({isActive, isExactActive}),
                         onClick: $event => ($options.onClick($event, navigate))
                       }, [
                         ($props.item.icon)
@@ -73,14 +83,14 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                         ($props.item.label)
                           ? (openBlock(), createBlock("span", _hoisted_1$1, toDisplayString($props.item.label), 1))
                           : createCommentVNode("", true)
-                      ], 8, ["href", "onClick"])
+                      ], 10, ["href", "onClick"])
                     ]),
                     _: 1
                   }, 8, ["to"]))
                 : (openBlock(), createBlock("a", {
                     key: 1,
                     href: $props.item.url||'#',
-                    class: "p-menuitem-link",
+                    class: $options.linkClass(),
                     onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
                     target: $props.item.target
                   }, [
@@ -93,7 +103,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     ($props.item.label)
                       ? (openBlock(), createBlock("span", _hoisted_2$1, toDisplayString($props.item.label), 1))
                       : createCommentVNode("", true)
-                  ], 8, ["href", "target"]))
+                  ], 10, ["href", "target"]))
             ], 64))
           : (openBlock(), createBlock(resolveDynamicComponent($props.template), {
               key: 1,
@@ -115,6 +125,10 @@ var script = {
         home: {
             type: null,
             default: null
+        },
+        exact: {
+            type: Boolean,
+            default: true
         }
     },
     components: {
@@ -138,8 +152,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             key: 0,
             item: $props.home,
             class: "p-breadcrumb-home",
-            template: _ctx.$slots.item
-          }, null, 8, ["item", "template"]))
+            template: _ctx.$slots.item,
+            exact: $props.exact
+          }, null, 8, ["item", "template", "exact"]))
         : createCommentVNode("", true),
       (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item) => {
         return (openBlock(), createBlock(Fragment, {
@@ -148,8 +163,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           _hoisted_2,
           createVNode(_component_BreadcrumbItem, {
             item: item,
-            template: _ctx.$slots.item
-          }, null, 8, ["item", "template"])
+            template: _ctx.$slots.item,
+            exact: $props.exact
+          }, null, 8, ["item", "template", "exact"])
         ], 64))
       }), 128))
     ])
@@ -183,7 +199,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-breadcrumb ul {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n}\n.p-breadcrumb .p-menuitem-text {\n    line-height: 1;\n}\n.p-breadcrumb .p-menuitem-link {\n    text-decoration: none;\n}\n";
+var css_248z = "\n.p-breadcrumb {\n    overflow-x: auto;\n}\n.p-breadcrumb ul {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n}\n.p-breadcrumb .p-menuitem-text {\n    line-height: 1;\n}\n.p-breadcrumb .p-menuitem-link {\n    text-decoration: none;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

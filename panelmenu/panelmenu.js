@@ -17,6 +17,10 @@ this.primevue.panelmenu = (function (vue, utils) {
             expandedKeys: {
                 type: null,
                 default: null
+            },
+            exact: {
+                type: Boolean,
+                default: true
             }
         },
         data() {
@@ -26,7 +30,11 @@ this.primevue.panelmenu = (function (vue, utils) {
         },
         methods: {
             onItemClick(event, item, navigate) {
-                if (item.disabled) {
+                if (this.isActive(item) && this.activeItem === null) {
+                    this.activeItem = item;
+                }
+                
+                if (this.disabled(item)) {
                     event.preventDefault();
                     return;
                 }
@@ -52,8 +60,12 @@ this.primevue.panelmenu = (function (vue, utils) {
             getItemClass(item) {
                 return ['p-menuitem', item.className];
             },
-            getLinkClass(item) {
-                return ['p-menuitem-link', {'p-disabled': item.disabled}];
+            linkClass(item, routerProps) {
+                return ['p-menuitem-link', {
+                    'p-disabled': this.disabled(item),
+                    'router-link-active': routerProps && routerProps.isActive,
+                    'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+                }];
             },
             isActive(item) {
                 return this.expandedKeys ? this.expandedKeys[item.key] : item === this.activeItem;
@@ -64,6 +76,9 @@ this.primevue.panelmenu = (function (vue, utils) {
             },
             visible(item) {
                 return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+            },
+            disabled(item) {
+                return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
             }
         }
     };
@@ -94,19 +109,19 @@ this.primevue.panelmenu = (function (vue, utils) {
                 }, [
                   (!$props.template)
                     ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
-                        (item.to && !item.disabled)
+                        (item.to && !$options.disabled(item))
                           ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                               key: 0,
                               to: item.to,
                               custom: ""
                             }, {
-                              default: vue.withCtx(({navigate, href}) => [
+                              default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
                                 vue.createVNode("a", {
                                   href: href,
-                                  class: $options.getLinkClass(item),
+                                  class: $options.linkClass(item, {isActive, isExactActive}),
                                   onClick: $event => ($options.onItemClick($event, item, navigate)),
                                   role: "treeitem",
-                                  "aria-expanded": $options.isActive(item)
+                                  "aria-expanded": isActive(item)
                                 }, [
                                   vue.createVNode("span", {
                                     class: ['p-menuitem-icon', item.icon]
@@ -119,12 +134,12 @@ this.primevue.panelmenu = (function (vue, utils) {
                           : (vue.openBlock(), vue.createBlock("a", {
                               key: 1,
                               href: item.url,
-                              class: $options.getLinkClass(item),
+                              class: $options.linkClass(item),
                               target: item.target,
                               onClick: $event => ($options.onItemClick($event, item)),
                               role: "treeitem",
                               "aria-expanded": $options.isActive(item),
-                              tabindex: item.disabled ? null : '0'
+                              tabindex: $options.disabled(item) ? null : '0'
                             }, [
                               (item.items)
                                 ? (vue.openBlock(), vue.createBlock("span", {
@@ -151,8 +166,9 @@ this.primevue.panelmenu = (function (vue, utils) {
                               key: item.label + '_sub_',
                               template: $props.template,
                               expandedKeys: $props.expandedKeys,
-                              onItemToggle: _cache[1] || (_cache[1] = $event => (_ctx.$emit('item-toggle', $event)))
-                            }, null, 8, ["model", "template", "expandedKeys"]))
+                              onItemToggle: _cache[1] || (_cache[1] = $event => (_ctx.$emit('item-toggle', $event))),
+                              exact: $props.exact
+                            }, null, 8, ["model", "template", "expandedKeys", "exact"]))
                           : vue.createCommentVNode("", true)
                       ], 512), [
                         [vue.vShow, $options.isActive(item)]
@@ -187,6 +203,10 @@ this.primevue.panelmenu = (function (vue, utils) {
             expandedKeys: {
                 type: null,
                 default: null
+            },
+            exact: {
+                type: Boolean,
+                default: true
             }
         },
         data() {
@@ -196,7 +216,11 @@ this.primevue.panelmenu = (function (vue, utils) {
         },
         methods: {
             onItemClick(event, item, navigate) {
-                if (item.disabled) {
+                if (this.isActive(item) && this.activeItem === null) {
+                    this.activeItem = item;
+                }
+                
+                if (this.disabled(item)) {
                     event.preventDefault();
                     return;
                 }
@@ -236,20 +260,29 @@ this.primevue.panelmenu = (function (vue, utils) {
                 return ['p-panelmenu-panel', item.class];
             },
             getPanelToggleIcon(item) {
-                const active = item === this.activeItem;
+                const active = this.isActive(item);
                 return ['p-panelmenu-icon pi', {'pi-chevron-right': !active,' pi-chevron-down': active}];
             },
             getPanelIcon(item) {
                 return ['p-menuitem-icon', item.icon];
             },
+            getHeaderLinkClass(item, routerProps) {
+                return ['p-panelmenu-header-link', {
+                    'router-link-active': routerProps && routerProps.isActive,
+                    'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+                }];
+            },
             isActive(item) {
                 return this.expandedKeys ? this.expandedKeys[item.key] : item === this.activeItem;
             },
             getHeaderClass(item) {
-                return ['p-component p-panelmenu-header', {'p-highlight': this.isActive(item), 'p-disabled': item.disabled}];
+                return ['p-component p-panelmenu-header', {'p-highlight': this.isActive(item), 'p-disabled': this.disabled(item)}];
             },
             visible(item) {
                 return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+            },
+            disabled(item) {
+                return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
             }
         },
         components: {
@@ -291,16 +324,16 @@ this.primevue.panelmenu = (function (vue, utils) {
                   }, [
                     (!_ctx.$slots.item)
                       ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
-                          (item.to && !item.disabled)
+                          (item.to && !$options.disabled(item))
                             ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                                 key: 0,
                                 to: item.to,
                                 custom: ""
                               }, {
-                                default: vue.withCtx(({navigate, href}) => [
+                                default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
                                   vue.createVNode("a", {
                                     href: href,
-                                    class: "p-panelmenu-header-link",
+                                    class: $options.getHeaderLinkClass(item, {isActive, isExactActive}),
                                     onClick: $event => ($options.onItemClick($event, item, navigate)),
                                     role: "treeitem"
                                   }, [
@@ -311,16 +344,16 @@ this.primevue.panelmenu = (function (vue, utils) {
                                         }, null, 2))
                                       : vue.createCommentVNode("", true),
                                     vue.createVNode("span", _hoisted_2, vue.toDisplayString(item.label), 1)
-                                  ], 8, ["href", "onClick"])
+                                  ], 10, ["href", "onClick"])
                                 ]),
                                 _: 2
                               }, 1032, ["to"]))
                             : (vue.openBlock(), vue.createBlock("a", {
                                 key: 1,
                                 href: item.url,
-                                class: "p-panelmenu-header-link",
+                                class: $options.getHeaderLinkClass(item),
                                 onClick: $event => ($options.onItemClick($event, item)),
-                                tabindex: item.disabled ? null : '0',
+                                tabindex: $options.disabled(item) ? null : '0',
                                 "aria-expanded": $options.isActive(item),
                                 id: $options.ariaId +'_header',
                                 "aria-controls": $options.ariaId +'_content'
@@ -338,7 +371,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                                     }, null, 2))
                                   : vue.createCommentVNode("", true),
                                 vue.createVNode("span", _hoisted_3, vue.toDisplayString(item.label), 1)
-                              ], 8, ["href", "onClick", "tabindex", "aria-expanded", "id", "aria-controls"]))
+                              ], 10, ["href", "onClick", "tabindex", "aria-expanded", "id", "aria-controls"]))
                         ], 64))
                       : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {
                           key: 1,
@@ -360,8 +393,9 @@ this.primevue.panelmenu = (function (vue, utils) {
                                 class: "p-panelmenu-root-submenu",
                                 template: _ctx.$slots.item,
                                 expandedKeys: $props.expandedKeys,
-                                onItemToggle: $options.updateExpandedKeys
-                              }, null, 8, ["model", "template", "expandedKeys", "onItemToggle"])
+                                onItemToggle: $options.updateExpandedKeys,
+                                exact: $props.exact
+                              }, null, 8, ["model", "template", "expandedKeys", "onItemToggle", "exact"])
                             ]))
                           : vue.createCommentVNode("", true)
                       ], 8, ["id", "aria-labelledby"]), [

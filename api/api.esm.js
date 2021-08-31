@@ -466,4 +466,11 @@ const PrimeIcons = {
     WINDOW_MINIMIZE:'pi pi-window-minimize'
 };
 
-export { FilterMatchMode, FilterOperator, FilterService, PrimeIcons };
+const ToastSeverities = {
+    INFO: 'info',
+    WARN: 'warn',
+    ERROR: 'error',
+    SUCCESS: 'success'
+};
+
+export { FilterMatchMode, FilterOperator, FilterService, PrimeIcons, ToastSeverities as ToastSeverity };

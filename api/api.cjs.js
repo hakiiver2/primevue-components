@@ -470,7 +470,15 @@ const PrimeIcons = {
     WINDOW_MINIMIZE:'pi pi-window-minimize'
 };
 
+const ToastSeverities = {
+    INFO: 'info',
+    WARN: 'warn',
+    ERROR: 'error',
+    SUCCESS: 'success'
+};
+
 exports.FilterMatchMode = FilterMatchMode;
 exports.FilterOperator = FilterOperator;
 exports.FilterService = FilterService;
 exports.PrimeIcons = PrimeIcons;
+exports.ToastSeverity = ToastSeverities;

@@ -140,7 +140,7 @@ class DomHandler {
             else
                 return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
         }
-        
+
         return false;
     }
 
@@ -498,6 +498,10 @@ class DomHandler {
 
     static isAndroid() {
         return /(android)/i.test(navigator.userAgent);
+    }
+
+    static isTouchDevice() {
+        return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
     }
 }
 

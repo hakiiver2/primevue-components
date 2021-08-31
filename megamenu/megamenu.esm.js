@@ -1,6 +1,6 @@
 import { DomHandler } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, Fragment, renderList, withCtx, withDirectives, createCommentVNode, toDisplayString, resolveDynamicComponent, renderSlot } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createBlock, renderSlot, createCommentVNode, createVNode, Fragment, renderList, withCtx, withDirectives, toDisplayString, resolveDynamicComponent } from 'vue';
 
 var script = {
     name: 'MegaMenu',
@@ -12,6 +12,10 @@ var script = {
         orientation: {
             type: String,
             default: 'horizontal'
+        },
+        exact: {
+            type: Boolean,
+            default: true
         }
     },
     documentClickListener: null,
@@ -25,7 +29,7 @@ var script = {
     },
     methods: {
         onLeafClick(event, item, navigate) {
-            if (item.disabled) {
+            if (this.disabled(item)) {
                 event.preventDefault();
                 return;
             }
@@ -44,7 +48,7 @@ var script = {
             }
         },
         onCategoryMouseEnter(event, category) {
-            if (category.disabled) {
+            if (this.disabled(category)) {
                 event.preventDefault();
                 return;
             }
@@ -54,7 +58,7 @@ var script = {
             }
         },
         onCategoryClick(event, category, navigate) {
-            if (category.disabled) {
+            if (this.disabled(category)) {
                 event.preventDefault();
                 return;
             }
@@ -205,13 +209,17 @@ var script = {
             return columnClass;
         },
         getSubmenuHeaderClass(submenu) {
-            return ['p-megamenu-submenu-header', submenu.class, {'p-disabled': submenu.disabled}];
+            return ['p-megamenu-submenu-header', submenu.class, {'p-disabled': this.disabled(submenu)}];
         },
         getSubmenuItemClass(item) {
             return ['p-menuitem', item.class];
         },
-        getLinkClass(item) {
-            return ['p-menuitem-link', {'p-disabled': item.disabled}];
+        linkClass(item, routerProps) {
+            return ['p-menuitem-link', {
+                'p-disabled': this.disabled(item),
+                'router-link-active': routerProps && routerProps.isActive,
+                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+            }];
         },
         bindDocumentClickListener() {
             if (!this.documentClickListener) {
@@ -233,6 +241,9 @@ var script = {
         },
         visible(item) {
             return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+        },
+        disabled(item) {
+            return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
         }
     },
     computed: {
@@ -255,21 +266,25 @@ var script = {
 };
 
 const _hoisted_1 = {
+  key: 0,
+  class: "p-megamenu-start"
+};
+const _hoisted_2 = {
   class: "p-megamenu-root-list",
   role: "menubar"
 };
-const _hoisted_2 = { class: "p-menuitem-text" };
 const _hoisted_3 = { class: "p-menuitem-text" };
-const _hoisted_4 = {
+const _hoisted_4 = { class: "p-menuitem-text" };
+const _hoisted_5 = {
   key: 2,
   class: "p-megamenu-panel"
 };
-const _hoisted_5 = { class: "p-megamenu-grid" };
-const _hoisted_6 = { class: "p-menuitem-text" };
+const _hoisted_6 = { class: "p-megamenu-grid" };
 const _hoisted_7 = { class: "p-menuitem-text" };
-const _hoisted_8 = {
-  key: 0,
-  class: "p-megamenu-custom"
+const _hoisted_8 = { class: "p-menuitem-text" };
+const _hoisted_9 = {
+  key: 1,
+  class: "p-megamenu-end"
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -277,7 +292,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createBlock("div", { class: $options.containerClass }, [
-    createVNode("ul", _hoisted_1, [
+    (_ctx.$slots.start)
+      ? (openBlock(), createBlock("div", _hoisted_1, [
+          renderSlot(_ctx.$slots, "start")
+        ]))
+      : createCommentVNode("", true),
+    createVNode("ul", _hoisted_2, [
       (openBlock(true), createBlock(Fragment, null, renderList($props.model, (category, index) => {
         return (openBlock(), createBlock(Fragment, {
           key: category.label + '_' + index
@@ -292,16 +312,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }, [
                 (!_ctx.$slots.item)
                   ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                      (category.to && !category.disabled)
+                      (category.to && !$options.disabled(category))
                         ? (openBlock(), createBlock(_component_router_link, {
                             key: 0,
                             to: category.to,
                             custom: ""
                           }, {
-                            default: withCtx(({navigate, href}) => [
+                            default: withCtx(({navigate, href, isActive, isExactActive}) => [
                               withDirectives(createVNode("a", {
                                 href: href,
-                                class: $options.getLinkClass(category),
+                                class: $options.linkClass(category, {isActive, isExactActive}),
                                 onClick: $event => ($options.onCategoryClick($event, category, navigate)),
                                 onKeydown: $event => ($options.onCategoryKeydown($event, category)),
                                 role: "menuitem"
@@ -312,7 +332,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                       class: $options.getCategoryIcon(category)
                                     }, null, 2))
                                   : createCommentVNode("", true),
-                                createVNode("span", _hoisted_2, toDisplayString(category.label), 1)
+                                createVNode("span", _hoisted_3, toDisplayString(category.label), 1)
                               ], 42, ["href", "onClick", "onKeydown"]), [
                                 [_directive_ripple]
                               ])
@@ -322,14 +342,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         : withDirectives((openBlock(), createBlock("a", {
                             key: 1,
                             href: category.url,
-                            class: $options.getLinkClass(category),
+                            class: $options.linkClass(category),
                             target: category.target,
                             onClick: $event => ($options.onCategoryClick($event, category)),
                             onKeydown: $event => ($options.onCategoryKeydown($event, category)),
                             role: "menuitem",
                             "aria-haspopup": category.items != null,
                             "aria-expanded": category === $data.activeItem,
-                            tabindex: category.disabled ? null : '0'
+                            tabindex: $options.disabled(category) ? null : '0'
                           }, [
                             (category.icon)
                               ? (openBlock(), createBlock("span", {
@@ -337,7 +357,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   class: $options.getCategoryIcon(category)
                                 }, null, 2))
                               : createCommentVNode("", true),
-                            createVNode("span", _hoisted_3, toDisplayString(category.label), 1),
+                            createVNode("span", _hoisted_4, toDisplayString(category.label), 1),
                             (category.items)
                               ? (openBlock(), createBlock("span", {
                                   key: 1,
@@ -353,8 +373,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       item: _ctx.item
                     }, null, 8, ["item"])),
                 (category.items)
-                  ? (openBlock(), createBlock("div", _hoisted_4, [
-                      createVNode("div", _hoisted_5, [
+                  ? (openBlock(), createBlock("div", _hoisted_5, [
+                      createVNode("div", _hoisted_6, [
                         (openBlock(true), createBlock(Fragment, null, renderList(category.items, (column, columnIndex) => {
                           return (openBlock(), createBlock("div", {
                             key: category.label + '_column_' + columnIndex,
@@ -384,16 +404,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         }, [
                                           (!_ctx.$slots.item)
                                             ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                                                (item.to && !item.disabled)
+                                                (item.to && !$options.disabled(item))
                                                   ? (openBlock(), createBlock(_component_router_link, {
                                                       key: 0,
                                                       to: item.to,
                                                       custom: ""
                                                     }, {
-                                                      default: withCtx(({navigate, href}) => [
+                                                      default: withCtx(({navigate, href, isActive, isExactActive}) => [
                                                         withDirectives(createVNode("a", {
                                                           href: href,
-                                                          class: $options.getLinkClass(item),
+                                                          class: $options.linkClass(item, {isActive, isExactActive}),
                                                           onClick: $event => ($options.onLeafClick($event, item, navigate)),
                                                           role: "menuitem"
                                                         }, [
@@ -403,7 +423,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                 class: ['p-menuitem-icon', item.icon]
                                                               }, null, 2))
                                                             : createCommentVNode("", true),
-                                                          createVNode("span", _hoisted_6, toDisplayString(item.label), 1)
+                                                          createVNode("span", _hoisted_7, toDisplayString(item.label), 1)
                                                         ], 10, ["href", "onClick"]), [
                                                           [_directive_ripple]
                                                         ])
@@ -413,11 +433,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                   : withDirectives((openBlock(), createBlock("a", {
                                                       key: 1,
                                                       href: item.url,
-                                                      class: $options.getLinkClass(item),
+                                                      class: $options.linkClass(item),
                                                       target: item.target,
                                                       onClick: $event => ($options.onLeafClick($event, item)),
                                                       role: "menuitem",
-                                                      tabindex: item.disabled ? null : '0'
+                                                      tabindex: $options.disabled(item) ? null : '0'
                                                     }, [
                                                       (item.icon)
                                                         ? (openBlock(), createBlock("span", {
@@ -425,7 +445,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             class: ['p-menuitem-icon', item.icon]
                                                           }, null, 2))
                                                         : createCommentVNode("", true),
-                                                      createVNode("span", _hoisted_7, toDisplayString(item.label), 1),
+                                                      createVNode("span", _hoisted_8, toDisplayString(item.label), 1),
                                                       (item.items)
                                                         ? (openBlock(), createBlock("span", {
                                                             key: 1,
@@ -464,9 +484,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ], 64))
       }), 128))
     ]),
-    (_ctx.$slots.default)
-      ? (openBlock(), createBlock("div", _hoisted_8, [
-          renderSlot(_ctx.$slots, "default")
+    (_ctx.$slots.end)
+      ? (openBlock(), createBlock("div", _hoisted_9, [
+          renderSlot(_ctx.$slots, "end")
         ]))
       : createCommentVNode("", true)
   ], 2))

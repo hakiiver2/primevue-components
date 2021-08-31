@@ -4,6 +4,7 @@ var utils = require('primevue/utils');
 var OverlayEventBus = require('primevue/overlayeventbus');
 var Button = require('primevue/button');
 var Ripple = require('primevue/ripple');
+var VirtualScroller = require('primevue/virtualscroller');
 var vue = require('vue');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -11,6 +12,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
 var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
 var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+var VirtualScroller__default = /*#__PURE__*/_interopDefaultLegacy(VirtualScroller);
 
 var script = {
     name: 'AutoComplete',
@@ -68,13 +70,18 @@ var script = {
         inputStyle: null,
         class: null,
         style: null,
-        panelClass: null
+        panelClass: null,
+        virtualScrollerOptions: {
+            type: Object,
+            default: null
+        }
     },
     timeout: null,
     outsideClickListener: null,
     resizeListener: null,
     scrollHandler: null,
     overlay: null,
+    virtualScroller: null,
     data() {
         return {
             searching: false,
@@ -116,6 +123,9 @@ var script = {
         }
     },
     methods: {
+        getOptionIndex(index, fn) {
+            return this.virtualScrollerDisabled ? index : (fn && fn(index)['index']);
+        },
         getOptionGroupRenderKey(optionGroup) {
             return utils.ObjectUtils.resolveFieldData(optionGroup, this.optionGroupLabel);
         },
@@ -485,6 +495,9 @@ var script = {
         overlayRef(el) {
             this.overlay = el;
         },
+        virtualScrollerRef(el) {
+            this.virtualScroller = el;
+        },
         onOverlayClick(event) {
             OverlayEventBus__default['default'].emit('overlay-click', {
                 originalEvent: event,
@@ -541,10 +554,14 @@ var script = {
         },
         appendTarget() {
             return this.appendDisabled ? null : this.appendTo;
+        },
+        virtualScrollerDisabled() {
+            return !this.virtualScrollerOptions;
         }
     },
     components: {
-        'Button': Button__default['default']
+        'Button': Button__default['default'],
+        'VirtualScroller': VirtualScroller__default['default']
     },
     directives: {
         'ripple': Ripple__default['default']
@@ -561,6 +578,7 @@ const _hoisted_4 = { class: "p-autocomplete-item-group" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Button = vue.resolveComponent("Button");
+  const _component_VirtualScroller = vue.resolveComponent("VirtualScroller");
   const _directive_ripple = vue.resolveDirective("ripple");
 
   return (vue.openBlock(), vue.createBlock("span", {
@@ -604,7 +622,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: i,
               class: "p-autocomplete-token"
             }, [
-              vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.getItemContent(item)), 1),
+              vue.renderSlot(_ctx.$slots, "chip", { value: item }, () => [
+                vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.getItemContent(item)), 1)
+              ]),
               vue.createVNode("span", {
                 class: "p-autocomplete-token-icon pi pi-times-circle",
                 onClick: $event => ($options.removeItem($event, i))
@@ -659,70 +679,89 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 key: 0,
                 ref: $options.overlayRef,
                 class: $options.panelStyleClass,
-                style: {'max-height': $props.scrollHeight},
+                style: {'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''},
                 onClick: _cache[13] || (_cache[13] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
                 vue.renderSlot(_ctx.$slots, "header", {
                   value: $props.modelValue,
                   suggestions: $props.suggestions
                 }),
-                vue.createVNode("ul", {
-                  id: $options.listId,
-                  class: "p-autocomplete-items",
-                  role: "listbox"
-                }, [
-                  (!$props.optionGroupLabel)
-                    ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList($props.suggestions, (item, i) => {
-                        return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
-                          class: "p-autocomplete-item",
-                          key: i,
-                          onClick: $event => ($options.selectItem($event, item)),
-                          role: "option"
-                        }, [
-                          vue.renderSlot(_ctx.$slots, "item", {
-                            item: item,
-                            index: i
-                          }, () => [
-                            vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
-                          ])
-                        ], 8, ["onClick"])), [
-                          [_directive_ripple]
-                        ])
-                      }), 128))
-                    : (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList($props.suggestions, (optionGroup, i) => {
-                        return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-                          key: $options.getOptionGroupRenderKey(optionGroup)
-                        }, [
-                          vue.createVNode("li", _hoisted_4, [
-                            vue.renderSlot(_ctx.$slots, "optiongroup", {
-                              item: optionGroup,
-                              index: i
-                            }, () => [
-                              vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
-                            ])
-                          ]),
-                          (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
+                vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
+                  style: {'height': $props.scrollHeight},
+                  items: $props.suggestions,
+                  disabled: $options.virtualScrollerDisabled
+                }), vue.createSlots({
+                  content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+                    vue.createVNode("ul", {
+                      id: $options.listId,
+                      ref: contentRef,
+                      class: ['p-autocomplete-items', styleClass],
+                      role: "listbox"
+                    }, [
+                      (!$props.optionGroupLabel)
+                        ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (item, i) => {
                             return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
                               class: "p-autocomplete-item",
-                              key: j,
+                              key: i,
                               onClick: $event => ($options.selectItem($event, item)),
-                              role: "option",
-                              "data-group": i,
-                              "data-index": j
+                              role: "option"
                             }, [
                               vue.renderSlot(_ctx.$slots, "item", {
                                 item: item,
-                                index: j
+                                index: $options.getOptionIndex(i, getItemOptions)
                               }, () => [
                                 vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
                               ])
-                            ], 8, ["onClick", "data-group", "data-index"])), [
+                            ], 8, ["onClick"])), [
                               [_directive_ripple]
                             ])
                           }), 128))
-                        ], 64))
-                      }), 128))
-                ], 8, ["id"]),
+                        : (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
+                            return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                              key: $options.getOptionGroupRenderKey(optionGroup)
+                            }, [
+                              vue.createVNode("li", _hoisted_4, [
+                                vue.renderSlot(_ctx.$slots, "optiongroup", {
+                                  item: optionGroup,
+                                  index: $options.getOptionIndex(i, getItemOptions)
+                                }, () => [
+                                  vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                                ])
+                              ]),
+                              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
+                                return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
+                                  class: "p-autocomplete-item",
+                                  key: j,
+                                  onClick: $event => ($options.selectItem($event, item)),
+                                  role: "option",
+                                  "data-group": i,
+                                  "data-index": j
+                                }, [
+                                  vue.renderSlot(_ctx.$slots, "item", {
+                                    item: item,
+                                    index: $options.getOptionIndex(j, getItemOptions)
+                                  }, () => [
+                                    vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
+                                  ])
+                                ], 8, ["onClick", "data-group", "data-index"])), [
+                                  [_directive_ripple]
+                                ])
+                              }), 128))
+                            ], 64))
+                          }), 128))
+                    ], 10, ["id"])
+                  ]),
+                  _: 2
+                }, [
+                  (_ctx.$slots.loader)
+                    ? {
+                        name: "loader",
+                        fn: vue.withCtx(({ options }) => [
+                          vue.renderSlot(_ctx.$slots, "loader", { options: options })
+                        ])
+                      }
+                    : undefined
+                ]), 1040, ["style", "items", "disabled"]),
                 vue.renderSlot(_ctx.$slots, "footer", {
                   value: $props.modelValue,
                   suggestions: $props.suggestions
@@ -763,7 +802,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-autocomplete {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: relative;\n}\n.p-autocomplete-loader {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-autocomplete-dd .p-autocomplete-input {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-autocomplete-dd .p-autocomplete-input,\n.p-autocomplete-dd .p-autocomplete-multiple-container {\n     border-top-right-radius: 0;\n     border-bottom-right-radius: 0;\n}\n.p-autocomplete-dd .p-autocomplete-dropdown {\n     border-top-left-radius: 0;\n     border-bottom-left-radius: 0px;\n}\n.p-autocomplete .p-autocomplete-panel {\n    min-width: 100%;\n}\n.p-autocomplete-panel {\n    position: absolute;\n    overflow: auto;\n}\n.p-autocomplete-items {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n.p-autocomplete-item {\n    cursor: pointer;\n    white-space: nowrap;\n    position: relative;\n    overflow: hidden;\n}\n.p-autocomplete-multiple-container {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    cursor: text;\n    overflow: hidden;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n}\n.p-autocomplete-token {\n    cursor: default;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-autocomplete-token-icon {\n    cursor: pointer;\n}\n.p-autocomplete-input-token {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n}\n.p-autocomplete-input-token input {\n    border: 0 none;\n    outline: 0 none;\n    background-color: transparent;\n    margin: 0;\n    padding: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n    border-radius: 0;\n    width: 100%;\n}\n.p-fluid .p-autocomplete {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-fluid .p-autocomplete-dd .p-autocomplete-input {\n    width: 1%;\n}\n";
+var css_248z = "\n.p-autocomplete {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: relative;\n}\n.p-autocomplete-loader {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-autocomplete-dd .p-autocomplete-input {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-autocomplete-dd .p-autocomplete-input,\n.p-autocomplete-dd .p-autocomplete-multiple-container {\n     border-top-right-radius: 0;\n     border-bottom-right-radius: 0;\n}\n.p-autocomplete-dd .p-autocomplete-dropdown {\n     border-top-left-radius: 0;\n     border-bottom-left-radius: 0px;\n}\n.p-autocomplete .p-autocomplete-panel {\n    min-width: 100%;\n}\n.p-autocomplete-panel {\n    position: absolute;\n    overflow: auto;\n    top: 0;\n    left: 0;\n}\n.p-autocomplete-items {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n.p-autocomplete-item {\n    cursor: pointer;\n    white-space: nowrap;\n    position: relative;\n    overflow: hidden;\n}\n.p-autocomplete-multiple-container {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    cursor: text;\n    overflow: hidden;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n}\n.p-autocomplete-token {\n    cursor: default;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-autocomplete-token-icon {\n    cursor: pointer;\n}\n.p-autocomplete-input-token {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n}\n.p-autocomplete-input-token input {\n    border: 0 none;\n    outline: 0 none;\n    background-color: transparent;\n    margin: 0;\n    padding: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n    border-radius: 0;\n    width: 100%;\n}\n.p-fluid .p-autocomplete {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-fluid .p-autocomplete-dd .p-autocomplete-input {\n    width: 1%;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

@@ -88,7 +88,9 @@ var script = {
         showCancelButton: {
             type: Boolean,
             default: true
-        }
+        },
+        style: null,
+        class: null
     },
     duplicateIEEvent: false,
     data() {
@@ -354,6 +356,9 @@ var script = {
             if (this.isFileLimitExceeded()) {
                 this.messages.push(this.invalidFileLimitMessage.replace('{0}', this.fileLimit.toString()));
             }
+        },
+        onMessageClose() {
+            this.messages = null;
         }
     },
     computed: {
@@ -364,14 +369,14 @@ var script = {
             return this.mode === 'basic';
         },
         advancedChooseButtonClass() {
-            return ['p-button p-component p-fileupload-choose', {
+            return ['p-button p-component p-fileupload-choose', this.class, {
                     'p-disabled': this.disabled,
                     'p-focus': this.focused
                 }
             ];
         },
         basicChooseButtonClass() {
-            return ['p-button p-component p-fileupload-choose', {
+            return ['p-button p-component p-fileupload-choose', this.class, {
                 'p-fileupload-choose-selected': this.hasFiles,
                 'p-disabled': this.disabled,
                 'p-focus': this.focused
@@ -384,7 +389,7 @@ var script = {
             }];
         },
         basicChooseButtonLabel() {
-            return this.auto ? this.chooseButtonLabel : (this.hasFiles ? this.files[0].name : this.chooseButtonLabel);
+            return this.auto ? this.chooseButtonLabel : (this.hasFiles ? this.files.map(f => f.name).join(', ') : this.chooseButtonLabel);
         },
         hasFiles() {
             return this.files && this.files.length > 0;
@@ -393,7 +398,7 @@ var script = {
             return this.disabled || (this.fileLimit && this.fileLimit <= this.files.length + this.uploadedFileCount);
         },
         uploadDisabled() {
-            return this.disabled || !this.hasFiles || (this.fileLimit < this.files.length);
+            return this.disabled || !this.hasFiles || (this.fileLimit && this.fileLimit < this.files.length);
         },
         cancelDisabled() {
             return this.disabled || !this.hasFiles;
@@ -451,6 +456,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         createVNode("div", _hoisted_2, [
           withDirectives(createVNode("span", {
             class: $options.advancedChooseButtonClass,
+            style: $props.style,
             onClick: _cache[2] || (_cache[2] = (...args) => ($options.choose && $options.choose(...args))),
             onKeydown: _cache[3] || (_cache[3] = withKeys((...args) => ($options.choose && $options.choose(...args)), ["enter"])),
             onFocus: _cache[4] || (_cache[4] = (...args) => ($options.onFocus && $options.onFocus(...args))),
@@ -467,7 +473,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, null, 40, ["multiple", "accept", "disabled"]),
             _hoisted_3,
             createVNode("span", _hoisted_4, toDisplayString($options.chooseButtonLabel), 1)
-          ], 34), [
+          ], 38), [
             [_directive_ripple]
           ]),
           ($props.showUploadButton)
@@ -506,13 +512,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           (openBlock(true), createBlock(Fragment, null, renderList($data.messages, (msg) => {
             return (openBlock(), createBlock(_component_FileUploadMessage, {
               severity: "error",
-              key: msg
+              key: msg,
+              onClose: $options.onMessageClose
             }, {
               default: withCtx(() => [
                 createTextVNode(toDisplayString(msg), 1)
               ]),
               _: 2
-            }, 1024))
+            }, 1032, ["onClose"]))
           }), 128)),
           ($options.hasFiles)
             ? (openBlock(), createBlock("div", _hoisted_5, [
@@ -557,16 +564,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           (openBlock(true), createBlock(Fragment, null, renderList($data.messages, (msg) => {
             return (openBlock(), createBlock(_component_FileUploadMessage, {
               severity: "error",
-              key: msg
+              key: msg,
+              onClose: $options.onMessageClose
             }, {
               default: withCtx(() => [
                 createTextVNode(toDisplayString(msg), 1)
               ]),
               _: 2
-            }, 1024))
+            }, 1032, ["onClose"]))
           }), 128)),
           withDirectives(createVNode("span", {
             class: $options.basicChooseButtonClass,
+            style: $props.style,
             onMouseup: _cache[13] || (_cache[13] = (...args) => ($options.onBasicUploaderClick && $options.onBasicUploaderClick(...args))),
             onKeydown: _cache[14] || (_cache[14] = withKeys((...args) => ($options.choose && $options.choose(...args)), ["enter"])),
             onFocus: _cache[15] || (_cache[15] = (...args) => ($options.onFocus && $options.onFocus(...args))),
@@ -582,12 +591,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   type: "file",
                   accept: $props.accept,
                   disabled: $props.disabled,
+                  multiple: $props.multiple,
                   onChange: _cache[10] || (_cache[10] = (...args) => ($options.onFileSelect && $options.onFileSelect(...args))),
                   onFocus: _cache[11] || (_cache[11] = (...args) => ($options.onFocus && $options.onFocus(...args))),
                   onBlur: _cache[12] || (_cache[12] = (...args) => ($options.onBlur && $options.onBlur(...args)))
-                }, null, 40, ["accept", "disabled"]))
+                }, null, 40, ["accept", "disabled", "multiple"]))
               : createCommentVNode("", true)
-          ], 34), [
+          ], 38), [
             [_directive_ripple]
           ])
         ]))

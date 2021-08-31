@@ -387,11 +387,11 @@ var script = {
             let val = this.unmask ? this.getUnmaskedValue() : e.target.value;
             this.$emit('update:modelValue', (this.defaultBuffer !== val) ? val : '');
         },
-        updateValue() {
+        updateValue(updateModel = true) {
             if (this.$el) {
                 if (this.modelValue == null) {
                     this.$el.value = '';
-                    this.$emit('update:modelValue', '');
+                    updateModel && this.$emit('update:modelValue', '');
                 }
                 else {
                     this.$el.value = this.modelValue;
@@ -402,8 +402,10 @@ var script = {
                             this.writeBuffer();
                             this.checkVal();
 
-                            let val = this.unmask ? this.getUnmaskedValue() : this.$el.value;
-                            this.$emit('update:modelValue', (this.defaultBuffer !== val) ? val : '');
+                            if (updateModel) {
+                                let val = this.unmask ? this.getUnmaskedValue() : this.$el.value;
+                                this.$emit('update:modelValue', (this.defaultBuffer !== val) ? val : '');
+                            }
                         }
                     }, 10);
                 }
@@ -463,7 +465,7 @@ var script = {
             }
         }
         this.defaultBuffer = this.buffer.join('');
-        this.updateValue();
+        this.updateValue(false);
     },
     updated() {
         if (this.isValueUpdated()) {

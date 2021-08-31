@@ -189,10 +189,10 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
       class: "p-dataview-header"
     };
     const _hoisted_2 = { class: "p-dataview-content" };
-    const _hoisted_3 = { class: "p-grid p-nogutter" };
+    const _hoisted_3 = { class: "p-grid p-nogutter grid grid-nogutter" };
     const _hoisted_4 = {
       key: 0,
-      class: "p-col"
+      class: "p-col col"
     };
     const _hoisted_5 = { class: "p-dataview-emptymessage" };
     const _hoisted_6 = {

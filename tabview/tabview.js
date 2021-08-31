@@ -17,16 +17,24 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
             lazy: {
                 type: Boolean,
                 default: false
+            },
+            scrollable: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
             return {
-                d_activeIndex: this.activeIndex
+                d_activeIndex: this.activeIndex,
+                backwardIsDisabled: true,
+                forwardIsDisabled: false
             }
         },
         watch: {
             activeIndex(newValue) {
                 this.d_activeIndex = newValue;
+
+                this.updateScrollBar(newValue);
             }
         },
         updated() {
@@ -45,6 +53,8 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
                         originalEvent: event,
                         index: i
                     });
+
+                    this.updateScrollBar(i);
                 }
 
                 this.$emit('tab-click', {
@@ -62,6 +72,18 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
                 this.$refs.inkbar.style.width = utils.DomHandler.getWidth(tabHeader) + 'px';
                 this.$refs.inkbar.style.left =  utils.DomHandler.getOffset(tabHeader).left - utils.DomHandler.getOffset(this.$refs.nav).left + 'px';
             },
+            updateScrollBar(index) {
+                let tabHeader = this.$refs.nav.children[index];
+                tabHeader.scrollIntoView({ block: 'nearest' });
+            },
+            updateButtonState() {
+                const content = this.$refs.content;
+                const { scrollLeft, scrollWidth } = content;
+                const width = utils.DomHandler.getWidth(content);
+
+                this.backwardIsDisabled = scrollLeft === 0;
+                this.forwardIsDisabled = scrollLeft === scrollWidth - width;
+            },
             getKey(tab, i) {
                 return (tab.props && tab.props.header) ? tab.props.header : i;
             },
@@ -70,9 +92,37 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
             },
             isTabPanel(child) {
                 return child.type.name === 'TabPanel'
+            },
+            onScroll(event) {
+                this.scrollable && this.updateButtonState();
+
+                event.preventDefault();
+            },
+            navBackward() {
+                const content = this.$refs.content;
+                const width = utils.DomHandler.getWidth(content);
+                const pos = content.scrollLeft - width;
+                content.scrollLeft = pos <= 0 ? 0 : pos;
+            },
+            navForward() {
+                const content = this.$refs.content;
+                const width = utils.DomHandler.getWidth(content);
+                const pos = content.scrollLeft + width;
+                const lastPos = content.scrollWidth - width;
+
+                content.scrollLeft = pos >= lastPos ? lastPos : pos;
             }
         },
         computed: {
+            contentClasses() {
+    			return ['p-tabview p-component', {'p-tabview-scrollable': this.scrollable}];
+    		},
+            prevButtonClasses() {
+                return ['p-tabview-nav-prev p-tabview-nav-btn p-link', {'p-disabled': this.backwardIsDisabled}]
+            },
+            nextButtonClasses() {
+                return ['p-tabview-nav-next p-tabview-nav-btn p-link', {'p-disabled': this.forwardIsDisabled}]
+            },
             tabs() {
                 const tabs = [];
                 this.$slots.default().forEach(child => {
@@ -89,29 +139,31 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
                     }
                 );
                 return tabs;
-            },
+            }
         },
         directives: {
             'ripple': Ripple__default['default']
         }
     };
 
-    const _hoisted_1 = { class: "p-tabview p-component" };
-    const _hoisted_2 = {
+    const _hoisted_1 = { class: "p-tabview-nav-container" };
+    const _hoisted_2 = /*#__PURE__*/vue.createVNode("span", { class: "pi pi-chevron-left" }, null, -1);
+    const _hoisted_3 = {
       ref: "nav",
       class: "p-tabview-nav",
       role: "tablist"
     };
-    const _hoisted_3 = {
+    const _hoisted_4 = {
       key: 0,
       class: "p-tabview-title"
     };
-    const _hoisted_4 = {
+    const _hoisted_5 = {
       ref: "inkbar",
       class: "p-tabview-ink-bar"
     };
-    const _hoisted_5 = { class: "p-tabview-panels" };
-    const _hoisted_6 = {
+    const _hoisted_6 = /*#__PURE__*/vue.createVNode("span", { class: "pi pi-chevron-right" }, null, -1);
+    const _hoisted_7 = { class: "p-tabview-panels" };
+    const _hoisted_8 = {
       key: 0,
       class: "p-tabview-panel",
       role: "tabpanel"
@@ -120,42 +172,76 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-        vue.createVNode("ul", _hoisted_2, [
-          (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.tabs, (tab, i) => {
-            return (vue.openBlock(), vue.createBlock("li", {
-              role: "presentation",
-              key: $options.getKey(tab,i),
-              class: [{'p-highlight': ($data.d_activeIndex === i), 'p-disabled': $options.isTabDisabled(tab)}]
-            }, [
-              vue.withDirectives(vue.createVNode("a", {
-                role: "tab",
-                class: "p-tabview-nav-link",
-                onClick: $event => ($options.onTabClick($event, i)),
-                onKeydown: $event => ($options.onTabKeydown($event, i)),
-                tabindex: $options.isTabDisabled(tab) ? null : '0',
-                "aria-selected": $data.d_activeIndex === i
+      return (vue.openBlock(), vue.createBlock("div", { class: $options.contentClasses }, [
+        vue.createVNode("div", _hoisted_1, [
+          ($props.scrollable)
+            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                key: 0,
+                class: $options.prevButtonClasses,
+                disabled: $data.backwardIsDisabled,
+                onClick: _cache[1] || (_cache[1] = (...args) => ($options.navBackward && $options.navBackward(...args))),
+                type: "button"
               }, [
-                (tab.props && tab.props.header)
-                  ? (vue.openBlock(), vue.createBlock("span", _hoisted_3, vue.toDisplayString(tab.props.header), 1))
-                  : vue.createCommentVNode("", true),
-                (tab.children && tab.children.header)
-                  ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(tab.children.header), { key: 1 }))
-                  : vue.createCommentVNode("", true)
-              ], 40, ["onClick", "onKeydown", "tabindex", "aria-selected"]), [
+                _hoisted_2
+              ], 10, ["disabled"])), [
                 [_directive_ripple]
               ])
-            ], 2))
-          }), 128)),
-          vue.createVNode("li", _hoisted_4, null, 512)
-        ], 512),
-        vue.createVNode("div", _hoisted_5, [
+            : vue.createCommentVNode("", true),
+          vue.createVNode("div", {
+            ref: "content",
+            class: "p-tabview-nav-content",
+            onScroll: _cache[2] || (_cache[2] = (...args) => ($options.onScroll && $options.onScroll(...args)))
+          }, [
+            vue.createVNode("ul", _hoisted_3, [
+              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.tabs, (tab, i) => {
+                return (vue.openBlock(), vue.createBlock("li", {
+                  role: "presentation",
+                  key: $options.getKey(tab,i),
+                  class: [{'p-highlight': ($data.d_activeIndex === i), 'p-disabled': $options.isTabDisabled(tab)}]
+                }, [
+                  vue.withDirectives(vue.createVNode("a", {
+                    role: "tab",
+                    class: "p-tabview-nav-link",
+                    onClick: $event => ($options.onTabClick($event, i)),
+                    onKeydown: $event => ($options.onTabKeydown($event, i)),
+                    tabindex: $options.isTabDisabled(tab) ? null : '0',
+                    "aria-selected": $data.d_activeIndex === i
+                  }, [
+                    (tab.props && tab.props.header)
+                      ? (vue.openBlock(), vue.createBlock("span", _hoisted_4, vue.toDisplayString(tab.props.header), 1))
+                      : vue.createCommentVNode("", true),
+                    (tab.children && tab.children.header)
+                      ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(tab.children.header), { key: 1 }))
+                      : vue.createCommentVNode("", true)
+                  ], 40, ["onClick", "onKeydown", "tabindex", "aria-selected"]), [
+                    [_directive_ripple]
+                  ])
+                ], 2))
+              }), 128)),
+              vue.createVNode("li", _hoisted_5, null, 512)
+            ], 512)
+          ], 544),
+          ($props.scrollable)
+            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                key: 1,
+                class: $options.nextButtonClasses,
+                disabled: $data.forwardIsDisabled,
+                onClick: _cache[3] || (_cache[3] = (...args) => ($options.navForward && $options.navForward(...args))),
+                type: "button"
+              }, [
+                _hoisted_6
+              ], 10, ["disabled"])), [
+                [_directive_ripple]
+              ])
+            : vue.createCommentVNode("", true)
+        ]),
+        vue.createVNode("div", _hoisted_7, [
           (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.tabs, (tab, i) => {
             return (vue.openBlock(), vue.createBlock(vue.Fragment, {
               key: $options.getKey(tab,i)
             }, [
               ($props.lazy ? ($data.d_activeIndex === i) : true)
-                ? vue.withDirectives((vue.openBlock(), vue.createBlock("div", _hoisted_6, [
+                ? vue.withDirectives((vue.openBlock(), vue.createBlock("div", _hoisted_8, [
                     (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(tab)))
                   ], 512)), [
                     [vue.vShow, $props.lazy ? true: ($data.d_activeIndex === i)]
@@ -164,7 +250,7 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
             ], 64))
           }), 128))
         ])
-      ]))
+      ], 2))
     }
 
     function styleInject(css, ref) {
@@ -194,7 +280,7 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
       }
     }
 
-    var css_248z = "\n.p-tabview-nav {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n}\n.p-tabview-nav-link {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: relative;\n    text-decoration: none;\n    overflow: hidden;\n}\n.p-tabview-ink-bar {\n    display: none;\n    z-index: 1;\n}\n.p-tabview-nav-link:focus {\n    z-index: 1;\n}\n.p-tabview-title {\n    line-height: 1;\n}\n";
+    var css_248z = "\n.p-tabview-nav-container {\n    position: relative;\n}\n.p-tabview-nav-content {\n    overflow-x: auto;\n    overflow-y: hidden;\n    scroll-behavior: smooth;\n    scrollbar-width: none;\n    -ms-scroll-chaining: contain auto;\n        overscroll-behavior: contain auto;\n}\n.p-tabview-nav {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n}\n.p-tabview-nav-link {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: relative;\n    text-decoration: none;\n    overflow: hidden;\n}\n.p-tabview-ink-bar {\n    display: none;\n    z-index: 1;\n}\n.p-tabview-nav-link:focus {\n    z-index: 1;\n}\n.p-tabview-title {\n    line-height: 1;\n    white-space: nowrap;\n}\n.p-tabview-nav-btn {\n    position: absolute;\n    top: 0;\n    z-index: 2;\n    height: 100%;\n}\n.p-tabview-nav-prev {\n    left: 0;\n}\n.p-tabview-nav-next {\n    right: 0;\n}\n.p-tabview-nav-content::-webkit-scrollbar {\n    display: none;\n}\n";
     styleInject(css_248z);
 
     script.render = render;

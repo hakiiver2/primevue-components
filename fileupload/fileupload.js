@@ -92,7 +92,9 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
             showCancelButton: {
                 type: Boolean,
                 default: true
-            }
+            },
+            style: null,
+            class: null
         },
         duplicateIEEvent: false,
         data() {
@@ -358,6 +360,9 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
                 if (this.isFileLimitExceeded()) {
                     this.messages.push(this.invalidFileLimitMessage.replace('{0}', this.fileLimit.toString()));
                 }
+            },
+            onMessageClose() {
+                this.messages = null;
             }
         },
         computed: {
@@ -368,14 +373,14 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
                 return this.mode === 'basic';
             },
             advancedChooseButtonClass() {
-                return ['p-button p-component p-fileupload-choose', {
+                return ['p-button p-component p-fileupload-choose', this.class, {
                         'p-disabled': this.disabled,
                         'p-focus': this.focused
                     }
                 ];
             },
             basicChooseButtonClass() {
-                return ['p-button p-component p-fileupload-choose', {
+                return ['p-button p-component p-fileupload-choose', this.class, {
                     'p-fileupload-choose-selected': this.hasFiles,
                     'p-disabled': this.disabled,
                     'p-focus': this.focused
@@ -388,7 +393,7 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
                 }];
             },
             basicChooseButtonLabel() {
-                return this.auto ? this.chooseButtonLabel : (this.hasFiles ? this.files[0].name : this.chooseButtonLabel);
+                return this.auto ? this.chooseButtonLabel : (this.hasFiles ? this.files.map(f => f.name).join(', ') : this.chooseButtonLabel);
             },
             hasFiles() {
                 return this.files && this.files.length > 0;
@@ -397,7 +402,7 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
                 return this.disabled || (this.fileLimit && this.fileLimit <= this.files.length + this.uploadedFileCount);
             },
             uploadDisabled() {
-                return this.disabled || !this.hasFiles || (this.fileLimit < this.files.length);
+                return this.disabled || !this.hasFiles || (this.fileLimit && this.fileLimit < this.files.length);
             },
             cancelDisabled() {
                 return this.disabled || !this.hasFiles;
@@ -455,6 +460,7 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
             vue.createVNode("div", _hoisted_2, [
               vue.withDirectives(vue.createVNode("span", {
                 class: $options.advancedChooseButtonClass,
+                style: $props.style,
                 onClick: _cache[2] || (_cache[2] = (...args) => ($options.choose && $options.choose(...args))),
                 onKeydown: _cache[3] || (_cache[3] = vue.withKeys((...args) => ($options.choose && $options.choose(...args)), ["enter"])),
                 onFocus: _cache[4] || (_cache[4] = (...args) => ($options.onFocus && $options.onFocus(...args))),
@@ -471,7 +477,7 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
                 }, null, 40, ["multiple", "accept", "disabled"]),
                 _hoisted_3,
                 vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.chooseButtonLabel), 1)
-              ], 34), [
+              ], 38), [
                 [_directive_ripple]
               ]),
               ($props.showUploadButton)
@@ -510,13 +516,14 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
               (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($data.messages, (msg) => {
                 return (vue.openBlock(), vue.createBlock(_component_FileUploadMessage, {
                   severity: "error",
-                  key: msg
+                  key: msg,
+                  onClose: $options.onMessageClose
                 }, {
                   default: vue.withCtx(() => [
                     vue.createTextVNode(vue.toDisplayString(msg), 1)
                   ]),
                   _: 2
-                }, 1024))
+                }, 1032, ["onClose"]))
               }), 128)),
               ($options.hasFiles)
                 ? (vue.openBlock(), vue.createBlock("div", _hoisted_5, [
@@ -561,16 +568,18 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
               (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($data.messages, (msg) => {
                 return (vue.openBlock(), vue.createBlock(_component_FileUploadMessage, {
                   severity: "error",
-                  key: msg
+                  key: msg,
+                  onClose: $options.onMessageClose
                 }, {
                   default: vue.withCtx(() => [
                     vue.createTextVNode(vue.toDisplayString(msg), 1)
                   ]),
                   _: 2
-                }, 1024))
+                }, 1032, ["onClose"]))
               }), 128)),
               vue.withDirectives(vue.createVNode("span", {
                 class: $options.basicChooseButtonClass,
+                style: $props.style,
                 onMouseup: _cache[13] || (_cache[13] = (...args) => ($options.onBasicUploaderClick && $options.onBasicUploaderClick(...args))),
                 onKeydown: _cache[14] || (_cache[14] = vue.withKeys((...args) => ($options.choose && $options.choose(...args)), ["enter"])),
                 onFocus: _cache[15] || (_cache[15] = (...args) => ($options.onFocus && $options.onFocus(...args))),
@@ -586,12 +595,13 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
                       type: "file",
                       accept: $props.accept,
                       disabled: $props.disabled,
+                      multiple: $props.multiple,
                       onChange: _cache[10] || (_cache[10] = (...args) => ($options.onFileSelect && $options.onFileSelect(...args))),
                       onFocus: _cache[11] || (_cache[11] = (...args) => ($options.onFocus && $options.onFocus(...args))),
                       onBlur: _cache[12] || (_cache[12] = (...args) => ($options.onBlur && $options.onBlur(...args)))
-                    }, null, 40, ["accept", "disabled"]))
+                    }, null, 40, ["accept", "disabled", "multiple"]))
                   : vue.createCommentVNode("", true)
-              ], 34), [
+              ], 38), [
                 [_directive_ripple]
               ])
             ]))

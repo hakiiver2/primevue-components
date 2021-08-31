@@ -5,7 +5,10 @@ this.primevue.progressbar = (function (vue) {
     var script = {
         name: 'ProgressBar',
         props: {
-            value: Number,
+            value: {
+                type: Number,
+                default: null
+            },
             mode: {
                 type: String,
                 default: 'determinate'
@@ -65,7 +68,7 @@ this.primevue.progressbar = (function (vue) {
               style: $options.progressStyle
             }, null, 4))
           : vue.createCommentVNode("", true),
-        ($options.determinate && $props.value && $props.showValue)
+        ($options.determinate && ($props.value !== null) && $props.showValue)
           ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
               vue.renderSlot(_ctx.$slots, "default", {}, () => [
                 vue.createTextVNode(vue.toDisplayString($props.value + '%'), 1)

@@ -15,10 +15,6 @@
     "description": "Orientation of tab headers.",
     "type": "string"
   },
-  "accordiontab/active": {
-    "description": "Visibility of the content.",
-    "type": "boolean"
-  },
   "accordiontab/disabled": {
     "description": "Whether the tab is disabled.",
     "type": "boolean"
@@ -87,9 +83,21 @@
     "description": "When present, autocomplete clears the manual input if it does not match of the suggestions to force only accepting values from the suggestions.",
     "type": "boolean"
   },
+  "autocomplete/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "autocomplete/style": {
+    "description": "Inline of the component.",
+    "type": "any"
+  },
   "autocomplete/panelClass": {
     "description": "Style class of the overlay panel.",
     "type": "string"
+  },
+  "autocomplete/virtualScrollerOptions": {
+    "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
+    "type": "object"
   },
   "avatar/label": {
     "description": "Defines the text to display.",
@@ -146,6 +154,10 @@
   "breadcrumb/home": {
     "description": "Configuration for the home icon.",
     "type": "menuitem"
+  },
+  "breadcrumb/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
   },
   "button/label": {
     "description": "Text of the button.",
@@ -331,6 +343,18 @@
     "description": "Style class of the input field.",
     "type": "string"
   },
+  "calendar/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "calendar/style": {
+    "description": "Inline style of the component.",
+    "type": "any"
+  },
+  "calendar/keepInvalid": {
+    "description": "Keep invalid value when input blur.",
+    "type": "boolean"
+  },
   "carousel/value": {
     "description": "An array of objects to display.",
     "type": "array"
@@ -475,6 +499,22 @@
     "description": "Allows to select a boolean value instead of multiple values.",
     "type": "boolean"
   },
+  "checkbox/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "checkbox/style": {
+    "description": "Inline of the component.",
+    "type": "any"
+  },
+  "checkbox/trueValue": {
+    "description": "Value in checked state.",
+    "type": "any"
+  },
+  "checkbox/falseValue": {
+    "description": "Value in unchecked state.",
+    "type": "any"
+  },
   "chip/label": {
     "description": "Defines the text to display.",
     "type": "string"
@@ -514,6 +554,14 @@
   "chips/allowDuplicate": {
     "description": "Whether to allow duplicate values or not.",
     "type": "boolean"
+  },
+  "chips/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "chips/style": {
+    "description": "Inline of the component.",
+    "type": "any"
   },
   "colorpicker/modelValue": {
     "description": "Value of the component.",
@@ -751,6 +799,10 @@
     "description": "Attaches the menu to document instead of a particular item.",
     "type": "boolean"
   },
+  "contextmenu/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
+  },
   "datatable/value": {
     "description": "An array of objects to display.",
     "type": "array"
@@ -882,6 +934,10 @@
   "datatable/exportFilename": {
     "description": "Name of the exported file.",
     "type": "string"
+  },
+  "datatable/exportFunction": {
+    "description": "Custom function to export data.",
+    "type": "function"
   },
   "datatable/autoLayout": {
     "description": "Whether the cell widths scale according to their content or not. Does not apply to scrollable tables.",
@@ -1123,6 +1179,10 @@
     "description": "Keeps dialog in the viewport when dragging.",
     "type": "boolean"
   },
+  "dialog/appendTo": {
+    "description": "A valid query selector or an HTMLElement to specify where the dialog gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
+    "type": "string"
+  },
   "divider/align": {
     "description": "Alignment of the content, options are \"left\", \"center\", \"right\" for horizontal layout and \"top\", \"center\", \"bottom\" for vertical.",
     "type": "string"
@@ -1134,6 +1194,26 @@
   "divider/type": {
     "description": "Border style type, default is \"solid\" and other options are \"dashed\" and \"dotted\".",
     "type": "string"
+  },
+  "dock/model": {
+    "description": "MenuModel instance to define the action items.",
+    "type": "object"
+  },
+  "dock/position": {
+    "description": "Position of element. Valid values are 'bottom', 'top', 'left' and 'right'.",
+    "type": "string"
+  },
+  "dock/class": {
+    "description": "Style class of the element.",
+    "type": "string"
+  },
+  "dock/style": {
+    "description": "Inline style of the element.",
+    "type": "object"
+  },
+  "dock/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
   },
   "dropdown/modelValue": {
     "description": "Value of the component.",
@@ -1238,6 +1318,10 @@
   "dropdown/loadingIcon": {
     "description": "Icon to display in loading state.",
     "type": "string"
+  },
+  "dropdown/virtualScrollerOptions": {
+    "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
+    "type": "object"
   },
   "editor/modelValue": {
     "description": "Value of the content.",
@@ -1347,6 +1431,14 @@
     "description": "Whether to cancel the upload button.",
     "type": "boolean"
   },
+  "fileupload/style": {
+    "description": "Inline style of the component.",
+    "type": "any"
+  },
+  "fileupload/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
   "fullcalendar/events": {
     "description": "An array of events to display.",
     "type": "array"
@@ -1450,6 +1542,10 @@
   "galleria/galleriaClass": {
     "description": "Style class of the component on fullscreen mode. Otherwise, the 'class' property can be used.",
     "type": "string"
+  },
+  "image/preview": {
+    "description": "Controls the preview functionality.",
+    "type": "boolean"
   },
   "inlinemessage/severity": {
     "description": "Severity level of the message. Valid severities are \"success\", \"info\", \"warn\" and \"error\".",
@@ -1575,9 +1671,33 @@
     "description": "Style class of the input field.",
     "type": "string"
   },
+  "inputnumber/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "inputnumber/style": {
+    "description": "Inline of the component.",
+    "type": "any"
+  },
   "inputswitch/modelValue": {
     "description": "Specifies whether a inputswitch should be checked or not.",
     "type": "boolean"
+  },
+  "inputswitch/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "inputswitch/style": {
+    "description": "Inline of the component.",
+    "type": "any"
+  },
+  "inputswitch/trueValue": {
+    "description": "Value in checked state.",
+    "type": "any"
+  },
+  "inputswitch/falseValue": {
+    "description": "Value in unchecked state.",
+    "type": "any"
   },
   "inputtext/modelValue": {
     "description": "Value of the component.",
@@ -1719,6 +1839,10 @@
     "description": "Defines the orientation, valid values are horizontal and vertical.",
     "type": "string"
   },
+  "megamenu/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
+  },
   "menu/modelValue": {
     "description": "An array of menuitems.",
     "type": "array"
@@ -1739,9 +1863,17 @@
     "description": "Whether to automatically manage layering.",
     "type": "boolean"
   },
+  "menu/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
+  },
   "menubar/modelValue": {
     "description": "An array of menuitems.",
     "type": "array"
+  },
+  "menubar/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
   },
   "message/severity": {
     "description": "Severity level of the message. Valid severities are \"success\", \"info\", \"warn\" and \"error\".",
@@ -1866,6 +1998,22 @@
   "multiselect/loadingIcon": {
     "description": "Icon to display in loading state.",
     "type": "string"
+  },
+  "multiselect/maxSelectedLabels": {
+    "description": "Decides how many selected item labels to show at most.",
+    "type": "number"
+  },
+  "multiselect/selectedItemsLabel": {
+    "description": "Label to display after exceeding max selected labels.",
+    "type": "string"
+  },
+  "multiselect/selectAll": {
+    "description": "Whether all data is selected.",
+    "type": "boolean"
+  },
+  "multiselect/virtualScrollerOptions": {
+    "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
+    "type": "object"
   },
   "orderlist/modelValue": {
     "description": "Value of the component.",
@@ -1995,6 +2143,10 @@
     "description": "A map of keys to represent the expansion state in controlled mode.",
     "type": "array"
   },
+  "panelmenu/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
+  },
   "password/modelValue": {
     "description": "Value of the component.",
     "type": "any"
@@ -2035,6 +2187,14 @@
     "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
     "type": "string"
   },
+  "password/hideIcon": {
+    "description": "Icon to hide displaying the password as plain text.",
+    "type": "string"
+  },
+  "password/showIcon": {
+    "description": "Icon to show displaying the password as plain text.",
+    "type": "string"
+  },
   "password/inputStyle": {
     "description": "Inline style of the input field.",
     "type": "any"
@@ -2043,12 +2203,16 @@
     "description": "Style class of the input field.",
     "type": "string"
   },
-  "password/hideIcon": {
-    "description": "Icon to hide displaying the password as plain text.",
+  "password/class": {
+    "description": "Style class of the component.",
     "type": "string"
   },
-  "password/showIcon": {
-    "description": "Icon to show displaying the password as plain text.",
+  "password/style": {
+    "description": "Inline of the component.",
+    "type": "any"
+  },
+  "password/panelClass": {
+    "description": "Style class of the overlay panel.",
     "type": "string"
   },
   "picklist/modelValue": {
@@ -2109,6 +2273,14 @@
   },
   "radiobutton/modelValue": {
     "description": "Value binding of the checkbox.",
+    "type": "any"
+  },
+  "radiobutton/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "radiobutton/style": {
+    "description": "Inline of the component.",
     "type": "any"
   },
   "rating/modelValue": {
@@ -2271,6 +2443,74 @@
     "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
     "type": "string"
   },
+  "speeddial/model": {
+    "description": "MenuModel instance to define the action items.",
+    "type": "object"
+  },
+  "speeddial/visible": {
+    "description": "Specifies the visibility of the overlay.",
+    "type": "boolean"
+  },
+  "speeddial/direction": {
+    "description": "Specifies the opening direction of actions. Valid values are 'up', 'down', 'left', 'right', 'up-left', 'up-right', 'down-left' and 'down-right'",
+    "type": "string"
+  },
+  "speeddial/transitionDelay": {
+    "description": "Transition delay step for each action item.",
+    "type": "number"
+  },
+  "speeddial/type": {
+    "description": "Specifies the opening type of actions.",
+    "type": "string"
+  },
+  "speeddial/radius": {
+    "description": "Radius for *circle types.",
+    "type": "number"
+  },
+  "speeddial/mask": {
+    "description": "Whether to show a mask element behind the speeddial",
+    "type": "boolean"
+  },
+  "speeddial/disabled": {
+    "description": "Whether the component is disabled.",
+    "type": "boolean"
+  },
+  "speeddial/hideOnClickOutside": {
+    "description": "Whether the actions close when clicked outside.",
+    "type": "boolean"
+  },
+  "speeddial/buttonClassName": {
+    "description": "Style class of the button element.",
+    "type": "string"
+  },
+  "speeddial/maskClassName": {
+    "description": "Style class of the mask element.",
+    "type": "string"
+  },
+  "speeddial/maskStyle": {
+    "description": "Inline style of the mask element.",
+    "type": "object"
+  },
+  "speeddial/showIcon": {
+    "description": "Show icon of the button element.",
+    "type": "string"
+  },
+  "speeddial/hideIcon": {
+    "description": "\tHide icon of the button element.",
+    "type": "string"
+  },
+  "speeddial/rotateAnimation": {
+    "description": "Defined to rotate showIcon when hideIcon is not present.",
+    "type": "boolean"
+  },
+  "speeddial/class": {
+    "description": "Style class of the element.",
+    "type": "object"
+  },
+  "speeddial/style": {
+    "description": "Style class of the element.",
+    "type": "any"
+  },
   "splitbutton/label": {
     "description": "Text of the button.",
     "type": "string"
@@ -2294,6 +2534,14 @@
   "splitbutton/appendTo": {
     "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached.",
     "type": "string"
+  },
+  "splitbutton/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "splitbutton/style": {
+    "description": "Inline of the component.",
+    "type": "any"
   },
   "splitter/layout": {
     "description": "Orientation of the panels, valid values are \"horizontal\" and \"vertical\".",
@@ -2331,6 +2579,10 @@
     "description": "Whether the items are clickable or not.",
     "type": "boolean"
   },
+  "steps/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
+  },
   "tabmenu/model": {
     "description": "An array of menuitems.",
     "type": "array"
@@ -2353,6 +2605,10 @@
   },
   "tabview/lazy": {
     "description": "When enabled, hidden tabs are not rendered at all. Defaults to false that hides tabs with css.",
+    "type": "boolean"
+  },
+  "tabview/scrollable": {
+    "description": "When specified, enables horizontal scrolling.",
     "type": "boolean"
   },
   "tag/value": {
@@ -2407,6 +2663,10 @@
     "description": "Whether to automatically manage layering.",
     "type": "boolean"
   },
+  "tieredmenu/exact": {
+    "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+    "type": "boolean"
+  },
   "timeline/value": {
     "description": "An array of events to display.",
     "type": "array"
@@ -2428,7 +2688,7 @@
     "type": "string"
   },
   "toast/position": {
-    "description": "Position of the toast in viewport. Other valid values are \"top-left\", \"top-center\", \"bottom-left\", \"botton-center\", \"bottom-right\" and \"center\".",
+    "description": "Position of the toast in viewport. Other valid values are \"top-left\", \"top-center\", \"bottom-left\", \"bottom-center\", \"bottom-right\" and \"center\".",
     "type": "string"
   },
   "toast/autoZIndex": {
@@ -2438,6 +2698,10 @@
   "toast/baseZIndex": {
     "description": "Base zIndex value to use in layering.",
     "type": "number"
+  },
+  "toast/breakpoints": {
+    "description": "Object literal to define widths per screen size.",
+    "type": "object"
   },
   "togglebutton/modelValue": {
     "description": "Value of the component.",
@@ -2722,5 +2986,57 @@
   "tristatecheckbox/modelValue": {
     "description": "Value of the component.",
     "type": "boolean"
+  },
+  "tristatecheckbox/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
+  "tristatecheckbox/style": {
+    "description": "Inline of the component.",
+    "type": "any"
+  },
+  "virtualscroller/items": {
+    "description": "An array of objects to display.",
+    "type": "array"
+  },
+  "virtualscroller/itemSize": {
+    "description": "The height/width of item according to orientation.",
+    "type": "number|array"
+  },
+  "virtualscroller/scrollHeight": {
+    "description": "Height of the scroll viewport.",
+    "type": "string"
+  },
+  "virtualscroller/scrollWidth": {
+    "description": "Width of the scroll viewport.",
+    "type": "string"
+  },
+  "virtualscroller/orientation": {
+    "description": "The orientation of scrollbar, valid values are 'vertical', 'horizontal' and 'both'.",
+    "type": "string"
+  },
+  "virtualscroller/numToleratedItems": {
+    "description": "Determines how many additional elements to add to the DOM outside of the view. According to the scrolls made up and down, extra items are added in a certain algorithm in the form of multiples of this number. Default value is half the number of items shown in the view.",
+    "type": "number"
+  },
+  "virtualscroller/delay": {
+    "description": "Delay in scroll before new data is loaded.",
+    "type": "number"
+  },
+  "virtualscroller/lazy": {
+    "description": "Defines if data is loaded and interacted with in lazy manner.",
+    "type": "boolean"
+  },
+  "virtualscroller/showLoader": {
+    "description": "Whether to show loader.",
+    "type": "boolean"
+  },
+  "virtualscroller/style": {
+    "description": "Inline style of the component.",
+    "type": "any"
+  },
+  "virtualscroller/class": {
+    "description": "Style class of the component.",
+    "type": "string"
   }
 }

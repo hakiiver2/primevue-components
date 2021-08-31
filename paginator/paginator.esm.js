@@ -34,9 +34,9 @@ var script$8 = {
 		computed: {
             text() {
                 let text = this.template
-                    .replace("{currentPage}", this.page + 1)
+                    .replace("{currentPage}", this.pageCount > 0 ? this.page + 1 : 0)
                     .replace("{totalPages}", this.pageCount)
-                    .replace("{first}", this.first + 1)
+                    .replace("{first}", this.pageCount > 0 ? this.first + 1 : 0)
                     .replace("{last}", Math.min(this.first + this.rows, this.totalRecords))
                     .replace("{rows}", this.rows)
                     .replace("{totalRecords}", this.totalRecords);
@@ -226,7 +226,8 @@ var script$2 = {
     emits: ['rows-change'],
     props: {
         options: Array,
-        rows: Number
+        rows: Number,
+        disabled: Boolean
     },
     methods: {
         onChange(value) {
@@ -258,8 +259,9 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
     optionLabel: "label",
     optionValue: "value",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
-    class: "p-paginator-rpp-options"
-  }, null, 8, ["modelValue", "options"]))
+    class: "p-paginator-rpp-options",
+    disabled: $props.disabled
+  }, null, 8, ["modelValue", "options", "disabled"]))
 }
 
 script$2.render = render$2;
@@ -270,7 +272,8 @@ var script$1 = {
     emits: ['page-change'],
     props: {
         page: Number,
-        pageCount: Number
+        pageCount: Number,
+        disabled: Boolean
     },
     methods: {
         onChange(value) {
@@ -281,7 +284,7 @@ var script$1 = {
         pageOptions() {
             let opts = [];
             for(let i= 0; i < this.pageCount; i++) {
-                opts.push({label: String(i), value: i});
+                opts.push({label: String(i+1), value: i});
             }
             return opts;
         }
@@ -300,8 +303,9 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
     optionLabel: "label",
     optionValue: "value",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
-    class: "p-paginator-page-options"
-  }, null, 8, ["modelValue", "options"]))
+    class: "p-paginator-page-options",
+    disabled: $props.disabled
+  }, null, 8, ["modelValue", "options", "disabled"]))
 }
 
 script$1.render = render$1;
@@ -423,7 +427,7 @@ var script = {
             return Math.floor(this.d_first / this.d_rows);
         },
         pageCount() {
-            return Math.ceil(this.totalRecords / this.d_rows) || 1;
+            return Math.ceil(this.totalRecords / this.d_rows);
         },
         isFirstPage() {
             return this.page === 0;
@@ -463,6 +467,9 @@ var script = {
                 first: this.d_first,
                 rows: this.d_rows
             }
+        },
+        empty() {
+            return this.pageCount === 0;
         }
     },
     components: {
@@ -513,25 +520,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ? (openBlock(), createBlock(_component_FirstPageLink, {
                   key: 0,
                   onClick: _cache[1] || (_cache[1] = $event => ($options.changePageToFirst($event))),
-                  disabled: $options.isFirstPage
+                  disabled: $options.isFirstPage || $options.empty
                 }, null, 8, ["disabled"]))
               : (item === 'PrevPageLink')
                 ? (openBlock(), createBlock(_component_PrevPageLink, {
                     key: 1,
                     onClick: _cache[2] || (_cache[2] = $event => ($options.changePageToPrev($event))),
-                    disabled: $options.isFirstPage
+                    disabled: $options.isFirstPage || $options.empty
                   }, null, 8, ["disabled"]))
                 : (item === 'NextPageLink')
                   ? (openBlock(), createBlock(_component_NextPageLink, {
                       key: 2,
                       onClick: _cache[3] || (_cache[3] = $event => ($options.changePageToNext($event))),
-                      disabled: $options.isLastPage
+                      disabled: $options.isLastPage || $options.empty
                     }, null, 8, ["disabled"]))
                   : (item === 'LastPageLink')
                     ? (openBlock(), createBlock(_component_LastPageLink, {
                         key: 3,
                         onClick: _cache[4] || (_cache[4] = $event => ($options.changePageToLast($event))),
-                        disabled: $options.isLastPage
+                        disabled: $options.isLastPage || $options.empty
                       }, null, 8, ["disabled"]))
                     : (item === 'PageLinks')
                       ? (openBlock(), createBlock(_component_PageLinks, {
@@ -555,15 +562,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               key: 6,
                               rows: $data.d_rows,
                               options: $props.rowsPerPageOptions,
-                              onRowsChange: _cache[6] || (_cache[6] = $event => ($options.onRowChange($event)))
-                            }, null, 8, ["rows", "options"]))
+                              onRowsChange: _cache[6] || (_cache[6] = $event => ($options.onRowChange($event))),
+                              disabled: $options.empty
+                            }, null, 8, ["rows", "options", "disabled"]))
                           : (item === 'JumpToPageDropdown')
                             ? (openBlock(), createBlock(_component_JumpToPageDropdown, {
                                 key: 7,
                                 page: $options.page,
                                 pageCount: $options.pageCount,
-                                onPageChange: _cache[7] || (_cache[7] = $event => ($options.changePage($event)))
-                              }, null, 8, ["page", "pageCount"]))
+                                onPageChange: _cache[7] || (_cache[7] = $event => ($options.changePage($event))),
+                                disabled: $options.empty
+                              }, null, 8, ["page", "pageCount", "disabled"]))
                             : createCommentVNode("", true)
           ], 64))
         }), 128)),

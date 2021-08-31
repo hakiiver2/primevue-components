@@ -5,11 +5,19 @@ var vue = require('vue');
 var script = {
     name: 'InputSwitch',
     inheritAttrs: false,
-    emits: ['update:modelValue', 'click', 'change'],
+    emits: ['click', 'update:modelValue', 'change', 'input'],
     props: {
         modelValue: Boolean,
         class: null,
-        style: null
+        style: null,
+        trueValue: {
+            type: null,
+            default: true
+        },
+        falseValue: {
+            type: null,
+            default: false
+        }
     },
     data() {
         return {
@@ -19,9 +27,11 @@ var script = {
     methods: {
         onClick(event) {
             if (!this.$attrs.disabled) {
+                const newValue = this.checked ? this.falseValue : this.trueValue;
                 this.$emit('click', event);
-                this.$emit('update:modelValue', !this.modelValue);
+                this.$emit('update:modelValue', newValue);
                 this.$emit('change', event);
+                this.$emit('input', newValue);
                 this.$refs.input.focus();
             }
             event.preventDefault();
@@ -38,11 +48,14 @@ var script = {
             return [
                 'p-inputswitch p-component', this.class,
                 {
-                    'p-inputswitch-checked': this.modelValue,
+                    'p-inputswitch-checked': this.checked,
 					'p-disabled': this.$attrs.disabled,
                     'p-focus': this.focused
                 }
             ];
+        },
+        checked() {
+            return this.modelValue === this.trueValue;
         }
     }
 };

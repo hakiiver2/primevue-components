@@ -3,7 +3,10 @@ import { openBlock, createBlock, createCommentVNode, renderSlot, createTextVNode
 var script = {
     name: 'ProgressBar',
     props: {
-        value: Number,
+        value: {
+            type: Number,
+            default: null
+        },
         mode: {
             type: String,
             default: 'determinate'
@@ -63,7 +66,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           style: $options.progressStyle
         }, null, 4))
       : createCommentVNode("", true),
-    ($options.determinate && $props.value && $props.showValue)
+    ($options.determinate && ($props.value !== null) && $props.showValue)
       ? (openBlock(), createBlock("div", _hoisted_1, [
           renderSlot(_ctx.$slots, "default", {}, () => [
             createTextVNode(toDisplayString($props.value + '%'), 1)

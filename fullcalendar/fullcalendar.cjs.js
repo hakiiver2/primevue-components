@@ -1,5 +1,6 @@
 'use strict';
 
+require('@fullcalendar/core/vdom');
 var core = require('@fullcalendar/core');
 var vue = require('vue');
 

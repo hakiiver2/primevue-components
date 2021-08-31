@@ -33,6 +33,8 @@ declare class TreeSelect {
         value: VNode[];
         header: VNode[];
         footer: VNode[];
+        empty: VNode[];
+        indicator: VNode[];
     }
 }
 

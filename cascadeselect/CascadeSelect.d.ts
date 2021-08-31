@@ -25,11 +25,13 @@ declare class CascadeSelect {
     $emit(eventName: 'change', e: { originalEvent: Event, value: any }): this;
     $emit(eventName: 'change-group', e: { originalEvent: Event, value: any }): this;
     $emit(eventName: 'before-show'): this;
-    $emit(eventName: 'before-leave'): this;
+    $emit(eventName: 'before-hide'): this;
     $emit(eventName: 'show'): this;
     $emit(eventName: 'hide'): this;
     $slot: {
         option: VNode[];
+        value: VNode[];
+        indicator: VNode[];
     }
 }
 

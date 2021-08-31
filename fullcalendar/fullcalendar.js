@@ -1,5 +1,5 @@
 this.primevue = this.primevue || {};
-this.primevue.fullcalendar = (function (core, vue) {
+this.primevue.fullcalendar = (function (vdom, core, vue) {
     'use strict';
 
     var script = {
@@ -93,4 +93,4 @@ this.primevue.fullcalendar = (function (core, vue) {
 
     return script;
 
-}(FullCalendar, Vue));
+}(null, FullCalendar, Vue));

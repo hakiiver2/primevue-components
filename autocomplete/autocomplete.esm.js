@@ -2,7 +2,8 @@ import { ZIndexUtils, ObjectUtils, DomHandler, ConnectedOverlayScrollHandler, Un
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, mergeProps, createCommentVNode, Fragment, renderList, createVNode, toDisplayString, Teleport, Transition, withCtx, renderSlot, withDirectives, createTextVNode } from 'vue';
+import VirtualScroller from 'primevue/virtualscroller';
+import { resolveComponent, resolveDirective, openBlock, createBlock, mergeProps, createCommentVNode, Fragment, renderList, renderSlot, createVNode, toDisplayString, Teleport, Transition, withCtx, createSlots, withDirectives, createTextVNode } from 'vue';
 
 var script = {
     name: 'AutoComplete',
@@ -60,13 +61,18 @@ var script = {
         inputStyle: null,
         class: null,
         style: null,
-        panelClass: null
+        panelClass: null,
+        virtualScrollerOptions: {
+            type: Object,
+            default: null
+        }
     },
     timeout: null,
     outsideClickListener: null,
     resizeListener: null,
     scrollHandler: null,
     overlay: null,
+    virtualScroller: null,
     data() {
         return {
             searching: false,
@@ -108,6 +114,9 @@ var script = {
         }
     },
     methods: {
+        getOptionIndex(index, fn) {
+            return this.virtualScrollerDisabled ? index : (fn && fn(index)['index']);
+        },
         getOptionGroupRenderKey(optionGroup) {
             return ObjectUtils.resolveFieldData(optionGroup, this.optionGroupLabel);
         },
@@ -477,6 +486,9 @@ var script = {
         overlayRef(el) {
             this.overlay = el;
         },
+        virtualScrollerRef(el) {
+            this.virtualScroller = el;
+        },
         onOverlayClick(event) {
             OverlayEventBus.emit('overlay-click', {
                 originalEvent: event,
@@ -533,10 +545,14 @@ var script = {
         },
         appendTarget() {
             return this.appendDisabled ? null : this.appendTo;
+        },
+        virtualScrollerDisabled() {
+            return !this.virtualScrollerOptions;
         }
     },
     components: {
-        'Button': Button
+        'Button': Button,
+        'VirtualScroller': VirtualScroller
     },
     directives: {
         'ripple': Ripple
@@ -553,6 +569,7 @@ const _hoisted_4 = { class: "p-autocomplete-item-group" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Button = resolveComponent("Button");
+  const _component_VirtualScroller = resolveComponent("VirtualScroller");
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createBlock("span", {
@@ -596,7 +613,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: i,
               class: "p-autocomplete-token"
             }, [
-              createVNode("span", _hoisted_1, toDisplayString($options.getItemContent(item)), 1),
+              renderSlot(_ctx.$slots, "chip", { value: item }, () => [
+                createVNode("span", _hoisted_1, toDisplayString($options.getItemContent(item)), 1)
+              ]),
               createVNode("span", {
                 class: "p-autocomplete-token-icon pi pi-times-circle",
                 onClick: $event => ($options.removeItem($event, i))
@@ -651,70 +670,89 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 key: 0,
                 ref: $options.overlayRef,
                 class: $options.panelStyleClass,
-                style: {'max-height': $props.scrollHeight},
+                style: {'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''},
                 onClick: _cache[13] || (_cache[13] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
                 renderSlot(_ctx.$slots, "header", {
                   value: $props.modelValue,
                   suggestions: $props.suggestions
                 }),
-                createVNode("ul", {
-                  id: $options.listId,
-                  class: "p-autocomplete-items",
-                  role: "listbox"
-                }, [
-                  (!$props.optionGroupLabel)
-                    ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($props.suggestions, (item, i) => {
-                        return withDirectives((openBlock(), createBlock("li", {
-                          class: "p-autocomplete-item",
-                          key: i,
-                          onClick: $event => ($options.selectItem($event, item)),
-                          role: "option"
-                        }, [
-                          renderSlot(_ctx.$slots, "item", {
-                            item: item,
-                            index: i
-                          }, () => [
-                            createTextVNode(toDisplayString($options.getItemContent(item)), 1)
-                          ])
-                        ], 8, ["onClick"])), [
-                          [_directive_ripple]
-                        ])
-                      }), 128))
-                    : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($props.suggestions, (optionGroup, i) => {
-                        return (openBlock(), createBlock(Fragment, {
-                          key: $options.getOptionGroupRenderKey(optionGroup)
-                        }, [
-                          createVNode("li", _hoisted_4, [
-                            renderSlot(_ctx.$slots, "optiongroup", {
-                              item: optionGroup,
-                              index: i
-                            }, () => [
-                              createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
-                            ])
-                          ]),
-                          (openBlock(true), createBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
+                createVNode(_component_VirtualScroller, mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
+                  style: {'height': $props.scrollHeight},
+                  items: $props.suggestions,
+                  disabled: $options.virtualScrollerDisabled
+                }), createSlots({
+                  content: withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+                    createVNode("ul", {
+                      id: $options.listId,
+                      ref: contentRef,
+                      class: ['p-autocomplete-items', styleClass],
+                      role: "listbox"
+                    }, [
+                      (!$props.optionGroupLabel)
+                        ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList(items, (item, i) => {
                             return withDirectives((openBlock(), createBlock("li", {
                               class: "p-autocomplete-item",
-                              key: j,
+                              key: i,
                               onClick: $event => ($options.selectItem($event, item)),
-                              role: "option",
-                              "data-group": i,
-                              "data-index": j
+                              role: "option"
                             }, [
                               renderSlot(_ctx.$slots, "item", {
                                 item: item,
-                                index: j
+                                index: $options.getOptionIndex(i, getItemOptions)
                               }, () => [
                                 createTextVNode(toDisplayString($options.getItemContent(item)), 1)
                               ])
-                            ], 8, ["onClick", "data-group", "data-index"])), [
+                            ], 8, ["onClick"])), [
                               [_directive_ripple]
                             ])
                           }), 128))
-                        ], 64))
-                      }), 128))
-                ], 8, ["id"]),
+                        : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
+                            return (openBlock(), createBlock(Fragment, {
+                              key: $options.getOptionGroupRenderKey(optionGroup)
+                            }, [
+                              createVNode("li", _hoisted_4, [
+                                renderSlot(_ctx.$slots, "optiongroup", {
+                                  item: optionGroup,
+                                  index: $options.getOptionIndex(i, getItemOptions)
+                                }, () => [
+                                  createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                                ])
+                              ]),
+                              (openBlock(true), createBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
+                                return withDirectives((openBlock(), createBlock("li", {
+                                  class: "p-autocomplete-item",
+                                  key: j,
+                                  onClick: $event => ($options.selectItem($event, item)),
+                                  role: "option",
+                                  "data-group": i,
+                                  "data-index": j
+                                }, [
+                                  renderSlot(_ctx.$slots, "item", {
+                                    item: item,
+                                    index: $options.getOptionIndex(j, getItemOptions)
+                                  }, () => [
+                                    createTextVNode(toDisplayString($options.getItemContent(item)), 1)
+                                  ])
+                                ], 8, ["onClick", "data-group", "data-index"])), [
+                                  [_directive_ripple]
+                                ])
+                              }), 128))
+                            ], 64))
+                          }), 128))
+                    ], 10, ["id"])
+                  ]),
+                  _: 2
+                }, [
+                  (_ctx.$slots.loader)
+                    ? {
+                        name: "loader",
+                        fn: withCtx(({ options }) => [
+                          renderSlot(_ctx.$slots, "loader", { options: options })
+                        ])
+                      }
+                    : undefined
+                ]), 1040, ["style", "items", "disabled"]),
                 renderSlot(_ctx.$slots, "footer", {
                   value: $props.modelValue,
                   suggestions: $props.suggestions
@@ -755,7 +793,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-autocomplete {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: relative;\n}\n.p-autocomplete-loader {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-autocomplete-dd .p-autocomplete-input {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-autocomplete-dd .p-autocomplete-input,\n.p-autocomplete-dd .p-autocomplete-multiple-container {\n     border-top-right-radius: 0;\n     border-bottom-right-radius: 0;\n}\n.p-autocomplete-dd .p-autocomplete-dropdown {\n     border-top-left-radius: 0;\n     border-bottom-left-radius: 0px;\n}\n.p-autocomplete .p-autocomplete-panel {\n    min-width: 100%;\n}\n.p-autocomplete-panel {\n    position: absolute;\n    overflow: auto;\n}\n.p-autocomplete-items {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n.p-autocomplete-item {\n    cursor: pointer;\n    white-space: nowrap;\n    position: relative;\n    overflow: hidden;\n}\n.p-autocomplete-multiple-container {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    cursor: text;\n    overflow: hidden;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n}\n.p-autocomplete-token {\n    cursor: default;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-autocomplete-token-icon {\n    cursor: pointer;\n}\n.p-autocomplete-input-token {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n}\n.p-autocomplete-input-token input {\n    border: 0 none;\n    outline: 0 none;\n    background-color: transparent;\n    margin: 0;\n    padding: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n    border-radius: 0;\n    width: 100%;\n}\n.p-fluid .p-autocomplete {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-fluid .p-autocomplete-dd .p-autocomplete-input {\n    width: 1%;\n}\n";
+var css_248z = "\n.p-autocomplete {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: relative;\n}\n.p-autocomplete-loader {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-autocomplete-dd .p-autocomplete-input {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-autocomplete-dd .p-autocomplete-input,\n.p-autocomplete-dd .p-autocomplete-multiple-container {\n     border-top-right-radius: 0;\n     border-bottom-right-radius: 0;\n}\n.p-autocomplete-dd .p-autocomplete-dropdown {\n     border-top-left-radius: 0;\n     border-bottom-left-radius: 0px;\n}\n.p-autocomplete .p-autocomplete-panel {\n    min-width: 100%;\n}\n.p-autocomplete-panel {\n    position: absolute;\n    overflow: auto;\n    top: 0;\n    left: 0;\n}\n.p-autocomplete-items {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n.p-autocomplete-item {\n    cursor: pointer;\n    white-space: nowrap;\n    position: relative;\n    overflow: hidden;\n}\n.p-autocomplete-multiple-container {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    cursor: text;\n    overflow: hidden;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n}\n.p-autocomplete-token {\n    cursor: default;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-autocomplete-token-icon {\n    cursor: pointer;\n}\n.p-autocomplete-input-token {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n}\n.p-autocomplete-input-token input {\n    border: 0 none;\n    outline: 0 none;\n    background-color: transparent;\n    margin: 0;\n    padding: 0;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n    border-radius: 0;\n    width: 100%;\n}\n.p-fluid .p-autocomplete {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-fluid .p-autocomplete-dd .p-autocomplete-input {\n    width: 1%;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

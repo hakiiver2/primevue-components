@@ -7,11 +7,13 @@
         <input v-if="editable" type="text" class="p-dropdown-label p-inputtext" :disabled="disabled" @focus="onFocus" @blur="onBlur" :placeholder="placeholder" :value="editableInputValue" @input="onEditableInput"
             aria-haspopup="listbox" :aria-expanded="overlayVisible">
         <span v-if="!editable" :class="labelClass">
-            <slot name="value" :value="modelValue" :placeholder="placeholder">{{label}}</slot>
+            <slot name="value" :value="modelValue" :placeholder="placeholder">{{label||'empty'}}</slot>
         </span>
         <i v-if="showClear && modelValue != null" class="p-dropdown-clear-icon pi pi-times" @click="onClearClick($event)"></i>
         <div class="p-dropdown-trigger" role="button" aria-haspopup="listbox" :aria-expanded="overlayVisible">
-            <span :class="dropdownIconClass"></span>
+            <slot name="indicator">
+                <span :class="dropdownIconClass"></span>
+            </slot>
         </div>
         <Teleport :to="appendTarget" :disabled="appendDisabled">
             <transition name="p-connected-overlay" @enter="onOverlayEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
@@ -23,32 +25,39 @@
                             <span class="p-dropdown-filter-icon pi pi-search"></span>
                         </div>
                     </div>
-                    <div :ref="itemsWrapperRef" class="p-dropdown-items-wrapper" :style="{'max-height': scrollHeight}">
-                        <ul class="p-dropdown-items" role="listbox">
-                            <template v-if="!optionGroupLabel">
-                                <li v-for="(option, i) of visibleOptions" :class="['p-dropdown-item', {'p-highlight': isSelected(option), 'p-disabled': isOptionDisabled(option)}]" v-ripple
-                                    :key="getOptionRenderKey(option)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
-                                    <slot name="option" :option="option" :index="i">{{getOptionLabel(option)}}</slot>
-                                </li>
-                            </template>
-                            <template v-else>
-                                <template v-for="(optionGroup, i) of visibleOptions" :key="getOptionGroupRenderKey(optionGroup)">
-                                    <li  class="p-dropdown-item-group" >
-                                        <slot name="optiongroup" :option="optionGroup" :index="i">{{getOptionGroupLabel(optionGroup)}}</slot>
+                    <div :ref="itemsWrapperRef" class="p-dropdown-items-wrapper" :style="{'max-height': virtualScrollerDisabled ? scrollHeight : ''}">
+                        <VirtualScroller :ref="virtualScrollerRef" v-bind="virtualScrollerOptions" :items="visibleOptions" :style="{'height': scrollHeight}" :disabled="virtualScrollerDisabled">
+                            <template v-slot:content="{ styleClass, contentRef, items, getItemOptions }">
+                                <ul :ref="contentRef" :class="['p-dropdown-items', styleClass]" role="listbox">
+                                    <template v-if="!optionGroupLabel">
+                                        <li v-for="(option, i) of items" :class="['p-dropdown-item', {'p-highlight': isSelected(option), 'p-disabled': isOptionDisabled(option)}]" v-ripple
+                                            :key="getOptionRenderKey(option)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
+                                            <slot name="option" :option="option" :index="getOptionIndex(i, getItemOptions)">{{getOptionLabel(option)}}</slot>
+                                        </li>
+                                    </template>
+                                    <template v-else>
+                                        <template v-for="(optionGroup, i) of items" :key="getOptionGroupRenderKey(optionGroup)">
+                                            <li  class="p-dropdown-item-group">
+                                                <slot name="optiongroup" :option="optionGroup" :index="getOptionIndex(i, getItemOptions)">{{getOptionGroupLabel(optionGroup)}}</slot>
+                                            </li>
+                                            <li v-for="(option, i) of getOptionGroupChildren(optionGroup)" :class="['p-dropdown-item', {'p-highlight': isSelected(option), 'p-disabled': isOptionDisabled(option)}]" v-ripple
+                                                :key="getOptionRenderKey(option)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
+                                                <slot name="option" :option="option" :index="getOptionIndex(i, getItemOptions)">{{getOptionLabel(option)}}</slot>
+                                            </li>
+                                        </template>
+                                    </template>
+                                    <li v-if="filterValue && (!items || (items && items.length === 0))" class="p-dropdown-empty-message">
+                                        <slot name="emptyfilter">{{emptyFilterMessageText}}</slot>
                                     </li>
-                                    <li v-for="(option, i) of getOptionGroupChildren(optionGroup)" :class="['p-dropdown-item', {'p-highlight': isSelected(option), 'p-disabled': isOptionDisabled(option)}]" v-ripple
-                                        :key="getOptionRenderKey(option)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
-                                        <slot name="option" :option="option" :index="i">{{getOptionLabel(option)}}</slot>
+                                    <li v-else-if="(!options || (options && options.length === 0))" class="p-dropdown-empty-message">
+                                        <slot name="empty">{{emptyMessageText}}</slot>
                                     </li>
-                                </template>
+                                </ul>
                             </template>
-                            <li v-if="filterValue && (!visibleOptions || (visibleOptions && visibleOptions.length === 0))" class="p-dropdown-empty-message">
-                                <slot name="emptyfilter">{{emptyFilterMessageText}}</slot>
-                            </li>
-                            <li v-else-if="(!options || (options && options.length === 0))" class="p-dropdown-empty-message">
-                                <slot name="empty">{{emptyMessageText}}</slot>
-                            </li>
-                        </ul>
+                            <template v-slot:loader="{ options }" v-if="$slots.loader">
+                                <slot name="loader" :options="options"></slot>
+                            </template>
+                        </VirtualScroller>
                     </div>
                     <slot name="footer" :value="modelValue" :options="visibleOptions"></slot>
                 </div>
@@ -62,6 +71,7 @@ import {ConnectedOverlayScrollHandler,ObjectUtils,DomHandler,ZIndexUtils} from '
 import OverlayEventBus from 'primevue/overlayeventbus';
 import {FilterService} from 'primevue/api';
 import Ripple from 'primevue/ripple';
+import VirtualScroller from 'primevue/virtualscroller';
 
 export default {
     name: 'Dropdown',
@@ -117,6 +127,10 @@ export default {
         loadingIcon: {
             type: String,
             default: 'pi pi-spinner pi-spin'
+        },
+        virtualScrollerOptions: {
+            type: Object,
+            default: null
         }
     },
     data() {
@@ -125,6 +139,11 @@ export default {
             filterValue: null,
             overlayVisible: false
         };
+    },
+    watch: {
+        modelValue() {
+            this.isModelValueChanged = true;
+        }
     },
     outsideClickListener: null,
     scrollHandler: null,
@@ -135,6 +154,15 @@ export default {
     searchValue: null,
     overlay: null,
     itemsWrapper: null,
+    virtualScroller: null,
+    isModelValueChanged: false,
+    updated() {
+        if (this.overlayVisible && this.isModelValueChanged) {
+            this.scrollValueInView();
+        }
+
+        this.isModelValueChanged = false;
+    },
     beforeUnmount() {
         this.unbindOutsideClickListener();
         this.unbindResizeListener();
@@ -152,6 +180,9 @@ export default {
         }
     },
     methods: {
+        getOptionIndex(index, fn) {
+            return this.virtualScrollerDisabled ? index : (fn && fn(index)['index']);
+        },
         getOptionLabel(option) {
             return this.optionLabel ? ObjectUtils.resolveFieldData(option, this.optionLabel) : option;
         },
@@ -290,7 +321,7 @@ export default {
                     this.show();
                 }
                 else {
-                    let nextOption = this.findNextOption(this.getSelectedOptionIndex());
+                    let nextOption = this.visibleOptions && this.visibleOptions.length > 0 ? this.findNextOption(this.getSelectedOptionIndex()) : null;
                     if (nextOption) {
                         this.updateModel(event, this.getOptionValue(nextOption));
                     }
@@ -415,6 +446,13 @@ export default {
                 this.$refs.filterInput.focus();
             }
 
+            if (!this.virtualScrollerDisabled) {
+                const selectedIndex = this.getSelectedOptionIndex();
+                if (selectedIndex !== -1) {
+                    this.virtualScroller.scrollToIndex(selectedIndex);
+                }
+            }
+
             this.$emit('show');
         },
         onOverlayLeave() {
@@ -476,7 +514,7 @@ export default {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible && !DomHandler.isAndroid()) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -498,7 +536,7 @@ export default {
                 clearTimeout(this.searchTimeout);
             }
 
-            const char = String.fromCharCode(event.keyCode);
+            const char = event.key;
             this.previousSearchChar = this.currentSearchChar;
             this.currentSearchChar = char;
 
@@ -581,11 +619,14 @@ export default {
         itemsWrapperRef(el) {
             this.itemsWrapper = el;
         },
+        virtualScrollerRef(el) {
+            this.virtualScroller = el;
+        },
         scrollValueInView() {
             if (this.overlay) {
                 let selectedItem = DomHandler.findSingle(this.overlay, 'li.p-highlight');
                 if (selectedItem) {
-                    this.itemsWrapper.scrollTop = selectedItem.offsetTop;
+                    selectedItem.scrollIntoView({ block: 'nearest', inline: 'start' });
                 }
             }
         },
@@ -675,6 +716,9 @@ export default {
         appendDisabled() {
             return this.appendTo === 'self';
         },
+        virtualScrollerDisabled() {
+            return !this.virtualScrollerOptions;
+        },
         appendTarget() {
             return this.appendDisabled ? null : this.appendTo;
         },
@@ -684,6 +728,9 @@ export default {
     },
     directives: {
         'ripple': Ripple
+    },
+    components: {
+        'VirtualScroller': VirtualScroller
     }
 }
 </script>
@@ -734,6 +781,8 @@ input.p-dropdown-label  {
 
 .p-dropdown-panel {
     position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .p-dropdown-items-wrapper {

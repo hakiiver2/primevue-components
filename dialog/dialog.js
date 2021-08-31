@@ -67,6 +67,10 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
             minY: {
                 type: Number,
                 default: 0
+            },
+            appendTo: {
+                type: String,
+                default: 'body'
             }
         },
         data() {
@@ -129,7 +133,7 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
                 utils.DomHandler.addClass(this.mask, 'p-dialog-mask-leave');
             },
             onLeave() {
-                
+
                 this.$emit('hide');
             },
             onAfterLeave(el) {
@@ -373,6 +377,12 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
             },
             contentStyleClass() {
                 return ['p-dialog-content', this.contentClass];
+            },
+            appendDisabled() {
+                return this.appendTo === 'self';
+            },
+            appendTarget() {
+                return this.appendDisabled ? null : this.appendTo;
             }
         },
         directives: {
@@ -390,7 +400,10 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
+      return (vue.openBlock(), vue.createBlock(vue.Teleport, {
+        to: $options.appendTarget,
+        disabled: $options.appendDisabled
+      }, [
         ($data.containerVisible)
           ? (vue.openBlock(), vue.createBlock("div", {
               key: 0,
@@ -484,7 +497,7 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
               }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onLeave", "onAfterLeave"])
             ], 2))
           : vue.createCommentVNode("", true)
-      ]))
+      ], 8, ["to", "disabled"]))
     }
 
     function styleInject(css, ref) {

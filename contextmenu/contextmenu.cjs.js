@@ -27,6 +27,10 @@ var script$1 = {
         template: {
             type: Object,
             default: null
+        },
+        exact: {
+            type: Boolean,
+            default: true
         }
     },
     watch: {
@@ -43,7 +47,7 @@ var script$1 = {
     },
     methods: {
         onItemMouseEnter(event, item) {
-            if (item.disabled) {
+            if (this.disabled(item)) {
                 event.preventDefault();
                 return;
             }
@@ -51,7 +55,7 @@ var script$1 = {
             this.activeItem = item;
         },
         onItemClick(event, item, navigate) {
-            if (item.disabled) {
+            if (this.disabled(item)) {
                 event.preventDefault();
                 return;
             }
@@ -108,11 +112,18 @@ var script$1 = {
                 }
             ]
         },
-        getLinkClass(item) {
-            return ['p-menuitem-link', {'p-disabled': item.disabled}];
+        linkClass(item, routerProps) {
+            return ['p-menuitem-link', {
+                'p-disabled': this.disabled(item),
+                'router-link-active': routerProps && routerProps.isActive,
+                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+            }];
         },
         visible(item) {
             return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+        },
+        disabled(item) {
+            return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
         }
     },
     computed: {
@@ -163,17 +174,17 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     }, [
                       (!$props.template)
                         ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
-                            (item.to && !item.disabled)
+                            (item.to && !$options.disabled(item))
                               ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                                   key: 0,
                                   to: item.to,
                                   custom: ""
                                 }, {
-                                  default: vue.withCtx(({navigate, href}) => [
+                                  default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
                                     vue.withDirectives(vue.createVNode("a", {
                                       href: href,
                                       onClick: $event => ($options.onItemClick($event, item, navigate)),
-                                      class: $options.getLinkClass(item),
+                                      class: $options.linkClass(item, {isActive, isExactActive}),
                                       role: "menuitem"
                                     }, [
                                       vue.createVNode("span", {
@@ -189,13 +200,13 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                               : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
                                   key: 1,
                                   href: item.url,
-                                  class: $options.getLinkClass(item),
+                                  class: $options.linkClass(item),
                                   target: item.target,
                                   onClick: $event => ($options.onItemClick($event, item)),
                                   "aria-haspopup": item.items != null,
                                   "aria-expanded": item === $data.activeItem,
                                   role: "menuitem",
-                                  tabindex: item.disabled ? null : '0'
+                                  tabindex: $options.disabled(item) ? null : '0'
                                 }, [
                                   vue.createVNode("span", {
                                     class: ['p-menuitem-icon', item.icon]
@@ -218,8 +229,9 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                             key: item.label + '_sub_',
                             template: $props.template,
                             onLeafClick: $options.onLeafClick,
-                            parentActive: item === $data.activeItem
-                          }, null, 8, ["model", "template", "onLeafClick", "parentActive"]))
+                            parentActive: item === $data.activeItem,
+                            exact: $props.exact
+                          }, null, 8, ["model", "template", "onLeafClick", "parentActive", "exact"]))
                         : vue.createCommentVNode("", true)
                     ], 46, ["onMouseenter"]))
                   : vue.createCommentVNode("", true),
@@ -265,6 +277,10 @@ var script = {
         global: {
             type: Boolean,
             default: false
+        },
+        exact: {
+            type: Boolean,
+            default: true
         }
     },
     target: null,
@@ -460,8 +476,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 model: $props.model,
                 root: true,
                 onLeafClick: $options.onLeafClick,
-                template: _ctx.$slots.item
-              }, null, 8, ["model", "onLeafClick", "template"])
+                template: _ctx.$slots.item,
+                exact: $props.exact
+              }, null, 8, ["model", "onLeafClick", "template", "exact"])
             ], 16))
           : vue.createCommentVNode("", true)
       ]),

@@ -1,7 +1,8 @@
 import { ObjectUtils, DomHandler } from 'primevue/utils';
 import { FilterService } from 'primevue/api';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, renderSlot, createVNode, withDirectives, vModelText, createCommentVNode, Fragment, renderList, createTextVNode, toDisplayString } from 'vue';
+import VirtualScroller from 'primevue/virtualscroller';
+import { resolveComponent, resolveDirective, openBlock, createBlock, renderSlot, createVNode, withDirectives, vModelText, createCommentVNode, mergeProps, createSlots, withCtx, Fragment, renderList, createTextVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'Listbox',
@@ -37,15 +38,23 @@ var script = {
         emptyMessage: {
             type: String,
             default: null
+        },
+        virtualScrollerOptions: {
+            type: Object,
+            default: null
         }
     },
     optionTouched: false,
+    virtualScroller: null,
     data() {
         return {
             filterValue: null
         };
     },
     methods: {
+        getOptionIndex(index, fn) {
+            return this.virtualScrollerDisabled ? index : (fn && fn(index)['index']);
+        },
         getOptionLabel(option) {
             return this.optionLabel ? ObjectUtils.resolveFieldData(option, this.optionLabel) : option;
         },
@@ -227,6 +236,9 @@ var script = {
         },
         onFilterChange(event) {
             this.$emit('filter', {originalEvent: event, value: event.target.value});
+        },
+        virtualScrollerRef(el) {
+            this.virtualScroller = el;
         }
     },
     computed: {
@@ -261,10 +273,16 @@ var script = {
         },
         emptyMessageText() {
             return this.emptyMessage || this.$primevue.config.locale.emptyMessage;
+        },
+        virtualScrollerDisabled() {
+            return !this.virtualScrollerOptions;
         }
     },
     directives: {
         'ripple': Ripple
+    },
+    components: {
+        'VirtualScroller': VirtualScroller
     }
 };
 
@@ -275,22 +293,18 @@ const _hoisted_2 = {
 };
 const _hoisted_3 = { class: "p-listbox-filter-container" };
 const _hoisted_4 = /*#__PURE__*/createVNode("span", { class: "p-listbox-filter-icon pi pi-search" }, null, -1);
-const _hoisted_5 = {
-  class: "p-listbox-list",
-  role: "listbox",
-  "aria-multiselectable": "multiple"
-};
-const _hoisted_6 = { class: "p-listbox-item-group" };
-const _hoisted_7 = {
+const _hoisted_5 = { class: "p-listbox-item-group" };
+const _hoisted_6 = {
   key: 2,
   class: "p-listbox-empty-message"
 };
-const _hoisted_8 = {
+const _hoisted_7 = {
   key: 3,
   class: "p-listbox-empty-message"
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_VirtualScroller = resolveComponent("VirtualScroller");
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createBlock("div", _hoisted_1, [
@@ -318,49 +332,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       class: "p-listbox-list-wrapper",
       style: $props.listStyle
     }, [
-      createVNode("ul", _hoisted_5, [
-        (!$props.optionGroupLabel)
-          ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($options.visibleOptions, (option, i) => {
-              return withDirectives((openBlock(), createBlock("li", {
-                tabindex: $options.isOptionDisabled(option) ? null : '0',
-                class: ['p-listbox-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
-                key: $options.getOptionRenderKey(option),
-                onClick: $event => ($options.onOptionSelect($event, option)),
-                onTouchend: _cache[3] || (_cache[3] = $event => ($options.onOptionTouchEnd())),
-                onKeydown: $event => ($options.onOptionKeyDown($event, option)),
-                role: "option",
-                "aria-label": $options.getOptionLabel(option),
-                "aria-selected": $options.isSelected(option)
-              }, [
-                renderSlot(_ctx.$slots, "option", {
-                  option: option,
-                  index: i
-                }, () => [
-                  createTextVNode(toDisplayString($options.getOptionLabel(option)), 1)
-                ])
-              ], 42, ["tabindex", "onClick", "onKeydown", "aria-label", "aria-selected"])), [
-                [_directive_ripple]
-              ])
-            }), 128))
-          : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($options.visibleOptions, (optionGroup, i) => {
-              return (openBlock(), createBlock(Fragment, {
-                key: $options.getOptionGroupRenderKey(optionGroup)
-              }, [
-                createVNode("li", _hoisted_6, [
-                  renderSlot(_ctx.$slots, "optiongroup", {
-                    option: optionGroup,
-                    index: i
-                  }, () => [
-                    createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
-                  ])
-                ]),
-                (openBlock(true), createBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+      createVNode(_component_VirtualScroller, mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
+        style: $props.listStyle,
+        items: $options.visibleOptions,
+        disabled: $options.virtualScrollerDisabled
+      }), createSlots({
+        content: withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+          createVNode("ul", {
+            ref: contentRef,
+            class: ['p-listbox-list', styleClass],
+            role: "listbox",
+            "aria-multiselectable": "multiple"
+          }, [
+            (!$props.optionGroupLabel)
+              ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList(items, (option, i) => {
                   return withDirectives((openBlock(), createBlock("li", {
                     tabindex: $options.isOptionDisabled(option) ? null : '0',
                     class: ['p-listbox-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
                     key: $options.getOptionRenderKey(option),
                     onClick: $event => ($options.onOptionSelect($event, option)),
-                    onTouchend: _cache[4] || (_cache[4] = $event => ($options.onOptionTouchEnd())),
+                    onTouchend: _cache[3] || (_cache[3] = $event => ($options.onOptionTouchEnd())),
                     onKeydown: $event => ($options.onOptionKeyDown($event, option)),
                     role: "option",
                     "aria-label": $options.getOptionLabel(option),
@@ -368,7 +359,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }, [
                     renderSlot(_ctx.$slots, "option", {
                       option: option,
-                      index: i
+                      index: $options.getOptionIndex(i, getItemOptions)
                     }, () => [
                       createTextVNode(toDisplayString($options.getOptionLabel(option)), 1)
                     ])
@@ -376,22 +367,68 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     [_directive_ripple]
                   ])
                 }), 128))
-              ], 64))
-            }), 128)),
-        ($data.filterValue && (!$options.visibleOptions || ($options.visibleOptions && $options.visibleOptions.length === 0)))
-          ? (openBlock(), createBlock("li", _hoisted_7, [
-              renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
-                createTextVNode(toDisplayString($options.emptyFilterMessageText), 1)
+              : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
+                  return (openBlock(), createBlock(Fragment, {
+                    key: $options.getOptionGroupRenderKey(optionGroup)
+                  }, [
+                    createVNode("li", _hoisted_5, [
+                      renderSlot(_ctx.$slots, "optiongroup", {
+                        option: optionGroup,
+                        index: $options.getOptionIndex(i, getItemOptions)
+                      }, () => [
+                        createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                      ])
+                    ]),
+                    (openBlock(true), createBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                      return withDirectives((openBlock(), createBlock("li", {
+                        tabindex: $options.isOptionDisabled(option) ? null : '0',
+                        class: ['p-listbox-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                        key: $options.getOptionRenderKey(option),
+                        onClick: $event => ($options.onOptionSelect($event, option)),
+                        onTouchend: _cache[4] || (_cache[4] = $event => ($options.onOptionTouchEnd())),
+                        onKeydown: $event => ($options.onOptionKeyDown($event, option)),
+                        role: "option",
+                        "aria-label": $options.getOptionLabel(option),
+                        "aria-selected": $options.isSelected(option)
+                      }, [
+                        renderSlot(_ctx.$slots, "option", {
+                          option: option,
+                          index: $options.getOptionIndex(i, getItemOptions)
+                        }, () => [
+                          createTextVNode(toDisplayString($options.getOptionLabel(option)), 1)
+                        ])
+                      ], 42, ["tabindex", "onClick", "onKeydown", "aria-label", "aria-selected"])), [
+                        [_directive_ripple]
+                      ])
+                    }), 128))
+                  ], 64))
+                }), 128)),
+            ($data.filterValue && (!items || (items && items.length === 0)))
+              ? (openBlock(), createBlock("li", _hoisted_6, [
+                  renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
+                    createTextVNode(toDisplayString($options.emptyFilterMessageText), 1)
+                  ])
+                ]))
+              : ((!$props.options || ($props.options && $props.options.length === 0)))
+                ? (openBlock(), createBlock("li", _hoisted_7, [
+                    renderSlot(_ctx.$slots, "empty", {}, () => [
+                      createTextVNode(toDisplayString($options.emptyMessageText), 1)
+                    ])
+                  ]))
+                : createCommentVNode("", true)
+          ], 2)
+        ]),
+        _: 2
+      }, [
+        (_ctx.$slots.loader)
+          ? {
+              name: "loader",
+              fn: withCtx(({ options }) => [
+                renderSlot(_ctx.$slots, "loader", { options: options })
               ])
-            ]))
-          : ((!$props.options || ($props.options && $props.options.length === 0)))
-            ? (openBlock(), createBlock("li", _hoisted_8, [
-                renderSlot(_ctx.$slots, "empty", {}, () => [
-                  createTextVNode(toDisplayString($options.emptyMessageText), 1)
-                ])
-              ]))
-            : createCommentVNode("", true)
-      ])
+            }
+          : undefined
+      ]), 1040, ["style", "items", "disabled"])
     ], 4),
     renderSlot(_ctx.$slots, "footer", {
       value: $props.modelValue,

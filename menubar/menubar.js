@@ -33,6 +33,10 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
             template: {
                 type: Object,
                 default: null
+            },
+            exact: {
+                type: Boolean,
+                default: true
             }
         },
         documentClickListener: null,
@@ -58,7 +62,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
         },
         methods: {
             onItemMouseEnter(event, item) {
-                if (item.disabled || this.mobileActive) {
+                if (this.disabled(item) || this.mobileActive) {
                     event.preventDefault();
                     return;
                 }
@@ -73,7 +77,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                 }
             },
             onItemClick(event, item, navigate) {
-                if (item.disabled) {
+                if (this.disabled(item)) {
                     event.preventDefault();
                     return;
                 }
@@ -223,8 +227,12 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                     }
                 ]
             },
-            getLinkClass(item) {
-                return ['p-menuitem-link', {'p-disabled': item.disabled}];
+            linkClass(item, routerProps) {
+                return ['p-menuitem-link', {
+                    'p-disabled': this.disabled(item),
+                    'router-link-active': routerProps && routerProps.isActive,
+                    'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+                }];
             },
             bindDocumentClickListener() {
                 if (!this.documentClickListener) {
@@ -251,6 +259,9 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
             },
             visible(item) {
                 return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+            },
+            disabled(item) {
+                return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
             }
         },
         computed: {
@@ -289,17 +300,17 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                 }, [
                   (!$props.template)
                     ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
-                        (item.to && !item.disabled)
+                        (item.to && !$options.disabled(item))
                           ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                               key: 0,
                               to: item.to,
                               custom: ""
                             }, {
-                              default: vue.withCtx(({navigate, href}) => [
+                              default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
                                 vue.withDirectives(vue.createVNode("a", {
                                   href: href,
                                   onClick: $event => ($options.onItemClick($event, item, navigate)),
-                                  class: $options.getLinkClass(item),
+                                  class: $options.linkClass(item, {isActive, isExactActive}),
                                   onKeydown: $event => ($options.onItemKeyDown($event, item)),
                                   role: "menuitem"
                                 }, [
@@ -316,14 +327,14 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                           : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
                               key: 1,
                               href: item.url,
-                              class: $options.getLinkClass(item),
+                              class: $options.linkClass(item),
                               target: item.target,
                               "aria-haspopup": item.items != null,
                               "aria-expanded": item === $data.activeItem,
                               onClick: $event => ($options.onItemClick($event, item)),
                               onKeydown: $event => ($options.onItemKeyDown($event, item)),
                               role: "menuitem",
-                              tabindex: item.disabled ? null : '0'
+                              tabindex: $options.disabled(item) ? null : '0'
                             }, [
                               vue.createVNode("span", {
                                 class: ['p-menuitem-icon', item.icon]
@@ -351,8 +362,9 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                         onLeafClick: $options.onLeafClick,
                         onKeydownItem: $options.onChildItemKeyDown,
                         parentActive: item === $data.activeItem,
-                        template: $props.template
-                      }, null, 8, ["model", "mobileActive", "onLeafClick", "onKeydownItem", "parentActive", "template"]))
+                        template: $props.template,
+                        exact: $props.exact
+                      }, null, 8, ["model", "mobileActive", "onLeafClick", "onKeydownItem", "parentActive", "template", "exact"]))
                     : vue.createCommentVNode("", true)
                 ], 46, ["onMouseenter"]))
               : vue.createCommentVNode("", true),
@@ -377,6 +389,10 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
     		model: {
                 type: Array,
                 default: null
+            },
+            exact: {
+                type: Boolean,
+                default: true
             }
         },
         outsideClickListener: null,
@@ -470,8 +486,9 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
           root: true,
           mobileActive: $data.mobileActive,
           onLeafClick: $options.onLeafClick,
-          template: _ctx.$slots.item
-        }, null, 8, ["model", "mobileActive", "onLeafClick", "template"]),
+          template: _ctx.$slots.item,
+          exact: $props.exact
+        }, null, 8, ["model", "mobileActive", "onLeafClick", "template", "exact"]),
         (_ctx.$slots.end)
           ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
               vue.renderSlot(_ctx.$slots, "end")

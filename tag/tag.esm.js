@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, createCommentVNode, createVNode, toDisplayString } from 'vue';
+import { openBlock, createBlock, mergeProps, renderSlot, createCommentVNode, createVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'Tag',
@@ -27,7 +27,7 @@ var script = {
 const _hoisted_1 = { class: "p-tag-value" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", { class: $options.containerClass }, [
+  return (openBlock(), createBlock("span", mergeProps({ class: $options.containerClass }, _ctx.$attrs), [
     renderSlot(_ctx.$slots, "default", {}, () => [
       ($props.icon)
         ? (openBlock(), createBlock("span", {
@@ -37,7 +37,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         : createCommentVNode("", true),
       createVNode("span", _hoisted_1, toDisplayString($props.value), 1)
     ])
-  ], 2))
+  ], 16))
 }
 
 function styleInject(css, ref) {

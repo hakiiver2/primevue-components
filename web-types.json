@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "framework": "vue",
   "name": "PrimeVue",
-  "version": "3.5.1-SNAPSHOT",
+  "version": "3.6.5-SNAPSHOT",
   "contributions": {
     "html": {
       "types-syntax": "typescript",
@@ -106,16 +106,6 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
-              }
-            },
-            {
-              "name": "active",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/accordiontab",
-              "description": "Visibility of the content.",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
               }
             },
             {
@@ -241,7 +231,7 @@
             },
             {
               "name": "completeOnFocus",
-              "default": false,
+              "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
               "description": "Whether to run a query when input receives focus.",
               "value": {
@@ -300,6 +290,26 @@
               }
             },
             {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
               "name": "panelClass",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
@@ -307,6 +317,16 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "virtualScrollerOptions",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             }
           ],
@@ -413,6 +433,21 @@
               "name": "footer",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
               "description": "Custom content for the component footer."
+            },
+            {
+              "name": "chip",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Custom content for the chip display."
+            },
+            {
+              "name": "content",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Custom content for the virtual scroller"
+            },
+            {
+              "name": "loader",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Custom content for the virtual scroller loader items"
             }
           ]
         },
@@ -626,6 +661,16 @@
               "value": {
                 "kind": "expression",
                 "type": "menuitem"
+              }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/breadcrumb",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
               }
             }
           ],
@@ -1115,6 +1160,36 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Inline style of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "keepInvalid",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Keep invalid value when input blur.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
               }
             }
           ],
@@ -1649,6 +1724,11 @@
               "name": "option",
               "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
               "description": "Custom content for the item's option"
+            },
+            {
+              "name": "indicator",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Custom content for the dropdown indicator"
             }
           ]
         },
@@ -1790,6 +1870,63 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "trueValue",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Value in checked state.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "falseValue",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Value in unchecked state.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Callback to invoke on value click."
+            },
+            {
+              "name": "change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Callback to invoke on value change."
+            },
+            {
+              "name": "input",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Callback to invoke on value change."
             }
           ]
         },
@@ -1926,6 +2063,26 @@
               "value": {
                 "kind": "expression",
                 "type": "boolean"
+              }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/chips",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/chips",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
               }
             }
           ],
@@ -2675,6 +2832,16 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/contextmenu",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
             }
           ],
           "slots": [
@@ -3022,6 +3189,16 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "exportFunction",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Custom function to export data.",
+              "value": {
+                "kind": "expression",
+                "type": "function"
               }
             },
             {
@@ -4608,34 +4785,28 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "appendTo",
+              "default": "body",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dialog",
+              "description": "A valid query selector or an HTMLElement to specify where the dialog gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
             }
           ],
           "events": [
             {
               "name": "hide",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dialog",
-              "description": "Callback to invoke when dialog is hidden.",
-              "arguments": [
-                {
-                  "name": "event",
-                  "doc-url": "https://primefaces.org/primevue/showcase/#/dialog",
-                  "type": "object",
-                  "description": "Event Object"
-                }
-              ]
+              "description": "Callback to invoke when dialog is hidden."
             },
             {
               "name": "show",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dialog",
-              "description": "Callback to invoke when dialog is showed.",
-              "arguments": [
-                {
-                  "name": "event",
-                  "doc-url": "https://primefaces.org/primevue/showcase/#/dialog",
-                  "type": "object",
-                  "description": "Event Object"
-                }
-              ]
+              "description": "Callback to invoke when dialog is showed."
             },
             {
               "name": "maximize",
@@ -4728,6 +4899,74 @@
                 "kind": "expression",
                 "type": "string"
               }
+            }
+          ]
+        },
+        {
+          "name": "Dock",
+          "source": {
+            "module": "PrimeVue",
+            "symbol": "Dock"
+          },
+          "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+          "description": "Dock is a navigation component consisting of menuitems.",
+          "attributes": [
+            {
+              "name": "model",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+              "description": "MenuModel instance to define the action items.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "position",
+              "default": "bottom",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+              "description": "Position of element. Valid values are 'bottom', 'top', 'left' and 'right'.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+              "description": "Style class of the element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+              "description": "Inline style of the element.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            }
+          ],
+          "slots": [
+            {
+              "name": "item",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+              "description": "Custom content for the item."
             }
           ]
         },
@@ -4999,6 +5238,16 @@
                 "kind": "expression",
                 "type": "string"
               }
+            },
+            {
+              "name": "virtualScrollerOptions",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
             }
           ],
           "events": [
@@ -5135,6 +5384,21 @@
               "name": "empty",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
               "description": "Custom content when there is no data to display"
+            },
+            {
+              "name": "content",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Custom content for the virtual scroller"
+            },
+            {
+              "name": "loader",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Custom content for the virtual scroller loader items"
+            },
+            {
+              "name": "indicator",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Custom content for the dropdown indicator"
             }
           ]
         },
@@ -5525,6 +5789,26 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/fileupload",
+              "description": "Inline style of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/fileupload",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
             }
           ],
           "events": [
@@ -5666,12 +5950,14 @@
               "description": "Callback to invoke when a singe file is removed from the list.",
               "arguments": [
                 {
-                  "file": "event.file",
+                  "name": "event.file",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/fileupload",
                   "type": "object",
                   "description": "Removed file."
                 },
                 {
-                  "file": "event.files",
+                  "name": "event.files",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/fileupload",
                   "type": "object",
                   "description": "Remaining files to be uploaded."
                 }
@@ -5997,6 +6283,46 @@
               "name": "indicator",
               "doc-url": "https://primefaces.org/primevue/showcase/#/galleria",
               "description": "Custom indicator content"
+            }
+          ]
+        },
+        {
+          "name": "Image",
+          "source": {
+            "module": "PrimeVue",
+            "symbol": "Image"
+          },
+          "doc-url": "https://primefaces.org/primevue/showcase/#/image",
+          "description": "Displays an image with preview and tranformation options.",
+          "attributes": [
+            {
+              "name": "preview",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/image",
+              "description": "Controls the preview functionality.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "show",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/image",
+              "description": "Triggered when the preview overlay is shown."
+            },
+            {
+              "name": "hide",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/image",
+              "description": "Triggered when the preview overlay is hidden."
+            }
+          ],
+          "slots": [
+            {
+              "name": "indicator",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/image",
+              "description": "Custom content for the preview indicator"
             }
           ]
         },
@@ -6391,6 +6717,26 @@
                 "kind": "expression",
                 "type": "string"
               }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
             }
           ],
           "events": [
@@ -6433,6 +6779,63 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "trueValue",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Value in checked state.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "falseValue",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Value in unchecked state.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Callback to invoke on click."
+            },
+            {
+              "name": "change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Callback to invoke on value change."
+            },
+            {
+              "name": "input",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Callback to invoke on value change."
             }
           ]
         },
@@ -6851,6 +7254,13 @@
                   "description": "Filter value"
                 }
               ]
+            },
+            {
+              "name": "virtualScrollerOptions",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "type": "object",
+              "default": "null",
+              "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it."
             }
           ],
           "slots": [
@@ -6883,6 +7293,16 @@
               "name": "empty",
               "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
               "description": "Custom content when there is no data to display"
+            },
+            {
+              "name": "content",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Custom content for the virtual scroller"
+            },
+            {
+              "name": "loader",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Custom content for the virtual scroller loader items"
             }
           ]
         },
@@ -6914,9 +7334,29 @@
                 "kind": "expression",
                 "type": "string"
               }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/megamenu",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
             }
           ],
           "slots": [
+            {
+              "name": "start",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/megamenu",
+              "description": "Custom content before the content"
+            },
+            {
+              "name": "end",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/megamenu",
+              "description": "Custom content after the content"
+            },
             {
               "name": "item",
               "doc-url": "https://primefaces.org/primevue/showcase/#/megamenu",
@@ -6982,6 +7422,16 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/menu",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
             }
           ],
           "slots": [
@@ -7009,6 +7459,16 @@
               "value": {
                 "kind": "expression",
                 "type": "array"
+              }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/menubar",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
               }
             }
           ],
@@ -7374,6 +7834,46 @@
                 "kind": "expression",
                 "type": "string"
               }
+            },
+            {
+              "name": "maxSelectedLabels",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Decides how many selected item labels to show at most.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "selectedItemsLabel",
+              "default": "{0} items selected",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Label to display after exceeding max selected labels.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "selectAll",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Whether all data is selected.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "virtualScrollerOptions",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
             }
           ],
           "events": [
@@ -7434,6 +7934,25 @@
                   "description": "Filter value"
                 }
               ]
+            },
+            {
+              "name": "selectall-change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Callback to invoke when all data is selected.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+                  "type": "object",
+                  "description": "Browser event"
+                },
+                {
+                  "name": "event.checked",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+                  "type": "boolean",
+                  "description": "Whether all data is selected."
+                }
+              ]
             }
           ],
           "slots": [
@@ -7471,6 +7990,26 @@
               "name": "empty",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
               "description": "Custom content when there is no data to display"
+            },
+            {
+              "name": "chip",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Custom content for the chip display."
+            },
+            {
+              "name": "content",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Custom content for the virtual scroller"
+            },
+            {
+              "name": "loader",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Custom content for the virtual scroller loader items"
+            },
+            {
+              "name": "indicator",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Custom content for the dropdown indicator"
             }
           ]
         },
@@ -7577,6 +8116,25 @@
                   "doc-url": "https://primefaces.org/primevue/showcase/#/orderlist",
                   "type": "string",
                   "description": "Direction of the change; \"up\", \"down\", \"bottom\", \"top\""
+                }
+              ]
+            },
+            {
+              "name": "selection-change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/orderlist",
+              "description": "Callback to invoke when selection changes.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/orderlist",
+                  "type": "object",
+                  "description": "Browser event"
+                },
+                {
+                  "name": "event.value",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/orderlist",
+                  "type": "array",
+                  "description": "Ordered list"
                 }
               ]
             }
@@ -8028,6 +8586,16 @@
                 "kind": "expression",
                 "type": "array"
               }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/panelmenu",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
             }
           ],
           "slots": [
@@ -8148,6 +8716,26 @@
               }
             },
             {
+              "name": "hideIcon",
+              "default": "pi pi-eye-slash",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/password",
+              "description": "Icon to hide displaying the password as plain text.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "showIcon",
+              "default": "pi pi-eye",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/password",
+              "description": "Icon to show displaying the password as plain text.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "inputStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/password",
@@ -8168,20 +8756,30 @@
               }
             },
             {
-              "name": "hideIcon",
-              "default": "pi pi-eye-slash",
+              "name": "class",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/password",
-              "description": "Icon to hide displaying the password as plain text.",
+              "description": "Style class of the component.",
               "value": {
                 "kind": "expression",
                 "type": "string"
               }
             },
             {
-              "name": "showIcon",
-              "default": "pi pi-eye",
+              "name": "style",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/password",
-              "description": "Icon to show displaying the password as plain text.",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "panelClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/password",
+              "description": "Style class of the overlay panel.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -8393,6 +8991,25 @@
                   "description": "Moved items"
                 }
               ]
+            },
+            {
+              "name": "selection-change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Callback to invoke when one or more items are moved to the other list.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+                  "type": "object",
+                  "description": "Browser event"
+                },
+                {
+                  "name": "event.value",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+                  "type": "array",
+                  "description": "Selected items"
+                }
+              ]
             }
           ],
           "slots": [
@@ -8523,6 +9140,54 @@
                 "kind": "expression",
                 "type": "any"
               }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Callback to invoke on radio button click.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Callback to invoke on radio button value change.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
             }
           ]
         },
@@ -9122,6 +9787,224 @@
           ]
         },
         {
+          "name": "SpeedDial",
+          "source": {
+            "module": "PrimeVue",
+            "symbol": "SpeedDial"
+          },
+          "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+          "description": "When pressed, a floating action button can display multiple primary actions that can be performed on a page.",
+          "attributes": [
+            {
+              "name": "model",
+              "default": "any",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "MenuModel instance to define the action items.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "visible",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Specifies the visibility of the overlay.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "direction",
+              "default": "up",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Specifies the opening direction of actions. Valid values are 'up', 'down', 'left', 'right', 'up-left', 'up-right', 'down-left' and 'down-right'",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "transitionDelay",
+              "default": "30",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Transition delay step for each action item.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "type",
+              "default": "linear",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Specifies the opening type of actions.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "radius",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Radius for *circle types.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "mask",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Whether to show a mask element behind the speeddial",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Whether the component is disabled.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "hideOnClickOutside",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Whether the actions close when clicked outside.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "buttonClassName",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Style class of the button element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "maskClassName",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Style class of the mask element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "maskStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Inline style of the mask element.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "showIcon",
+              "default": "pi pi-plus",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Show icon of the button element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "hideIcon",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "\tHide icon of the button element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "rotateAnimation",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Defined to rotate showIcon when hideIcon is not present.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Style class of the element.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Style class of the element.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Fired when the button element clicked.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "show",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Fired when the actions are visible."
+            },
+            {
+              "name": "hide",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Fired when the actions are hidden."
+            }
+          ],
+          "slots": [
+            {
+              "name": "item",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Custom content for the item"
+            },
+            {
+              "name": "toggle",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "toggle: toggle metadata"
+            }
+          ]
+        },
+        {
           "name": "SplitButton",
           "source": {
             "module": "PrimeVue",
@@ -9188,6 +10071,26 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/splitbutton",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/splitbutton",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
               }
             }
           ],
@@ -9348,6 +10251,16 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/steps",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
             }
           ],
           "slots": [
@@ -9357,6 +10270,15 @@
               "description": "Template of a menuitem."
             }
           ]
+        },
+        {
+          "name": "StyleClass",
+          "source": {
+            "module": "PrimeVue",
+            "symbol": "StyleClass"
+          },
+          "doc-url": "https://primefaces.org/primevue/showcase/#/styleclass",
+          "description": "StyleClass manages css classes declaratively to during enter/leave animations or just to toggle classes on an element."
         },
         {
           "name": "TabMenu",
@@ -9379,7 +10301,7 @@
             },
             {
               "name": "exact",
-              "default": true,
+              "default": "true",
               "doc-url": "https://primefaces.org/primevue/showcase/#/tabmenu",
               "description": "Defines if active route highlight should match the exact route path.",
               "value": {
@@ -9491,6 +10413,16 @@
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
               "description": "When enabled, hidden tabs are not rendered at all. Defaults to false that hides tabs with css.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "scrollable",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "When specified, enables horizontal scrolling.",
               "value": {
                 "kind": "expression",
                 "type": "boolean"
@@ -9669,6 +10601,16 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "exact",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tieredmenu",
+              "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
             }
           ],
           "slots": [
@@ -9775,7 +10717,7 @@
               "name": "position",
               "default": "top-right",
               "doc-url": "https://primefaces.org/primevue/showcase/#/toast",
-              "description": "Position of the toast in viewport. Other valid values are \"top-left\", \"top-center\", \"bottom-left\", \"botton-center\", \"bottom-right\" and \"center\".",
+              "description": "Position of the toast in viewport. Other valid values are \"top-left\", \"top-center\", \"bottom-left\", \"bottom-center\", \"bottom-right\" and \"center\".",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -9800,6 +10742,23 @@
                 "kind": "expression",
                 "type": "number"
               }
+            },
+            {
+              "name": "breakpoints",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/toast",
+              "description": "Object literal to define widths per screen size.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            }
+          ],
+          "slots": [
+            {
+              "name": "message",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/toast",
+              "description": "Custom content for the toast message"
             }
           ]
         },
@@ -10371,6 +11330,11 @@
               "name": "empty",
               "doc-url": "https://primefaces.org/primevue/showcase/#/treeselect",
               "description": "Custom content when there is no data to display"
+            },
+            {
+              "name": "indicator",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/treeselect",
+              "description": "Custom content for the dropdown indicator"
             }
           ]
         },
@@ -11056,6 +12020,204 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tristatecheckbox",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tristatecheckbox",
+              "description": "Inline of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            }
+          ]
+        },
+        {
+          "name": "VirtualScroller",
+          "source": {
+            "module": "PrimeVue",
+            "symbol": "VirtualScroller"
+          },
+          "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+          "description": "VirtualScroller is a performant approach to handle huge data efficiently.",
+          "attributes": [
+            {
+              "name": "items",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "An array of objects to display.",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              }
+            },
+            {
+              "name": "itemSize",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "The height/width of item according to orientation.",
+              "value": {
+                "kind": "expression",
+                "type": "number|array"
+              }
+            },
+            {
+              "name": "scrollHeight",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Height of the scroll viewport.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "scrollWidth",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Width of the scroll viewport.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "orientation",
+              "default": "vertical",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "The orientation of scrollbar, valid values are 'vertical', 'horizontal' and 'both'.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "numToleratedItems",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Determines how many additional elements to add to the DOM outside of the view. According to the scrolls made up and down, extra items are added in a certain algorithm in the form of multiples of this number. Default value is half the number of items shown in the view.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "delay",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Delay in scroll before new data is loaded.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "lazy",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Defines if data is loaded and interacted with in lazy manner.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "showLoader",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Whether to show loader.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Inline style of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "scroll-index-change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Callback to invoke when scroll position and item's range in view changes.",
+              "arguments": [
+                {
+                  "name": "event.first",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+                  "type": "number",
+                  "description": "First index of the new data range to be loaded."
+                },
+                {
+                  "name": "event.last",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+                  "type": "number",
+                  "description": "Last index of the new data range to be loaded."
+                }
+              ]
+            },
+            {
+              "name": "lazy-load",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Callback to invoke in lazy mode to load new data.",
+              "arguments": [
+                {
+                  "name": "event.first",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+                  "type": "number",
+                  "description": "First index of the new data range to be loaded."
+                },
+                {
+                  "name": "event.last",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+                  "type": "number",
+                  "description": "Last index of the new data range to be loaded."
+                }
+              ]
+            }
+          ],
+          "slots": [
+            {
+              "name": "item",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Content for the item"
+            },
+            {
+              "name": "content",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Custom content for the component"
+            },
+            {
+              "name": "loader",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Custom content for the loader items"
             }
           ]
         }
@@ -11105,6 +12267,20 @@
           },
           "description": "Ripple directive adds ripple effect to the host element.",
           "doc-url": "https://primefaces.org/primevue/showcase/#/ripple",
+          "value": {
+            "kind": "expression",
+            "type": "function"
+          },
+          "required": false
+        },
+        {
+          "name": "StyleClass",
+          "source": {
+            "module": "PrimeVue",
+            "symbol": "StyleClass"
+          },
+          "description": "StyleClass manages css classes declaratively to during enter/leave animations or just to toggle classes on an element.",
+          "doc-url": "https://primefaces.org/primevue/showcase/#/styleclass",
           "value": {
             "kind": "expression",
             "type": "function"

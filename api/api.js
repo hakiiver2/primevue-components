@@ -468,10 +468,18 @@ this.primevue.api = (function (exports, utils) {
         WINDOW_MINIMIZE:'pi pi-window-minimize'
     };
 
+    const ToastSeverities = {
+        INFO: 'info',
+        WARN: 'warn',
+        ERROR: 'error',
+        SUCCESS: 'success'
+    };
+
     exports.FilterMatchMode = FilterMatchMode;
     exports.FilterOperator = FilterOperator;
     exports.FilterService = FilterService;
     exports.PrimeIcons = PrimeIcons;
+    exports.ToastSeverity = ToastSeverities;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

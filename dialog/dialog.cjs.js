@@ -69,6 +69,10 @@ var script = {
         minY: {
             type: Number,
             default: 0
+        },
+        appendTo: {
+            type: String,
+            default: 'body'
         }
     },
     data() {
@@ -131,7 +135,7 @@ var script = {
             utils.DomHandler.addClass(this.mask, 'p-dialog-mask-leave');
         },
         onLeave() {
-            
+
             this.$emit('hide');
         },
         onAfterLeave(el) {
@@ -375,6 +379,12 @@ var script = {
         },
         contentStyleClass() {
             return ['p-dialog-content', this.contentClass];
+        },
+        appendDisabled() {
+            return this.appendTo === 'self';
+        },
+        appendTarget() {
+            return this.appendDisabled ? null : this.appendTo;
         }
     },
     directives: {
@@ -392,7 +402,10 @@ const _hoisted_3 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
+  return (vue.openBlock(), vue.createBlock(vue.Teleport, {
+    to: $options.appendTarget,
+    disabled: $options.appendDisabled
+  }, [
     ($data.containerVisible)
       ? (vue.openBlock(), vue.createBlock("div", {
           key: 0,
@@ -486,7 +499,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onLeave", "onAfterLeave"])
         ], 2))
       : vue.createCommentVNode("", true)
-  ]))
+  ], 8, ["to", "disabled"]))
 }
 
 function styleInject(css, ref) {

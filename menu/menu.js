@@ -13,7 +13,8 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
         emits: ['click'],
         props: {
             item: null,
-            template: null
+            template: null,
+            exact: null
         },
         methods: {
             onClick(event, navigate) {
@@ -23,16 +24,23 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
                     navigate: navigate
                 });
             },
+            linkClass(item, routerProps) {
+                return ['p-menuitem-link', {
+                    'p-disabled': this.disabled(item),
+                    'router-link-active': routerProps && routerProps.isActive,
+                    'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+                }];
+            },
             visible() {
                 return (typeof this.item.visible === 'function' ? this.item.visible() : this.item.visible !== false);
+            },
+            disabled(item) {
+                return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
             }
         },
         computed: {
             containerClass() {
                 return ['p-menuitem', this.item.class];
-            },
-            linkClass() {
-                return ['p-menuitem-link', {'p-disabled': this.item.disabled}];
             }
         },
         directives: {
@@ -56,17 +64,17 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
           }, [
             (!$props.template)
               ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
-                  ($props.item.to && !$props.item.disabled)
+                  ($props.item.to && !$options.disabled($props.item))
                     ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                         key: 0,
                         to: $props.item.to,
                         custom: ""
                       }, {
-                        default: vue.withCtx(({navigate, href}) => [
+                        default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
                           vue.withDirectives(vue.createVNode("a", {
                             href: href,
                             onClick: $event => ($options.onClick($event, navigate)),
-                            class: $options.linkClass,
+                            class: $options.linkClass($props.item, {isActive, isExactActive}),
                             role: "menuitem"
                           }, [
                             vue.createVNode("span", {
@@ -82,11 +90,11 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
                     : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
                         key: 1,
                         href: $props.item.url,
-                        class: $options.linkClass,
+                        class: $options.linkClass($props.item),
                         onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
                         target: $props.item.target,
                         role: "menuitem",
-                        tabindex: $props.item.disabled ? null : '0'
+                        tabindex: $options.disabled($props.item) ? null : '0'
                       }, [
                         vue.createVNode("span", {
                           class: ['p-menuitem-icon', $props.item.icon]
@@ -108,6 +116,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
 
     var script = {
         name: 'Menu',
+        emits: ['show', 'hide'],
         inheritAttrs: false,
         props: {
             popup: {
@@ -129,6 +138,10 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
             baseZIndex: {
                 type: Number,
                 default: 0
+            },
+            exact: {
+                type: Boolean,
+                default: true
             }
         },
         data() {
@@ -196,11 +209,14 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
                 if (this.autoZIndex) {
                     utils.ZIndexUtils.set('menu', el, this.baseZIndex + this.$primevue.config.zIndex.menu);
                 }
+
+                this.$emit('show');
             },
             onLeave() {
                 this.unbindOutsideClickListener();
                 this.unbindResizeListener();
                 this.unbindScrollListener();
+                this.$emit('hide');
             },
             onAfterLeave(el) {
                 if (this.autoZIndex) {
@@ -343,8 +359,9 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
                                         key: 0,
                                         item: child,
                                         onClick: $options.itemClick,
-                                        template: _ctx.$slots.item
-                                      }, null, 8, ["item", "onClick", "template"]))
+                                        template: _ctx.$slots.item,
+                                        exact: $props.exact
+                                      }, null, 8, ["item", "onClick", "template", "exact"]))
                                     : ($options.visible(child) && child.separator)
                                       ? (vue.openBlock(), vue.createBlock("li", {
                                           class: ['p-menu-separator', child.class],
@@ -367,8 +384,9 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
                                 key: item.label + i.toString(),
                                 item: item,
                                 onClick: $options.itemClick,
-                                template: _ctx.$slots.item
-                              }, null, 8, ["item", "onClick", "template"]))
+                                template: _ctx.$slots.item,
+                                exact: $props.exact
+                              }, null, 8, ["item", "onClick", "template", "exact"]))
                       ], 64))
                     }), 128))
                   ])
@@ -407,7 +425,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
       }
     }
 
-    var css_248z = "\n.p-menu-overlay {\n    position: absolute;\n}\n.p-menu ul {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-menu .p-menuitem-link {\n    cursor: pointer;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-menu .p-menuitem-text {\n    line-height: 1;\n}\n";
+    var css_248z = "\n.p-menu-overlay {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-menu ul {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-menu .p-menuitem-link {\n    cursor: pointer;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-menu .p-menuitem-text {\n    line-height: 1;\n}\n";
     styleInject(css_248z);
 
     script.render = render;

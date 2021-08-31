@@ -17,11 +17,15 @@ var script = {
         readonly: {
             type: Boolean,
             default: true
+        },
+        exact: {
+            type: Boolean,
+            default: true
         }
     },
     methods: {
         onItemClick(event, item, navigate) {
-            if (item.disabled || this.readonly) {
+            if (this.disabled(item) || this.readonly) {
                 event.preventDefault();
                 return;
             }
@@ -46,11 +50,20 @@ var script = {
                 'p-disabled': this.isItemDisabled(item)
             }];
         },
+        linkClass(routerProps) {
+            return ['p-menuitem-link', {
+                'router-link-active': routerProps && routerProps.isActive,
+                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+            }];
+        },
         isItemDisabled(item) {
-            return (item.disabled || (this.readonly && !this.isActive(item)));
+            return (this.disabled(item) || (this.readonly && !this.isActive(item)));
         },
         visible(item) {
             return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+        },
+        disabled(item) {
+            return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
         }
     },
     computed: {
@@ -66,13 +79,8 @@ var script = {
 const _hoisted_1 = { role: "tablist" };
 const _hoisted_2 = { class: "p-steps-number" };
 const _hoisted_3 = { class: "p-steps-title" };
-const _hoisted_4 = {
-  key: 1,
-  class: "p-menuitem-link",
-  role: "presentation"
-};
-const _hoisted_5 = { class: "p-steps-number" };
-const _hoisted_6 = { class: "p-steps-title" };
+const _hoisted_4 = { class: "p-steps-number" };
+const _hoisted_5 = { class: "p-steps-title" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = vue.resolveComponent("router-link");
@@ -103,23 +111,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             to: item.to,
                             custom: ""
                           }, {
-                            default: vue.withCtx(({navigate, href}) => [
+                            default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
                               vue.createVNode("a", {
                                 href: href,
-                                class: "p-menuitem-link",
+                                class: $options.linkClass({isActive, isExactActive}),
                                 onClick: $event => ($options.onItemClick($event, item, navigate)),
                                 role: "presentation"
                               }, [
                                 vue.createVNode("span", _hoisted_2, vue.toDisplayString(index + 1), 1),
                                 vue.createVNode("span", _hoisted_3, vue.toDisplayString(item.label), 1)
-                              ], 8, ["href", "onClick"])
+                              ], 10, ["href", "onClick"])
                             ]),
                             _: 2
                           }, 1032, ["to"]))
-                        : (vue.openBlock(), vue.createBlock("span", _hoisted_4, [
-                            vue.createVNode("span", _hoisted_5, vue.toDisplayString(index + 1), 1),
-                            vue.createVNode("span", _hoisted_6, vue.toDisplayString(item.label), 1)
-                          ]))
+                        : (vue.openBlock(), vue.createBlock("span", {
+                            key: 1,
+                            class: $options.linkClass(),
+                            role: "presentation"
+                          }, [
+                            vue.createVNode("span", _hoisted_4, vue.toDisplayString(index + 1), 1),
+                            vue.createVNode("span", _hoisted_5, vue.toDisplayString(item.label), 1)
+                          ], 2))
                     ], 64))
                   : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {
                       key: 1,

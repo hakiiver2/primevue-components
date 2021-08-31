@@ -50,6 +50,7 @@ var script = {
     },
     selfClick: false,
     target: null,
+    eventTarget: null,
     outsideClickListener: null,
     scrollHandler: null,
     resizeListener: null,
@@ -86,15 +87,16 @@ var script = {
         }
     },
     methods: {
-        toggle(event) {
+        toggle(event, target) {
             if (this.visible)
                 this.hide();
             else
-                this.show(event);
+                this.show(event, target);
         },
-        show(event) {
+        show(event, target) {
             this.visible = true;
-            this.target = event.currentTarget;
+            this.eventTarget = event.currentTarget;
+            this.target = target || event.currentTarget;
         },
         hide() {
             this.visible = false;
@@ -203,7 +205,7 @@ var script = {
             }
         },
         isTargetClicked(event) {
-            return this.target && (this.target === event.target || this.target.contains(event.target));
+            return (this.eventTarget && (this.eventTarget === event.target || this.eventTarget.contains(event.target)));
         },
         containerRef(el) {
             this.container = el;
@@ -280,10 +282,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }), [
               vue.createVNode("div", {
                 class: "p-overlaypanel-content",
-                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
+                onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
               }, [
                 vue.renderSlot(_ctx.$slots, "default")
-              ]),
+              ], 32),
               ($props.showCloseIcon)
                 ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
                     key: 0,
@@ -332,7 +334,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-overlaypanel {\n    position: absolute;\n    margin-top: 10px;\n}\n.p-overlaypanel-flipped {\n    margin-top: 0;\n    margin-bottom: 10px;\n}\n.p-overlaypanel-close {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Animation */\n.p-overlaypanel-enter-from {\n    opacity: 0;\n    -webkit-transform: scaleY(0.8);\n            transform: scaleY(0.8);\n}\n.p-overlaypanel-leave-to {\n    opacity: 0;\n}\n.p-overlaypanel-enter-active {\n    -webkit-transition: opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n}\n.p-overlaypanel-leave-active {\n    -webkit-transition: opacity .1s linear;\n    transition: opacity .1s linear;\n}\n.p-overlaypanel:after, .p-overlaypanel:before {\n\tbottom: 100%;\n\tleft: calc(var(--overlayArrowLeft, 0) + 1.25rem);\n\tcontent: \" \";\n\theight: 0;\n\twidth: 0;\n\tposition: absolute;\n\tpointer-events: none;\n}\n.p-overlaypanel:after {\n\tborder-width: 8px;\n\tmargin-left: -8px;\n}\n.p-overlaypanel:before {\n\tborder-width: 10px;\n\tmargin-left: -10px;\n}\n.p-overlaypanel-flipped:after, .p-overlaypanel-flipped:before {\n    bottom: auto;\n    top: 100%;\n}\n.p-overlaypanel.p-overlaypanel-flipped:after {\n    border-bottom-color: transparent;\n}\n.p-overlaypanel.p-overlaypanel-flipped:before {\n    border-bottom-color: transparent\n}\n";
+var css_248z = "\n.p-overlaypanel {\n    position: absolute;\n    margin-top: 10px;\n    top: 0;\n    left: 0;\n}\n.p-overlaypanel-flipped {\n    margin-top: 0;\n    margin-bottom: 10px;\n}\n.p-overlaypanel-close {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Animation */\n.p-overlaypanel-enter-from {\n    opacity: 0;\n    -webkit-transform: scaleY(0.8);\n            transform: scaleY(0.8);\n}\n.p-overlaypanel-leave-to {\n    opacity: 0;\n}\n.p-overlaypanel-enter-active {\n    -webkit-transition: opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n}\n.p-overlaypanel-leave-active {\n    -webkit-transition: opacity .1s linear;\n    transition: opacity .1s linear;\n}\n.p-overlaypanel:after, .p-overlaypanel:before {\n\tbottom: 100%;\n\tleft: calc(var(--overlayArrowLeft, 0) + 1.25rem);\n\tcontent: \" \";\n\theight: 0;\n\twidth: 0;\n\tposition: absolute;\n\tpointer-events: none;\n}\n.p-overlaypanel:after {\n\tborder-width: 8px;\n\tmargin-left: -8px;\n}\n.p-overlaypanel:before {\n\tborder-width: 10px;\n\tmargin-left: -10px;\n}\n.p-overlaypanel-flipped:after, .p-overlaypanel-flipped:before {\n    bottom: auto;\n    top: 100%;\n}\n.p-overlaypanel.p-overlaypanel-flipped:after {\n    border-bottom-color: transparent;\n}\n.p-overlaypanel.p-overlaypanel-flipped:before {\n    border-bottom-color: transparent\n}\n";
 styleInject(css_248z);
 
 script.render = render;

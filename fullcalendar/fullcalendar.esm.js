@@ -1,3 +1,4 @@
+import '@fullcalendar/core/vdom';
 import { Calendar } from '@fullcalendar/core';
 import { openBlock, createBlock } from 'vue';
 

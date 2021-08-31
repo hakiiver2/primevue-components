@@ -11,7 +11,6 @@
     "description": "Accordion element consists of one or more AccordionTab elements.",
     "attributes": [
       "header",
-      "active",
       "disabled"
     ]
   },
@@ -34,7 +33,10 @@
       "inputStyle",
       "inputClass",
       "forceSelection",
-      "panelClass"
+      "class",
+      "style",
+      "panelClass",
+      "virtualScrollerOptions"
     ]
   },
   "Avatar": {
@@ -68,7 +70,8 @@
     "description": "Breadcrumb provides contextual information about page hierarchy.",
     "attributes": [
       "model",
-      "home"
+      "home",
+      "exact"
     ]
   },
   "Button": {
@@ -124,7 +127,10 @@
       "manualInput",
       "appendTo",
       "inputStyle",
-      "inputClass"
+      "inputClass",
+      "class",
+      "style",
+      "keepInvalid"
     ]
   },
   "Carousel": {
@@ -180,7 +186,11 @@
     "attributes": [
       "value",
       "modelValue",
-      "binary"
+      "binary",
+      "class",
+      "style",
+      "trueValue",
+      "falseValue"
     ]
   },
   "Chip": {
@@ -200,7 +210,9 @@
       "max",
       "separator",
       "addOnBlur",
-      "allowDuplicate"
+      "allowDuplicate",
+      "class",
+      "style"
     ]
   },
   "ColorPicker": {
@@ -284,7 +296,8 @@
       "appendTo",
       "baseZIndex",
       "autoZIndex",
-      "global"
+      "global",
+      "exact"
     ]
   },
   "DataTable": {
@@ -323,6 +336,7 @@
       "rowHover",
       "csvSeparator",
       "exportFilename",
+      "exportFunction",
       "autoLayout",
       "resizableColumns",
       "columnResizeMode",
@@ -392,7 +406,8 @@
       "draggable",
       "minX",
       "minY",
-      "keepInViewport"
+      "keepInViewport",
+      "appendTo"
     ]
   },
   "Divider": {
@@ -401,6 +416,16 @@
       "align",
       "layout",
       "type"
+    ]
+  },
+  "Dock": {
+    "description": "Dock is a navigation component consisting of menuitems.",
+    "attributes": [
+      "model",
+      "position",
+      "class",
+      "style",
+      "exact"
     ]
   },
   "Dropdown": {
@@ -431,7 +456,8 @@
       "emptyMessage",
       "panelClass",
       "loading",
-      "loadingIcon"
+      "loadingIcon",
+      "virtualScrollerOptions"
     ]
   },
   "Editor": {
@@ -473,7 +499,9 @@
       "cancelLabel",
       "customUpload",
       "showUploadButton",
-      "showCancelButton"
+      "showCancelButton",
+      "style",
+      "class"
     ]
   },
   "FullCalendar": {
@@ -510,6 +538,12 @@
       "maskClass",
       "containerStyle",
       "galleriaClass"
+    ]
+  },
+  "Image": {
+    "description": "Displays an image with preview and tranformation options.",
+    "attributes": [
+      "preview"
     ]
   },
   "InlineMessage": {
@@ -560,13 +594,19 @@
       "max",
       "step",
       "inputStyle",
-      "inputClass"
+      "inputClass",
+      "class",
+      "style"
     ]
   },
   "InputSwitch": {
     "description": "InputSwitch is used to select a boolean value.",
     "attributes": [
-      "modelValue"
+      "modelValue",
+      "class",
+      "style",
+      "trueValue",
+      "falseValue"
     ]
   },
   "InputText": {
@@ -621,7 +661,8 @@
     "description": "MegaMenu is navigation component that displays submenus together.",
     "attributes": [
       "modelValue",
-      "orientation"
+      "orientation",
+      "exact"
     ]
   },
   "Menu": {
@@ -631,13 +672,15 @@
       "popup",
       "appendTo",
       "baseZIndex",
-      "autoZIndex"
+      "autoZIndex",
+      "exact"
     ]
   },
   "Menubar": {
     "description": "Menubar is a horizontal menu component.",
     "attributes": [
-      "modelValue"
+      "modelValue",
+      "exact"
     ]
   },
   "Message": {
@@ -678,7 +721,11 @@
       "selectionLimit",
       "showToggleAll",
       "loading",
-      "loadingIcon"
+      "loadingIcon",
+      "maxSelectedLabels",
+      "selectedItemsLabel",
+      "selectAll",
+      "virtualScrollerOptions"
     ]
   },
   "OrderList": {
@@ -740,7 +787,8 @@
     "description": "PanelMenu is a hybrid of Accordion and Tree components",
     "attributes": [
       "model",
-      "expandedKeys"
+      "expandedKeys",
+      "exact"
     ]
   },
   "Password": {
@@ -756,10 +804,13 @@
       "feedback",
       "toogleMask",
       "appendTo",
+      "hideIcon",
+      "showIcon",
       "inputStyle",
       "inputClass",
-      "hideIcon",
-      "showIcon"
+      "class",
+      "style",
+      "panelClass"
     ]
   },
   "PickList": {
@@ -794,7 +845,9 @@
     "description": "RadioButton is an extension to standard radio button element with theming.",
     "attributes": [
       "value",
-      "modelValue"
+      "modelValue",
+      "class",
+      "style"
     ]
   },
   "rating": {
@@ -867,6 +920,28 @@
       "ariaLabelledBy"
     ]
   },
+  "SpeedDial": {
+    "description": "When pressed, a floating action button can display multiple primary actions that can be performed on a page.",
+    "attributes": [
+      "model",
+      "visible",
+      "direction",
+      "transitionDelay",
+      "type",
+      "radius",
+      "mask",
+      "disabled",
+      "hideOnClickOutside",
+      "buttonClassName",
+      "maskClassName",
+      "maskStyle",
+      "showIcon",
+      "hideIcon",
+      "rotateAnimation",
+      "class",
+      "style"
+    ]
+  },
   "SplitButton": {
     "description": "SplitButton groups a set of commands in an overlay with a default command.",
     "attributes": [
@@ -875,7 +950,9 @@
       "model",
       "autoZIndex",
       "baseZIndex",
-      "appendTo"
+      "appendTo",
+      "class",
+      "style"
     ]
   },
   "Splitter": {
@@ -899,7 +976,8 @@
     "attributes": [
       "id",
       "model",
-      "readonly"
+      "readonly",
+      "exact"
     ]
   },
   "TabMenu": {
@@ -920,7 +998,8 @@
     "description": "TabView is a container component to group content with tabs.",
     "attributes": [
       "activeIndex",
-      "lazy"
+      "lazy",
+      "scrollable"
     ]
   },
   "Tag": {
@@ -953,7 +1032,8 @@
       "popup",
       "appendTo",
       "baseZIndex",
-      "autoZIndex"
+      "autoZIndex",
+      "exact"
     ]
   },
   "Timeline": {
@@ -971,7 +1051,8 @@
       "group",
       "position",
       "autoZIndex",
-      "baseZIndex"
+      "baseZIndex",
+      "breakpoints"
     ]
   },
   "ToggleButton": {
@@ -1067,7 +1148,25 @@
   "TriStateCheckbox": {
     "description": "TriStateCheckbox is used to select either \"true\", \"false\" or \"null\" as the value.",
     "attributes": [
-      "modelValue"
+      "modelValue",
+      "class",
+      "style"
+    ]
+  },
+  "VirtualScroller": {
+    "description": "VirtualScroller is a performant approach to handle huge data efficiently.",
+    "attributes": [
+      "items",
+      "itemSize",
+      "scrollHeight",
+      "scrollWidth",
+      "orientation",
+      "numToleratedItems",
+      "delay",
+      "lazy",
+      "showLoader",
+      "style",
+      "class"
     ]
   }
 }

@@ -740,9 +740,17 @@ var script$8 = {
             type: Boolean,
             default: false
         },
+        groupRowsBy: {
+            type: [Array,String],
+            default: null
+        },
         sortMode: {
             type: String,
             default: 'single'
+        },
+        groupRowSortField: {
+            type: [String, Function],
+            default: null
         },
         sortField: {
             type: [String, Function],
@@ -827,20 +835,15 @@ var script$8 = {
             this.$emit('column-resizestart', event);
         },
         getMultiSortMetaIndex() {
-            let index = -1;
+            return this.multiSortMeta.findIndex(meta => (meta.field === this.columnProp('field') || meta.field === this.columnProp('sortField')));
+        },
+        getBadgeValue() {
+            let index = this.getMultiSortMetaIndex();
 
-            for (let i = 0; i < this.multiSortMeta.length; i++) {
-                let meta = this.multiSortMeta[i];
-                if (meta.field === this.columnProp('field') || meta.field === this.columnProp('sortField')) {
-                    index = i;
-                    break;
-                }
-            }
-
-            return index;
+            return (this.groupRowsBy && this.groupRowsBy === this.groupRowSortField) && index > -1 ? index : index + 1;
         },
         isMultiSorted() {
-            return this.columnProp('sortable') && this.getMultiSortMetaIndex() > -1
+            return this.sortMode === 'multiple' && this.columnProp('sortable') && this.getMultiSortMetaIndex() > -1
         },
         isColumnSorted() {
             return this.sortMode === 'single' ? (this.sortField && (this.sortField === this.columnProp('field') || this.sortField === this.columnProp('sortField'))) : this.isMultiSorted();
@@ -992,7 +995,7 @@ function render$8(_ctx, _cache, $props, $setup, $data, $options) {
           }, null, 2))
         : createCommentVNode("", true),
       ($options.isMultiSorted())
-        ? (openBlock(), createBlock("span", _hoisted_3$3, toDisplayString($options.getMultiSortMetaIndex() + 1), 1))
+        ? (openBlock(), createBlock("span", _hoisted_3$3, toDisplayString($options.getBadgeValue()), 1))
         : createCommentVNode("", true),
       ($options.columnProp('selectionMode') ==='multiple' && $props.filterDisplay !== 'row')
         ? (openBlock(), createBlock(_component_DTHeaderCheckbox, {
@@ -1078,6 +1081,10 @@ var script$7 = {
             type: String,
             default: 'single'
         },
+        groupRowSortField: {
+            type: [String, Function],
+            default: null
+        },
         sortField: {
             type: [String, Function],
             default: null
@@ -1156,6 +1163,8 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
                       onColumnDragover: _cache[4] || (_cache[4] = $event => (_ctx.$emit('column-dragover', $event))),
                       onColumnDragleave: _cache[5] || (_cache[5] = $event => (_ctx.$emit('column-dragleave', $event))),
                       onColumnDrop: _cache[6] || (_cache[6] = $event => (_ctx.$emit('column-drop', $event))),
+                      groupRowsBy: $props.groupRowsBy,
+                      groupRowSortField: $props.groupRowSortField,
                       resizableColumns: $props.resizableColumns,
                       onColumnResizestart: _cache[7] || (_cache[7] = $event => (_ctx.$emit('column-resizestart', $event))),
                       sortMode: $props.sortMode,
@@ -1175,7 +1184,7 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
                       onConstraintAdd: _cache[13] || (_cache[13] = $event => (_ctx.$emit('constraint-add', $event))),
                       onConstraintRemove: _cache[14] || (_cache[14] = $event => (_ctx.$emit('constraint-remove', $event))),
                       onApplyClick: _cache[15] || (_cache[15] = $event => (_ctx.$emit('apply-click',$event)))
-                    }, null, 8, ["column", "resizableColumns", "sortMode", "sortField", "sortOrder", "multiSortMeta", "allRowsSelected", "empty", "filters", "filterDisplay", "filtersStore"]))
+                    }, null, 8, ["column", "groupRowsBy", "groupRowSortField", "resizableColumns", "sortMode", "sortField", "sortOrder", "multiSortMeta", "allRowsSelected", "empty", "filters", "filterDisplay", "filtersStore"]))
                   : createCommentVNode("", true)
               ], 64))
             }), 128))
@@ -1248,12 +1257,14 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
               return (openBlock(), createBlock(Fragment, {
                 key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||j
               }, [
-                (!$options.columnProp(col, 'hidden') && ($props.rowGroupMode !== 'subheader' || ($props.groupRowsBy !== $options.columnProp(col, 'field'))))
+                (!$options.columnProp(col, 'hidden') && ($props.rowGroupMode !== 'subheader' || ($props.groupRowsBy !== $options.columnProp(col, 'field'))) && (typeof col.children !== 'string'))
                   ? (openBlock(), createBlock(_component_DTHeaderCell, {
                       key: 0,
                       column: col,
                       onColumnClick: _cache[24] || (_cache[24] = $event => (_ctx.$emit('column-click', $event))),
                       onColumnMousedown: _cache[25] || (_cache[25] = $event => (_ctx.$emit('column-mousedown', $event))),
+                      groupRowsBy: $props.groupRowsBy,
+                      groupRowSortField: $props.groupRowSortField,
                       sortMode: $props.sortMode,
                       sortField: $props.sortField,
                       sortOrder: $props.sortOrder,
@@ -1271,7 +1282,7 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
                       onConstraintAdd: _cache[31] || (_cache[31] = $event => (_ctx.$emit('constraint-add', $event))),
                       onConstraintRemove: _cache[32] || (_cache[32] = $event => (_ctx.$emit('constraint-remove', $event))),
                       onApplyClick: _cache[33] || (_cache[33] = $event => (_ctx.$emit('apply-click',$event)))
-                    }, null, 8, ["column", "sortMode", "sortField", "sortOrder", "multiSortMeta", "allRowsSelected", "empty", "filters", "filterDisplay", "filtersStore"]))
+                    }, null, 8, ["column", "groupRowsBy", "groupRowSortField", "sortMode", "sortField", "sortOrder", "multiSortMeta", "allRowsSelected", "empty", "filters", "filterDisplay", "filtersStore"]))
                   : createCommentVNode("", true)
               ], 64))
             }), 128))
@@ -1738,7 +1749,7 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
           key: 1,
           data: $props.rowData,
           column: $props.column,
-          index: $props.index,
+          index: $props.rowIndex,
           frozenRow: $props.frozenRow
         }, null, 8, ["data", "column", "index", "frozenRow"]))
       : ($props.column.children && $props.column.children.editor && $data.d_editing)
@@ -1746,7 +1757,7 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
             key: 2,
             data: $props.rowData,
             column: $props.column,
-            index: $props.index,
+            index: $props.rowIndex,
             frozenRow: $props.frozenRow
           }, null, 8, ["data", "column", "index", "frozenRow"]))
         : ($options.columnProp('selectionMode'))
@@ -2725,6 +2736,10 @@ var script = {
             type: String,
             default: 'download'
         },
+        exportFunction: {
+            type: Function,
+            default: null
+        },
         autoLayout: {
             type: Boolean,
             default: false
@@ -2833,6 +2848,7 @@ var script = {
             d_sortField: this.sortField,
             d_sortOrder: this.sortOrder,
             d_multiSortMeta: this.multiSortMeta ? [...this.multiSortMeta] : [],
+            d_groupRowsSortMeta: null,
             d_selectionKeys: null,
             d_expandedRowKeys: null,
             d_columnOrder: null,
@@ -2874,9 +2890,12 @@ var script = {
         multiSortMeta(newValue) {
             this.d_multiSortMeta = newValue;
         },
-        selection(newValue) {
-            if (this.dataKey) {
-                this.updateSelectionKeys(newValue);
+        selection: {
+            immediate: true,
+            handler(newValue) {
+                if (this.dataKey) {
+                    this.updateSelectionKeys(newValue);
+                }
             }
         },
         expandedRows(newValue) {
@@ -2902,7 +2921,7 @@ var script = {
         }
     },
     mounted() {
-        if (this.scrollable && (this.scrollDirection !== 'vertical' || this.rowGroupMode === 'subheader')) {
+        if (this.scrollable && (this.scrollDirection !== 'vertical' || this.rowGroupMode === 'subheader' || !this.resizableColumns)) {
             this.updateScrollWidth();
         }
 
@@ -2991,6 +3010,15 @@ var script = {
             }
         },
         sortSingle(value) {
+            if (this.groupRowsBy && this.groupRowsBy === this.sortField) {
+                this.d_multiSortMeta = [
+                    {field: this.sortField, order: this.sortOrder || this.defaultSortOrder},
+                    {field: this.d_sortField, order: this.d_sortOrder}
+                ];
+
+                return this.sortMultiple(value);
+            }
+
             let data = [...value];
 
             data.sort((data1, data2) => {
@@ -3016,6 +3044,15 @@ var script = {
             return data;
         },
         sortMultiple(value) {
+            if (this.groupRowsBy && (this.d_groupRowsSortMeta || (this.d_multiSortMeta.length && this.groupRowsBy === this.d_multiSortMeta[0].field))) {
+                const firstSortMeta = this.d_multiSortMeta[0];
+                !this.d_groupRowsSortMeta && (this.d_groupRowsSortMeta = firstSortMeta);
+
+                if (firstSortMeta.field !== this.d_groupRowsSortMeta.field) {
+                    this.d_multiSortMeta = [this.d_groupRowsSortMeta, ...this.d_multiSortMeta];
+                }
+            }
+
             let data = [...value];
 
             data.sort((data1, data2) => {
@@ -3132,7 +3169,7 @@ var script = {
             let filterEvent = this.createLazyLoadEvent();
             filterEvent.filteredValue = filteredValue;
             this.$emit('filter', filterEvent);
-            this.$emit('value-change', this.processedData);
+            this.$emit('value-change', filteredValue);
 
             return filteredValue;
         },
@@ -3576,7 +3613,7 @@ var script = {
                 else if (this.columnResizeMode === 'expand') {
                     this.$refs.table.style.width = this.$refs.table.offsetWidth + delta + 'px';
 
-                    if (!this.scrollable) 
+                    if (!this.scrollable)
                         this.resizeColumnElement.style.width = newColumnWidth + 'px';
                     else
                         this.resizeTableCells(newColumnWidth);
@@ -3604,12 +3641,14 @@ var script = {
             for (let child of children) {
                 for (let row of child.children) {
                     let resizeCell = row.children[colIndex];
-                    resizeCell.style.flex = '0 0 ' + newColumnWidth + 'px';
+                    if (resizeCell) {
+                        resizeCell.style.flex = '0 0 ' + newColumnWidth + 'px';
 
-                    if (this.columnResizeMode === 'fit') {
-                        let nextCell = resizeCell.nextElementSibling;
-                        if (nextCell) {
-                            nextCell.style.flex = '0 0 ' + nextColumnWidth + 'px';
+                        if (this.columnResizeMode === 'fit') {
+                            let nextCell = resizeCell.nextElementSibling;
+                            if (nextCell) {
+                                nextCell.style.flex = '0 0 ' + nextColumnWidth + 'px';
+                            }
                         }
                     }
                 }
@@ -4121,7 +4160,14 @@ var script = {
             this.d_columnOrder = columnOrder;
         },
         updateScrollWidth() {
-            this.$refs.table.style.width = this.$refs.table.scrollWidth + 'px';
+            let parentElementHeight = DomHandler.width(this.$refs.table.parentElement);
+
+            if (this.$refs.table.scrollWidth > parentElementHeight) {
+                this.$refs.table.style.width = this.$refs.table.scrollWidth + 'px';
+            }
+            else {
+                this.$refs.table.style.width = parentElementHeight - DomHandler.calculateScrollbarWidth() + 'px';
+            }
         },
         createResponsiveStyle() {
 			if (!this.styleElement) {
@@ -4186,7 +4232,9 @@ var script = {
                     'p-datatable-responsive-stack': this.responsiveLayout === 'stack',
                     'p-datatable-responsive-scroll': this.responsiveLayout === 'scroll',
                     'p-datatable-striped': this.stripedRows,
-                    'p-datatable-gridlines': this.showGridlines
+                    'p-datatable-gridlines': this.showGridlines,
+                    'p-datatable-grouped-header': this.headerColumnGroup != null,
+                    'p-datatable-grouped-footer': this.footerColumnGroup != null
                 }
             ];
         },
@@ -4199,7 +4247,7 @@ var script = {
             }
 
             children.forEach(child => {
-                if (child.dynamicChildren && child.children instanceof Array)
+                if (child.children && child.children instanceof Array)
                     cols = [...cols, ...child.children];
                 else if (child.type.name === 'Column')
                     cols.push(child);
@@ -4307,10 +4355,14 @@ var script = {
         },
         allRowsSelected() {
             const val = this.frozenValue ? [...this.frozenValue, ...this.processedData]: this.processedData;
-            return (val && val.length > 0 && this.selection && this.selection.length > 0 && this.selection.length === val.length);
+            const length = this.lazy ? this.totalRecords : (val ? val.length : 0);
+            return (val && length > 0 && this.selection && this.selection.length > 0 && this.selection.length === length);
         },
         attributeSelector() {
             return UniqueComponentId();
+        },
+        groupRowSortField() {
+            return this.sortMode === 'single' ? this.sortField : (this.d_groupRowsSortMeta ? this.d_groupRowsSortMeta.field : null);
         }
     },
     components: {
@@ -4419,6 +4471,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           columns: $options.columns,
           rowGroupMode: $props.rowGroupMode,
           groupRowsBy: $props.groupRowsBy,
+          groupRowSortField: $options.groupRowSortField,
           resizableColumns: $props.resizableColumns,
           allRowsSelected: $options.allRowsSelected,
           empty: $options.empty,
@@ -4439,7 +4492,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onColumnDrop: _cache[7] || (_cache[7] = $event => ($options.onColumnHeaderDrop($event))),
           onColumnResizestart: _cache[8] || (_cache[8] = $event => ($options.onColumnResizeStart($event))),
           onCheckboxChange: _cache[9] || (_cache[9] = $event => ($options.toggleRowsWithCheckbox($event)))
-        }, null, 8, ["columnGroup", "columns", "rowGroupMode", "groupRowsBy", "resizableColumns", "allRowsSelected", "empty", "sortMode", "sortField", "sortOrder", "multiSortMeta", "filters", "filtersStore", "filterDisplay", "onFilterChange", "onFilterApply"]),
+        }, null, 8, ["columnGroup", "columns", "rowGroupMode", "groupRowsBy", "groupRowSortField", "resizableColumns", "allRowsSelected", "empty", "sortMode", "sortField", "sortOrder", "multiSortMeta", "filters", "filtersStore", "filterDisplay", "onFilterChange", "onFilterApply"]),
         ($props.frozenValue)
           ? (openBlock(), createBlock(_component_DTTableBody, {
               key: 0,
@@ -4624,7 +4677,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-datatable {\n    position: relative;\n}\n.p-datatable table {\n    border-collapse: collapse;\n    width: 100%;\n    table-layout: fixed;\n}\n.p-datatable .p-sortable-column {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-datatable .p-sortable-column .p-column-title,\n.p-datatable .p-sortable-column .p-sortable-column-icon,\n.p-datatable .p-sortable-column .p-sortable-column-badge {\n    vertical-align: middle;\n}\n.p-datatable .p-sortable-column .p-sortable-column-badge {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-datatable-responsive-scroll > .p-datatable-wrapper {\n    overflow-x: auto;\n}\n.p-datatable-responsive-scroll > .p-datatable-wrapper > table,\n.p-datatable-auto-layout > .p-datatable-wrapper > table {\n    table-layout: auto;\n}\n.p-datatable-hoverable-rows .p-selectable-row {\n    cursor: pointer;\n}\n\n/* Scrollable */\n.p-datatable-scrollable .p-datatable-wrapper {\n    position: relative;\n    overflow: auto;\n}\n.p-datatable-scrollable .p-datatable-table {\n    display: block;\n}\n.p-datatable-scrollable .p-datatable-thead,\n.p-datatable-scrollable .p-datatable-tbody,\n.p-datatable-scrollable .p-datatable-tfoot {\n    display: block;\n}\n.p-datatable-scrollable .p-datatable-thead > tr,\n.p-datatable-scrollable .p-datatable-tbody > tr,\n.p-datatable-scrollable .p-datatable-tfoot > tr {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n    width: 100%;\n}\n.p-datatable-scrollable .p-datatable-thead > tr > th,\n.p-datatable-scrollable .p-datatable-tbody > tr > td,\n.p-datatable-scrollable .p-datatable-tfoot > tr > td {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 0px;\n            flex: 1 1 0;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-datatable-scrollable .p-datatable-thead {\n    position: sticky;\n    top: 0;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-datatable-frozen-tbody {\n    position: sticky;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-datatable-tfoot {\n    position: sticky;\n    bottom: 0;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-frozen-column {\n    position: sticky;\n    background: inherit;\n}\n.p-datatable-scrollable th.p-frozen-column {\n    z-index: 1;\n}\n.p-datatable-scrollable-both .p-datatable-thead > tr > th,\n.p-datatable-scrollable-both .p-datatable-tbody > tr > td,\n.p-datatable-scrollable-both .p-datatable-tfoot > tr > td,\n.p-datatable-scrollable-horizontal .p-datatable-thead > tr > th\n.p-datatable-scrollable-horizontal .p-datatable-tbody > tr > td,\n.p-datatable-scrollable-horizontal .p-datatable-tfoot > tr > td {\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-datatable-flex-scrollable {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    height: 100%;\n}\n.p-datatable-flex-scrollable .p-datatable-wrapper {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    height: 100%;\n}\n.p-datatable-scrollable .p-rowgroup-header {\n    position: sticky;\n    z-index: 1;\n}\n\n/* Resizable */\n.p-datatable-resizable > .p-datatable-wrapper {\n    overflow-x: auto;\n}\n.p-datatable-resizable .p-datatable-thead > tr > th,\n.p-datatable-resizable .p-datatable-tfoot > tr > td,\n.p-datatable-resizable .p-datatable-tbody > tr > td {\n    overflow: hidden;\n    white-space: nowrap;\n}\n.p-datatable-resizable .p-resizable-column {\n    background-clip: padding-box;\n    position: relative;\n}\n.p-datatable-resizable-fit .p-resizable-column:last-child .p-column-resizer {\n    display: none;\n}\n.p-datatable .p-column-resizer {\n    display: block;\n    position: absolute !important;\n    top: 0;\n    right: 0;\n    margin: 0;\n    width: .5rem;\n    height: 100%;\n    padding: 0px;\n    cursor:col-resize;\n    border: 1px solid transparent;\n}\n.p-datatable .p-column-header-content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-datatable .p-column-resizer-helper {\n    width: 1px;\n    position: absolute;\n    z-index: 10;\n    display: none;\n}\n.p-datatable .p-row-editor-init,\n.p-datatable .p-row-editor-save,\n.p-datatable .p-row-editor-cancel {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Expand */\n.p-datatable .p-row-toggler {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Reorder */\n.p-datatable-reorder-indicator-up,\n.p-datatable-reorder-indicator-down {\n    position: absolute;\n    display: none;\n}\n\n/* Loader */\n.p-datatable .p-datatable-loading-overlay {\n    position: absolute;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    z-index: 2;\n}\n\n/* Filter */\n.p-column-filter-row {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    width: 100%;\n}\n.p-column-filter-menu {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    margin-left: auto;\n}\n.p-column-filter-row .p-column-filter-element {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-column-filter-menu-button,\n.p-column-filter-clear-button {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    cursor: pointer;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-column-filter-overlay {\n    position: absolute;\n}\n.p-column-filter-row-items {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-column-filter-row-item {\n    cursor: pointer;\n}\n.p-column-filter-add-button,\n.p-column-filter-remove-button {\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-column-filter-add-button .p-button-label,\n.p-column-filter-remove-button .p-button-label {\n    -webkit-box-flex: 0;\n        -ms-flex-positive: 0;\n            flex-grow: 0;\n}\n.p-column-filter-buttonbar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n.p-column-filter-buttonbar .p-button:not(.p-button-icon-only) {\n    width: auto;\n}\n\n/* Responsive */\n.p-datatable .p-datatable-tbody > tr > td > .p-column-title {\n    display: none;\n}\n";
+var css_248z = "\n.p-datatable {\n    position: relative;\n}\n.p-datatable table {\n    border-collapse: collapse;\n    width: 100%;\n    table-layout: fixed;\n}\n.p-datatable .p-sortable-column {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-datatable .p-sortable-column .p-column-title,\n.p-datatable .p-sortable-column .p-sortable-column-icon,\n.p-datatable .p-sortable-column .p-sortable-column-badge {\n    vertical-align: middle;\n}\n.p-datatable .p-sortable-column .p-sortable-column-badge {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-datatable-responsive-scroll > .p-datatable-wrapper {\n    overflow-x: auto;\n}\n.p-datatable-responsive-scroll > .p-datatable-wrapper > table,\n.p-datatable-auto-layout > .p-datatable-wrapper > table {\n    table-layout: auto;\n}\n.p-datatable-hoverable-rows .p-selectable-row {\n    cursor: pointer;\n}\n\n/* Scrollable */\n.p-datatable-scrollable .p-datatable-wrapper {\n    position: relative;\n    overflow: auto;\n}\n.p-datatable-scrollable .p-datatable-table {\n    display: block;\n}\n.p-datatable-scrollable .p-datatable-thead,\n.p-datatable-scrollable .p-datatable-tbody,\n.p-datatable-scrollable .p-datatable-tfoot {\n    display: block;\n}\n.p-datatable-scrollable .p-datatable-thead > tr,\n.p-datatable-scrollable .p-datatable-tbody > tr,\n.p-datatable-scrollable .p-datatable-tfoot > tr {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n    width: 100%;\n}\n.p-datatable-scrollable .p-datatable-thead > tr > th,\n.p-datatable-scrollable .p-datatable-tbody > tr > td,\n.p-datatable-scrollable .p-datatable-tfoot > tr > td {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 0px;\n            flex: 1 1 0;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-datatable-scrollable .p-datatable-thead {\n    position: sticky;\n    top: 0;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-datatable-frozen-tbody {\n    position: sticky;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-datatable-tfoot {\n    position: sticky;\n    bottom: 0;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-frozen-column {\n    position: sticky;\n    background: inherit;\n}\n.p-datatable-scrollable th.p-frozen-column {\n    z-index: 1;\n}\n.p-datatable-scrollable-both .p-datatable-thead > tr > th,\n.p-datatable-scrollable-both .p-datatable-tbody > tr > td,\n.p-datatable-scrollable-both .p-datatable-tfoot > tr > td,\n.p-datatable-scrollable-horizontal .p-datatable-thead > tr > th\n.p-datatable-scrollable-horizontal .p-datatable-tbody > tr > td,\n.p-datatable-scrollable-horizontal .p-datatable-tfoot > tr > td {\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-datatable-flex-scrollable {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    height: 100%;\n}\n.p-datatable-flex-scrollable .p-datatable-wrapper {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    height: 100%;\n}\n.p-datatable-scrollable .p-rowgroup-header {\n    position: sticky;\n    z-index: 1;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot {\n    display: table;\n    border-collapse: collapse;\n    width: 100%;\n    table-layout: fixed;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead > tr,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot > tr {\n    display: table-row;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead > tr > th,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot > tr > td {\n    display: table-cell;\n}\n\n/* Resizable */\n.p-datatable-resizable > .p-datatable-wrapper {\n    overflow-x: auto;\n}\n.p-datatable-resizable .p-datatable-thead > tr > th,\n.p-datatable-resizable .p-datatable-tfoot > tr > td,\n.p-datatable-resizable .p-datatable-tbody > tr > td {\n    overflow: hidden;\n    white-space: nowrap;\n}\n.p-datatable-resizable .p-resizable-column {\n    background-clip: padding-box;\n    position: relative;\n}\n.p-datatable-resizable-fit .p-resizable-column:last-child .p-column-resizer {\n    display: none;\n}\n.p-datatable .p-column-resizer {\n    display: block;\n    position: absolute !important;\n    top: 0;\n    right: 0;\n    margin: 0;\n    width: .5rem;\n    height: 100%;\n    padding: 0px;\n    cursor:col-resize;\n    border: 1px solid transparent;\n}\n.p-datatable .p-column-header-content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-datatable .p-column-resizer-helper {\n    width: 1px;\n    position: absolute;\n    z-index: 10;\n    display: none;\n}\n.p-datatable .p-row-editor-init,\n.p-datatable .p-row-editor-save,\n.p-datatable .p-row-editor-cancel {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Expand */\n.p-datatable .p-row-toggler {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Reorder */\n.p-datatable-reorder-indicator-up,\n.p-datatable-reorder-indicator-down {\n    position: absolute;\n    display: none;\n}\n\n/* Loader */\n.p-datatable .p-datatable-loading-overlay {\n    position: absolute;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    z-index: 2;\n}\n\n/* Filter */\n.p-column-filter-row {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    width: 100%;\n}\n.p-column-filter-menu {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    margin-left: auto;\n}\n.p-column-filter-row .p-column-filter-element {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-column-filter-menu-button,\n.p-column-filter-clear-button {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    cursor: pointer;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-column-filter-overlay {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-column-filter-row-items {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-column-filter-row-item {\n    cursor: pointer;\n}\n.p-column-filter-add-button,\n.p-column-filter-remove-button {\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-column-filter-add-button .p-button-label,\n.p-column-filter-remove-button .p-button-label {\n    -webkit-box-flex: 0;\n        -ms-flex-positive: 0;\n            flex-grow: 0;\n}\n.p-column-filter-buttonbar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n.p-column-filter-buttonbar .p-button:not(.p-button-icon-only) {\n    width: auto;\n}\n\n/* Responsive */\n.p-datatable .p-datatable-tbody > tr > td > .p-column-title {\n    display: none;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

@@ -383,10 +383,9 @@ var script = {
 const _hoisted_1 = { class: "p-hidden-accessible" };
 const _hoisted_2 = { class: "p-treeselect-label-container" };
 const _hoisted_3 = { class: "p-treeselect-token-label" };
-const _hoisted_4 = /*#__PURE__*/vue.createVNode("div", { class: "p-treeselect-trigger" }, [
-  /*#__PURE__*/vue.createVNode("span", { class: "p-treeselect-trigger-icon pi pi-chevron-down" })
-], -1);
-const _hoisted_5 = {
+const _hoisted_4 = { class: "p-treeselect-trigger" };
+const _hoisted_5 = /*#__PURE__*/vue.createVNode("span", { class: "p-treeselect-trigger-icon pi pi-chevron-down" }, null, -1);
+const _hoisted_6 = {
   key: 0,
   class: "p-treeselect-empty-message"
 };
@@ -446,7 +445,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       ], 2)
     ]),
-    _hoisted_4,
+    vue.createVNode("div", _hoisted_4, [
+      vue.renderSlot(_ctx.$slots, "indicator", {}, () => [
+        _hoisted_5
+      ])
+    ]),
     (vue.openBlock(), vue.createBlock(vue.Teleport, {
       to: $options.appendTarget,
       disabled: $options.appendDisabled
@@ -487,7 +490,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     onNodeUnselect: $options.onNodeUnselect
                   }, null, 8, ["value", "selectionMode", "onUpdate:selectionKeys", "selectionKeys", "expandedKeys", "onUpdate:expandedKeys", "metaKeySelection", "onNodeSelect", "onNodeUnselect"]),
                   ($options.emptyOptions)
-                    ? (vue.openBlock(), vue.createBlock("div", _hoisted_5, [
+                    ? (vue.openBlock(), vue.createBlock("div", _hoisted_6, [
                         vue.renderSlot(_ctx.$slots, "empty", {}, () => [
                           vue.createTextVNode(vue.toDisplayString($options.emptyMessageText), 1)
                         ])
@@ -534,7 +537,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-treeselect {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    cursor: pointer;\n    position: relative;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-treeselect-trigger {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -ms-flex-negative: 0;\n        flex-shrink: 0;\n}\n.p-treeselect-label-container {\n    overflow: hidden;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    cursor: pointer;\n}\n.p-treeselect-label  {\n    display: block;\n    white-space: nowrap;\n    cursor: pointer;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n.p-treeselect-label-empty {\n    overflow: hidden;\n    visibility: hidden;\n}\n.p-treeselect-token {\n    cursor: default;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-treeselect .p-treeselect-panel {\n    min-width: 100%;\n}\n.p-treeselect-panel {\n    position: absolute;\n}\n.p-treeselect-items-wrapper {\n    overflow: auto;\n}\n.p-fluid .p-treeselect {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n";
+var css_248z = "\n.p-treeselect {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    cursor: pointer;\n    position: relative;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-treeselect-trigger {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -ms-flex-negative: 0;\n        flex-shrink: 0;\n}\n.p-treeselect-label-container {\n    overflow: hidden;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    cursor: pointer;\n}\n.p-treeselect-label  {\n    display: block;\n    white-space: nowrap;\n    cursor: pointer;\n    overflow: hidden;\n    text-overflow: ellipsis;\n}\n.p-treeselect-label-empty {\n    overflow: hidden;\n    visibility: hidden;\n}\n.p-treeselect-token {\n    cursor: default;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-treeselect .p-treeselect-panel {\n    min-width: 100%;\n}\n.p-treeselect-panel {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-treeselect-items-wrapper {\n    overflow: auto;\n}\n.p-fluid .p-treeselect {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

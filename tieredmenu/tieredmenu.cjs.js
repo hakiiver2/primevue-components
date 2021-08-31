@@ -33,6 +33,10 @@ var script$1 = {
         template: {
             type: Object,
             default: null
+        },
+        exact: {
+            type: Boolean,
+            default: true
         }
     },
     documentClickListener: null,
@@ -58,7 +62,7 @@ var script$1 = {
     },
     methods: {
         onItemMouseEnter(event, item) {
-            if (item.disabled) {
+            if (this.disabled(item)) {
                 event.preventDefault();
                 return;
             }
@@ -73,7 +77,7 @@ var script$1 = {
             }
         },
         onItemClick(event, item, navigate) {
-            if (item.disabled) {
+            if (this.disabled(item)) {
                 event.preventDefault();
                 return;
             }
@@ -177,8 +181,12 @@ var script$1 = {
                 }
             ]
         },
-        getLinkClass(item) {
-            return ['p-menuitem-link', {'p-disabled': item.disabled}];
+        linkClass(item, routerProps) {
+            return ['p-menuitem-link', {
+                'p-disabled': this.disabled(item),
+                'router-link-active': routerProps && routerProps.isActive,
+                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+            }];
         },
         bindDocumentClickListener() {
             if (!this.documentClickListener) {
@@ -200,6 +208,9 @@ var script$1 = {
         },
         visible(item) {
             return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+        },
+        disabled(item) {
+            return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
         }
     },
     computed: {
@@ -244,17 +255,17 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
             }, [
               (!$props.template)
                 ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
-                    (item.to && !item.disabled)
+                    (item.to && !$options.disabled(item))
                       ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                           key: 0,
                           to: item.to,
                           custom: ""
                         }, {
-                          default: vue.withCtx(({navigate, href}) => [
+                          default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
                             vue.withDirectives(vue.createVNode("a", {
                               href: href,
                               onClick: $event => ($options.onItemClick($event, item, navigate)),
-                              class: $options.getLinkClass(item),
+                              class: $options.linkClass(item, {isActive, isExactActive}),
                               onKeydown: $event => ($options.onItemKeyDown($event, item)),
                               role: "menuitem"
                             }, [
@@ -271,14 +282,14 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                       : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
                           key: 1,
                           href: item.url,
-                          class: $options.getLinkClass(item),
+                          class: $options.linkClass(item),
                           target: item.target,
                           "aria-haspopup": item.items != null,
                           "aria-expanded": item === $data.activeItem,
                           onClick: $event => ($options.onItemClick($event, item)),
                           onKeydown: $event => ($options.onItemKeyDown($event, item)),
                           role: "menuitem",
-                          tabindex: item.disabled ? null : '0'
+                          tabindex: $options.disabled(item) ? null : '0'
                         }, [
                           vue.createVNode("span", {
                             class: ['p-menuitem-icon', item.icon]
@@ -302,8 +313,9 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     template: $props.template,
                     onLeafClick: $options.onLeafClick,
                     onKeydownItem: $options.onChildItemKeyDown,
-                    parentActive: item === $data.activeItem
-                  }, null, 8, ["model", "template", "onLeafClick", "onKeydownItem", "parentActive"]))
+                    parentActive: item === $data.activeItem,
+                    exact: $props.exact
+                  }, null, 8, ["model", "template", "onLeafClick", "onKeydownItem", "parentActive", "exact"]))
                 : vue.createCommentVNode("", true)
             ], 46, ["onMouseenter"]))
           : vue.createCommentVNode("", true),
@@ -345,6 +357,10 @@ var script = {
         baseZIndex: {
             type: Number,
             default: 0
+        },
+        exact: {
+            type: Boolean,
+            default: true
         }
     },
     target: null,
@@ -524,8 +540,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 root: true,
                 popup: $props.popup,
                 onLeafClick: $options.onLeafClick,
-                template: _ctx.$slots.item
-              }, null, 8, ["model", "popup", "onLeafClick", "template"])
+                template: _ctx.$slots.item,
+                exact: $props.exact
+              }, null, 8, ["model", "popup", "onLeafClick", "template", "exact"])
             ], 16))
           : vue.createCommentVNode("", true)
       ]),
@@ -561,7 +578,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-tieredmenu-overlay {\n    position: absolute;\n}\n.p-tieredmenu ul {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-tieredmenu .p-submenu-list {\n    position: absolute;\n    min-width: 100%;\n    z-index: 1;\n    display: none;\n}\n.p-tieredmenu .p-menuitem-link {\n    cursor: pointer;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-tieredmenu .p-menuitem-text {\n    line-height: 1;\n}\n.p-tieredmenu .p-menuitem {\n    position: relative;\n}\n.p-tieredmenu .p-menuitem-link .p-submenu-icon {\n    margin-left: auto;\n}\n.p-tieredmenu .p-menuitem-active > .p-submenu-list {\n    display: block;\n    left: 100%;\n    top: 0;\n}\n";
+var css_248z = "\n.p-tieredmenu-overlay {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-tieredmenu ul {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-tieredmenu .p-submenu-list {\n    position: absolute;\n    min-width: 100%;\n    z-index: 1;\n    display: none;\n}\n.p-tieredmenu .p-menuitem-link {\n    cursor: pointer;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-tieredmenu .p-menuitem-text {\n    line-height: 1;\n}\n.p-tieredmenu .p-menuitem {\n    position: relative;\n}\n.p-tieredmenu .p-menuitem-link .p-submenu-icon {\n    margin-left: auto;\n}\n.p-tieredmenu .p-menuitem-active > .p-submenu-list {\n    display: block;\n    left: 100%;\n    top: 0;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

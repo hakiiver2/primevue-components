@@ -2,7 +2,8 @@ import { ZIndexUtils, ObjectUtils, DomHandler, ConnectedOverlayScrollHandler } f
 import OverlayEventBus from 'primevue/overlayeventbus';
 import { FilterService } from 'primevue/api';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, createVNode, createCommentVNode, renderSlot, createTextVNode, toDisplayString, Teleport, Transition, withCtx, withDirectives, vModelText, Fragment, renderList } from 'vue';
+import VirtualScroller from 'primevue/virtualscroller';
+import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, createCommentVNode, renderSlot, createTextVNode, toDisplayString, Teleport, Transition, withCtx, withDirectives, vModelText, mergeProps, createSlots, Fragment, renderList } from 'vue';
 
 var script = {
     name: 'Dropdown',
@@ -58,6 +59,10 @@ var script = {
         loadingIcon: {
             type: String,
             default: 'pi pi-spinner pi-spin'
+        },
+        virtualScrollerOptions: {
+            type: Object,
+            default: null
         }
     },
     data() {
@@ -66,6 +71,11 @@ var script = {
             filterValue: null,
             overlayVisible: false
         };
+    },
+    watch: {
+        modelValue() {
+            this.isModelValueChanged = true;
+        }
     },
     outsideClickListener: null,
     scrollHandler: null,
@@ -76,6 +86,15 @@ var script = {
     searchValue: null,
     overlay: null,
     itemsWrapper: null,
+    virtualScroller: null,
+    isModelValueChanged: false,
+    updated() {
+        if (this.overlayVisible && this.isModelValueChanged) {
+            this.scrollValueInView();
+        }
+
+        this.isModelValueChanged = false;
+    },
     beforeUnmount() {
         this.unbindOutsideClickListener();
         this.unbindResizeListener();
@@ -93,6 +112,9 @@ var script = {
         }
     },
     methods: {
+        getOptionIndex(index, fn) {
+            return this.virtualScrollerDisabled ? index : (fn && fn(index)['index']);
+        },
         getOptionLabel(option) {
             return this.optionLabel ? ObjectUtils.resolveFieldData(option, this.optionLabel) : option;
         },
@@ -228,7 +250,7 @@ var script = {
                     this.show();
                 }
                 else {
-                    let nextOption = this.findNextOption(this.getSelectedOptionIndex());
+                    let nextOption = this.visibleOptions && this.visibleOptions.length > 0 ? this.findNextOption(this.getSelectedOptionIndex()) : null;
                     if (nextOption) {
                         this.updateModel(event, this.getOptionValue(nextOption));
                     }
@@ -353,6 +375,13 @@ var script = {
                 this.$refs.filterInput.focus();
             }
 
+            if (!this.virtualScrollerDisabled) {
+                const selectedIndex = this.getSelectedOptionIndex();
+                if (selectedIndex !== -1) {
+                    this.virtualScroller.scrollToIndex(selectedIndex);
+                }
+            }
+
             this.$emit('show');
         },
         onOverlayLeave() {
@@ -414,7 +443,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible && !DomHandler.isAndroid()) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -436,7 +465,7 @@ var script = {
                 clearTimeout(this.searchTimeout);
             }
 
-            const char = String.fromCharCode(event.keyCode);
+            const char = event.key;
             this.previousSearchChar = this.currentSearchChar;
             this.currentSearchChar = char;
 
@@ -519,11 +548,14 @@ var script = {
         itemsWrapperRef(el) {
             this.itemsWrapper = el;
         },
+        virtualScrollerRef(el) {
+            this.virtualScroller = el;
+        },
         scrollValueInView() {
             if (this.overlay) {
                 let selectedItem = DomHandler.findSingle(this.overlay, 'li.p-highlight');
                 if (selectedItem) {
-                    this.itemsWrapper.scrollTop = selectedItem.offsetTop;
+                    selectedItem.scrollIntoView({ block: 'nearest', inline: 'start' });
                 }
             }
         },
@@ -613,6 +645,9 @@ var script = {
         appendDisabled() {
             return this.appendTo === 'self';
         },
+        virtualScrollerDisabled() {
+            return !this.virtualScrollerOptions;
+        },
         appendTarget() {
             return this.appendDisabled ? null : this.appendTo;
         },
@@ -622,6 +657,9 @@ var script = {
     },
     directives: {
         'ripple': Ripple
+    },
+    components: {
+        'VirtualScroller': VirtualScroller
     }
 };
 
@@ -632,21 +670,18 @@ const _hoisted_2 = {
 };
 const _hoisted_3 = { class: "p-dropdown-filter-container" };
 const _hoisted_4 = /*#__PURE__*/createVNode("span", { class: "p-dropdown-filter-icon pi pi-search" }, null, -1);
-const _hoisted_5 = {
-  class: "p-dropdown-items",
-  role: "listbox"
-};
-const _hoisted_6 = { class: "p-dropdown-item-group" };
-const _hoisted_7 = {
+const _hoisted_5 = { class: "p-dropdown-item-group" };
+const _hoisted_6 = {
   key: 2,
   class: "p-dropdown-empty-message"
 };
-const _hoisted_8 = {
+const _hoisted_7 = {
   key: 3,
   class: "p-dropdown-empty-message"
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_VirtualScroller = resolveComponent("VirtualScroller");
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createBlock("div", {
@@ -694,7 +729,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             value: $props.modelValue,
             placeholder: $props.placeholder
           }, () => [
-            createTextVNode(toDisplayString($options.label), 1)
+            createTextVNode(toDisplayString($options.label||'empty'), 1)
           ])
         ], 2))
       : createCommentVNode("", true),
@@ -711,7 +746,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "aria-haspopup": "listbox",
       "aria-expanded": $data.overlayVisible
     }, [
-      createVNode("span", { class: $options.dropdownIconClass }, null, 2)
+      renderSlot(_ctx.$slots, "indicator", {}, () => [
+        createVNode("span", { class: $options.dropdownIconClass }, null, 2)
+      ])
     ], 8, ["aria-expanded"]),
     (openBlock(), createBlock(Teleport, {
       to: $options.appendTarget,
@@ -757,42 +794,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 createVNode("div", {
                   ref: $options.itemsWrapperRef,
                   class: "p-dropdown-items-wrapper",
-                  style: {'max-height': $props.scrollHeight}
+                  style: {'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}
                 }, [
-                  createVNode("ul", _hoisted_5, [
-                    (!$props.optionGroupLabel)
-                      ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($options.visibleOptions, (option, i) => {
-                          return withDirectives((openBlock(), createBlock("li", {
-                            class: ['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
-                            key: $options.getOptionRenderKey(option),
-                            onClick: $event => ($options.onOptionSelect($event, option)),
-                            role: "option",
-                            "aria-label": $options.getOptionLabel(option),
-                            "aria-selected": $options.isSelected(option)
-                          }, [
-                            renderSlot(_ctx.$slots, "option", {
-                              option: option,
-                              index: i
-                            }, () => [
-                              createTextVNode(toDisplayString($options.getOptionLabel(option)), 1)
-                            ])
-                          ], 10, ["onClick", "aria-label", "aria-selected"])), [
-                            [_directive_ripple]
-                          ])
-                        }), 128))
-                      : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($options.visibleOptions, (optionGroup, i) => {
-                          return (openBlock(), createBlock(Fragment, {
-                            key: $options.getOptionGroupRenderKey(optionGroup)
-                          }, [
-                            createVNode("li", _hoisted_6, [
-                              renderSlot(_ctx.$slots, "optiongroup", {
-                                option: optionGroup,
-                                index: i
-                              }, () => [
-                                createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
-                              ])
-                            ]),
-                            (openBlock(true), createBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                  createVNode(_component_VirtualScroller, mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
+                    items: $options.visibleOptions,
+                    style: {'height': $props.scrollHeight},
+                    disabled: $options.virtualScrollerDisabled
+                  }), createSlots({
+                    content: withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+                      createVNode("ul", {
+                        ref: contentRef,
+                        class: ['p-dropdown-items', styleClass],
+                        role: "listbox"
+                      }, [
+                        (!$props.optionGroupLabel)
+                          ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList(items, (option, i) => {
                               return withDirectives((openBlock(), createBlock("li", {
                                 class: ['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
                                 key: $options.getOptionRenderKey(option),
@@ -803,7 +819,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               }, [
                                 renderSlot(_ctx.$slots, "option", {
                                   option: option,
-                                  index: i
+                                  index: $options.getOptionIndex(i, getItemOptions)
                                 }, () => [
                                   createTextVNode(toDisplayString($options.getOptionLabel(option)), 1)
                                 ])
@@ -811,22 +827,65 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 [_directive_ripple]
                               ])
                             }), 128))
-                          ], 64))
-                        }), 128)),
-                    ($data.filterValue && (!$options.visibleOptions || ($options.visibleOptions && $options.visibleOptions.length === 0)))
-                      ? (openBlock(), createBlock("li", _hoisted_7, [
-                          renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
-                            createTextVNode(toDisplayString($options.emptyFilterMessageText), 1)
+                          : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
+                              return (openBlock(), createBlock(Fragment, {
+                                key: $options.getOptionGroupRenderKey(optionGroup)
+                              }, [
+                                createVNode("li", _hoisted_5, [
+                                  renderSlot(_ctx.$slots, "optiongroup", {
+                                    option: optionGroup,
+                                    index: $options.getOptionIndex(i, getItemOptions)
+                                  }, () => [
+                                    createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                                  ])
+                                ]),
+                                (openBlock(true), createBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                                  return withDirectives((openBlock(), createBlock("li", {
+                                    class: ['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                                    key: $options.getOptionRenderKey(option),
+                                    onClick: $event => ($options.onOptionSelect($event, option)),
+                                    role: "option",
+                                    "aria-label": $options.getOptionLabel(option),
+                                    "aria-selected": $options.isSelected(option)
+                                  }, [
+                                    renderSlot(_ctx.$slots, "option", {
+                                      option: option,
+                                      index: $options.getOptionIndex(i, getItemOptions)
+                                    }, () => [
+                                      createTextVNode(toDisplayString($options.getOptionLabel(option)), 1)
+                                    ])
+                                  ], 10, ["onClick", "aria-label", "aria-selected"])), [
+                                    [_directive_ripple]
+                                  ])
+                                }), 128))
+                              ], 64))
+                            }), 128)),
+                        ($data.filterValue && (!items || (items && items.length === 0)))
+                          ? (openBlock(), createBlock("li", _hoisted_6, [
+                              renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
+                                createTextVNode(toDisplayString($options.emptyFilterMessageText), 1)
+                              ])
+                            ]))
+                          : ((!$props.options || ($props.options && $props.options.length === 0)))
+                            ? (openBlock(), createBlock("li", _hoisted_7, [
+                                renderSlot(_ctx.$slots, "empty", {}, () => [
+                                  createTextVNode(toDisplayString($options.emptyMessageText), 1)
+                                ])
+                              ]))
+                            : createCommentVNode("", true)
+                      ], 2)
+                    ]),
+                    _: 2
+                  }, [
+                    (_ctx.$slots.loader)
+                      ? {
+                          name: "loader",
+                          fn: withCtx(({ options }) => [
+                            renderSlot(_ctx.$slots, "loader", { options: options })
                           ])
-                        ]))
-                      : ((!$props.options || ($props.options && $props.options.length === 0)))
-                        ? (openBlock(), createBlock("li", _hoisted_8, [
-                            renderSlot(_ctx.$slots, "empty", {}, () => [
-                              createTextVNode(toDisplayString($options.emptyMessageText), 1)
-                            ])
-                          ]))
-                        : createCommentVNode("", true)
-                  ])
+                        }
+                      : undefined
+                  ]), 1040, ["items", "style", "disabled"])
                 ], 4),
                 renderSlot(_ctx.$slots, "footer", {
                   value: $props.modelValue,
@@ -868,7 +927,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-dropdown {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    cursor: pointer;\n    position: relative;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-dropdown-clear-icon {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-dropdown-trigger {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -ms-flex-negative: 0;\n        flex-shrink: 0;\n}\n.p-dropdown-label {\n    display: block;\n    white-space: nowrap;\n    overflow: hidden;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n    text-overflow: ellipsis;\n    cursor: pointer;\n}\n.p-dropdown-label-empty {\n    overflow: hidden;\n    visibility: hidden;\n}\ninput.p-dropdown-label  {\n    cursor: default;\n}\n.p-dropdown .p-dropdown-panel {\n    min-width: 100%;\n}\n.p-dropdown-panel {\n    position: absolute;\n}\n.p-dropdown-items-wrapper {\n    overflow: auto;\n}\n.p-dropdown-item {\n    cursor: pointer;\n    font-weight: normal;\n    white-space: nowrap;\n    position: relative;\n    overflow: hidden;\n}\n.p-dropdown-item-group {\n    cursor: auto;\n}\n.p-dropdown-items {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n.p-dropdown-filter {\n    width: 100%;\n}\n.p-dropdown-filter-container {\n    position: relative;\n}\n.p-dropdown-filter-icon {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-fluid .p-dropdown {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-fluid .p-dropdown .p-dropdown-label {\n    width: 1%;\n}\n";
+var css_248z = "\n.p-dropdown {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    cursor: pointer;\n    position: relative;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-dropdown-clear-icon {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-dropdown-trigger {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -ms-flex-negative: 0;\n        flex-shrink: 0;\n}\n.p-dropdown-label {\n    display: block;\n    white-space: nowrap;\n    overflow: hidden;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n    text-overflow: ellipsis;\n    cursor: pointer;\n}\n.p-dropdown-label-empty {\n    overflow: hidden;\n    visibility: hidden;\n}\ninput.p-dropdown-label  {\n    cursor: default;\n}\n.p-dropdown .p-dropdown-panel {\n    min-width: 100%;\n}\n.p-dropdown-panel {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-dropdown-items-wrapper {\n    overflow: auto;\n}\n.p-dropdown-item {\n    cursor: pointer;\n    font-weight: normal;\n    white-space: nowrap;\n    position: relative;\n    overflow: hidden;\n}\n.p-dropdown-item-group {\n    cursor: auto;\n}\n.p-dropdown-items {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n.p-dropdown-filter {\n    width: 100%;\n}\n.p-dropdown-filter-container {\n    position: relative;\n}\n.p-dropdown-filter-icon {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-fluid .p-dropdown {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-fluid .p-dropdown .p-dropdown-label {\n    width: 1%;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

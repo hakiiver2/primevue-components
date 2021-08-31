@@ -63,7 +63,7 @@ function onClick(event) {
 }
 
 function show(el) {
-    if (!el.$_ptooltipValue) {
+    if (el.$_ptooltipDisabled) {
         return;
     }
 
@@ -72,7 +72,9 @@ function show(el) {
     DomHandler.fadeIn(tooltipElement, 250);
 
     window.addEventListener('resize', function onWindowResize() {
-        hide(el);
+        if (!DomHandler.isAndroid()) {
+            hide(el);
+        }
         this.removeEventListener('resize', onWindowResize);
     });
 
@@ -254,7 +256,15 @@ const Tooltip = {
     beforeMount(el, options) {
         let target = getTarget(el);
         target.$_ptooltipModifiers = options.modifiers;
-        target.$_ptooltipValue = options.value;
+        if (typeof options.value === 'string') {
+            target.$_ptooltipValue = options.value;
+            target.$_ptooltipDisabled = false;
+        }
+        else {
+            target.$_ptooltipValue = options.value.value;
+            target.$_ptooltipDisabled = options.value.disabled || false;
+        }
+
         target.$_ptooltipZIndex = options.instance.$primevue && options.instance.$primevue.config && options.instance.$primevue.config.zIndex.tooltip;
         bindEvents(target);
     },
@@ -273,7 +283,15 @@ const Tooltip = {
     updated(el, options) {
         let target = getTarget(el);
         target.$_ptooltipModifiers = options.modifiers;
-        target.$_ptooltipValue = options.value;
+
+        if (typeof options.value === 'string') {
+            target.$_ptooltipValue = options.value;
+            target.$_ptooltipDisabled = false;
+        }
+        else {
+            target.$_ptooltipValue = options.value.value;
+            target.$_ptooltipDisabled = options.value.disabled;
+        }
     },
 
 };
