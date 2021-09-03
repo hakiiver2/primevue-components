@@ -95,7 +95,10 @@ function getTooltipElement(el) {
 }
 
 function escapeHtml(str) {
-    if(str) {
+    if(typeof str == "number") {
+        str = String(str);
+    }
+    if(str !== undefined && str !== null) {
         str = str.replace(/&/g, '&amp;');
         str = str.replace(/</g, '&lt;');
         str = str.replace(/>/g, '&gt;');
