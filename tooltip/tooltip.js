@@ -95,6 +95,7 @@ this.primevue.tooltip = (function (utils) {
     }
 
     function escapeHtml(str) {
+        console.log(str, String(str));
         if(str !== undefined && str !== null) {
             str = String(str);
             str = str.replace(/&/g, '&amp;');
@@ -257,6 +258,7 @@ this.primevue.tooltip = (function (utils) {
 
     const Tooltip = {
         beforeMount(el, options) {
+            console.log(options);
             let target = getTarget(el);
             target.$_ptooltipModifiers = options.modifiers;
             if (typeof options.value === 'string') {
@@ -264,8 +266,10 @@ this.primevue.tooltip = (function (utils) {
                 target.$_ptooltipDisabled = false;
             }
             else {
-                target.$_ptooltipValue = options.value.value;
-                target.$_ptooltipDisabled = options.value.disabled || false;
+                // target.$_ptooltipValue = options.value.value;
+                target.$_ptooltipValue = options.value;
+                // target.$_ptooltipDisabled = options.value.disabled || false;
+                target.$_ptooltipDisabled = options.disabled || false;
             }
 
             target.$_ptooltipZIndex = options.instance.$primevue && options.instance.$primevue.config && options.instance.$primevue.config.zIndex.tooltip;
@@ -292,8 +296,10 @@ this.primevue.tooltip = (function (utils) {
                 target.$_ptooltipDisabled = false;
             }
             else {
-                target.$_ptooltipValue = options.value.value;
-                target.$_ptooltipDisabled = options.value.disabled;
+                // target.$_ptooltipValue = options.value.value;
+                target.$_ptooltipValue = options.value;
+                // target.$_ptooltipDisabled = options.value.disabled || false;
+                target.$_ptooltipDisabled = options.disabled || false;
             }
         },
 
