@@ -13,6 +13,6 @@ Visit the [PrimeVue Website](https://www.primefaces.org/primevue/) for general i
 npm run build-lib
 cd dist
 git add .
-git commit update
+git commit -m update
 git push
 ```
