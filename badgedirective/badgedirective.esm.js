@@ -53,4 +53,4 @@ const BadgeDirective = {
     }
 };
 
-export default BadgeDirective;
+export { BadgeDirective as default };

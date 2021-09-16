@@ -128,4 +128,4 @@ styleInject(css_248z);
 script.render = render;
 script.__scopeId = "data-v-5bb97d91";
 
-export default script;
+export { script as default };

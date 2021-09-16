@@ -101,5 +101,4 @@ var PrimeVue = {
     }
 };
 
-export default PrimeVue;
-export { usePrimeVue };
+export { PrimeVue as default, usePrimeVue };

@@ -660,13 +660,13 @@ export default {
 
             return filterConstraint(dataFieldValue, filterValue, this.filterLocale);
         },
-        onRowClick(e) {
+        async onRowClick(e) {
             const event = e.originalEvent;
             if (DomHandler.isClickable(event.target)) {
                 return;
             }
 
-            const clickable = this.beforeRowClick()
+            const clickable = await this.beforeRowClick()
             if(!clickable) return;
             this.$emit('row-click', e);
 

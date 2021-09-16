@@ -185,7 +185,9 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
                 class: ['p-paginator-page p-paginator-element p-link', {'p-highlight': ((pageLink - 1) === $props.page)}],
                 type: "button",
                 onClick: $event => ($options.onPageLinkClick($event, pageLink))
-              }, vue.toDisplayString(pageLink), 11, ["onClick"])), [
+              }, [
+                vue.createTextVNode(vue.toDisplayString(pageLink), 1)
+              ], 10, ["onClick"])), [
                 [_directive_ripple]
               ])
             }), 128))

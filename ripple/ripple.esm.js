@@ -73,4 +73,4 @@ const Ripple = {
     }
 };
 
-export default Ripple;
+export { Ripple as default };

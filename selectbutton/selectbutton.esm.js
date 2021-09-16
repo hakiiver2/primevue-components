@@ -135,4 +135,4 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 script.render = render;
 
-export default script;
+export { script as default };

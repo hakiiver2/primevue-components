@@ -93,7 +93,6 @@ function getTooltipElement(el) {
 }
 
 function escapeHtml(str) {
-    console.log(str, String(str));
     if(str !== undefined && str !== null) {
         str = String(str);
         str = str.replace(/&/g, '&amp;');
@@ -256,7 +255,6 @@ function getTarget(el) {
 
 const Tooltip = {
     beforeMount(el, options) {
-        console.log(options);
         let target = getTarget(el);
         target.$_ptooltipModifiers = options.modifiers;
         if (typeof options.value === 'string') {
@@ -303,4 +301,4 @@ const Tooltip = {
 
 };
 
-export default Tooltip;
+export { Tooltip as default };

@@ -19,4 +19,4 @@ var ToastService = {
     }
 };
 
-export default ToastService;
+export { ToastService as default };

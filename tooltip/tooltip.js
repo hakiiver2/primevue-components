@@ -95,7 +95,6 @@ this.primevue.tooltip = (function (utils) {
     }
 
     function escapeHtml(str) {
-        console.log(str, String(str));
         if(str !== undefined && str !== null) {
             str = String(str);
             str = str.replace(/&/g, '&amp;');
@@ -258,7 +257,6 @@ this.primevue.tooltip = (function (utils) {
 
     const Tooltip = {
         beforeMount(el, options) {
-            console.log(options);
             let target = getTarget(el);
             target.$_ptooltipModifiers = options.modifiers;
             if (typeof options.value === 'string') {

@@ -165,4 +165,4 @@ const StyleClass = {
     }
 };
 
-export default StyleClass;
+export { StyleClass as default };

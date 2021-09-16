@@ -5,4 +5,4 @@ var script = {
     }
 };
 
-export default script;
+export { script as default };

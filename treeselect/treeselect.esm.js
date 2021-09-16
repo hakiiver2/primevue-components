@@ -534,4 +534,4 @@ styleInject(css_248z);
 
 script.render = render;
 
-export default script;
+export { script as default };

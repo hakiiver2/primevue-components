@@ -2335,7 +2335,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 onClick: $event => ($options.onMonthSelect($event, i)),
                                 onKeydown: $event => ($options.onMonthCellKeydown($event,i)),
                                 class: ["p-monthpicker-month", {'p-highlight': $options.isMonthSelected(i)}]
-                              }, vue.toDisplayString(m), 43, ["onClick", "onKeydown"])), [
+                              }, [
+                                vue.createTextVNode(vue.toDisplayString(m), 1)
+                              ], 42, ["onClick", "onKeydown"])), [
                                 [_directive_ripple]
                               ])
                             }), 128))

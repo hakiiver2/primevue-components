@@ -1,4 +1,4 @@
-import { openBlock, createBlock, toDisplayString, resolveDirective, withDirectives, createVNode, Fragment, renderList, resolveComponent, renderSlot, createCommentVNode } from 'vue';
+import { openBlock, createBlock, toDisplayString, resolveDirective, withDirectives, createVNode, Fragment, renderList, createTextVNode, resolveComponent, renderSlot, createCommentVNode } from 'vue';
 import Ripple from 'primevue/ripple';
 import Dropdown from 'primevue/dropdown';
 
@@ -180,7 +180,9 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
         class: ['p-paginator-page p-paginator-element p-link', {'p-highlight': ((pageLink - 1) === $props.page)}],
         type: "button",
         onClick: $event => ($options.onPageLinkClick($event, pageLink))
-      }, toDisplayString(pageLink), 11, ["onClick"])), [
+      }, [
+        createTextVNode(toDisplayString(pageLink), 1)
+      ], 10, ["onClick"])), [
         [_directive_ripple]
       ])
     }), 128))
@@ -617,4 +619,4 @@ styleInject(css_248z);
 
 script.render = render;
 
-export default script;
+export { script as default };

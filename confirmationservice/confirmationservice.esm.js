@@ -16,4 +16,4 @@ var ConfirmationService = {
     }
 };
 
-export default ConfirmationService;
+export { ConfirmationService as default };
