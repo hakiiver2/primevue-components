@@ -3190,6 +3190,7 @@ this.primevue.datatable = (function (utils, api, Paginator, vue, OverlayEventBus
                     return;
                 }
 
+                console.log(this.beforeRowClick());
                 const clickable = await this.beforeRowClick();
                 if(!clickable) return;
                 this.$emit('row-click', e);
