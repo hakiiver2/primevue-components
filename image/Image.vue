@@ -1,7 +1,7 @@
 <template>
     <span :class="containerClass" :style="style">
         <img v-bind="$attrs" :style="imageStyle" :class="imageClass" />
-        <div class="p-image-preview-indicator" v-if="preview" @click="onImageClick">
+        <div class="p-image-preview-indicator" v-if="preview" @click="onImageClick" :showPreview="showPreview" >
             <slot name="indicator">
                 <i class="p-image-preview-icon pi pi-eye"></i>
             </slot>
@@ -49,7 +49,11 @@ export default {
         class: null,
         style: null,
         imageStyle: null,
-        imageClass: null
+        imageClass: null,
+        showPreview: {
+            type: Boolean,
+            default: false
+        }
     },
     mask: null,
     data() {
@@ -64,6 +68,17 @@ export default {
         if (this.mask) {
             ZIndexUtils.clear(this.container);
         }
+    },
+    watch: {
+        showPreview: {
+            handler: function(value) {
+                if(value) {
+                    this.onImageClick()
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
     },
     methods: {
         maskRef(el) {

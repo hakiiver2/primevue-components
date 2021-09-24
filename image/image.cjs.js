@@ -14,7 +14,11 @@ var script = {
         class: null,
         style: null,
         imageStyle: null,
-        imageClass: null
+        imageClass: null,
+        showPreview: {
+            type: Boolean,
+            default: false
+        }
     },
     mask: null,
     data() {
@@ -29,6 +33,17 @@ var script = {
         if (this.mask) {
             utils.ZIndexUtils.clear(this.container);
         }
+    },
+    watch: {
+        showPreview: {
+            handler: function(value) {
+                if(value) {
+                    this.onImageClick();
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
     },
     methods: {
         maskRef(el) {
@@ -134,12 +149,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ? (vue.openBlock(), vue.createBlock("div", {
           key: 0,
           class: "p-image-preview-indicator",
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onImageClick && $options.onImageClick(...args)))
+          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onImageClick && $options.onImageClick(...args))),
+          showPreview: $props.showPreview
         }, [
           vue.renderSlot(_ctx.$slots, "indicator", {}, () => [
             _hoisted_1
           ])
-        ]))
+        ], 8, ["showPreview"]))
       : vue.createCommentVNode("", true),
     (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
       ($data.maskVisible)
