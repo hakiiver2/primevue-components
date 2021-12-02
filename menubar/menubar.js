@@ -31,7 +31,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                 default: false
             },
             template: {
-                type: Object,
+                type: Function,
                 default: null
             },
             exact: {
@@ -262,6 +262,9 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
             },
             disabled(item) {
                 return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+            },
+            label(item) {
+                return (typeof item.label === 'function' ? item.label() : item.label);
             }
         },
         computed: {
@@ -288,7 +291,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
       }, [
         (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
           return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-            key: item.label + i.toString()
+            key: $options.label(item) + i.toString()
           }, [
             ($options.visible(item) && !item.separator)
               ? (vue.openBlock(), vue.createBlock("li", {
@@ -317,7 +320,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                                   vue.createVNode("span", {
                                     class: ['p-menuitem-icon', item.icon]
                                   }, null, 2),
-                                  vue.createVNode("span", _hoisted_1$1, vue.toDisplayString(item.label), 1)
+                                  vue.createVNode("span", _hoisted_1$1, vue.toDisplayString($options.label(item)), 1)
                                 ], 42, ["href", "onClick", "onKeydown"]), [
                                   [_directive_ripple]
                                 ])
@@ -339,7 +342,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                               vue.createVNode("span", {
                                 class: ['p-menuitem-icon', item.icon]
                               }, null, 2),
-                              vue.createVNode("span", _hoisted_2$1, vue.toDisplayString(item.label), 1),
+                              vue.createVNode("span", _hoisted_2$1, vue.toDisplayString($options.label(item)), 1),
                               (item.items)
                                 ? (vue.openBlock(), vue.createBlock("span", {
                                     key: 0,
@@ -357,7 +360,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                   ($options.visible(item) && item.items)
                     ? (vue.openBlock(), vue.createBlock(_component_MenubarSub, {
                         model: item.items,
-                        key: item.label + '_sub_',
+                        key: $options.label(item) + '_sub_',
                         mobileActive: $props.mobileActive,
                         onLeafClick: $options.onLeafClick,
                         onKeydownItem: $options.onChildItemKeyDown,
@@ -524,7 +527,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
       }
     }
 
-    var css_248z = "\n.p-menubar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-menubar ul {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-menubar .p-menuitem-link {\n    cursor: pointer;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-menubar .p-menuitem-text {\n    line-height: 1;\n}\n.p-menubar .p-menuitem {\n    position: relative;\n}\n.p-menubar-root-list {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-menubar-root-list > li ul {\n    display: none;\n    z-index: 1;\n}\n.p-menubar-root-list > .p-menuitem-active > .p-submenu-list {\n    display: block;\n}\n.p-menubar .p-submenu-list {\n    display: none;\n    position: absolute;\n    z-index: 1;\n}\n.p-menubar .p-submenu-list > .p-menuitem-active > .p-submenu-list  {\n    display: block;\n    left: 100%;\n    top: 0;\n}\n.p-menubar .p-submenu-list .p-menuitem-link .p-submenu-icon {\n    margin-left: auto;\n}\n.p-menubar .p-menubar-custom,\n.p-menubar .p-menubar-end {\n    margin-left: auto;\n    -ms-flex-item-align: center;\n        align-self: center;\n}\n.p-menubar-button {\n    display: none;\n    cursor: pointer;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n";
+    var css_248z = "\n.p-menubar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-menubar ul {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-menubar .p-menuitem-link {\n    cursor: pointer;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-menubar .p-menuitem-text {\n    line-height: 1;\n}\n.p-menubar .p-menuitem {\n    position: relative;\n}\n.p-menubar-root-list {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-menubar-root-list > li ul {\n    display: none;\n    z-index: 1;\n}\n.p-menubar-root-list > .p-menuitem-active > .p-submenu-list {\n    display: block;\n}\n.p-menubar .p-submenu-list {\n    display: none;\n    position: absolute;\n    z-index: 1;\n}\n.p-menubar .p-submenu-list > .p-menuitem-active > .p-submenu-list  {\n    display: block;\n    left: 100%;\n    top: 0;\n}\n.p-menubar .p-submenu-list .p-menuitem-link .p-submenu-icon {\n    margin-left: auto;\n}\n.p-menubar .p-menubar-custom,\n.p-menubar .p-menubar-end {\n    margin-left: auto;\n    -ms-flex-item-align: center;\n        align-self: center;\n}\n.p-menubar-button {\n    display: none;\n    cursor: pointer;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    text-decoration: none;\n}\n";
     styleInject(css_248z);
 
     script.render = render;

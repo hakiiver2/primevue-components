@@ -37,6 +37,10 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                 type: String,
                 default: 'blank'
             },
+            autoHighlight: {
+                type: Boolean,
+                default: false
+            },
             multiple: {
                 type: Boolean,
                 default: false
@@ -121,6 +125,9 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
             getOptionIndex(index, fn) {
                 return this.virtualScrollerDisabled ? index : (fn && fn(index)['index']);
             },
+            getOptionRenderKey(option) {
+                return this.getItemContent(option);
+            },
             getOptionGroupRenderKey(optionGroup) {
                 return utils.ObjectUtils.resolveFieldData(optionGroup, this.optionGroupLabel);
             },
@@ -136,6 +143,10 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                 this.bindOutsideClickListener();
                 this.bindScrollListener();
                 this.bindResizeListener();
+
+                if (this.autoHighlight && this.suggestions && this.suggestions.length) {
+                    utils.DomHandler.addClass(this.list.firstElementChild, 'p-highlight');
+                }
             },
             onOverlayLeave() {
                 this.unbindOutsideClickListener();
@@ -296,7 +307,6 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                     query: query
                 });
             },
-
             onInputClicked(event) {
                 if(this.completeOnFocus) {
                     this.search(event, '', 'click');
@@ -337,7 +347,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
             },
             onKeyDown(event) {
                 if (this.overlayVisible) {
-                    let highlightItem = utils.DomHandler.findSingle(this.overlay, 'li.p-highlight');
+                    let highlightItem = utils.DomHandler.findSingle(this.list, 'li.p-highlight');
 
                     switch(event.which) {
                         //down
@@ -347,11 +357,11 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                                 if (nextElement) {
                                     utils.DomHandler.addClass(nextElement, 'p-highlight');
                                     utils.DomHandler.removeClass(highlightItem, 'p-highlight');
-                                    utils.DomHandler.scrollInView(this.overlay, nextElement);
+                                    nextElement.scrollIntoView({ block: 'nearest', inline: 'start' });
                                 }
                             }
                             else {
-                                highlightItem = this.overlay.firstElementChild.firstElementChild;
+                                highlightItem = this.list.firstElementChild;
                                 if (utils.DomHandler.hasClass(highlightItem, 'p-autocomplete-item-group')) {
                                     highlightItem = this.findNextItem(highlightItem);
                                 }
@@ -371,7 +381,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                                 if (previousElement) {
                                     utils.DomHandler.addClass(previousElement, 'p-highlight');
                                     utils.DomHandler.removeClass(highlightItem, 'p-highlight');
-                                    utils.DomHandler.scrollInView(this.overlay, previousElement);
+                                    previousElement.scrollIntoView({ block: 'nearest', inline: 'start' });
                                 }
                             }
 
@@ -429,7 +439,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                     this.selectItem(event, this.getOptionGroupChildren(optionGroup)[item.dataset.index]);
                 }
                 else {
-                    this.selectItem(event, this.suggestions[utils.DomHandler.index(item)]);
+                    this.selectItem(event, this.suggestions[item.dataset.index]);
                 }
             },
             findNextItem(item) {
@@ -489,6 +499,10 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
             },
             overlayRef(el) {
                 this.overlay = el;
+            },
+            listRef(el, contentRef) {
+                this.list = el;
+                contentRef && contentRef(el); // for virtualScroller
             },
             virtualScrollerRef(el) {
                 this.virtualScroller = el;
@@ -689,7 +703,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                       content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
                         vue.createVNode("ul", {
                           id: $options.listId,
-                          ref: contentRef,
+                          ref: (el) => $options.listRef(el, contentRef),
                           class: ['p-autocomplete-items', styleClass],
                           role: "listbox"
                         }, [
@@ -697,9 +711,10 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                             ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (item, i) => {
                                 return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
                                   class: "p-autocomplete-item",
-                                  key: i,
+                                  key: $options.getOptionRenderKey(item),
                                   onClick: $event => ($options.selectItem($event, item)),
-                                  role: "option"
+                                  role: "option",
+                                  "data-index": $options.getOptionIndex(i, getItemOptions)
                                 }, [
                                   vue.renderSlot(_ctx.$slots, "item", {
                                     item: item,
@@ -707,7 +722,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                                   }, () => [
                                     vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
                                   ])
-                                ], 8, ["onClick"])), [
+                                ], 8, ["onClick", "data-index"])), [
                                   [_directive_ripple]
                                 ])
                               }), 128))
@@ -730,7 +745,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                                       onClick: $event => ($options.selectItem($event, item)),
                                       role: "option",
                                       "data-group": i,
-                                      "data-index": j
+                                      "data-index": $options.getOptionIndex(j, getItemOptions)
                                     }, [
                                       vue.renderSlot(_ctx.$slots, "item", {
                                         item: item,

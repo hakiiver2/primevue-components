@@ -42,6 +42,10 @@ var script = {
             type: String,
             default: 'blank'
         },
+        autoHighlight: {
+            type: Boolean,
+            default: false
+        },
         multiple: {
             type: Boolean,
             default: false
@@ -126,6 +130,9 @@ var script = {
         getOptionIndex(index, fn) {
             return this.virtualScrollerDisabled ? index : (fn && fn(index)['index']);
         },
+        getOptionRenderKey(option) {
+            return this.getItemContent(option);
+        },
         getOptionGroupRenderKey(optionGroup) {
             return utils.ObjectUtils.resolveFieldData(optionGroup, this.optionGroupLabel);
         },
@@ -141,6 +148,10 @@ var script = {
             this.bindOutsideClickListener();
             this.bindScrollListener();
             this.bindResizeListener();
+
+            if (this.autoHighlight && this.suggestions && this.suggestions.length) {
+                utils.DomHandler.addClass(this.list.firstElementChild, 'p-highlight');
+            }
         },
         onOverlayLeave() {
             this.unbindOutsideClickListener();
@@ -301,7 +312,6 @@ var script = {
                 query: query
             });
         },
-
         onInputClicked(event) {
             if(this.completeOnFocus) {
                 this.search(event, '', 'click');
@@ -342,7 +352,7 @@ var script = {
         },
         onKeyDown(event) {
             if (this.overlayVisible) {
-                let highlightItem = utils.DomHandler.findSingle(this.overlay, 'li.p-highlight');
+                let highlightItem = utils.DomHandler.findSingle(this.list, 'li.p-highlight');
 
                 switch(event.which) {
                     //down
@@ -352,11 +362,11 @@ var script = {
                             if (nextElement) {
                                 utils.DomHandler.addClass(nextElement, 'p-highlight');
                                 utils.DomHandler.removeClass(highlightItem, 'p-highlight');
-                                utils.DomHandler.scrollInView(this.overlay, nextElement);
+                                nextElement.scrollIntoView({ block: 'nearest', inline: 'start' });
                             }
                         }
                         else {
-                            highlightItem = this.overlay.firstElementChild.firstElementChild;
+                            highlightItem = this.list.firstElementChild;
                             if (utils.DomHandler.hasClass(highlightItem, 'p-autocomplete-item-group')) {
                                 highlightItem = this.findNextItem(highlightItem);
                             }
@@ -376,7 +386,7 @@ var script = {
                             if (previousElement) {
                                 utils.DomHandler.addClass(previousElement, 'p-highlight');
                                 utils.DomHandler.removeClass(highlightItem, 'p-highlight');
-                                utils.DomHandler.scrollInView(this.overlay, previousElement);
+                                previousElement.scrollIntoView({ block: 'nearest', inline: 'start' });
                             }
                         }
 
@@ -434,7 +444,7 @@ var script = {
                 this.selectItem(event, this.getOptionGroupChildren(optionGroup)[item.dataset.index]);
             }
             else {
-                this.selectItem(event, this.suggestions[utils.DomHandler.index(item)]);
+                this.selectItem(event, this.suggestions[item.dataset.index]);
             }
         },
         findNextItem(item) {
@@ -494,6 +504,10 @@ var script = {
         },
         overlayRef(el) {
             this.overlay = el;
+        },
+        listRef(el, contentRef) {
+            this.list = el;
+            contentRef && contentRef(el); // for virtualScroller
         },
         virtualScrollerRef(el) {
             this.virtualScroller = el;
@@ -694,7 +708,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
                     vue.createVNode("ul", {
                       id: $options.listId,
-                      ref: contentRef,
+                      ref: (el) => $options.listRef(el, contentRef),
                       class: ['p-autocomplete-items', styleClass],
                       role: "listbox"
                     }, [
@@ -702,9 +716,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (item, i) => {
                             return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
                               class: "p-autocomplete-item",
-                              key: i,
+                              key: $options.getOptionRenderKey(item),
                               onClick: $event => ($options.selectItem($event, item)),
-                              role: "option"
+                              role: "option",
+                              "data-index": $options.getOptionIndex(i, getItemOptions)
                             }, [
                               vue.renderSlot(_ctx.$slots, "item", {
                                 item: item,
@@ -712,7 +727,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               }, () => [
                                 vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
                               ])
-                            ], 8, ["onClick"])), [
+                            ], 8, ["onClick", "data-index"])), [
                               [_directive_ripple]
                             ])
                           }), 128))
@@ -735,7 +750,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   onClick: $event => ($options.selectItem($event, item)),
                                   role: "option",
                                   "data-group": i,
-                                  "data-index": j
+                                  "data-index": $options.getOptionIndex(j, getItemOptions)
                                 }, [
                                   vue.renderSlot(_ctx.$slots, "item", {
                                     item: item,

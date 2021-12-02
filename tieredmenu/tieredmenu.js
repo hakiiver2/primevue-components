@@ -28,7 +28,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                 default: false
             },
             template: {
-                type: Object,
+                type: Function,
                 default: null
             },
             exact: {
@@ -208,6 +208,9 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
             },
             disabled(item) {
                 return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+            },
+            label(item) {
+                return (typeof item.label === 'function' ? item.label() : item.label);
             }
         },
         computed: {
@@ -240,7 +243,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
       }, [
         (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
           return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-            key: item.label + i.toString()
+            key: $options.label(item) + i.toString()
           }, [
             ($options.visible(item) && !item.separator)
               ? (vue.openBlock(), vue.createBlock("li", {
@@ -269,7 +272,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                                   vue.createVNode("span", {
                                     class: ['p-menuitem-icon', item.icon]
                                   }, null, 2),
-                                  vue.createVNode("span", _hoisted_1, vue.toDisplayString(item.label), 1)
+                                  vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.label(item)), 1)
                                 ], 42, ["href", "onClick", "onKeydown"]), [
                                   [_directive_ripple]
                                 ])
@@ -291,7 +294,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                               vue.createVNode("span", {
                                 class: ['p-menuitem-icon', item.icon]
                               }, null, 2),
-                              vue.createVNode("span", _hoisted_2, vue.toDisplayString(item.label), 1),
+                              vue.createVNode("span", _hoisted_2, vue.toDisplayString($options.label(item)), 1),
                               (item.items)
                                 ? (vue.openBlock(), vue.createBlock("span", _hoisted_3))
                                 : vue.createCommentVNode("", true)
@@ -306,7 +309,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                   ($options.visible(item) && item.items)
                     ? (vue.openBlock(), vue.createBlock(_component_TieredMenuSub, {
                         model: item.items,
-                        key: item.label + '_sub_',
+                        key: $options.label(item) + '_sub_',
                         template: $props.template,
                         onLeafClick: $options.onLeafClick,
                         onKeydownItem: $options.onChildItemKeyDown,

@@ -104,7 +104,7 @@ export default {
                 this.rotate = 0;
                 this.scale = 1;
             }
-            
+
             this.previewClick = false;
         },
         rotateRight() {
@@ -125,13 +125,12 @@ export default {
         },
         onBeforeEnter() {
             ZIndexUtils.set('modal', this.mask, this.$primevue.config.zIndex.modal);
-            DomHandler.addClass(this.mask, 'p-component-overlay');
         },
         onEnter() {
             this.$emit('show');
         },
         onBeforeLeave() {
-            DomHandler.addClass(this.mask, 'p-image-mask-leave');
+            DomHandler.addClass(this.mask, 'p-component-overlay-leave');
         },
         onLeave() {
             this.$emit('hide');
@@ -148,7 +147,7 @@ export default {
             }];
         },
         maskClass() {
-            return ['p-image-mask'];
+            return ['p-image-mask p-component-overlay p-component-overlay-enter'];
         },
         rotateClass() {
             return 'p-image-preview-rotate-' + this.rotate;
@@ -168,12 +167,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: transparent;
-    transition-property: background-color;
-}
-
-.p-image-mask.p-component-overlay.p-image-mask-leave {
-    background-color: transparent;
 }
 
 .p-image-preview-container {
@@ -191,9 +184,7 @@ export default {
     align-items: center;
     justify-content: center;
     opacity: 0;
-    background-color: rgba(0,0,0,.5);
     transition: opacity .3s;
-    color: #ffffff;
 }
 
 .p-image-preview-icon {
@@ -217,14 +208,15 @@ export default {
 }
 
 .p-image-action.p-link {
-    padding: 1rem;
-    color: #ffffff;
-    margin-right: .5rem;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .p-image-preview {
     transition: transform .15s;
+    max-width: 100vw;
+    max-height: 100vh;
 }
 
 .p-image-preview-enter-active {

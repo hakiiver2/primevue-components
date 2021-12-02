@@ -76,7 +76,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: $event => ($options.onStarClick($event,i)),
         tabindex: $options.focusIndex,
         onKeydown: withKeys(withModifiers($event => ($options.onStarClick($event,i)), ["prevent"]), ["enter"]),
-        class: ['p-rating-icon', {'pi pi-star-o': (i > $props.modelValue), 'pi pi-star': (i <= $props.modelValue)}]
+        class: ['p-rating-icon', {'pi pi-star': (i > $props.modelValue), 'pi pi-star-fill': (i <= $props.modelValue)}]
       }, null, 42, ["onClick", "tabindex", "onKeydown"]))
     }), 128))
   ], 2))

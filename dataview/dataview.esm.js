@@ -219,19 +219,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           alwaysShow: $props.alwaysShowPaginator,
           onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event)))
         }, createSlots({ _: 2 }, [
-          (_ctx.$slots.paginatorLeft)
+          (_ctx.$slots.paginatorstart)
             ? {
-                name: "left",
+                name: "start",
                 fn: withCtx(() => [
-                  renderSlot(_ctx.$slots, "paginatorLeft")
+                  renderSlot(_ctx.$slots, "paginatorstart")
                 ])
               }
             : undefined,
-          (_ctx.$slots.paginatorRight)
+          (_ctx.$slots.paginatorend)
             ? {
-                name: "right",
+                name: "end",
                 fn: withCtx(() => [
-                  renderSlot(_ctx.$slots, "paginatorRight")
+                  renderSlot(_ctx.$slots, "paginatorend")
                 ])
               }
             : undefined
@@ -280,19 +280,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           alwaysShow: $props.alwaysShowPaginator,
           onPage: _cache[2] || (_cache[2] = $event => ($options.onPage($event)))
         }, createSlots({ _: 2 }, [
-          (_ctx.$slots.paginatorLeft)
+          (_ctx.$slots.paginatorstart)
             ? {
-                name: "left",
+                name: "start",
                 fn: withCtx(() => [
-                  renderSlot(_ctx.$slots, "paginatorLeft")
+                  renderSlot(_ctx.$slots, "paginatorstart")
                 ])
               }
             : undefined,
-          (_ctx.$slots.paginatorRight)
+          (_ctx.$slots.paginatorend)
             ? {
-                name: "right",
+                name: "end",
                 fn: withCtx(() => [
-                  renderSlot(_ctx.$slots, "paginatorRight")
+                  renderSlot(_ctx.$slots, "paginatorend")
                 ])
               }
             : undefined

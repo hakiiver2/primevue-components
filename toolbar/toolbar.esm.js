@@ -14,10 +14,10 @@ const _hoisted_3 = { class: "p-toolbar-group-right" };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", _hoisted_1, [
     createVNode("div", _hoisted_2, [
-      renderSlot(_ctx.$slots, "left")
+      renderSlot(_ctx.$slots, "start")
     ]),
     createVNode("div", _hoisted_3, [
-      renderSlot(_ctx.$slots, "right")
+      renderSlot(_ctx.$slots, "end")
     ])
   ]))
 }

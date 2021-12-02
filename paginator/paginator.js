@@ -1,17 +1,22 @@
 this.primevue = this.primevue || {};
-this.primevue.paginator = (function (vue, Ripple, Dropdown) {
+this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
         'use strict';
 
         function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
         var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
         var Dropdown__default = /*#__PURE__*/_interopDefaultLegacy(Dropdown);
+        var InputNumber__default = /*#__PURE__*/_interopDefaultLegacy(InputNumber);
 
-        var script$8 = {
+        var script$9 = {
                 name: 'CurrentPageReport',
         		inheritAttrs: false,
         		props: {
         			pageCount: {
+                        type: Number,
+                        default: 0
+                    },
+                    currentPage: {
                         type: Number,
                         default: 0
                     },
@@ -39,7 +44,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
         		computed: {
                     text() {
                         let text = this.template
-                            .replace("{currentPage}", this.pageCount > 0 ? this.page + 1 : 0)
+                            .replace("{currentPage}", this.currentPage)
                             .replace("{totalPages}", this.pageCount)
                             .replace("{first}", this.pageCount > 0 ? this.first + 1 : 0)
                             .replace("{last}", Math.min(this.first + this.rows, this.totalRecords))
@@ -53,13 +58,13 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
 
         const _hoisted_1$6 = { class: "p-paginator-current" };
 
-        function render$8(_ctx, _cache, $props, $setup, $data, $options) {
+        function render$9(_ctx, _cache, $props, $setup, $data, $options) {
           return (vue.openBlock(), vue.createBlock("span", _hoisted_1$6, vue.toDisplayString($options.text), 1))
         }
 
-        script$8.render = render$8;
+        script$9.render = render$9;
 
-        var script$7 = {
+        var script$8 = {
             name: 'FirstPageLink',
             computed: {
                 containerClass() {
@@ -75,7 +80,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
 
         const _hoisted_1$5 = /*#__PURE__*/vue.createVNode("span", { class: "p-paginator-icon pi pi-angle-double-left" }, null, -1);
 
-        function render$7(_ctx, _cache, $props, $setup, $data, $options) {
+        function render$8(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
           return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
@@ -88,9 +93,9 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
           ])
         }
 
-        script$7.render = render$7;
+        script$8.render = render$8;
 
-        var script$6 = {
+        var script$7 = {
             name: 'LastPageLink',
             computed: {
                 containerClass() {
@@ -106,7 +111,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
 
         const _hoisted_1$4 = /*#__PURE__*/vue.createVNode("span", { class: "p-paginator-icon pi pi-angle-double-right" }, null, -1);
 
-        function render$6(_ctx, _cache, $props, $setup, $data, $options) {
+        function render$7(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
           return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
@@ -119,9 +124,9 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
           ])
         }
 
-        script$6.render = render$6;
+        script$7.render = render$7;
 
-        var script$5 = {
+        var script$6 = {
             name: 'NextPageLink',
             computed: {
                 containerClass() {
@@ -137,7 +142,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
 
         const _hoisted_1$3 = /*#__PURE__*/vue.createVNode("span", { class: "p-paginator-icon pi pi-angle-right" }, null, -1);
 
-        function render$5(_ctx, _cache, $props, $setup, $data, $options) {
+        function render$6(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
           return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
@@ -150,9 +155,9 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
           ])
         }
 
-        script$5.render = render$5;
+        script$6.render = render$6;
 
-        var script$4 = {
+        var script$5 = {
             name: 'PageLinks',
             inheritAttrs: false,
             emits: ['click'],
@@ -175,7 +180,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
 
         const _hoisted_1$2 = { class: "p-paginator-pages" };
 
-        function render$4(_ctx, _cache, $props, $setup, $data, $options) {
+        function render$5(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
           return (vue.openBlock(), vue.createBlock("span", _hoisted_1$2, [
@@ -194,9 +199,9 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
           ]))
         }
 
-        script$4.render = render$4;
+        script$5.render = render$5;
 
-        var script$3 = {
+        var script$4 = {
             name: 'PrevPageLink',
             computed: {
                 containerClass() {
@@ -212,7 +217,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
 
         const _hoisted_1$1 = /*#__PURE__*/vue.createVNode("span", { class: "p-paginator-icon pi pi-angle-left" }, null, -1);
 
-        function render$3(_ctx, _cache, $props, $setup, $data, $options) {
+        function render$4(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
           return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
@@ -225,9 +230,9 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
           ])
         }
 
-        script$3.render = render$3;
+        script$4.render = render$4;
 
-        var script$2 = {
+        var script$3 = {
             name: 'RowsPerPageDropdown',
             inheritAttrs: false,
             emits: ['rows-change'],
@@ -257,7 +262,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
             }
         };
 
-        function render$2(_ctx, _cache, $props, $setup, $data, $options) {
+        function render$3(_ctx, _cache, $props, $setup, $data, $options) {
           const _component_RPPDropdown = vue.resolveComponent("RPPDropdown");
 
           return (vue.openBlock(), vue.createBlock(_component_RPPDropdown, {
@@ -271,9 +276,9 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
           }, null, 8, ["modelValue", "options", "disabled"]))
         }
 
-        script$2.render = render$2;
+        script$3.render = render$3;
 
-        var script$1 = {
+        var script$2 = {
             name: 'JumpToPageDropdown',
             inheritAttrs: false,
             emits: ['page-change'],
@@ -301,7 +306,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
             }
         };
 
-        function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+        function render$2(_ctx, _cache, $props, $setup, $data, $options) {
           const _component_JTPDropdown = vue.resolveComponent("JTPDropdown");
 
           return (vue.openBlock(), vue.createBlock(_component_JTPDropdown, {
@@ -313,6 +318,38 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
             class: "p-paginator-page-options",
             disabled: $props.disabled
           }, null, 8, ["modelValue", "options", "disabled"]))
+        }
+
+        script$2.render = render$2;
+
+        var script$1 = {
+            name: 'JumpToPageInput',
+            inheritAttrs: false,
+            emits: ['page-change'],
+            props: {
+                page: Number,
+                pageCount: Number,
+                disabled: Boolean
+            },
+            methods: {
+                onChange(value) {
+                    this.$emit('page-change', value - 1);
+                }
+            },
+            components: {
+                'JTPInput': InputNumber__default['default']
+            }
+        };
+
+        function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+          const _component_JTPInput = vue.resolveComponent("JTPInput");
+
+          return (vue.openBlock(), vue.createBlock(_component_JTPInput, {
+            modelValue: $props.page,
+            "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
+            class: "p-paginator-page-input",
+            disabled: $props.disabled
+          }, null, 8, ["modelValue", "disabled"]))
         }
 
         script$1.render = render$1;
@@ -477,17 +514,21 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
                 },
                 empty() {
                     return this.pageCount === 0;
+                },
+                currentPage() {
+                    return this.pageCount > 0 ? this.page + 1 : 0;
                 }
             },
             components: {
-                'CurrentPageReport': script$8,
-                'FirstPageLink': script$7,
-                'LastPageLink': script$6,
-                'NextPageLink': script$5,
-                'PageLinks': script$4,
-                'PrevPageLink': script$3,
-                'RowsPerPageDropdown': script$2,
-                'JumpToPageDropdown': script$1
+                'CurrentPageReport': script$9,
+                'FirstPageLink': script$8,
+                'LastPageLink': script$7,
+                'NextPageLink': script$6,
+                'PageLinks': script$5,
+                'PrevPageLink': script$4,
+                'RowsPerPageDropdown': script$3,
+                'JumpToPageDropdown': script$2,
+                'JumpToPageInput': script$1
             }
         };
 
@@ -513,12 +554,13 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
           const _component_CurrentPageReport = vue.resolveComponent("CurrentPageReport");
           const _component_RowsPerPageDropdown = vue.resolveComponent("RowsPerPageDropdown");
           const _component_JumpToPageDropdown = vue.resolveComponent("JumpToPageDropdown");
+          const _component_JumpToPageInput = vue.resolveComponent("JumpToPageInput");
 
           return ($props.alwaysShow ? true : ($options.pageLinks && $options.pageLinks.length > 1))
             ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-                (_ctx.$slots.left)
+                (_ctx.$slots.start)
                   ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
-                      vue.renderSlot(_ctx.$slots, "left", { state: $options.currentState })
+                      vue.renderSlot(_ctx.$slots, "start", { state: $options.currentState })
                     ]))
                   : vue.createCommentVNode("", true),
                 (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.templateItems, (item) => {
@@ -558,12 +600,13 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
                                 ? (vue.openBlock(), vue.createBlock(_component_CurrentPageReport, {
                                     key: 5,
                                     template: $props.currentPageReportTemplate,
+                                    currentPage: $options.currentPage,
                                     page: $options.page,
                                     pageCount: $options.pageCount,
                                     first: $data.d_first,
                                     rows: $data.d_rows,
                                     totalRecords: $props.totalRecords
-                                  }, null, 8, ["template", "page", "pageCount", "first", "rows", "totalRecords"]))
+                                  }, null, 8, ["template", "currentPage", "page", "pageCount", "first", "rows", "totalRecords"]))
                                 : (item === 'RowsPerPageDropdown' && $props.rowsPerPageOptions)
                                   ? (vue.openBlock(), vue.createBlock(_component_RowsPerPageDropdown, {
                                       key: 6,
@@ -580,12 +623,19 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
                                         onPageChange: _cache[7] || (_cache[7] = $event => ($options.changePage($event))),
                                         disabled: $options.empty
                                       }, null, 8, ["page", "pageCount", "disabled"]))
-                                    : vue.createCommentVNode("", true)
+                                    : (item === 'JumpToPageInput')
+                                      ? (vue.openBlock(), vue.createBlock(_component_JumpToPageInput, {
+                                          key: 8,
+                                          page: $options.currentPage,
+                                          onPageChange: _cache[8] || (_cache[8] = $event => ($options.changePage($event))),
+                                          disabled: $options.empty
+                                        }, null, 8, ["page", "disabled"]))
+                                      : vue.createCommentVNode("", true)
                   ], 64))
                 }), 128)),
-                (_ctx.$slots.right)
+                (_ctx.$slots.end)
                   ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
-                      vue.renderSlot(_ctx.$slots, "right", { state: $options.currentState })
+                      vue.renderSlot(_ctx.$slots, "end", { state: $options.currentState })
                     ]))
                   : vue.createCommentVNode("", true)
               ]))
@@ -626,4 +676,4 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown) {
 
         return script;
 
-}(Vue, primevue.ripple, primevue.dropdown));
+}(Vue, primevue.ripple, primevue.dropdown, primevue.inputnumber));

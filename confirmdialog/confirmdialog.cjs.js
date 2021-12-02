@@ -77,6 +77,12 @@ var script = {
         autoFocus() {
             return this.confirmation && this.confirmation.autoFocus ? this.confirmation.autoFocus : "accept";
         },
+        isShowAcceptButton() {
+            return this.confirmation && "isShowAcceptButton" in this.confirmation ? this.confirmation.isShowAcceptButton : true;
+        },
+        isShowRejectButton() {
+            return this.confirmation && "isShowRejectButton" in this.confirmation ? this.confirmation.isShowRejectButton : true;
+        },
         blockScroll() {
             return this.confirmation ? this.confirmation.blockScroll : true;
         },
@@ -103,6 +109,12 @@ var script = {
         },
         rejectClass() {
             return ['p-confirm-dialog-reject', this.confirmation ? (this.confirmation.rejectClass || 'p-button-text') : null];
+        },
+        autoFocusAccept() {
+            return (this.confirmation.defaultFocus === undefined || this.confirmation.defaultFocus === 'accept') ? true : false;
+        },
+        autoFocusReject() {
+            return this.confirmation.defaultFocus === 'reject' ? true : false;
         }
     },
     components: {
@@ -128,20 +140,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     breakpoints: $props.breakpoints
   }, {
     footer: vue.withCtx(() => [
-      vue.createVNode(_component_CDButton, {
-        label: $options.rejectLabel,
-        icon: $options.rejectIcon,
-        class: $options.rejectClass,
-        onClick: _cache[1] || (_cache[1] = $event => ($options.reject())),
-        autofocus: $options.autoFocus==='reject'
-      }, null, 8, ["label", "icon", "class", "autofocus"]),
-      vue.createVNode(_component_CDButton, {
-        label: $options.acceptLabel,
-        icon: $options.acceptIcon,
-        class: $options.acceptClass,
-        onClick: _cache[2] || (_cache[2] = $event => ($options.accept())),
-        autofocus: $options.autoFocus==='accept'
-      }, null, 8, ["label", "icon", "class", "autofocus"])
+      ($options.isShowRejectButton)
+        ? (vue.openBlock(), vue.createBlock(_component_CDButton, {
+            key: 0,
+            label: $options.rejectLabel,
+            icon: $options.rejectIcon,
+            class: $options.rejectClass,
+            onClick: _cache[1] || (_cache[1] = $event => ($options.reject())),
+            autofocus: $options.autoFocusReject
+          }, null, 8, ["label", "icon", "class", "autofocus"]))
+        : vue.createCommentVNode("", true),
+      ($options.isShowAcceptButton)
+        ? (vue.openBlock(), vue.createBlock(_component_CDButton, {
+            key: 1,
+            label: $options.acceptLabel,
+            icon: $options.acceptIcon,
+            class: $options.acceptClass,
+            onClick: _cache[2] || (_cache[2] = $event => ($options.accept())),
+            autofocus: $options.autoFocusAccept
+          }, null, 8, ["label", "icon", "class", "autofocus"]))
+        : vue.createCommentVNode("", true)
     ]),
     default: vue.withCtx(() => [
       vue.createVNode("i", { class: $options.iconClass }, null, 2),

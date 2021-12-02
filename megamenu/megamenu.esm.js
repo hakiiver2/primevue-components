@@ -244,6 +244,9 @@ var script = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.disabled === 'function' ? item.label() : item.label);
         }
     },
     computed: {
@@ -300,7 +303,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     createVNode("ul", _hoisted_2, [
       (openBlock(true), createBlock(Fragment, null, renderList($props.model, (category, index) => {
         return (openBlock(), createBlock(Fragment, {
-          key: category.label + '_' + index
+          key: $options.label(category) + '_' + index
         }, [
           ($options.visible(category))
             ? (openBlock(), createBlock("li", {
@@ -332,7 +335,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                       class: $options.getCategoryIcon(category)
                                     }, null, 2))
                                   : createCommentVNode("", true),
-                                createVNode("span", _hoisted_3, toDisplayString(category.label), 1)
+                                createVNode("span", _hoisted_3, toDisplayString($options.label(category)), 1)
                               ], 42, ["href", "onClick", "onKeydown"]), [
                                 [_directive_ripple]
                               ])
@@ -357,7 +360,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   class: $options.getCategoryIcon(category)
                                 }, null, 2))
                               : createCommentVNode("", true),
-                            createVNode("span", _hoisted_4, toDisplayString(category.label), 1),
+                            createVNode("span", _hoisted_4, toDisplayString($options.label(category)), 1),
                             (category.items)
                               ? (openBlock(), createBlock("span", {
                                   key: 1,
@@ -370,14 +373,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     ], 64))
                   : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.item), {
                       key: 1,
-                      item: _ctx.item
+                      item: category
                     }, null, 8, ["item"])),
                 (category.items)
                   ? (openBlock(), createBlock("div", _hoisted_5, [
                       createVNode("div", _hoisted_6, [
                         (openBlock(true), createBlock(Fragment, null, renderList(category.items, (column, columnIndex) => {
                           return (openBlock(), createBlock("div", {
-                            key: category.label + '_column_' + columnIndex,
+                            key: $options.label(category) + '_column_' + columnIndex,
                             class: $options.getColumnClassName(category)
                           }, [
                             (openBlock(true), createBlock(Fragment, null, renderList(column, (submenu, submenuIndex) => {
@@ -393,7 +396,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 }, toDisplayString(submenu.label), 7),
                                 (openBlock(true), createBlock(Fragment, null, renderList(submenu.items, (item, i) => {
                                   return (openBlock(), createBlock(Fragment, {
-                                    key: item.label + i.toString()
+                                    key: $options.label(item) + i.toString()
                                   }, [
                                     ($options.visible(item) && !item.separator)
                                       ? (openBlock(), createBlock("li", {
@@ -423,7 +426,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                 class: ['p-menuitem-icon', item.icon]
                                                               }, null, 2))
                                                             : createCommentVNode("", true),
-                                                          createVNode("span", _hoisted_7, toDisplayString(item.label), 1)
+                                                          createVNode("span", _hoisted_7, toDisplayString($options.label(item)), 1)
                                                         ], 10, ["href", "onClick"]), [
                                                           [_directive_ripple]
                                                         ])
@@ -445,7 +448,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             class: ['p-menuitem-icon', item.icon]
                                                           }, null, 2))
                                                         : createCommentVNode("", true),
-                                                      createVNode("span", _hoisted_8, toDisplayString(item.label), 1),
+                                                      createVNode("span", _hoisted_8, toDisplayString($options.label(item)), 1),
                                                       (item.items)
                                                         ? (openBlock(), createBlock("span", {
                                                             key: 1,

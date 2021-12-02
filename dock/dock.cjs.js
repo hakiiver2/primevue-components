@@ -1,6 +1,11 @@
 'use strict';
 
+var Ripple = require('primevue/ripple');
 var vue = require('vue');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
 
 var script$1 = {
     name: 'DockSub',
@@ -9,14 +14,15 @@ var script$1 = {
             type: Array,
             default: null
         },
-        template: {
-            type: Function,
+        templates: {
+            type: null,
             default: null
         },
         exact: {
             type: Boolean,
             default: true
-        }
+        },
+        tooltipOptions: null
     },
     data() {
         return {
@@ -66,6 +72,9 @@ var script$1 = {
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
         }
+    },
+    directives: {
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -74,6 +83,7 @@ const _hoisted_1 = { class: "p-dock-list-container" };
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = vue.resolveComponent("router-link");
   const _directive_ripple = vue.resolveDirective("ripple");
+  const _directive_tooltip = vue.resolveDirective("tooltip");
 
   return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
     vue.createVNode("ul", {
@@ -89,7 +99,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
           role: "none",
           onMouseenter: $event => ($options.onItemMouseEnter(index))
         }, [
-          (!$props.template)
+          (!$props.templates['item'])
             ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
                 (item.to && !$options.disabled(item))
                   ? (vue.openBlock(), vue.createBlock(_component_router_link, {
@@ -98,47 +108,55 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                       custom: ""
                     }, {
                       default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                        vue.createVNode("a", {
+                        vue.withDirectives(vue.createVNode("a", {
                           href: href,
                           role: "menuitem",
                           class: $options.linkClass(item, {isActive, isExactActive}),
                           target: item.target,
-                          "data-pr-tooltip": item.label,
                           onClick: $event => ($options.onItemClick($event, item, navigate))
                         }, [
-                          (typeof item.icon === 'string')
+                          (!$props.templates['icon'])
                             ? vue.withDirectives((vue.openBlock(), vue.createBlock("span", {
                                 key: 0,
                                 class: ['p-dock-action-icon', item.icon]
                               }, null, 2)), [
                                 [_directive_ripple]
                               ])
-                            : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(item.icon), { key: 1 }))
-                        ], 10, ["href", "target", "data-pr-tooltip", "onClick"])
+                            : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates['icon']), {
+                                key: 1,
+                                item: item
+                              }, null, 8, ["item"]))
+                        ], 10, ["href", "target", "onClick"]), [
+                          [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions]
+                        ])
                       ]),
                       _: 2
                     }, 1032, ["to"]))
-                  : (vue.openBlock(), vue.createBlock("a", {
+                  : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
                       key: 1,
                       href: item.url,
                       role: "menuitem",
                       class: $options.linkClass(item),
                       target: item.target,
-                      "data-pr-tooltip": item.label,
                       onClick: $event => ($options.onItemClick($event, item)),
                       tabindex: $options.disabled(item) ? null : '0'
                     }, [
-                      (typeof item.icon === 'string')
+                      (!$props.templates['icon'])
                         ? vue.withDirectives((vue.openBlock(), vue.createBlock("span", {
                             key: 0,
                             class: ['p-dock-action-icon', item.icon]
                           }, null, 2)), [
                             [_directive_ripple]
                           ])
-                        : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(item.icon), { key: 1 }))
-                    ], 10, ["href", "target", "data-pr-tooltip", "onClick", "tabindex"]))
+                        : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates['icon']), {
+                            key: 1,
+                            item: item
+                          }, null, 8, ["item"]))
+                    ], 10, ["href", "target", "onClick", "tabindex"])), [
+                      [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions]
+                    ])
               ], 64))
-            : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.template), {
+            : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates['item']), {
                 key: 1,
                 item: item
               }, null, 8, ["item"]))
@@ -160,6 +178,7 @@ var script = {
         model: null,
         class: null,
         style: null,
+        tooltipOptions: null,
         exact: {
             type: Boolean,
             default: true
@@ -184,9 +203,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, [
     vue.createVNode(_component_DockSub, {
       model: $props.model,
-      template: _ctx.$slots.item,
-      exact: $props.exact
-    }, null, 8, ["model", "template", "exact"])
+      templates: _ctx.$slots,
+      exact: $props.exact,
+      tooltipOptions: $props.tooltipOptions
+    }, null, 8, ["model", "templates", "exact", "tooltipOptions"])
   ], 6))
 }
 

@@ -482,15 +482,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]),
         createVNode("div", {
           class: "p-carousel-items-content",
-          style: [{'height': $options.isVertical() ? $props.verticalViewPortHeight : 'auto'}]
+          style: [{'height': $options.isVertical() ? $props.verticalViewPortHeight : 'auto'}],
+          onTouchend: _cache[3] || (_cache[3] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
+          onTouchstart: _cache[4] || (_cache[4] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
+          onTouchmove: _cache[5] || (_cache[5] = (...args) => ($options.onTouchMove && $options.onTouchMove(...args)))
         }, [
           createVNode("div", {
             ref: "itemsContainer",
             class: "p-carousel-items-container",
-            onTransitionend: _cache[2] || (_cache[2] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args))),
-            onTouchend: _cache[3] || (_cache[3] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
-            onTouchstart: _cache[4] || (_cache[4] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
-            onTouchmove: _cache[5] || (_cache[5] = (...args) => ($options.onTouchMove && $options.onTouchMove(...args)))
+            onTransitionend: _cache[2] || (_cache[2] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args)))
           }, [
             ($options.isCircular())
               ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($props.value.slice(-1 * $data.d_numVisible), (item, index) => {
@@ -539,7 +539,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 }), 128))
               : createCommentVNode("", true)
           ], 544)
-        ], 4),
+        ], 36),
         withDirectives(createVNode("button", {
           class: ['p-carousel-next p-link', {'p-disabled': $options.forwardIsDisabled}],
           disabled: $options.forwardIsDisabled,

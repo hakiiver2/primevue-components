@@ -51,6 +51,10 @@
     "description": "Specifies the behavior dropdown button. Default \"blank\" mode sends an empty string and \"current\" mode sends the input value.",
     "type": "string"
   },
+  "autocomplete/autoHighlight": {
+    "description": "Highlights automatically the first item of the dropdown to be selected.",
+    "type": "boolean"
+  },
   "autocomplete/multiple": {
     "description": "Specifies if multiple values can be selected.",
     "type": "boolean"
@@ -1003,6 +1007,10 @@
     "description": "A function that takes the row data and returns a string to apply a particular class for the row.",
     "type": "function"
   },
+  "datatable/rowStyle": {
+    "description": "A function that takes the row data as a parameter and returns the inline style for the corresponding row.",
+    "type": "object"
+  },
   "datatable/scrollable": {
     "description": "When specified, enables horizontal and/or vertical scrolling.",
     "type": "boolean"
@@ -1034,6 +1042,14 @@
   "datatable/stripedRows": {
     "description": "Whether to displays rows with alternating colors.",
     "type": "boolean"
+  },
+  "datatable/tableStyle": {
+    "description": "Inline style of the table element.",
+    "type": "object"
+  },
+  "datatable/tableClass": {
+    "description": "Style class of the table element.",
+    "type": "string"
   },
   "dataview/value": {
     "description": "An array of objects to display.",
@@ -1214,6 +1230,10 @@
   "dock/exact": {
     "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
     "type": "boolean"
+  },
+  "dock/tooltipOptions": {
+    "description": "Whether to display the tooltip on items. The modifiers of tooltip can be used like an object in it. Valid keys are 'event' and 'position'.",
+    "type": "object"
   },
   "dropdown/modelValue": {
     "description": "Value of the component.",
@@ -1559,6 +1579,10 @@
     "description": "Displays a button to switch back to display mode.",
     "type": "boolean"
   },
+  "inplace/diabled": {
+    "description": "When present, it specifies that the element should be disabled.",
+    "type": "boolean"
+  },
   "inputmask/modelValue": {
     "description": "Value of the component.",
     "type": "any"
@@ -1662,6 +1686,10 @@
   "inputnumber/step": {
     "description": "Step factor to increment/decrement the value.",
     "type": "number"
+  },
+  "inputnumber/allowEmpty": {
+    "description": "Determines whether the input field is empty.",
+    "type": "boolean"
   },
   "inputnumber/inputStyle": {
     "description": "Inline style of the input field.",
@@ -1890,6 +1918,10 @@
   "message/life": {
     "description": "Delay in milliseconds to close the message automatically.",
     "type": "number"
+  },
+  "message/icon": {
+    "description": "Display a custom icon for the message.",
+    "type": "string"
   },
   "multiselect/modelValue": {
     "description": "Value of the component.",
@@ -2479,11 +2511,11 @@
     "description": "Whether the actions close when clicked outside.",
     "type": "boolean"
   },
-  "speeddial/buttonClassName": {
+  "speeddial/buttonClass": {
     "description": "Style class of the button element.",
     "type": "string"
   },
-  "speeddial/maskClassName": {
+  "speeddial/maskClass": {
     "description": "Style class of the mask element.",
     "type": "string"
   },
@@ -2510,6 +2542,10 @@
   "speeddial/style": {
     "description": "Style class of the element.",
     "type": "any"
+  },
+  "speeddial/tooltipOptions": {
+    "description": "Whether to display the tooltip on items. The modifiers of tooltip can be used like an object in it. Valid keys are 'event' and 'position'.",
+    "type": "object"
   },
   "splitbutton/label": {
     "description": "Text of the button.",
@@ -2591,6 +2627,10 @@
     "description": "Defines if active route highlight should match the exact route path.",
     "type": "boolean"
   },
+  "tabmenu/activeIndex": {
+    "description": "Active index of menuitem.",
+    "type": "number"
+  },
   "tabpanel/header": {
     "description": "Orientation of tab headers.",
     "type": "string"
@@ -2608,7 +2648,7 @@
     "type": "boolean"
   },
   "tabview/scrollable": {
-    "description": "When specified, enables horizontal scrolling.",
+    "description": "When enabled displays buttons at each side of the tab headers to scroll the tab list.",
     "type": "boolean"
   },
   "tag/value": {

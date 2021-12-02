@@ -5,7 +5,10 @@ var script = {
     inheritAttrs: false,
     emits: ['click', 'update:modelValue', 'change', 'input'],
     props: {
-        modelValue: Boolean,
+        modelValue: {
+            type: null,
+            default: false
+        },
         class: null,
         style: null,
         trueValue: {
@@ -71,13 +74,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       createVNode("input", mergeProps({
         ref: "input",
         type: "checkbox",
-        checked: $props.modelValue
+        checked: $options.checked
       }, _ctx.$attrs, {
         onFocus: _cache[1] || (_cache[1] = $event => ($options.onFocus($event))),
         onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur($event))),
         onKeydown: _cache[3] || (_cache[3] = withKeys(withModifiers($event => ($options.onClick($event)), ["prevent"]), ["enter"])),
         role: "switch",
-        "aria-checked": $props.modelValue
+        "aria-checked": $options.checked
       }), null, 16, ["checked", "aria-checked"])
     ]),
     _hoisted_2

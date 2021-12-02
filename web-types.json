@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "framework": "vue",
   "name": "PrimeVue",
-  "version": "3.6.5-SNAPSHOT",
+  "version": "3.9.1",
   "contributions": {
     "html": {
       "types-syntax": "typescript",
@@ -207,6 +207,16 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "autoHighlight",
+              "default": false,
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Highlights automatically the first item of the dropdown to be selected.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
               }
             },
             {
@@ -1297,6 +1307,11 @@
               "name": "date",
               "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
               "description": "Custom content for the calendar cell."
+            },
+            {
+              "name": "decade",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Custom content for the calendar decade."
             }
           ]
         },
@@ -2253,6 +2268,37 @@
                 "type": "string"
               }
             }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
+              "description": "Callback to invoke when a color is selected.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
+                  "type": "object",
+                  "description": "Original event"
+                },
+                {
+                  "name": "event.value",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
+                  "type": "any",
+                  "description": "Selected color"
+                }
+              ]
+            },
+            {
+              "name": "show",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
+              "description": "Callback to invoke when popup is shown."
+            },
+            {
+              "name": "hide",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
+              "description": "Callback to invoke when popup is hidden."
+            }
           ]
         },
         {
@@ -2771,6 +2817,13 @@
                 "kind": "expression",
                 "type": "string"
               }
+            }
+          ],
+          "slots": [
+            {
+              "name": "message",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/confirmpopup",
+              "description": "Custom content for the component."
             }
           ]
         },
@@ -3362,6 +3415,16 @@
               }
             },
             {
+              "name": "rowStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "A function that takes the row data as a parameter and returns the inline style for the corresponding row.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
               "name": "scrollable",
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
@@ -3439,6 +3502,26 @@
               "value": {
                 "kind": "expression",
                 "type": "boolean"
+              }
+            },
+            {
+              "name": "tableStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Inline style of the table element.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "tableClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Style class of the table element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
               }
             }
           ],
@@ -3951,6 +4034,24 @@
                   "description": "Row data to edit."
                 },
                 {
+                  "name": "event.newData",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "New row data after editing."
+                },
+                {
+                  "name": "event.value",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "Field value of row data to edit."
+                },
+                {
+                  "name": "event.newValue",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "Field value of new row data after editing"
+                },
+                {
                   "name": "event.field",
                   "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
                   "type": "string",
@@ -4019,35 +4120,10 @@
                   "description": "Row data to edit."
                 },
                 {
-                  "name": "event.field",
-                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
-                  "type": "string",
-                  "description": "Field name of the row data."
-                },
-                {
-                  "name": "event.index",
-                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
-                  "type": "number",
-                  "description": "Index of the row data to edit."
-                }
-              ]
-            },
-            {
-              "name": "cell-edit-save",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
-              "description": "Callback to invoke when cell edit is saved.",
-              "arguments": [
-                {
-                  "name": "event.originalEvent",
+                  "name": "event.newData",
                   "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
                   "type": "object",
-                  "description": "Browser event"
-                },
-                {
-                  "name": "event.data",
-                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
-                  "type": "object",
-                  "description": "Row data to edit."
+                  "description": "New row data after editing."
                 },
                 {
                   "name": "event.field",
@@ -4064,9 +4140,9 @@
               ]
             },
             {
-              "name": "cell-edit-cancel",
+              "name": "row-edit-save",
               "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
-              "description": "Callback to invoke when cell edit is cancelled.",
+              "description": "Callback to invoke when row edit is saved.",
               "arguments": [
                 {
                   "name": "event.originalEvent",
@@ -4079,6 +4155,49 @@
                   "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
                   "type": "object",
                   "description": "Row data to edit."
+                },
+                {
+                  "name": "event.newData",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "New row data after editing."
+                },
+                {
+                  "name": "event.field",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "string",
+                  "description": "Field name of the row data."
+                },
+                {
+                  "name": "event.index",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "number",
+                  "description": "Index of the row data to edit."
+                }
+              ]
+            },
+            {
+              "name": "row-edit-cancel",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Callback to invoke when row edit is cancelled.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "Browser event"
+                },
+                {
+                  "name": "event.data",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "Row data to edit."
+                },
+                {
+                  "name": "event.newData",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "New row data after editing."
                 },
                 {
                   "name": "event.field",
@@ -4272,12 +4391,12 @@
               "description": "Custom content for the component's header"
             },
             {
-              "name": "paginatorLeft",
+              "name": "paginatorstart",
               "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
               "description": "Custom content for the component paginator's left side"
             },
             {
-              "name": "paginatorRight",
+              "name": "paginatorend",
               "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
               "description": "Custom content for the component paginator's right side"
             },
@@ -4503,12 +4622,12 @@
               "description": "Custom content for the component's header"
             },
             {
-              "name": "paginatorLeft",
+              "name": "paginatorstart",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dataview",
               "description": "Custom content for the component paginator's left side"
             },
             {
-              "name": "paginatorRight",
+              "name": "paginatorend",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dataview",
               "description": "Custom content for the component paginator's right side"
             },
@@ -4960,6 +5079,16 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "tooltipOptions",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+              "description": "Whether to display the tooltip on items. The modifiers of tooltip can be used like an object in it. Valid keys are 'event' and 'position'.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
             }
           ],
           "slots": [
@@ -4967,6 +5096,11 @@
               "name": "item",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
               "description": "Custom content for the item."
+            },
+            {
+              "name": "icon",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dock",
+              "description": "Custom content for the icon."
             }
           ]
         },
@@ -6375,6 +6509,16 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "diabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inplace",
+              "description": "When present, it specifies that the element should be disabled.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
             }
           ],
           "events": [
@@ -6696,6 +6840,16 @@
               "value": {
                 "kind": "expression",
                 "type": "number"
+              }
+            },
+            {
+              "name": "allowEmpty",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+              "description": "Determines whether the input field is empty.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
               }
             },
             {
@@ -7434,6 +7588,18 @@
               }
             }
           ],
+          "events": [
+            {
+              "name": "show",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/menu",
+              "description": "Callback to invoke when the overlay is shown."
+            },
+            {
+              "name": "hide",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/menu",
+              "description": "Callback to invoke when the overlay is hidden."
+            }
+          ],
           "slots": [
             {
               "name": "item",
@@ -7537,6 +7703,16 @@
               "value": {
                 "kind": "expression",
                 "type": "number"
+              }
+            },
+            {
+              "name": "icon",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/message",
+              "description": "Display a custom icon for the message.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
               }
             }
           ],
@@ -8149,6 +8325,16 @@
               "name": "item",
               "doc-url": "https://primefaces.org/primevue/showcase/#/orderlist",
               "description": "Custom content for the item"
+            },
+            {
+              "name": "controlsstart",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/orderlist",
+              "description": "Custom content before the buttons"
+            },
+            {
+              "name": "controlsend",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/orderlist",
+              "description": "Custom content after the buttons"
             }
           ]
         },
@@ -8345,6 +8531,18 @@
                 "kind": "expression",
                 "type": "object"
               }
+            }
+          ],
+          "events": [
+            {
+              "name": "show",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/overlaypanel",
+              "description": "Callback to invoke before the overlay is shown."
+            },
+            {
+              "name": "hide",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/overlaypanel",
+              "description": "Callback to invoke before the overlay is hidden."
             }
           ]
         },
@@ -9014,7 +9212,7 @@
           ],
           "slots": [
             {
-              "name": "sourceHeader",
+              "name": "sourceheader",
               "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
               "description": "Custom content for the component's source header"
             },
@@ -9024,9 +9222,39 @@
               "description": "Custom content for the item"
             },
             {
-              "name": "targetHeader",
+              "name": "targetheader",
               "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
               "description": "Custom content for the component's target header"
+            },
+            {
+              "name": "sourcecontrolsstart",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Custom content before source control buttons"
+            },
+            {
+              "name": "sourcecontrolsend",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Custom content after source control buttons"
+            },
+            {
+              "name": "movecontrolsstart",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Custom content before move buttons"
+            },
+            {
+              "name": "movecontrolsend",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Custom content after move buttons"
+            },
+            {
+              "name": "targetcontrolsstart",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Custom content before target control buttons"
+            },
+            {
+              "name": "targetcontrolsend",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Custom content after target control buttons"
             }
           ]
         },
@@ -9452,6 +9680,25 @@
             }
           ],
           "events": [
+            {
+              "name": "change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/selectbutton",
+              "description": "Callback to invoke on value change.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/selectbutton",
+                  "type": "object",
+                  "description": "Browser event"
+                },
+                {
+                  "name": "event.value",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/selectbutton",
+                  "type": "any",
+                  "description": "Single value or an array of values that are selected."
+                }
+              ]
+            },
             {
               "name": "focus",
               "doc-url": "https://primefaces.org/primevue/showcase/#/selectbutton",
@@ -9886,7 +10133,7 @@
               }
             },
             {
-              "name": "buttonClassName",
+              "name": "buttonClass",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
               "description": "Style class of the button element.",
@@ -9896,7 +10143,7 @@
               }
             },
             {
-              "name": "maskClassName",
+              "name": "maskClass",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
               "description": "Style class of the mask element.",
@@ -9963,6 +10210,16 @@
               "value": {
                 "kind": "expression",
                 "type": "any"
+              }
+            },
+            {
+              "name": "tooltipOptions",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/speeddial",
+              "description": "Whether to display the tooltip on items. The modifiers of tooltip can be used like an object in it. Valid keys are 'event' and 'position'.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             }
           ],
@@ -10308,6 +10565,37 @@
                 "kind": "expression",
                 "type": "boolean"
               }
+            },
+            {
+              "name": "activeIndex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabmenu",
+              "description": "Active index of menuitem.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "tab-change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabmenu",
+              "description": "Callback to invoke when an active tab is changed.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/tabmenu",
+                  "type": "object",
+                  "description": "Original event"
+                },
+                {
+                  "name": "event.index",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/tabmenu",
+                  "type": "number",
+                  "description": "Index of the selected tab"
+                }
+              ]
             }
           ],
           "slots": [
@@ -10422,7 +10710,7 @@
               "name": "scrollable",
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
-              "description": "When specified, enables horizontal scrolling.",
+              "description": "When enabled displays buttons at each side of the tab headers to scroll the tab list.",
               "value": {
                 "kind": "expression",
                 "type": "boolean"
@@ -11981,12 +12269,12 @@
               "description": "Custom content for the component's header"
             },
             {
-              "name": "paginatorLeft",
+              "name": "paginatorstart",
               "doc-url": "https://primefaces.org/primevue/showcase/#/treetable",
               "description": "Custom content for the component paginator's left side"
             },
             {
-              "name": "paginatorRight",
+              "name": "paginatorend",
               "doc-url": "https://primefaces.org/primevue/showcase/#/treetable",
               "description": "Custom content for the component paginator's right side"
             },

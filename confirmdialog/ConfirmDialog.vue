@@ -4,8 +4,8 @@
         <i :class="iconClass" />
         <span class="p-confirm-dialog-message">{{message}}</span>
         <template #footer>
-            <CDButton :label="rejectLabel" :icon="rejectIcon" :class="rejectClass" @click="reject()" :autofocus="autoFocus==='reject'"/>
-            <CDButton :label="acceptLabel" :icon="acceptIcon" :class="acceptClass" @click="accept()" :autofocus="autoFocus==='accept'" />
+            <CDButton :label="rejectLabel" :icon="rejectIcon" :class="rejectClass" @click="reject()" :autofocus="autoFocusReject"  v-if="isShowRejectButton"/>
+            <CDButton :label="acceptLabel" :icon="acceptIcon" :class="acceptClass" @click="accept()" :autofocus="autoFocusAccept"   v-if="isShowAcceptButton"/>
         </template>
     </CDialog>
 </template>
@@ -81,6 +81,12 @@ export default {
         autoFocus() {
             return this.confirmation && this.confirmation.autoFocus ? this.confirmation.autoFocus : "accept";
         },
+        isShowAcceptButton() {
+            return this.confirmation && "isShowAcceptButton" in this.confirmation ? this.confirmation.isShowAcceptButton : true;
+        },
+        isShowRejectButton() {
+            return this.confirmation && "isShowRejectButton" in this.confirmation ? this.confirmation.isShowRejectButton : true;
+        },
         blockScroll() {
             return this.confirmation ? this.confirmation.blockScroll : true;
         },
@@ -107,6 +113,12 @@ export default {
         },
         rejectClass() {
             return ['p-confirm-dialog-reject', this.confirmation ? (this.confirmation.rejectClass || 'p-button-text') : null];
+        },
+        autoFocusAccept() {
+            return (this.confirmation.defaultFocus === undefined || this.confirmation.defaultFocus === 'accept') ? true : false;
+        },
+        autoFocusReject() {
+            return this.confirmation.defaultFocus === 'reject' ? true : false;
         }
     },
     components: {

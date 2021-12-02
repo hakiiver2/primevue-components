@@ -532,6 +532,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
 
       return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
         vue.createVNode("div", _hoisted_2, [
+          vue.renderSlot(_ctx.$slots, "sourcecontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-up",
@@ -551,12 +552,13 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             type: "button",
             icon: "pi pi-angle-double-down",
             onClick: _cache[4] || (_cache[4] = $event => ($options.moveBottom($event, 0)))
-          })
+          }),
+          vue.renderSlot(_ctx.$slots, "sourcecontrolsend")
         ]),
         vue.createVNode("div", _hoisted_3, [
-          (_ctx.$slots.sourceHeader)
+          (_ctx.$slots.sourceheader)
             ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
-                vue.renderSlot(_ctx.$slots, "sourceHeader")
+                vue.renderSlot(_ctx.$slots, "sourceheader")
               ]))
             : vue.createCommentVNode("", true),
           vue.createVNode(vue.TransitionGroup, {
@@ -594,6 +596,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
           }, 8, ["style"])
         ]),
         vue.createVNode("div", _hoisted_5, [
+          vue.renderSlot(_ctx.$slots, "movecontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-right",
@@ -613,12 +616,13 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             type: "button",
             icon: "pi pi-angle-double-left",
             onClick: $options.moveAllToSource
-          }, null, 8, ["onClick"])
+          }, null, 8, ["onClick"]),
+          vue.renderSlot(_ctx.$slots, "movecontrolsend")
         ]),
         vue.createVNode("div", _hoisted_6, [
-          (_ctx.$slots.targetHeader)
+          (_ctx.$slots.targetheader)
             ? (vue.openBlock(), vue.createBlock("div", _hoisted_7, [
-                vue.renderSlot(_ctx.$slots, "targetHeader")
+                vue.renderSlot(_ctx.$slots, "targetheader")
               ]))
             : vue.createCommentVNode("", true),
           vue.createVNode(vue.TransitionGroup, {
@@ -656,6 +660,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
           }, 8, ["style"])
         ]),
         vue.createVNode("div", _hoisted_8, [
+          vue.renderSlot(_ctx.$slots, "targetcontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-up",
@@ -675,7 +680,8 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             type: "button",
             icon: "pi pi-angle-double-down",
             onClick: _cache[10] || (_cache[10] = $event => ($options.moveBottom($event, 1)))
-          })
+          }),
+          vue.renderSlot(_ctx.$slots, "targetcontrolsend")
         ])
       ]))
     }

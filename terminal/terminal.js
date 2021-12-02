@@ -128,4 +128,4 @@ this.primevue.terminal = (function (TerminalService, vue) {
 
     return script;
 
-}(TerminalService, Vue));
+}(primevue.terminalservice, Vue));

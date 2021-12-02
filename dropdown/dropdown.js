@@ -141,20 +141,20 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             },
             getSelectedOption() {
                 let index = this.getSelectedOptionIndex();
-                return index !== -1 ? (this.optionGroupLabel ? this.getOptionGroupChildren(this.options[index.group])[index.option]: this.options[index]) : null;
+                return index !== -1 ? (this.optionGroupLabel ? this.getOptionGroupChildren(this.visibleOptions[index.group])[index.option]: this.visibleOptions[index]) : null;
             },
             getSelectedOptionIndex() {
-                if (this.modelValue != null && this.options) {
+                if (this.modelValue != null && this.visibleOptions) {
                     if (this.optionGroupLabel) {
-                        for (let i = 0; i < this.options.length; i++) {
-                            let selectedOptionIndex = this.findOptionIndexInList(this.modelValue, this.getOptionGroupChildren(this.options[i]));
+                        for (let i = 0; i < this.visibleOptions.length; i++) {
+                            let selectedOptionIndex = this.findOptionIndexInList(this.modelValue, this.getOptionGroupChildren(this.visibleOptions[i]));
                             if (selectedOptionIndex !== -1) {
                                 return {group: i, option: selectedOptionIndex};
                             }
                         }
                     }
                     else {
-                        return this.findOptionIndexInList(this.modelValue, this.options);
+                        return this.findOptionIndexInList(this.modelValue, this.visibleOptions);
                     }
                 }
 
@@ -368,11 +368,11 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             },
             onOverlayEnter(el) {
                 utils.ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
-                this.scrollValueInView();
                 this.alignOverlay();
                 this.bindOutsideClickListener();
                 this.bindScrollListener();
                 this.bindResizeListener();
+                this.scrollValueInView();
 
                 if (this.filter) {
                     this.$refs.filterInput.focus();
@@ -541,6 +541,8 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             },
             onFilterChange(event) {
                 this.$emit('filter', {originalEvent: event, value: event.target.value});
+            },
+            onFilterUpdated() {
                 if (this.overlayVisible) {
                     this.alignOverlay();
                 }
@@ -585,7 +587,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                         return filteredGroups
                     }
                     else {
-                        return api.FilterService.filter(this.options, this.searchFields, this.filterValue, 'contains', this.filterLocale);
+                        return api.FilterService.filter(this.options, this.searchFields, this.filterValue, this.filterMatchMode, this.filterLocale);
                     }
                 }
                 else {
@@ -690,7 +692,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
       return (vue.openBlock(), vue.createBlock("div", {
         ref: "container",
         class: $options.containerClass,
-        onClick: _cache[12] || (_cache[12] = $event => ($options.onClick($event)))
+        onClick: _cache[13] || (_cache[13] = $event => ($options.onClick($event)))
       }, [
         vue.createVNode("div", _hoisted_1, [
           vue.createVNode("input", {
@@ -769,7 +771,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                     key: 0,
                     ref: $options.overlayRef,
                     class: $options.panelStyleClass,
-                    onClick: _cache[11] || (_cache[11] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                    onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                   }, [
                     vue.renderSlot(_ctx.$slots, "header", {
                       value: $props.modelValue,
@@ -782,11 +784,12 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                               type: "text",
                               ref: "filterInput",
                               "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => ($data.filterValue = $event)),
+                              onVnodeUpdated: _cache[9] || (_cache[9] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
                               autoComplete: "off",
                               class: "p-dropdown-filter p-inputtext p-component",
                               placeholder: $props.filterPlaceholder,
-                              onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
-                              onInput: _cache[10] || (_cache[10] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                              onKeydown: _cache[10] || (_cache[10] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
+                              onInput: _cache[11] || (_cache[11] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
                             }, null, 40, ["placeholder"]), [
                               [vue.vModelText, $data.filterValue]
                             ]),

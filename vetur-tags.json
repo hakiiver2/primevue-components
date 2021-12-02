@@ -25,6 +25,7 @@
       "scrollHeight",
       "dropdown",
       "dropdownMode",
+      "autoHighlight",
       "multiple",
       "minLength",
       "completeOnFocus",
@@ -353,6 +354,7 @@
       "editMode",
       "editingRows",
       "rowClass",
+      "rowStyle",
       "scrollable",
       "scrollDirection",
       "scrollHeight",
@@ -360,7 +362,9 @@
       "responsiveLayout",
       "breakpoint",
       "showGridlines",
-      "stripedRows"
+      "stripedRows",
+      "tableStyle",
+      "tableClass"
     ]
   },
   "DataView": {
@@ -425,7 +429,8 @@
       "position",
       "class",
       "style",
-      "exact"
+      "exact",
+      "tooltipOptions"
     ]
   },
   "Dropdown": {
@@ -556,7 +561,8 @@
     "description": "Inplace provides an easy to do editing and display at the same time where clicking the output displays the actual content.",
     "attributes": [
       "active",
-      "closable"
+      "closable",
+      "diabled"
     ]
   },
   "InputMask": {
@@ -593,6 +599,7 @@
       "min",
       "max",
       "step",
+      "allowEmpty",
       "inputStyle",
       "inputClass",
       "class",
@@ -689,7 +696,8 @@
       "severity",
       "closable",
       "sticky",
-      "life"
+      "life",
+      "icon"
     ]
   },
   "MultiSelect": {
@@ -932,14 +940,15 @@
       "mask",
       "disabled",
       "hideOnClickOutside",
-      "buttonClassName",
-      "maskClassName",
+      "buttonClass",
+      "maskClass",
       "maskStyle",
       "showIcon",
       "hideIcon",
       "rotateAnimation",
       "class",
-      "style"
+      "style",
+      "tooltipOptions"
     ]
   },
   "SplitButton": {
@@ -984,7 +993,8 @@
     "description": "TabMenu is a navigation component that displays items as tab headers.",
     "attributes": [
       "model",
-      "exact"
+      "exact",
+      "activeIndex"
     ]
   },
   "TabPanel": {

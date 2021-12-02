@@ -49,8 +49,15 @@ var script = {
         }
     },
     watch: {
-        data() {
-            this.reinit();
+        /*
+         * Use deep watch to enable triggering watch for changes within structure
+         * otherwise the entire data object needs to be replaced to trigger watch
+         */
+        data: {
+            handler() {
+                this.reinit();
+            },
+            deep: true
         },
         type() {
             this.reinit();

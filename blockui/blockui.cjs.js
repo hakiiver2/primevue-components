@@ -40,23 +40,19 @@ var script = {
     },
     methods: {
         block() {
+            let styleClass = 'p-blockui p-component-overlay p-component-overlay-enter';
             if (this.fullScreen) {
+                styleClass += ' p-blockui-document';
                 this.mask = document.createElement('div');
-                this.mask.setAttribute('class', 'p-blockui p-blockui-document');
+                this.mask.setAttribute('class', styleClass);
                 document.body.appendChild(this.mask);
                 utils.DomHandler.addClass(document.body, 'p-overflow-hidden');
                 document.activeElement.blur();
             }
             else {
                 this.mask = document.createElement('div');
-                this.mask.setAttribute('class', 'p-blockui');
+                this.mask.setAttribute('class', styleClass);
                 this.$refs.container.appendChild(this.mask);
-            }
-
-            if (this.mask) {
-                setTimeout(() => {
-                    utils.DomHandler.addClass(this.mask, 'p-component-overlay');
-                }, 1);
             }
 
             if (this.autoZIndex) {
@@ -66,8 +62,8 @@ var script = {
             this.$emit('block');
         },
         unblock() {
-            utils.DomHandler.addClass(this.mask, 'p-blockui-leave');
-            this.mask.addEventListener('transitionend', () => {
+            utils.DomHandler.addClass(this.mask, 'p-component-overlay-leave');
+            this.mask.addEventListener('animationend', () => {
                 this.removeMask();
             });
         },
@@ -86,15 +82,13 @@ var script = {
     }
 };
 
-const _hoisted_1 = {
-  ref: "container",
-  class: "p-blockui-container"
-};
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+  return (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+    ref: "container",
+    class: "p-blockui-container"
+  }, _ctx.$attrs), [
     vue.renderSlot(_ctx.$slots, "default")
-  ], 512))
+  ], 16))
 }
 
 function styleInject(css, ref) {
@@ -124,7 +118,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-blockui-container {\n    position: relative;\n}\n.p-blockui {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: transparent;\n    -webkit-transition-property: background-color;\n    transition-property: background-color;\n}\n.p-blockui.p-component-overlay {\n    position: absolute;\n}\n.p-blockui-document.p-component-overlay {\n    position: fixed;\n}\n.p-blockui.p-blockui-leave.p-component-overlay {\n    background-color: transparent;\n}\n";
+var css_248z = "\n.p-blockui-container {\n    position: relative;\n}\n.p-blockui {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n}\n.p-blockui.p-component-overlay {\n    position: absolute;\n}\n.p-blockui-document.p-component-overlay {\n    position: fixed;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

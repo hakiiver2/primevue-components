@@ -1,12 +1,17 @@
 import { openBlock, createBlock, toDisplayString, resolveDirective, withDirectives, createVNode, Fragment, renderList, createTextVNode, resolveComponent, renderSlot, createCommentVNode } from 'vue';
 import Ripple from 'primevue/ripple';
 import Dropdown from 'primevue/dropdown';
+import InputNumber from 'primevue/inputnumber';
 
-var script$8 = {
+var script$9 = {
         name: 'CurrentPageReport',
 		inheritAttrs: false,
 		props: {
 			pageCount: {
+                type: Number,
+                default: 0
+            },
+            currentPage: {
                 type: Number,
                 default: 0
             },
@@ -34,7 +39,7 @@ var script$8 = {
 		computed: {
             text() {
                 let text = this.template
-                    .replace("{currentPage}", this.pageCount > 0 ? this.page + 1 : 0)
+                    .replace("{currentPage}", this.currentPage)
                     .replace("{totalPages}", this.pageCount)
                     .replace("{first}", this.pageCount > 0 ? this.first + 1 : 0)
                     .replace("{last}", Math.min(this.first + this.rows, this.totalRecords))
@@ -48,13 +53,13 @@ var script$8 = {
 
 const _hoisted_1$6 = { class: "p-paginator-current" };
 
-function render$8(_ctx, _cache, $props, $setup, $data, $options) {
+function render$9(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("span", _hoisted_1$6, toDisplayString($options.text), 1))
 }
 
-script$8.render = render$8;
+script$9.render = render$9;
 
-var script$7 = {
+var script$8 = {
     name: 'FirstPageLink',
     computed: {
         containerClass() {
@@ -70,7 +75,7 @@ var script$7 = {
 
 const _hoisted_1$5 = /*#__PURE__*/createVNode("span", { class: "p-paginator-icon pi pi-angle-double-left" }, null, -1);
 
-function render$7(_ctx, _cache, $props, $setup, $data, $options) {
+function render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return withDirectives((openBlock(), createBlock("button", {
@@ -83,9 +88,9 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   ])
 }
 
-script$7.render = render$7;
+script$8.render = render$8;
 
-var script$6 = {
+var script$7 = {
     name: 'LastPageLink',
     computed: {
         containerClass() {
@@ -101,7 +106,7 @@ var script$6 = {
 
 const _hoisted_1$4 = /*#__PURE__*/createVNode("span", { class: "p-paginator-icon pi pi-angle-double-right" }, null, -1);
 
-function render$6(_ctx, _cache, $props, $setup, $data, $options) {
+function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return withDirectives((openBlock(), createBlock("button", {
@@ -114,9 +119,9 @@ function render$6(_ctx, _cache, $props, $setup, $data, $options) {
   ])
 }
 
-script$6.render = render$6;
+script$7.render = render$7;
 
-var script$5 = {
+var script$6 = {
     name: 'NextPageLink',
     computed: {
         containerClass() {
@@ -132,7 +137,7 @@ var script$5 = {
 
 const _hoisted_1$3 = /*#__PURE__*/createVNode("span", { class: "p-paginator-icon pi pi-angle-right" }, null, -1);
 
-function render$5(_ctx, _cache, $props, $setup, $data, $options) {
+function render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return withDirectives((openBlock(), createBlock("button", {
@@ -145,9 +150,9 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
   ])
 }
 
-script$5.render = render$5;
+script$6.render = render$6;
 
-var script$4 = {
+var script$5 = {
     name: 'PageLinks',
     inheritAttrs: false,
     emits: ['click'],
@@ -170,7 +175,7 @@ var script$4 = {
 
 const _hoisted_1$2 = { class: "p-paginator-pages" };
 
-function render$4(_ctx, _cache, $props, $setup, $data, $options) {
+function render$5(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createBlock("span", _hoisted_1$2, [
@@ -189,9 +194,9 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   ]))
 }
 
-script$4.render = render$4;
+script$5.render = render$5;
 
-var script$3 = {
+var script$4 = {
     name: 'PrevPageLink',
     computed: {
         containerClass() {
@@ -207,7 +212,7 @@ var script$3 = {
 
 const _hoisted_1$1 = /*#__PURE__*/createVNode("span", { class: "p-paginator-icon pi pi-angle-left" }, null, -1);
 
-function render$3(_ctx, _cache, $props, $setup, $data, $options) {
+function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return withDirectives((openBlock(), createBlock("button", {
@@ -220,9 +225,9 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   ])
 }
 
-script$3.render = render$3;
+script$4.render = render$4;
 
-var script$2 = {
+var script$3 = {
     name: 'RowsPerPageDropdown',
     inheritAttrs: false,
     emits: ['rows-change'],
@@ -252,7 +257,7 @@ var script$2 = {
     }
 };
 
-function render$2(_ctx, _cache, $props, $setup, $data, $options) {
+function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_RPPDropdown = resolveComponent("RPPDropdown");
 
   return (openBlock(), createBlock(_component_RPPDropdown, {
@@ -266,9 +271,9 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 8, ["modelValue", "options", "disabled"]))
 }
 
-script$2.render = render$2;
+script$3.render = render$3;
 
-var script$1 = {
+var script$2 = {
     name: 'JumpToPageDropdown',
     inheritAttrs: false,
     emits: ['page-change'],
@@ -296,7 +301,7 @@ var script$1 = {
     }
 };
 
-function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+function render$2(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_JTPDropdown = resolveComponent("JTPDropdown");
 
   return (openBlock(), createBlock(_component_JTPDropdown, {
@@ -308,6 +313,38 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
     class: "p-paginator-page-options",
     disabled: $props.disabled
   }, null, 8, ["modelValue", "options", "disabled"]))
+}
+
+script$2.render = render$2;
+
+var script$1 = {
+    name: 'JumpToPageInput',
+    inheritAttrs: false,
+    emits: ['page-change'],
+    props: {
+        page: Number,
+        pageCount: Number,
+        disabled: Boolean
+    },
+    methods: {
+        onChange(value) {
+            this.$emit('page-change', value - 1);
+        }
+    },
+    components: {
+        'JTPInput': InputNumber
+    }
+};
+
+function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_JTPInput = resolveComponent("JTPInput");
+
+  return (openBlock(), createBlock(_component_JTPInput, {
+    modelValue: $props.page,
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
+    class: "p-paginator-page-input",
+    disabled: $props.disabled
+  }, null, 8, ["modelValue", "disabled"]))
 }
 
 script$1.render = render$1;
@@ -472,17 +509,21 @@ var script = {
         },
         empty() {
             return this.pageCount === 0;
+        },
+        currentPage() {
+            return this.pageCount > 0 ? this.page + 1 : 0;
         }
     },
     components: {
-        'CurrentPageReport': script$8,
-        'FirstPageLink': script$7,
-        'LastPageLink': script$6,
-        'NextPageLink': script$5,
-        'PageLinks': script$4,
-        'PrevPageLink': script$3,
-        'RowsPerPageDropdown': script$2,
-        'JumpToPageDropdown': script$1
+        'CurrentPageReport': script$9,
+        'FirstPageLink': script$8,
+        'LastPageLink': script$7,
+        'NextPageLink': script$6,
+        'PageLinks': script$5,
+        'PrevPageLink': script$4,
+        'RowsPerPageDropdown': script$3,
+        'JumpToPageDropdown': script$2,
+        'JumpToPageInput': script$1
     }
 };
 
@@ -508,12 +549,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CurrentPageReport = resolveComponent("CurrentPageReport");
   const _component_RowsPerPageDropdown = resolveComponent("RowsPerPageDropdown");
   const _component_JumpToPageDropdown = resolveComponent("JumpToPageDropdown");
+  const _component_JumpToPageInput = resolveComponent("JumpToPageInput");
 
   return ($props.alwaysShow ? true : ($options.pageLinks && $options.pageLinks.length > 1))
     ? (openBlock(), createBlock("div", _hoisted_1, [
-        (_ctx.$slots.left)
+        (_ctx.$slots.start)
           ? (openBlock(), createBlock("div", _hoisted_2, [
-              renderSlot(_ctx.$slots, "left", { state: $options.currentState })
+              renderSlot(_ctx.$slots, "start", { state: $options.currentState })
             ]))
           : createCommentVNode("", true),
         (openBlock(true), createBlock(Fragment, null, renderList($options.templateItems, (item) => {
@@ -553,12 +595,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ? (openBlock(), createBlock(_component_CurrentPageReport, {
                             key: 5,
                             template: $props.currentPageReportTemplate,
+                            currentPage: $options.currentPage,
                             page: $options.page,
                             pageCount: $options.pageCount,
                             first: $data.d_first,
                             rows: $data.d_rows,
                             totalRecords: $props.totalRecords
-                          }, null, 8, ["template", "page", "pageCount", "first", "rows", "totalRecords"]))
+                          }, null, 8, ["template", "currentPage", "page", "pageCount", "first", "rows", "totalRecords"]))
                         : (item === 'RowsPerPageDropdown' && $props.rowsPerPageOptions)
                           ? (openBlock(), createBlock(_component_RowsPerPageDropdown, {
                               key: 6,
@@ -575,12 +618,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 onPageChange: _cache[7] || (_cache[7] = $event => ($options.changePage($event))),
                                 disabled: $options.empty
                               }, null, 8, ["page", "pageCount", "disabled"]))
-                            : createCommentVNode("", true)
+                            : (item === 'JumpToPageInput')
+                              ? (openBlock(), createBlock(_component_JumpToPageInput, {
+                                  key: 8,
+                                  page: $options.currentPage,
+                                  onPageChange: _cache[8] || (_cache[8] = $event => ($options.changePage($event))),
+                                  disabled: $options.empty
+                                }, null, 8, ["page", "disabled"]))
+                              : createCommentVNode("", true)
           ], 64))
         }), 128)),
-        (_ctx.$slots.right)
+        (_ctx.$slots.end)
           ? (openBlock(), createBlock("div", _hoisted_3, [
-              renderSlot(_ctx.$slots, "right", { state: $options.currentState })
+              renderSlot(_ctx.$slots, "end", { state: $options.currentState })
             ]))
           : createCommentVNode("", true)
       ]))

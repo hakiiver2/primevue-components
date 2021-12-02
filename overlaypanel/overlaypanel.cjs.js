@@ -43,6 +43,7 @@ var script = {
             default: null
         }
     },
+    emits: ['show', 'hide'],
     data() {
         return {
             visible: false
@@ -125,6 +126,7 @@ var script = {
             };
 
             OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+            this.$emit('show');
         },
         onLeave() {
             this.unbindOutsideClickListener();
@@ -132,6 +134,7 @@ var script = {
             this.unbindResizeListener();
             OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
+            this.$emit('hide');
         },
         onAfterLeave(el) {
             if (this.autoZIndex) {
@@ -278,11 +281,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               class: $options.containerClass,
               ref: $options.containerRef
             }, _ctx.$attrs, {
-              onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              onClick: _cache[4] || (_cache[4] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
             }), [
               vue.createVNode("div", {
                 class: "p-overlaypanel-content",
-                onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
+                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
+                onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
               }, [
                 vue.renderSlot(_ctx.$slots, "default")
               ], 32),
@@ -290,7 +294,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
                     key: 0,
                     class: "p-overlaypanel-close p-link",
-                    onClick: _cache[2] || (_cache[2] = (...args) => ($options.hide && $options.hide(...args))),
+                    onClick: _cache[3] || (_cache[3] = (...args) => ($options.hide && $options.hide(...args))),
                     "aria-label": $props.ariaCloseLabel,
                     type: "button"
                   }, [

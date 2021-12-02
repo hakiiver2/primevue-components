@@ -17,6 +17,10 @@ this.primevue.inplace = (function (Button, vue) {
             active: {
                 type: Boolean,
                 default: false
+            },
+            disabled: {
+                type: Boolean,
+                default: false
             }
         },
         watch: {
@@ -31,6 +35,10 @@ this.primevue.inplace = (function (Button, vue) {
         },
         methods: {
             open(event) {
+                if (this.disabled) {
+                    return;
+                }
+
                 this.$emit('open', event);
                 this.d_active = true;
                 this.$emit('update:active', true);
@@ -44,6 +52,9 @@ this.primevue.inplace = (function (Button, vue) {
         computed: {
             containerClass() {
                 return ['p-inplace p-component', {'p-inplace-closable': this.closable}];
+            },
+            displayClass() {
+                return ['p-inplace-display', {'p-disabled': this.disabled}];
             }
         },
         components: {
@@ -63,13 +74,13 @@ this.primevue.inplace = (function (Button, vue) {
         (!$data.d_active)
           ? (vue.openBlock(), vue.createBlock("div", {
               key: 0,
-              class: "p-inplace-display",
+              class: $options.displayClass,
               tabindex: _ctx.$attrs.tabindex||'0',
               onClick: _cache[1] || (_cache[1] = (...args) => ($options.open && $options.open(...args))),
               onKeydown: _cache[2] || (_cache[2] = vue.withKeys((...args) => ($options.open && $options.open(...args)), ["enter"]))
             }, [
               vue.renderSlot(_ctx.$slots, "display")
-            ], 40, ["tabindex"]))
+            ], 42, ["tabindex"]))
           : (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
               vue.renderSlot(_ctx.$slots, "content"),
               ($props.closable)

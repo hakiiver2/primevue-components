@@ -8,7 +8,7 @@ this.primevue.selectbutton = (function (utils, Ripple, vue) {
 
     var script = {
         name: 'SelectButton',
-        emits: ['update:modelValue', 'focus', 'blur'],
+        emits: ['update:modelValue', 'focus', 'blur', 'change'],
         props: {
             modelValue: null,
             options: Array,
@@ -53,6 +53,7 @@ this.primevue.selectbutton = (function (utils, Ripple, vue) {
                 }
 
                 this.$emit('update:modelValue', newValue);
+                this.$emit('change', {event: event, value: newValue});
             },
             isSelected(option) {
                 let selected = false;
@@ -88,6 +89,11 @@ this.primevue.selectbutton = (function (utils, Ripple, vue) {
             }
         },
     	computed: {
+            containerClass() {
+                return ['p-selectbutton p-buttonset p-component', {
+                    'p-disabled': this.disabled
+                }];
+            },
             equalityKey() {
                 return this.optionValue ? null : this.dataKey;
             }
@@ -97,16 +103,15 @@ this.primevue.selectbutton = (function (utils, Ripple, vue) {
         }
     };
 
-    const _hoisted_1 = {
-      class: "p-selectbutton p-buttonset p-component",
-      role: "group"
-    };
-    const _hoisted_2 = { class: "p-button-label" };
+    const _hoisted_1 = { class: "p-button-label" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createBlock("div", {
+        class: $options.containerClass,
+        role: "group"
+      }, [
         (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.options, (option, i) => {
           return vue.withDirectives((vue.openBlock(), vue.createBlock("div", {
             key: $options.getOptionRenderKey(option),
@@ -128,13 +133,13 @@ this.primevue.selectbutton = (function (utils, Ripple, vue) {
               option: option,
               index: i
             }, () => [
-              vue.createVNode("span", _hoisted_2, vue.toDisplayString($options.getOptionLabel(option)), 1)
+              vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.getOptionLabel(option)), 1)
             ])
           ], 42, ["aria-label", "aria-pressed", "onClick", "onKeydown", "tabindex", "aria-labelledby"])), [
             [_directive_ripple]
           ])
         }), 128))
-      ]))
+      ], 2))
     }
 
     script.render = render;

@@ -197,7 +197,7 @@ var script = {
         }
     }
 };
-//Inspired from https://github.com/kramer99/vue-knob-control
+//Derived and forked from https://github.com/kramer99/vue-knob-control
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", { class: $options.containerClass }, [

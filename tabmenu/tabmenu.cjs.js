@@ -10,6 +10,7 @@ var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
 
 var script = {
     name: 'TabMenu',
+    emits: ['update:activeIndex', 'tab-change'],
     props: {
 		model: {
             type: Array,
@@ -18,9 +19,18 @@ var script = {
         exact: {
             type: Boolean,
             default: true
+        },
+        activeIndex: {
+            type: Number,
+            default: 0
         }
     },
     timeout: null,
+    data() {
+        return {
+            d_activeIndex: this.activeIndex
+        }
+    },
     mounted() {
         this.updateInkBar();
     },
@@ -33,10 +43,13 @@ var script = {
     watch: {
         $route() {
             this.timeout = setTimeout(() => this.updateInkBar(), 50);
+        },
+        activeIndex(newValue) {
+            this.d_activeIndex = newValue;
         }
     },
     methods: {
-        onItemClick(event, item, navigate) {
+        onItemClick(event, item, index, navigate) {
             if (this.disabled(item)) {
                 event.preventDefault();
                 return;
@@ -52,9 +65,20 @@ var script = {
             if (item.to && navigate) {
                 navigate(event);
             }
+
+            if (index !== this.d_activeIndex) {
+                this.d_activeIndex = index;
+                this.$emit('update:activeIndex', this.d_activeIndex);
+            }
+
+            this.$emit('tab-change', {
+                originalEvent: event,
+                index: index
+            });
         },
-        getItemClass(item) {
+        getItemClass(item, index) {
             return ['p-tabmenuitem', item.class, {
+                'p-highlight': this.d_activeIndex === index,
                 'p-disabled': this.disabled(item)
             }];
         },
@@ -72,6 +96,9 @@ var script = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         },
         updateInkBar() {
             let tabs = this.$refs.nav.children;
@@ -117,7 +144,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     vue.createVNode("ul", _hoisted_2, [
       (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
         return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-          key: item.label + '_' + i.toString()
+          key: $options.label(item) + '_' + i.toString()
         }, [
           (item.to && !$options.disabled(item))
             ? (vue.openBlock(), vue.createBlock(_component_router_link, {
@@ -138,7 +165,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               key: 0,
                               href: href,
                               class: "p-menuitem-link",
-                              onClick: $event => ($options.onItemClick($event, item, navigate)),
+                              onClick: $event => ($options.onItemClick($event, item, i, navigate)),
                               role: "presentation"
                             }, [
                               (item.icon)
@@ -147,7 +174,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     class: $options.getItemIcon(item)
                                   }, null, 2))
                                 : vue.createCommentVNode("", true),
-                              vue.createVNode("span", _hoisted_3, vue.toDisplayString(item.label), 1)
+                              vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
                             ], 8, ["href", "onClick"])), [
                               [_directive_ripple]
                             ])
@@ -163,7 +190,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             : ($options.visible(item))
               ? (vue.openBlock(), vue.createBlock("li", {
                   key: 1,
-                  class: $options.getItemClass(item),
+                  class: $options.getItemClass(item, i),
                   role: "tab"
                 }, [
                   (!_ctx.$slots.item)
@@ -172,7 +199,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         href: item.url,
                         class: "p-menuitem-link",
                         target: item.target,
-                        onClick: $event => ($options.onItemClick($event, item)),
+                        onClick: $event => ($options.onItemClick($event, item, i)),
                         role: "presentation",
                         tabindex: $options.disabled(item) ? null : '0'
                       }, [
@@ -182,7 +209,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               class: $options.getItemIcon(item)
                             }, null, 2))
                           : vue.createCommentVNode("", true),
-                        vue.createVNode("span", _hoisted_4, vue.toDisplayString(item.label), 1)
+                        vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.label(item)), 1)
                       ], 8, ["href", "target", "onClick", "tabindex"])), [
                         [_directive_ripple]
                       ])
@@ -226,7 +253,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-tabmenu {\n    overflow-x: auto;\n}\n.p-tabmenu-nav {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n}\n.p-tabmenu-nav a {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: relative;\n    text-decoration: none;\n    text-decoration: none;\n    overflow: hidden;\n}\n.p-tabmenu-nav a:focus {\n    z-index: 1;\n}\n.p-tabmenu-nav .p-menuitem-text {\n    line-height: 1;\n}\n.p-tabmenu-ink-bar {\n    display: none;\n    z-index: 1;\n}\n";
+var css_248z = "\n.p-tabmenu {\n    overflow-x: auto;\n}\n.p-tabmenu-nav {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n}\n.p-tabmenu-nav a {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: relative;\n    text-decoration: none;\n    text-decoration: none;\n    overflow: hidden;\n}\n.p-tabmenu-nav a:focus {\n    z-index: 1;\n}\n.p-tabmenu-nav .p-menuitem-text {\n    line-height: 1;\n}\n.p-tabmenu-ink-bar {\n    display: none;\n    z-index: 1;\n}\n.p-tabmenu::-webkit-scrollbar {\n    display: none;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

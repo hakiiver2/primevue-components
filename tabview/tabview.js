@@ -98,15 +98,20 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
 
                 event.preventDefault();
             },
+            getVisibleButtonWidths() {
+                const { prevBtn, nextBtn } = this.$refs;
+
+                return [prevBtn, nextBtn].reduce((acc, el) => el ? acc + utils.DomHandler.getWidth(el) : acc, 0);
+            },
             navBackward() {
                 const content = this.$refs.content;
-                const width = utils.DomHandler.getWidth(content);
+                const width = utils.DomHandler.getWidth(content) - this.getVisibleButtonWidths();
                 const pos = content.scrollLeft - width;
                 content.scrollLeft = pos <= 0 ? 0 : pos;
             },
             navForward() {
                 const content = this.$refs.content;
-                const width = utils.DomHandler.getWidth(content);
+                const width = utils.DomHandler.getWidth(content) - this.getVisibleButtonWidths();
                 const pos = content.scrollLeft + width;
                 const lastPos = content.scrollWidth - width;
 
@@ -118,10 +123,10 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
     			return ['p-tabview p-component', {'p-tabview-scrollable': this.scrollable}];
     		},
             prevButtonClasses() {
-                return ['p-tabview-nav-prev p-tabview-nav-btn p-link', {'p-disabled': this.backwardIsDisabled}]
+                return ['p-tabview-nav-prev p-tabview-nav-btn p-link']
             },
             nextButtonClasses() {
-                return ['p-tabview-nav-next p-tabview-nav-btn p-link', {'p-disabled': this.forwardIsDisabled}]
+                return ['p-tabview-nav-next p-tabview-nav-btn p-link']
             },
             tabs() {
                 const tabs = [];
@@ -174,16 +179,16 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
 
       return (vue.openBlock(), vue.createBlock("div", { class: $options.contentClasses }, [
         vue.createVNode("div", _hoisted_1, [
-          ($props.scrollable)
+          ($props.scrollable && !$data.backwardIsDisabled)
             ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
                 key: 0,
+                ref: "prevBtn",
                 class: $options.prevButtonClasses,
-                disabled: $data.backwardIsDisabled,
                 onClick: _cache[1] || (_cache[1] = (...args) => ($options.navBackward && $options.navBackward(...args))),
                 type: "button"
               }, [
                 _hoisted_2
-              ], 10, ["disabled"])), [
+              ], 2)), [
                 [_directive_ripple]
               ])
             : vue.createCommentVNode("", true),
@@ -221,16 +226,16 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
               vue.createVNode("li", _hoisted_5, null, 512)
             ], 512)
           ], 544),
-          ($props.scrollable)
+          ($props.scrollable && !$data.forwardIsDisabled)
             ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
                 key: 1,
+                ref: "nextBtn",
                 class: $options.nextButtonClasses,
-                disabled: $data.forwardIsDisabled,
                 onClick: _cache[3] || (_cache[3] = (...args) => ($options.navForward && $options.navForward(...args))),
                 type: "button"
               }, [
                 _hoisted_6
-              ], 10, ["disabled"])), [
+              ], 2)), [
                 [_directive_ripple]
               ])
             : vue.createCommentVNode("", true)
@@ -280,7 +285,7 @@ this.primevue.tabview = (function (utils, Ripple, vue) {
       }
     }
 
-    var css_248z = "\n.p-tabview-nav-container {\n    position: relative;\n}\n.p-tabview-nav-content {\n    overflow-x: auto;\n    overflow-y: hidden;\n    scroll-behavior: smooth;\n    scrollbar-width: none;\n    -ms-scroll-chaining: contain auto;\n        overscroll-behavior: contain auto;\n}\n.p-tabview-nav {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n}\n.p-tabview-nav-link {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: relative;\n    text-decoration: none;\n    overflow: hidden;\n}\n.p-tabview-ink-bar {\n    display: none;\n    z-index: 1;\n}\n.p-tabview-nav-link:focus {\n    z-index: 1;\n}\n.p-tabview-title {\n    line-height: 1;\n    white-space: nowrap;\n}\n.p-tabview-nav-btn {\n    position: absolute;\n    top: 0;\n    z-index: 2;\n    height: 100%;\n}\n.p-tabview-nav-prev {\n    left: 0;\n}\n.p-tabview-nav-next {\n    right: 0;\n}\n.p-tabview-nav-content::-webkit-scrollbar {\n    display: none;\n}\n";
+    var css_248z = "\n.p-tabview-nav-container {\n    position: relative;\n}\n.p-tabview-scrollable .p-tabview-nav-container {\n    overflow: hidden;\n}\n.p-tabview-nav-content {\n    overflow-x: auto;\n    overflow-y: hidden;\n    scroll-behavior: smooth;\n    scrollbar-width: none;\n    -ms-scroll-chaining: contain auto;\n        overscroll-behavior: contain auto;\n}\n.p-tabview-nav {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n}\n.p-tabview-nav-link {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    position: relative;\n    text-decoration: none;\n    overflow: hidden;\n}\n.p-tabview-ink-bar {\n    display: none;\n    z-index: 1;\n}\n.p-tabview-nav-link:focus {\n    z-index: 1;\n}\n.p-tabview-title {\n    line-height: 1;\n    white-space: nowrap;\n}\n.p-tabview-nav-btn {\n    position: absolute;\n    top: 0;\n    z-index: 2;\n    height: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-tabview-nav-prev {\n    left: 0;\n}\n.p-tabview-nav-next {\n    right: 0;\n}\n.p-tabview-nav-content::-webkit-scrollbar {\n    display: none;\n}\n";
     styleInject(css_248z);
 
     script.render = render;

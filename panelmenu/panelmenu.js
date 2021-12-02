@@ -11,7 +11,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                 default: null
             },
             template: {
-                type: Object,
+                type: Function,
                 default: null
             },
             expandedKeys: {
@@ -33,7 +33,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                 if (this.isActive(item) && this.activeItem === null) {
                     this.activeItem = item;
                 }
-                
+
                 if (this.disabled(item)) {
                     event.preventDefault();
                     return;
@@ -79,6 +79,9 @@ this.primevue.panelmenu = (function (vue, utils) {
             },
             disabled(item) {
                 return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+            },
+            label(item) {
+                return (typeof item.label === 'function' ? item.label() : item.label);
             }
         }
     };
@@ -98,7 +101,7 @@ this.primevue.panelmenu = (function (vue, utils) {
       return (vue.openBlock(), vue.createBlock("ul", _hoisted_1$1, [
         (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
           return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-            key: item.label + i.toString()
+            key: $options.label(item) + i.toString()
           }, [
             ($options.visible(item) && !item.separator)
               ? (vue.openBlock(), vue.createBlock("li", {
@@ -115,18 +118,18 @@ this.primevue.panelmenu = (function (vue, utils) {
                               to: item.to,
                               custom: ""
                             }, {
-                              default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
+                              default: vue.withCtx(({navigate, href, isActive:isRouterActive, isExactActive}) => [
                                 vue.createVNode("a", {
                                   href: href,
-                                  class: $options.linkClass(item, {isActive, isExactActive}),
+                                  class: $options.linkClass(item, {isRouterActive, isExactActive}),
                                   onClick: $event => ($options.onItemClick($event, item, navigate)),
                                   role: "treeitem",
-                                  "aria-expanded": isActive(item)
+                                  "aria-expanded": $options.isActive(item)
                                 }, [
                                   vue.createVNode("span", {
                                     class: ['p-menuitem-icon', item.icon]
                                   }, null, 2),
-                                  vue.createVNode("span", _hoisted_2$1, vue.toDisplayString(item.label), 1)
+                                  vue.createVNode("span", _hoisted_2$1, vue.toDisplayString($options.label(item)), 1)
                                 ], 10, ["href", "onClick", "aria-expanded"])
                               ]),
                               _: 2
@@ -150,7 +153,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                               vue.createVNode("span", {
                                 class: ['p-menuitem-icon', item.icon]
                               }, null, 2),
-                              vue.createVNode("span", _hoisted_3$1, vue.toDisplayString(item.label), 1)
+                              vue.createVNode("span", _hoisted_3$1, vue.toDisplayString($options.label(item)), 1)
                             ], 10, ["href", "target", "onClick", "aria-expanded", "tabindex"]))
                       ], 64))
                     : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.template), {
@@ -163,7 +166,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                         ($options.visible(item) && item.items)
                           ? (vue.openBlock(), vue.createBlock(_component_PanelMenuSub, {
                               model: item.items,
-                              key: item.label + '_sub_',
+                              key: $options.label(item) + '_sub_',
                               template: $props.template,
                               expandedKeys: $props.expandedKeys,
                               onItemToggle: _cache[1] || (_cache[1] = $event => (_ctx.$emit('item-toggle', $event))),
@@ -283,6 +286,9 @@ this.primevue.panelmenu = (function (vue, utils) {
             },
             disabled(item) {
                 return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+            },
+            label(item) {
+                return (typeof item.label === 'function' ? item.label() : item.label);
             }
         },
         components: {
@@ -310,7 +316,7 @@ this.primevue.panelmenu = (function (vue, utils) {
       return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
         (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, index) => {
           return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-            key: item.label + '_' + index
+            key: $options.label(item) + '_' + index
           }, [
             ($options.visible(item))
               ? (vue.openBlock(), vue.createBlock("div", {
@@ -343,7 +349,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                                           class: $options.getPanelIcon(item)
                                         }, null, 2))
                                       : vue.createCommentVNode("", true),
-                                    vue.createVNode("span", _hoisted_2, vue.toDisplayString(item.label), 1)
+                                    vue.createVNode("span", _hoisted_2, vue.toDisplayString($options.label(item)), 1)
                                   ], 10, ["href", "onClick"])
                                 ]),
                                 _: 2
@@ -370,7 +376,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                                       class: $options.getPanelIcon(item)
                                     }, null, 2))
                                   : vue.createCommentVNode("", true),
-                                vue.createVNode("span", _hoisted_3, vue.toDisplayString(item.label), 1)
+                                vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
                               ], 10, ["href", "onClick", "tabindex", "aria-expanded", "id", "aria-controls"]))
                         ], 64))
                       : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {

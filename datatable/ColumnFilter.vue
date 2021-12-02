@@ -6,10 +6,10 @@
         <button ref="icon" v-if="showMenuButton" type="button" class="p-column-filter-menu-button p-link" aria-haspopup="true" :aria-expanded="overlayVisible"
             :class="{'p-column-filter-menu-button-open': overlayVisible, 'p-column-filter-menu-button-active': hasFilter()}"
             @click="toggleMenu()" @keydown="onToggleButtonKeyDown($event)"><span class="pi pi-filter-icon pi-filter"></span></button>
-        <button v-if="showMenuButton && display === 'row'" :class="{'p-hidden-space': !hasRowFilter()}" type="button" class="p-column-filter-clear-button p-link" @click="clearFilter()"><span class="pi pi-filter-slash"></span></button>
+        <button v-if="showClearButton && display === 'row'" :class="{'p-hidden-space': !hasRowFilter()}" type="button" class="p-column-filter-clear-button p-link" @click="clearFilter()"><span class="pi pi-filter-slash"></span></button>
         <Teleport to="body">
             <transition name="p-connected-overlay" @enter="onOverlayEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
-                <div :ref="overlayRef" :class="overlayClass" v-if="overlayVisible" @keydown.escape="onEscape" @click="onContentClick">
+                <div :ref="overlayRef" :class="overlayClass" v-if="overlayVisible" @keydown.escape="onEscape" @click="onContentClick" @mousedown="onContentMouseDown">
                     <component :is="filterHeaderTemplate" :field="field" :filterModel="filters[field]" :filterCallback="filterCallback" />
                     <template v-if="display === 'row'">
                         <ul class="p-column-filter-row-items">
@@ -38,7 +38,7 @@
                             <CFButton type="button" :label="addRuleButtonLabel" icon="pi pi-plus" class="p-column-filter-add-button p-button-text p-button-sm" @click="addConstraint()"></CFButton>
                         </div>
                         <div class="p-column-filter-buttonbar">
-                            <CFButton v-if="!filterClearTemplate" type="button" class="p-button-outlined p-button-sm" @click="clearFilter()" :label="clearButtonLabel"></CFButton>
+                            <CFButton v-if="!filterClearTemplate && showClearButton" type="button" class="p-button-outlined p-button-sm" @click="clearFilter()" :label="clearButtonLabel"></CFButton>
                             <component v-else :is="filterClearTemplate" :field="field" :filterModel="filters[field]" :filterCallback="clearFilter" />
                             <template v-if="showApplyButton">
                                 <CFButton v-if="!filterApplyTemplate" type="button" class="p-button-sm" @click="applyFilter()" :label="applyButtonLabel"></CFButton>
@@ -346,7 +346,15 @@ export default {
         hide() {
             this.overlayVisible = false;
         },
-        onContentClick() {
+        onContentClick(event) {
+            this.selfClick = true;
+
+            OverlayEventBus.emit('overlay-click', {
+                originalEvent: event,
+                target: this.overlay
+            });
+        },
+        onContentMouseDown() {
             this.selfClick = true;
         },
         onOverlayEnter(el) {
@@ -360,7 +368,7 @@ export default {
             this.bindResizeListener();
 
             this.overlayEventListener = (e) => {
-                if (this.overlay.contains(e.target)) {
+                if (!this.isOutsideClicked(e.target)) {
                     this.selfClick = true;
                 }
             }
@@ -383,13 +391,16 @@ export default {
         overlayRef(el) {
             this.overlay = el;
         },
-        isTargetClicked(event) {
-            return this.$refs.icon && (this.$refs.icon === event.target || this.$refs.icon.contains(event.target));
+        isOutsideClicked(target) {
+            return !this.isTargetClicked(target) && this.overlay && !(this.overlay.isSameNode(target) || this.overlay.contains(target));
+        },
+        isTargetClicked(target) {
+            return this.$refs.icon && (this.$refs.icon.isSameNode(target) || this.$refs.icon.contains(target));
         },
         bindOutsideClickListener() {
             if (!this.outsideClickListener) {
                 this.outsideClickListener = (event) => {
-                    if (this.overlayVisible && !this.selfClick && !this.isTargetClicked(event)) {
+                    if (this.overlayVisible && !this.selfClick && this.isOutsideClicked(event.target)) {
                         this.overlayVisible = false;
                     }
                     this.selfClick = false;
@@ -446,7 +457,7 @@ export default {
         },
         overlayClass() {
             return [this.filterMenuClass, {
-                'p-column-filter-overlay p-component p-fluid': true, 
+                'p-column-filter-overlay p-component p-fluid': true,
                 'p-column-filter-overlay-menu': this.display === 'menu',
                 'p-input-filled': this.$primevue.config.inputStyle === 'filled',
                 'p-ripple-disabled': this.$primevue.config.ripple === false

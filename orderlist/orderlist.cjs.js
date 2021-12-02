@@ -352,6 +352,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
     vue.createVNode("div", _hoisted_2, [
+      vue.renderSlot(_ctx.$slots, "controlsstart"),
       vue.createVNode(_component_OLButton, {
         type: "button",
         icon: "pi pi-angle-up",
@@ -371,7 +372,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "button",
         icon: "pi pi-angle-double-down",
         onClick: $options.moveBottom
-      }, null, 8, ["onClick"])
+      }, null, 8, ["onClick"]),
+      vue.renderSlot(_ctx.$slots, "controlsend")
     ]),
     vue.createVNode("div", _hoisted_3, [
       (_ctx.$slots.header)

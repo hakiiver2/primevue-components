@@ -32,6 +32,9 @@ var script$1 = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label() {
+            return (typeof this.item.label === 'function' ? this.item.label() : this.item.label);
         }
     },
     computed: {
@@ -76,7 +79,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                         createVNode("span", {
                           class: ['p-menuitem-icon', $props.item.icon]
                         }, null, 2),
-                        createVNode("span", _hoisted_1$1, toDisplayString($props.item.label), 1)
+                        createVNode("span", _hoisted_1$1, toDisplayString($options.label()), 1)
                       ], 10, ["href", "onClick"]), [
                         [_directive_ripple]
                       ])
@@ -95,7 +98,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     createVNode("span", {
                       class: ['p-menuitem-icon', $props.item.icon]
                     }, null, 2),
-                    createVNode("span", _hoisted_2$1, toDisplayString($props.item.label), 1)
+                    createVNode("span", _hoisted_2$1, toDisplayString($options.label()), 1)
                   ], 10, ["href", "target", "tabindex"])), [
                     [_directive_ripple]
                   ])
@@ -277,6 +280,9 @@ var script = {
         visible(item) {
             return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
         },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
+        },
         containerRef(el) {
             this.container = el;
         },
@@ -335,14 +341,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               createVNode("ul", _hoisted_1, [
                 (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item, i) => {
                   return (openBlock(), createBlock(Fragment, {
-                    key: item.label + i.toString()
+                    key: $options.label(item) + i.toString()
                   }, [
                     (item.items && $options.visible(item) && !item.separator)
                       ? (openBlock(), createBlock(Fragment, { key: 0 }, [
                           (item.items)
                             ? (openBlock(), createBlock("li", _hoisted_2, [
                                 renderSlot(_ctx.$slots, "item", { item: item }, () => [
-                                  createTextVNode(toDisplayString(item.label), 1)
+                                  createTextVNode(toDisplayString($options.label(item)), 1)
                                 ])
                               ]))
                             : createCommentVNode("", true),
@@ -377,7 +383,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             role: "separator"
                           }, null, 6))
                         : (openBlock(), createBlock(_component_Menuitem, {
-                            key: item.label + i.toString(),
+                            key: $options.label(item) + i.toString(),
                             item: item,
                             onClick: $options.itemClick,
                             template: _ctx.$slots.item,

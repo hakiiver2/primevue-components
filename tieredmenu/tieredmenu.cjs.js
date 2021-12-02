@@ -31,7 +31,7 @@ var script$1 = {
             default: false
         },
         template: {
-            type: Object,
+            type: Function,
             default: null
         },
         exact: {
@@ -211,6 +211,9 @@ var script$1 = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         }
     },
     computed: {
@@ -243,7 +246,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   }, [
     (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
       return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-        key: item.label + i.toString()
+        key: $options.label(item) + i.toString()
       }, [
         ($options.visible(item) && !item.separator)
           ? (vue.openBlock(), vue.createBlock("li", {
@@ -272,7 +275,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                               vue.createVNode("span", {
                                 class: ['p-menuitem-icon', item.icon]
                               }, null, 2),
-                              vue.createVNode("span", _hoisted_1, vue.toDisplayString(item.label), 1)
+                              vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.label(item)), 1)
                             ], 42, ["href", "onClick", "onKeydown"]), [
                               [_directive_ripple]
                             ])
@@ -294,7 +297,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           vue.createVNode("span", {
                             class: ['p-menuitem-icon', item.icon]
                           }, null, 2),
-                          vue.createVNode("span", _hoisted_2, vue.toDisplayString(item.label), 1),
+                          vue.createVNode("span", _hoisted_2, vue.toDisplayString($options.label(item)), 1),
                           (item.items)
                             ? (vue.openBlock(), vue.createBlock("span", _hoisted_3))
                             : vue.createCommentVNode("", true)
@@ -309,7 +312,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               ($options.visible(item) && item.items)
                 ? (vue.openBlock(), vue.createBlock(_component_TieredMenuSub, {
                     model: item.items,
-                    key: item.label + '_sub_',
+                    key: $options.label(item) + '_sub_',
                     template: $props.template,
                     onLeafClick: $options.onLeafClick,
                     onKeydownItem: $options.onChildItemKeyDown,

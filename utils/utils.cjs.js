@@ -2,35 +2,35 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-class DomHandler {
+var DomHandler = {
 
-    static innerWidth(el) {
+    innerWidth(el) {
         let width = el.offsetWidth;
         let style = getComputedStyle(el);
 
         width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
         return width;
-    }
+    },
 
-    static width(el) {
+    width(el) {
         let width = el.offsetWidth;
         let style = getComputedStyle(el);
 
         width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
         return width;
-    }
+    },
 
-    static getWindowScrollTop() {
+    getWindowScrollTop() {
         let doc = document.documentElement;
         return (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-    }
+    },
 
-    static getWindowScrollLeft() {
+    getWindowScrollLeft() {
         let doc = document.documentElement;
         return (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    }
+    },
 
-    static getOuterWidth(el, margin) {
+    getOuterWidth(el, margin) {
         if (el) {
             let width = el.offsetWidth;
 
@@ -44,9 +44,9 @@ class DomHandler {
         else {
             return 0;
         }
-    }
+    },
 
-    static getOuterHeight(el, margin) {
+    getOuterHeight(el, margin) {
         if (el) {
             let height = el.offsetHeight;
 
@@ -60,9 +60,9 @@ class DomHandler {
         else {
             return 0;
         }
-    }
+    },
 
-    static getClientHeight(el, margin) {
+    getClientHeight(el, margin) {
         if (el) {
             let height = el.clientHeight;
 
@@ -75,9 +75,9 @@ class DomHandler {
         } else {
             return 0;
         }
-    }
+    },
 
-    static getViewport() {
+    getViewport() {
         let win = window,
             d = document,
             e = d.documentElement,
@@ -86,18 +86,18 @@ class DomHandler {
             h = win.innerHeight || e.clientHeight || g.clientHeight;
 
         return {width: w, height: h};
-    }
+    },
 
-    static getOffset(el) {
+    getOffset(el) {
         var rect = el.getBoundingClientRect();
 
         return {
             top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
             left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0),
         };
-    }
+    },
 
-    static index(element) {
+    index(element) {
         let children = element.parentNode.childNodes;
         let num = 0;
         for (var i = 0; i < children.length; i++) {
@@ -105,9 +105,9 @@ class DomHandler {
             if (children[i].nodeType === 1) num++;
         }
         return -1;
-    }
+    },
 
-    static addMultipleClasses(element, className) {
+    addMultipleClasses(element, className) {
         if (element.classList) {
             let styles = className.split(' ');
             for (let i = 0; i < styles.length; i++) {
@@ -121,23 +121,23 @@ class DomHandler {
                 element.className += ' ' + styles[i];
             }
         }
-    }
+    },
 
-    static addClass(element, className) {
+    addClass(element, className) {
         if (element.classList)
             element.classList.add(className);
         else
             element.className += ' ' + className;
-    }
+    },
 
-    static removeClass(element, className) {
+    removeClass(element, className) {
         if (element.classList)
             element.classList.remove(className);
         else
             element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-    }
+    },
 
-    static hasClass(element, className) {
+    hasClass(element, className) {
         if (element) {
             if (element.classList)
                 return element.classList.contains(className);
@@ -146,35 +146,35 @@ class DomHandler {
         }
 
         return false;
-    }
+    },
 
-    static find(element, selector) {
+    find(element, selector) {
         return element.querySelectorAll(selector);
-    }
+    },
 
-    static findSingle(element, selector) {
+    findSingle(element, selector) {
         return element.querySelector(selector);
-    }
+    },
 
-    static getHeight(el) {
+    getHeight(el) {
         let height = el.offsetHeight;
         let style = getComputedStyle(el);
 
         height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
 
         return height;
-    }
+    },
 
-    static getWidth(el) {
+    getWidth(el) {
         let width = el.offsetWidth;
         let style = getComputedStyle(el);
 
         width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
 
         return width;
-    }
+    },
 
-    static absolutePosition(element, target) {
+    absolutePosition(element, target) {
         let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
         let elementOuterHeight = elementDimensions.height;
         let elementOuterWidth = elementDimensions.width;
@@ -206,9 +206,9 @@ class DomHandler {
 
         element.style.top = top + 'px';
         element.style.left = left + 'px';
-    }
+    },
 
-    static relativePosition(element, target) {
+    relativePosition(element, target) {
         let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
         const targetHeight = target.offsetHeight;
         const targetOffset = target.getBoundingClientRect();
@@ -242,13 +242,13 @@ class DomHandler {
 
         element.style.top = top + 'px';
         element.style.left = left + 'px';
-    }
+    },
 
-    static getParents(element, parents = []) {
+    getParents(element, parents = []) {
         return element['parentNode'] === null ? parents : this.getParents(element.parentNode, parents.concat([element.parentNode]));
-    }
+    },
 
-    static getScrollableParents(element) {
+    getScrollableParents(element) {
         let scrollableParents = [];
 
         if (element) {
@@ -278,9 +278,9 @@ class DomHandler {
         }
 
         return scrollableParents;
-    }
+    },
 
-    static getHiddenElementOuterHeight(element) {
+    getHiddenElementOuterHeight(element) {
         element.style.visibility = 'hidden';
         element.style.display = 'block';
         let elementHeight = element.offsetHeight;
@@ -288,9 +288,9 @@ class DomHandler {
         element.style.visibility = 'visible';
 
         return elementHeight;
-    }
+    },
 
-    static getHiddenElementOuterWidth(element) {
+    getHiddenElementOuterWidth(element) {
         element.style.visibility = 'hidden';
         element.style.display = 'block';
         let elementWidth = element.offsetWidth;
@@ -298,9 +298,9 @@ class DomHandler {
         element.style.visibility = 'visible';
 
         return elementWidth;
-    }
+    },
 
-    static getHiddenElementDimensions(element) {
+    getHiddenElementDimensions(element) {
         var dimensions = {};
         element.style.visibility = 'hidden';
         element.style.display = 'block';
@@ -310,9 +310,9 @@ class DomHandler {
         element.style.visibility = 'visible';
 
         return dimensions;
-    }
+    },
 
-    static fadeIn(element, duration) {
+    fadeIn(element, duration) {
         element.style.opacity = 0;
 
         var last = +new Date();
@@ -328,9 +328,9 @@ class DomHandler {
         };
 
         tick();
-    }
+    },
 
-    static fadeOut(element, ms) {
+    fadeOut(element, ms) {
         var opacity = 1,
             interval = 50,
             duration = ms,
@@ -346,22 +346,22 @@ class DomHandler {
 
             element.style.opacity = opacity;
         }, interval);
-    }
+    },
 
-    static getUserAgent() {
+    getUserAgent() {
         return navigator.userAgent;
-    }
+    },
 
-    static appendChild(element, target) {
+    appendChild(element, target) {
         if(this.isElement(target))
             target.appendChild(element);
         else if(target.el && target.elElement)
             target.elElement.appendChild(element);
         else
             throw new Error('Cannot append ' + target + ' to ' + element);
-    }
+    },
 
-    static scrollInView(container, item) {
+    scrollInView(container, item) {
         let borderTopValue = getComputedStyle(container).getPropertyValue('borderTopWidth');
         let borderTop = borderTopValue ? parseFloat(borderTopValue) : 0;
         let paddingTopValue = getComputedStyle(container).getPropertyValue('paddingTop');
@@ -379,9 +379,9 @@ class DomHandler {
         else if ((offset + itemHeight) > elementHeight) {
             container.scrollTop = scroll + offset - elementHeight + itemHeight;
         }
-    }
+    },
 
-    static clearSelection() {
+    clearSelection() {
         if(window.getSelection) {
             if(window.getSelection().empty) {
                 window.getSelection().empty();
@@ -396,9 +396,9 @@ class DomHandler {
                 //ignore IE bug
             }
         }
-    }
+    },
 
-    static calculateScrollbarWidth() {
+    calculateScrollbarWidth() {
         if(this.calculatedScrollbarWidth != null)
             return this.calculatedScrollbarWidth;
 
@@ -412,9 +412,9 @@ class DomHandler {
         this.calculatedScrollbarWidth = scrollbarWidth;
 
         return scrollbarWidth;
-    }
+    },
 
-    static getBrowser() {
+    getBrowser() {
         if(!this.browser) {
             let matched = this.resolveUserAgent();
             this.browser = {};
@@ -432,9 +432,9 @@ class DomHandler {
         }
 
         return this.browser;
-    }
+    },
 
-    static resolveUserAgent() {
+    resolveUserAgent() {
         let ua = navigator.userAgent.toLowerCase();
         let match = /(chrome)[ ]([\w.]+)/.exec(ua) ||
             /(webkit)[ ]([\w.]+)/.exec(ua) ||
@@ -447,18 +447,18 @@ class DomHandler {
             browser: match[1] || "",
             version: match[2] || "0"
         };
-    }
+    },
 
-    static isVisible(element) {
+    isVisible(element) {
         return element.offsetParent != null;
-    }
+    },
 
-    static invokeElementMethod(element, methodName, args) {
+    invokeElementMethod(element, methodName, args) {
         (element)[methodName].apply(element, args);
-    }
+    },
 
-    static getFocusableElements(element) {
-        let focusableElements = DomHandler.find(element, `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
+    getFocusableElements(element) {
+        let focusableElements = this.find(element, `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
                 [href][clientHeight][clientWidth]:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
                 input:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]), select:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
                 textarea:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]), [tabIndex]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
@@ -472,9 +472,14 @@ class DomHandler {
         }
 
         return visibleFocusableElements;
-    }
+    },
 
-    static isClickable(element) {
+    getFirstFocusableElement(element) {
+        const focusableElements = this.getFocusableElements(element);
+        return focusableElements.length > 0 ? focusableElements[0] : null;
+    },
+
+    isClickable(element) {
         const targetNode = element.nodeName;
         const parentNode = element.parentElement && element.parentElement.nodeName;
 
@@ -483,9 +488,9 @@ class DomHandler {
                 this.hasClass(element, 'p-button') || this.hasClass(element.parentElement, 'p-button') ||
                 this.hasClass(element.parentElement, 'p-checkbox') || this.hasClass(element.parentElement, 'p-radiobutton')
         );
-    }
+    },
 
-    static applyStyle(element, style) {
+    applyStyle(element, style) {
         if (typeof style === 'string') {
             element.style.cssText = this.style;
         }
@@ -494,20 +499,20 @@ class DomHandler {
                 element.style[prop] = style[prop];
             }
         }
-    }
+    },
 
-    static isIOS() {
+    isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window['MSStream'];
-    }
+    },
 
-    static isAndroid() {
+    isAndroid() {
         return /(android)/i.test(navigator.userAgent);
-    }
+    },
 
-    static isTouchDevice() {
+    isTouchDevice() {
         return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
     }
-}
+};
 
 class ConnectedOverlayScrollHandler {
 
@@ -539,16 +544,16 @@ class ConnectedOverlayScrollHandler {
     }
 }
 
-class ObjectUtils {
+var ObjectUtils = {
 
-    static equals(obj1, obj2, field) {
+    equals(obj1, obj2, field) {
         if (field)
             return (this.resolveFieldData(obj1, field) === this.resolveFieldData(obj2, field));
         else
             return this.deepEquals(obj1, obj2);
-    }
+    },
 
-    static deepEquals(a, b) {
+    deepEquals(a, b) {
         if (a === b) return true;
 
         if (a && b && typeof a == 'object' && typeof b == 'object') {
@@ -596,9 +601,9 @@ class ObjectUtils {
         }
 
         return a !== a && b !== b;
-    }
+    },
 
-    static resolveFieldData(data, field) {
+    resolveFieldData(data, field) {
         if (data && Object.keys(data).length && field) {
             if (this.isFunction(field)) {
                 return field(data);
@@ -621,13 +626,13 @@ class ObjectUtils {
         else {
             return null;
         }
-    }
+    },
 
-    static isFunction(obj) {
+    isFunction(obj) {
         return !!(obj && obj.constructor && obj.call && obj.apply);
-    }
+    },
 
-    static filter(value, fields, filterValue) {
+    filter(value, fields, filterValue) {
         var filteredItems = [];
 
         if (value) {
@@ -642,9 +647,9 @@ class ObjectUtils {
         }
 
         return filteredItems;
-    }
+    },
 
-    static reorderArray(value, from, to) {
+    reorderArray(value, from, to) {
         let target;
         if (value && (from !== to)) {
             if (to >= value.length) {
@@ -655,9 +660,9 @@ class ObjectUtils {
             }
             value.splice(to, 0, value.splice(from, 1)[0]);
         }
-    }
+    },
 
-    static findIndexInList(value, list) {
+    findIndexInList(value, list) {
         let index = -1;
 
         if (list) {
@@ -670,9 +675,9 @@ class ObjectUtils {
         }
 
         return index;
-    }
+    },
 
-    static contains(value, list) {
+    contains(value, list) {
         if (value != null && list && list.length) {
             for (let val of list) {
                 if (this.equals(value, val))
@@ -681,9 +686,9 @@ class ObjectUtils {
         }
 
         return false;
-    }
+    },
 
-    static insertIntoOrderedArray(item, index, arr, sourceArr) {
+    insertIntoOrderedArray(item, index, arr, sourceArr) {
         if (arr.length > 0) {
             let injected = false;
             for (let i = 0; i < arr.length; i++) {
@@ -702,9 +707,9 @@ class ObjectUtils {
         else {
             arr.push(item);
         }
-    }
+    },
 
-    static removeAccents(str) {
+    removeAccents(str) {
         if (str && str.search(/[\xC0-\xFF]/g) > -1) {
             str = str
                     .replace(/[\xC0-\xC5]/g, "A")
@@ -731,8 +736,21 @@ class ObjectUtils {
         }
 
         return str;
-    }
-}
+    },
+
+    getVNodeProp(vnode, prop) {
+        let props = vnode.props;
+        if (props) {
+            let kebapProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+            let propName = Object.prototype.hasOwnProperty.call(props, kebapProp) ? kebapProp : prop;
+
+            return ((vnode.type.props[prop].type === Boolean && props[propName] === '') ? true : props[propName]);            
+        }
+
+        return null;
+    }  
+
+};
 
 function handler() {
     let zIndexes = [];

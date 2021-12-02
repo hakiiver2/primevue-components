@@ -19,7 +19,7 @@ var script$1 = {
             default: false
         },
         template: {
-            type: Object,
+            type: Function,
             default: null
         },
         exact: {
@@ -118,6 +118,9 @@ var script$1 = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         }
     },
     computed: {
@@ -156,7 +159,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
           }, [
             (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item, i) => {
               return (openBlock(), createBlock(Fragment, {
-                key: item.label + i.toString()
+                key: $options.label(item) + i.toString()
               }, [
                 ($options.visible(item) && !item.separator)
                   ? (openBlock(), createBlock("li", {
@@ -184,7 +187,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                                       createVNode("span", {
                                         class: ['p-menuitem-icon', item.icon]
                                       }, null, 2),
-                                      createVNode("span", _hoisted_1, toDisplayString(item.label), 1)
+                                      createVNode("span", _hoisted_1, toDisplayString($options.label(item)), 1)
                                     ], 10, ["href", "onClick"]), [
                                       [_directive_ripple]
                                     ])
@@ -205,7 +208,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                                   createVNode("span", {
                                     class: ['p-menuitem-icon', item.icon]
                                   }, null, 2),
-                                  createVNode("span", _hoisted_2, toDisplayString(item.label), 1),
+                                  createVNode("span", _hoisted_2, toDisplayString($options.label(item)), 1),
                                   (item.items)
                                     ? (openBlock(), createBlock("span", _hoisted_3))
                                     : createCommentVNode("", true)
@@ -220,7 +223,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                       ($options.visible(item) && item.items)
                         ? (openBlock(), createBlock(_component_ContextMenuSub, {
                             model: item.items,
-                            key: item.label + '_sub_',
+                            key: $options.label(item) + '_sub_',
                             template: $props.template,
                             onLeafClick: $options.onLeafClick,
                             parentActive: item === $data.activeItem,

@@ -69,7 +69,7 @@ var script = {
                 this.rotate = 0;
                 this.scale = 1;
             }
-            
+
             this.previewClick = false;
         },
         rotateRight() {
@@ -90,13 +90,12 @@ var script = {
         },
         onBeforeEnter() {
             utils.ZIndexUtils.set('modal', this.mask, this.$primevue.config.zIndex.modal);
-            utils.DomHandler.addClass(this.mask, 'p-component-overlay');
         },
         onEnter() {
             this.$emit('show');
         },
         onBeforeLeave() {
-            utils.DomHandler.addClass(this.mask, 'p-image-mask-leave');
+            utils.DomHandler.addClass(this.mask, 'p-component-overlay-leave');
         },
         onLeave() {
             this.$emit('hide');
@@ -113,7 +112,7 @@ var script = {
             }];
         },
         maskClass() {
-            return ['p-image-mask'];
+            return ['p-image-mask p-component-overlay p-component-overlay-enter'];
         },
         rotateClass() {
             return 'p-image-preview-rotate-' + this.rotate;
@@ -259,7 +258,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-image-mask {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    background-color: transparent;\n    -webkit-transition-property: background-color;\n    transition-property: background-color;\n}\n.p-image-mask.p-component-overlay.p-image-mask-leave {\n    background-color: transparent;\n}\n.p-image-preview-container {\n    position: relative;\n    display: inline-block;\n}\n.p-image-preview-indicator {\n    position: absolute;\n    left: 0;\n    top: 0;\n    width: 100%;\n    height: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    opacity: 0;\n    background-color: rgba(0,0,0,.5);\n    -webkit-transition: opacity .3s;\n    transition: opacity .3s;\n    color: #ffffff;\n}\n.p-image-preview-icon {\n    font-size: 1.5rem;\n}\n.p-image-preview-container:hover > .p-image-preview-indicator {\n    opacity: 1;\n    cursor: pointer;\n}\n.p-image-preview-container > img {\n    cursor: pointer;\n}\n.p-image-toolbar {\n    position: absolute;\n    top: 0;\n    right: 0;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-image-action.p-link {\n    padding: 1rem;\n    color: #ffffff;\n    margin-right: .5rem;\n    display: block;\n}\n.p-image-preview {\n    -webkit-transition: -webkit-transform .15s;\n    transition: -webkit-transform .15s;\n    transition: transform .15s;\n    transition: transform .15s, -webkit-transform .15s;\n}\n.p-image-preview-enter-active {\n    -webkit-transition: all 150ms cubic-bezier(0, 0, 0.2, 1);\n    transition: all 150ms cubic-bezier(0, 0, 0.2, 1);\n}\n.p-image-preview-leave-active {\n    -webkit-transition: all 150ms cubic-bezier(0.4, 0.0, 0.2, 1);\n    transition: all 150ms cubic-bezier(0.4, 0.0, 0.2, 1);\n}\n.p-image-preview-enter-from,\n.p-image-preview-leave-to {\n    opacity: 0;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n";
+var css_248z = "\n.p-image-mask {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-image-preview-container {\n    position: relative;\n    display: inline-block;\n}\n.p-image-preview-indicator {\n    position: absolute;\n    left: 0;\n    top: 0;\n    width: 100%;\n    height: 100%;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    opacity: 0;\n    -webkit-transition: opacity .3s;\n    transition: opacity .3s;\n}\n.p-image-preview-icon {\n    font-size: 1.5rem;\n}\n.p-image-preview-container:hover > .p-image-preview-indicator {\n    opacity: 1;\n    cursor: pointer;\n}\n.p-image-preview-container > img {\n    cursor: pointer;\n}\n.p-image-toolbar {\n    position: absolute;\n    top: 0;\n    right: 0;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-image-action.p-link {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-image-preview {\n    -webkit-transition: -webkit-transform .15s;\n    transition: -webkit-transform .15s;\n    transition: transform .15s;\n    transition: transform .15s, -webkit-transform .15s;\n    max-width: 100vw;\n    max-height: 100vh;\n}\n.p-image-preview-enter-active {\n    -webkit-transition: all 150ms cubic-bezier(0, 0, 0.2, 1);\n    transition: all 150ms cubic-bezier(0, 0, 0.2, 1);\n}\n.p-image-preview-leave-active {\n    -webkit-transition: all 150ms cubic-bezier(0.4, 0.0, 0.2, 1);\n    transition: all 150ms cubic-bezier(0.4, 0.0, 0.2, 1);\n}\n.p-image-preview-enter-from,\n.p-image-preview-leave-to {\n    opacity: 0;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n";
 styleInject(css_248z);
 
 script.render = render;

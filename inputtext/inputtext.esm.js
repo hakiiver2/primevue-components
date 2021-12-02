@@ -1,4 +1,4 @@
-import { openBlock, createBlock } from 'vue';
+import { openBlock, createBlock, mergeProps } from 'vue';
 
 var script = {
     name: 'InputText',
@@ -19,11 +19,11 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("input", {
+  return (openBlock(), createBlock("input", mergeProps({
     class: ['p-inputtext p-component', {'p-filled': $options.filled}],
     value: $props.modelValue,
     onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args)))
-  }, null, 42, ["value"]))
+  }, _ctx.$attrs), null, 16, ["value"]))
 }
 
 script.render = render;

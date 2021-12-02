@@ -210,7 +210,10 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
         }
     };
 
-    const _hoisted_1 = { class: "p-confirm-popup-content" };
+    const _hoisted_1 = {
+      key: 0,
+      class: "p-confirm-popup-content"
+    };
     const _hoisted_2 = { class: "p-confirm-popup-message" };
     const _hoisted_3 = { class: "p-confirm-popup-footer" };
 
@@ -233,10 +236,15 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
                 }, _ctx.$attrs, {
                   onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                 }), [
-                  vue.createVNode("div", _hoisted_1, [
-                    vue.createVNode("i", { class: $options.iconClass }, null, 2),
-                    vue.createVNode("span", _hoisted_2, vue.toDisplayString($data.confirmation.message), 1)
-                  ]),
+                  (!_ctx.$slots.message)
+                    ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+                        vue.createVNode("i", { class: $options.iconClass }, null, 2),
+                        vue.createVNode("span", _hoisted_2, vue.toDisplayString($data.confirmation.message), 1)
+                      ]))
+                    : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.message), {
+                        key: 1,
+                        message: $data.confirmation
+                      }, null, 8, ["message"])),
                   vue.createVNode("div", _hoisted_3, [
                     vue.createVNode(_component_CPButton, {
                       label: $options.rejectLabel,

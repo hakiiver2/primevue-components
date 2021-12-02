@@ -10,7 +10,7 @@ var script$1 = {
             default: null
         },
         template: {
-            type: Object,
+            type: Function,
             default: null
         },
         expandedKeys: {
@@ -32,7 +32,7 @@ var script$1 = {
             if (this.isActive(item) && this.activeItem === null) {
                 this.activeItem = item;
             }
-            
+
             if (this.disabled(item)) {
                 event.preventDefault();
                 return;
@@ -78,6 +78,9 @@ var script$1 = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         }
     }
 };
@@ -97,7 +100,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("ul", _hoisted_1$1, [
     (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item, i) => {
       return (openBlock(), createBlock(Fragment, {
-        key: item.label + i.toString()
+        key: $options.label(item) + i.toString()
       }, [
         ($options.visible(item) && !item.separator)
           ? (openBlock(), createBlock("li", {
@@ -114,18 +117,18 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           to: item.to,
                           custom: ""
                         }, {
-                          default: withCtx(({navigate, href, isActive, isExactActive}) => [
+                          default: withCtx(({navigate, href, isActive:isRouterActive, isExactActive}) => [
                             createVNode("a", {
                               href: href,
-                              class: $options.linkClass(item, {isActive, isExactActive}),
+                              class: $options.linkClass(item, {isRouterActive, isExactActive}),
                               onClick: $event => ($options.onItemClick($event, item, navigate)),
                               role: "treeitem",
-                              "aria-expanded": isActive(item)
+                              "aria-expanded": $options.isActive(item)
                             }, [
                               createVNode("span", {
                                 class: ['p-menuitem-icon', item.icon]
                               }, null, 2),
-                              createVNode("span", _hoisted_2$1, toDisplayString(item.label), 1)
+                              createVNode("span", _hoisted_2$1, toDisplayString($options.label(item)), 1)
                             ], 10, ["href", "onClick", "aria-expanded"])
                           ]),
                           _: 2
@@ -149,7 +152,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           createVNode("span", {
                             class: ['p-menuitem-icon', item.icon]
                           }, null, 2),
-                          createVNode("span", _hoisted_3$1, toDisplayString(item.label), 1)
+                          createVNode("span", _hoisted_3$1, toDisplayString($options.label(item)), 1)
                         ], 10, ["href", "target", "onClick", "aria-expanded", "tabindex"]))
                   ], 64))
                 : (openBlock(), createBlock(resolveDynamicComponent($props.template), {
@@ -162,7 +165,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     ($options.visible(item) && item.items)
                       ? (openBlock(), createBlock(_component_PanelMenuSub, {
                           model: item.items,
-                          key: item.label + '_sub_',
+                          key: $options.label(item) + '_sub_',
                           template: $props.template,
                           expandedKeys: $props.expandedKeys,
                           onItemToggle: _cache[1] || (_cache[1] = $event => (_ctx.$emit('item-toggle', $event))),
@@ -282,6 +285,9 @@ var script = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         }
     },
     components: {
@@ -309,7 +315,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", _hoisted_1, [
     (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item, index) => {
       return (openBlock(), createBlock(Fragment, {
-        key: item.label + '_' + index
+        key: $options.label(item) + '_' + index
       }, [
         ($options.visible(item))
           ? (openBlock(), createBlock("div", {
@@ -342,7 +348,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                       class: $options.getPanelIcon(item)
                                     }, null, 2))
                                   : createCommentVNode("", true),
-                                createVNode("span", _hoisted_2, toDisplayString(item.label), 1)
+                                createVNode("span", _hoisted_2, toDisplayString($options.label(item)), 1)
                               ], 10, ["href", "onClick"])
                             ]),
                             _: 2
@@ -369,7 +375,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   class: $options.getPanelIcon(item)
                                 }, null, 2))
                               : createCommentVNode("", true),
-                            createVNode("span", _hoisted_3, toDisplayString(item.label), 1)
+                            createVNode("span", _hoisted_3, toDisplayString($options.label(item)), 1)
                           ], 10, ["href", "onClick", "tabindex", "aria-expanded", "id", "aria-controls"]))
                     ], 64))
                   : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.item), {

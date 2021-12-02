@@ -32,6 +32,9 @@ var script$1 = {
         toggle() {
             this.$emit('node-toggle', this.node);
         },
+        label(node) {
+            return (typeof node.label === 'function' ? node.label() : node.label);
+        },
         onChildNodeToggle(node) {
             this.$emit('node-toggle', node);
         },
@@ -320,7 +323,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               node: $props.node
             }, null, 8, ["node"]))
           : (openBlock(), createBlock(Fragment, { key: 1 }, [
-              createTextVNode(toDisplayString($props.node.label), 1)
+              createTextVNode(toDisplayString($options.label($props.node)), 1)
             ], 64))
       ])
     ], 46, ["aria-expanded"]),

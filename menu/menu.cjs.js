@@ -39,6 +39,9 @@ var script$1 = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label() {
+            return (typeof this.item.label === 'function' ? this.item.label() : this.item.label);
         }
     },
     computed: {
@@ -83,7 +86,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                         vue.createVNode("span", {
                           class: ['p-menuitem-icon', $props.item.icon]
                         }, null, 2),
-                        vue.createVNode("span", _hoisted_1$1, vue.toDisplayString($props.item.label), 1)
+                        vue.createVNode("span", _hoisted_1$1, vue.toDisplayString($options.label()), 1)
                       ], 10, ["href", "onClick"]), [
                         [_directive_ripple]
                       ])
@@ -102,7 +105,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     vue.createVNode("span", {
                       class: ['p-menuitem-icon', $props.item.icon]
                     }, null, 2),
-                    vue.createVNode("span", _hoisted_2$1, vue.toDisplayString($props.item.label), 1)
+                    vue.createVNode("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1)
                   ], 10, ["href", "target", "tabindex"])), [
                     [_directive_ripple]
                   ])
@@ -284,6 +287,9 @@ var script = {
         visible(item) {
             return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
         },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
+        },
         containerRef(el) {
             this.container = el;
         },
@@ -342,14 +348,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               vue.createVNode("ul", _hoisted_1, [
                 (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
                   return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-                    key: item.label + i.toString()
+                    key: $options.label(item) + i.toString()
                   }, [
                     (item.items && $options.visible(item) && !item.separator)
                       ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
                           (item.items)
                             ? (vue.openBlock(), vue.createBlock("li", _hoisted_2, [
                                 vue.renderSlot(_ctx.$slots, "item", { item: item }, () => [
-                                  vue.createTextVNode(vue.toDisplayString(item.label), 1)
+                                  vue.createTextVNode(vue.toDisplayString($options.label(item)), 1)
                                 ])
                               ]))
                             : vue.createCommentVNode("", true),
@@ -384,7 +390,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             role: "separator"
                           }, null, 6))
                         : (vue.openBlock(), vue.createBlock(_component_Menuitem, {
-                            key: item.label + i.toString(),
+                            key: $options.label(item) + i.toString(),
                             item: item,
                             onClick: $options.itemClick,
                             template: _ctx.$slots.item,

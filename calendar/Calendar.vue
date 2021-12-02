@@ -5,31 +5,34 @@
         <CalendarButton v-if="showIcon" :icon="icon" tabindex="-1" class="p-datepicker-trigger" :disabled="$attrs.disabled" @click="onButtonClick" type="button" :aria-label="inputFieldValue"/>
         <Teleport :to="appendTarget" :disabled="appendDisabled">
             <transition name="p-connected-overlay" @enter="onOverlayEnter($event)" @after-enter="onOverlayEnterComplete" @after-leave="onOverlayAfterLeave" @leave="onOverlayLeave">
-                <div :ref="overlayRef" :class="panelStyleClass" v-if="inline ? true : overlayVisible" :role="inline ? null : 'dialog'" @click="onOverlayClick">
+                <div :ref="overlayRef" :class="panelStyleClass" v-if="inline ? true : overlayVisible" :role="inline ? null : 'dialog'" @click="onOverlayClick" @mouseup="onOverlayMouseUp">
                     <template v-if="!timeOnly">
                         <div class="p-datepicker-group-container">
                             <div class="p-datepicker-group" v-for="(month,groupIndex) of months" :key="month.month + month.year">
                                 <div class="p-datepicker-header">
                                     <slot name="header"></slot>
-                                    <button class="p-datepicker-prev p-link" v-if="groupIndex === 0" @click="onPrevButtonClick" type="button" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled">
+                                    <button class="p-datepicker-prev p-link" v-show="groupIndex === 0" @click="onPrevButtonClick" type="button" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled">
                                         <span class="p-datepicker-prev-icon pi pi-chevron-left"></span>
                                     </button>
                                     <div class="p-datepicker-title">
-                                        <span class="p-datepicker-month" v-if="!monthNavigator && (view !== 'month')">{{getMonthName(month.month)}}</span>
-                                        <select class="p-datepicker-month" v-if="monthNavigator && (view !== 'month') && numberOfMonths === 1" @change="onMonthDropdownChange($event.target.value)">
-                                            <option :value="index" v-for="(monthName, index) of monthNames" :key="monthName" :selected="index === month.month">{{monthName}}</option>
-                                        </select>
-                                        <span class="p-datepicker-year" v-if="!yearNavigator">{{view === 'month' ? currentYear : month.year}}</span>
-                                        <select class="p-datepicker-year" v-if="yearNavigator && numberOfMonths === 1" @change="onYearDropdownChange($event.target.value)">
-                                            <option :value="year" v-for="year of yearOptions" :key="year" :selected="year === currentYear">{{year}}</option>
-                                        </select>
+                                        <button type="button" @click="switchToMonthView" v-if="currentView === 'date'" class="p-datepicker-month p-link" :disabled="switchViewButtonDisabled">
+                                            {{getMonthName(month.month)}}
+                                        </button>
+                                        <button type="button" @click="switchToYearView" v-if="currentView !== 'year'" class="p-datepicker-year p-link" :disabled="switchViewButtonDisabled">
+                                            {{currentYear}}
+                                        </button>
+                                        <span class="p-datepicker-decade" v-if="currentView === 'year'">
+                                            <slot name="decade" :years="yearPickerValues">
+                                                {{yearPickerValues[0]}} - {{yearPickerValues[yearPickerValues.length - 1]}}
+                                            </slot>
+                                        </span>
                                     </div>
-                                    <button class="p-datepicker-next p-link" v-if="numberOfMonths === 1 ? true : (groupIndex === numberOfMonths - 1)"
+                                    <button class="p-datepicker-next p-link" v-show="numberOfMonths === 1 ? true : (groupIndex === numberOfMonths - 1)"
                                         @click="onNextButtonClick" type="button" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled">
                                         <span class="p-datepicker-next-icon pi pi-chevron-right"></span>
                                     </button>
                                 </div>
-                                <div class="p-datepicker-calendar-container" v-if="view ==='date'">
+                                <div class="p-datepicker-calendar-container" v-if="currentView ==='date'">
                                     <table class="p-datepicker-calendar">
                                         <thead>
                                             <tr>
@@ -61,22 +64,28 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="p-monthpicker" v-if="view === 'month'">
+                        <div class="p-monthpicker" v-if="currentView === 'month'">
                             <span v-for="(m,i) of monthPickerValues" :key="m" @click="onMonthSelect($event, i)" @keydown="onMonthCellKeydown($event,i)"
                                     class="p-monthpicker-month" :class="{'p-highlight': isMonthSelected(i)}" v-ripple>
                                 {{m}}
+                            </span>
+                        </div>
+                        <div class="p-yearpicker" v-if="currentView === 'year'">
+                            <span v-for="y of yearPickerValues" :key="y" @click="onYearSelect($event, y)" @keydown="onYearCellKeydown($event,y)"
+                                    class="p-yearpicker-year" :class="{'p-highlight': isYearSelected(y)}" v-ripple>
+                                {{y}}
                             </span>
                         </div>
                     </template>
                     <div class="p-timepicker" v-if="showTime||timeOnly">
                         <div class="p-hour-picker">
                             <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 0, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple
-                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 0, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" type="button">
+                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 0, 1)" @keydown.space="onTimePickerElementMouseDown($event, 0, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-up"></span>
                             </button>
                             <span>{{formattedCurrentHour}}</span>
                             <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 0, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple
-                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 0, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" type="button">
+                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 0, -1)" @keydown.space="onTimePickerElementMouseDown($event, 0, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-down"></span>
                             </button>
                         </div>
@@ -85,12 +94,12 @@
                         </div>
                         <div class="p-minute-picker">
                             <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 1, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled"
-                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 1, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" type="button">
+                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 1, 1)"  @keydown.space="onTimePickerElementMouseDown($event, 1, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-up"></span>
                             </button>
                         <span>{{formattedCurrentMinute}}</span>
                             <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 1, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled"
-                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 1, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" type="button">
+                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 1, -1)" @keydown.space="onTimePickerElementMouseDown($event, 1, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-down"></span>
                             </button>
                         </div>
@@ -99,12 +108,12 @@
                         </div>
                         <div class="p-second-picker" v-if="showSeconds">
                             <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 2, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple  :disabled="$attrs.disabled"
-                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 2, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" type="button">
+                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 2, 1)" @keydown.space="onTimePickerElementMouseDown($event, 2, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-up"></span>
                             </button>
                             <span>{{formattedCurrentSecond}}</span>
                             <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 2, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple  :disabled="$attrs.disabled"
-                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 2, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" type="button">
+                                @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 2, -1)" @keydown.space="onTimePickerElementMouseDown($event, 2, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-down"></span>
                             </button>
                         </div>
@@ -133,7 +142,7 @@
 </template>
 
 <script>
-import {ConnectedOverlayScrollHandler,DomHandler,ZIndexUtils} from 'primevue/utils';
+import {ConnectedOverlayScrollHandler,DomHandler,ZIndexUtils,UniqueComponentId} from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
@@ -177,6 +186,7 @@ export default {
             type: Number,
             default: 1
         },
+        responsiveOptions: Array,
         view: {
             type: String,
             default: 'date'
@@ -299,6 +309,7 @@ export default {
         style: null
     },
     navigationState: null,
+    timePickerChange: false,
     scrollHandler: null,
     outsideClickListener: null,
     maskClickListener: null,
@@ -306,13 +317,22 @@ export default {
     overlay: null,
     mask: null,
     timePickerTimer: null,
-    isKeydown: false,
     created() {
         this.updateCurrentMetaData();
     },
     mounted() {
-        if (this.inline && !this.$attrs.disabled) {
-            this.initFocusableCell();
+        this.createResponsiveStyle();
+
+        if (this.inline) {
+            this.overlay && this.overlay.setAttribute(this.attributeSelector, '');
+
+            if (!this.$attrs.disabled) {
+                this.initFocusableCell();
+
+                if (this.numberOfMonths === 1) {
+                    this.overlay.style.width = DomHandler.getOuterWidth(this.$el) + 'px';
+                }
+            }
         }
     },
     updated() {
@@ -333,8 +353,9 @@ export default {
         }
 
         if (this.mask) {
-            this.destroyMask();
+           this.destroyMask();
         }
+        this.destroyResponsiveStyleElement();
 
         this.unbindOutsideClickListener();
         this.unbindResizeListener();
@@ -358,7 +379,8 @@ export default {
             currentSecond: null,
             pm: null,
 			focused: false,
-            overlayVisible: false
+            overlayVisible: false,
+            currentView: this.view
         }
     },
     watch: {
@@ -372,6 +394,14 @@ export default {
             if (this.overlay) {
                 setTimeout(this.updateFocus, 0);
             }
+        },
+        numberOfMonths() {
+            this.destroyResponsiveStyleElement();
+            this.createResponsiveStyle();
+        },
+        responsiveOptions() {
+            this.destroyResponsiveStyleElement();
+            this.createResponsiveStyle();
         }
     },
     methods: {
@@ -412,6 +442,9 @@ export default {
         },
         isMonthSelected(month) {
             return this.isComparable() ? (this.modelValue.getMonth() === month && this.modelValue.getFullYear() === this.currentYear) : false;
+        },
+        isYearSelected(year) {
+            return this.isComparable() ? (this.modelValue.getFullYear() === year) : false;
         },
         isDateEquals(value, dateMeta) {
             if (value)
@@ -537,12 +570,15 @@ export default {
             return validMin && validMax && validDate && validDay;
         },
         onOverlayEnter(el) {
+            el.setAttribute(this.attributeSelector, '');
+
             if (this.autoZIndex) {
                 if (this.touchUI)
                     ZIndexUtils.set('modal', el, this.baseZIndex || this.$primevue.config.zIndex.modal);
                 else
                     ZIndexUtils.set('overlay', el, this.baseZIndex || this.$primevue.config.zIndex.overlay);
             }
+
             this.alignOverlay();
             this.$emit('show');
         },
@@ -557,6 +593,7 @@ export default {
             }
         },
         onOverlayLeave() {
+            this.currentView = this.view;
             this.unbindOutsideClickListener();
             this.unbindScrollListener();
             this.unbindResizeListener();
@@ -587,8 +624,11 @@ export default {
                 return;
             }
 
-            if (this.view === 'month') {
+            if (this.currentView === 'month') {
                 this.decrementYear();
+            }
+            else if (this.currentView === 'year') {
+                this.decrementDecade();
             }
             else {
                 if (this.currentMonth === 0) {
@@ -609,8 +649,11 @@ export default {
                 return;
             }
 
-            if (this.view === 'month') {
+            if (this.currentView === 'month') {
                 this.incrementYear();
+            }
+            else if (this.currentView === 'year') {
+                this.incrementDecade();
             }
             else {
                 if (this.currentMonth === 11) {
@@ -627,8 +670,24 @@ export default {
         decrementYear() {
             this.currentYear--;
         },
+        decrementDecade() {
+            this.currentYear = this.currentYear - 10;
+        },
         incrementYear() {
             this.currentYear++;
+        },
+        incrementDecade() {
+            this.currentYear = this.currentYear + 10;
+        },
+        switchToMonthView(event) {
+            this.currentView = 'month';
+            setTimeout(this.updateFocus, 0);
+            event.preventDefault();
+        },
+        switchToYearView(event) {
+            this.currentView = 'year';
+            setTimeout(this.updateFocus, 0);
+            event.preventDefault();
         },
         isEnabled() {
             return !this.$attrs.disabled && !this.$attrs.readonly;
@@ -714,7 +773,14 @@ export default {
                     DomHandler.relativePosition(this.overlay, this.$el);
                 }
                 else {
-                    this.overlay.style.minWidth = DomHandler.getOuterWidth(this.$el) + 'px';
+                    if (this.view === 'date') {
+                        this.overlay.style.width = DomHandler.getOuterWidth(this.overlay) + 'px';
+                        this.overlay.style.minWidth = DomHandler.getOuterWidth(this.$el) + 'px';
+                    }
+                    else {
+                        this.overlay.style.width = DomHandler.getOuterWidth(this.$el) + 'px';
+                    }
+
                     DomHandler.absolutePosition(this.overlay, this.$el);
                 }
             }
@@ -1115,12 +1181,10 @@ export default {
             }
             return hours;
         },
-         validateTime(hour, minute, second, pm) {
-            let value = this.modelValue;
+        validateTime(hour, minute, second, pm) {
+            let value = this.isComparable() ? this.modelValue : this.viewDate;
             const convertedHour = this.convertTo24Hour(hour, pm);
-            if (!this.isComparable()) {
-                return true;
-            }
+
             if (this.isRangeSelection()) {
                 value = this.modelValue[1] || this.modelValue[0];
             }
@@ -1166,7 +1230,6 @@ export default {
             let newHour = this.currentHour + this.stepHour;
             let newPM = this.pm;
 
-
             if (this.hourFormat == '24')
                 newHour = (newHour >= 24) ? (newHour - 24) : newHour;
             else if (this.hourFormat == '12') {
@@ -1176,7 +1239,6 @@ export default {
                 }
                 newHour = (newHour >= 13) ? (newHour - 12) : newHour;
             }
-
 
             if (this.validateTime(newHour, this.currentMinute, this.currentSecond, newPM)) {
                 this.currentHour = newHour;
@@ -1237,7 +1299,8 @@ export default {
             event.preventDefault();
         },
         updateModelTime() {
-            let value = this.isComparable() ? this.modelValue : new Date();
+            this.timePickerChange = true;
+            let value = this.isComparable() ? this.modelValue : this.viewDate;
 
             if (this.isRangeSelection()) {
                 value = this.modelValue[1] || this.modelValue[0];
@@ -1273,6 +1336,7 @@ export default {
 
             this.updateModel(value);
             this.$emit('date-select', value);
+            setTimeout(() => this.timePickerChange = false, 0);
         },
         toggleAMPM(event) {
             this.pm = !this.pm;
@@ -1285,13 +1349,34 @@ export default {
             }
         },
         onMonthSelect(event, index) {
-            this.onDateSelect(event, {year: this.currentYear, month: index, day: 1, selectable: true});
+            if (this.view === 'month') {
+                this.onDateSelect(event, {year: this.currentYear, month: index, day: 1, selectable: true});
+            }
+            else {
+                this.currentMonth = index;
+                this.currentView = 'date';
+                this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+            }
+
+            setTimeout(this.updateFocus, 0);
+        },
+        onYearSelect(event, year) {
+            if (this.view === 'year') {
+                this.onDateSelect(event, {year: year, month: 0, day: 1, selectable: true});
+            }
+            else {
+                this.currentYear = year;
+                this.currentView = 'month';
+                this.$emit('year-change', {month: this.currentMonth + 1, year: this.currentYear});
+            }
+
+            setTimeout(this.updateFocus, 0);
         },
         enableModality() {
             if (!this.mask) {
                 this.mask = document.createElement('div');
                 this.mask.style.zIndex = String(parseInt(this.overlay.style.zIndex, 10) - 1);
-                DomHandler.addMultipleClasses(this.mask, 'p-datepicker-mask p-datepicker-mask-scrollblocker');
+                DomHandler.addMultipleClasses(this.mask, 'p-datepicker-mask p-datepicker-mask-scrollblocker p-component-overlay p-component-overlay-enter');
 
                 this.maskClickListener = () => {
                     this.overlayVisible = false;
@@ -1300,16 +1385,12 @@ export default {
 
                 document.body.appendChild(this.mask);
                 DomHandler.addClass(document.body, 'p-overflow-hidden');
-
-                setTimeout(() => {
-                    DomHandler.addClass(this.mask, 'p-component-overlay');
-                }, 1);
             }
         },
         disableModality() {
             if (this.mask) {
-                DomHandler.addClass(this.mask, 'p-datepicker-mask-leave');
-                this.mask.addEventListener('transitionend', () => {
+                DomHandler.addClass(this.mask, 'p-component-overlay-leave');
+                this.mask.addEventListener('animationend', () => {
                     this.destroyMask();
                 });
             }
@@ -1344,6 +1425,10 @@ export default {
             }
         },
         isValidSelection(value) {
+            if (value == null) {
+                return true;
+            }
+
             let isValid = true;
             if (this.isSingleSelection()) {
                 if (!this.isSelectable(value.getDate(), value.getMonth(), value.getFullYear(), false)) {
@@ -1512,7 +1597,7 @@ export default {
                 iValue++;
             };
 
-            if (this.view === 'month') {
+            if (this.currentView === 'month') {
                 day = 1;
             }
 
@@ -1707,7 +1792,9 @@ export default {
                 }
 
                 //enter
-                case 13: {
+                //space
+                case 13:
+                case 32: {
                     this.onDateSelect(event, date);
                     event.preventDefault();
                     break;
@@ -1741,7 +1828,7 @@ export default {
                 }
                 else {
                     let prevMonthContainer = this.overlay.children[groupIndex - 1];
-                    let cells = DomHandler.find(prevMonthContainer, '.p-datepicker-calendar td span:not(.p-disabled)');
+                    let cells = DomHandler.find(prevMonthContainer, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink)');
                     let focusCell = cells[cells.length - 1];
                     focusCell.tabIndex = '0';
                     focusCell.focus();
@@ -1754,7 +1841,7 @@ export default {
                 }
                 else {
                     let nextMonthContainer = this.overlay.children[groupIndex + 1];
-                    let focusCell = DomHandler.findSingle(nextMonthContainer, '.p-datepicker-calendar td span:not(.p-disabled)');
+                    let focusCell = DomHandler.findSingle(nextMonthContainer, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink)');
                     focusCell.tabIndex = '0';
                     focusCell.focus();
                 }
@@ -1787,6 +1874,10 @@ export default {
                         prevCell.tabIndex = '0';
                         prevCell.focus();
                     }
+                    else {
+                        this.navigationState = {backward: true};
+                        this.navBackward(event);
+                    }
                     event.preventDefault();
                     break;
                 }
@@ -1799,13 +1890,97 @@ export default {
                         nextCell.tabIndex = '0';
                         nextCell.focus();
                     }
+                    else {
+                        this.navigationState = {backward: false};
+                        this.navForward(event);
+                    }
                     event.preventDefault();
                     break;
                 }
 
                 //enter
-                case 13: {
+                //space
+                case 13:
+                case 32: {
                     this.onMonthSelect(event, index);
+                    event.preventDefault();
+                    break;
+                }
+
+                //escape
+                case 27: {
+                    this.overlayVisible = false;
+                    event.preventDefault();
+                    break;
+                }
+
+                //tab
+                case 9: {
+                    this.trapFocus(event);
+                    break;
+                }
+
+                default:
+                    //no op
+                break;
+            }
+        },
+        onYearCellKeydown(event, index) {
+            const cell = event.currentTarget;
+
+            switch (event.which) {
+                //arrows
+                case 38:
+                case 40: {
+                    cell.tabIndex = '-1';
+                    var cells = cell.parentElement.children;
+                    var cellIndex = DomHandler.index(cell);
+                    let nextCell = cells[event.which === 40 ? cellIndex + 2 : cellIndex - 2];
+                    if (nextCell) {
+                        nextCell.tabIndex = '0';
+                        nextCell.focus();
+                    }
+                    event.preventDefault();
+                    break;
+                }
+
+                //left arrow
+                case 37: {
+                    cell.tabIndex = '-1';
+                    let prevCell = cell.previousElementSibling;
+                    if (prevCell) {
+                        prevCell.tabIndex = '0';
+                        prevCell.focus();
+                    }
+                    else {
+                        this.navigationState = {backward: true};
+                        this.navBackward(event);
+                    }
+                    event.preventDefault();
+                    break;
+                }
+
+                //right arrow
+                case 39: {
+                    cell.tabIndex = '-1';
+                    let nextCell = cell.nextElementSibling;
+                    if (nextCell) {
+                        nextCell.tabIndex = '0';
+                        nextCell.focus();
+                    }
+                    else {
+                        this.navigationState = {backward: false};
+                        this.navForward(event);
+                    }
+                    event.preventDefault();
+                    break;
+                }
+
+                //enter
+                //space
+                case 13:
+                case 32: {
+                    this.onYearSelect(event, index);
                     event.preventDefault();
                     break;
                 }
@@ -1830,6 +2005,7 @@ export default {
         },
         updateFocus() {
             let cell;
+
             if (this.navigationState) {
                 if (this.navigationState.button) {
                     this.initFocusableCell();
@@ -1841,11 +2017,32 @@ export default {
                 }
                 else {
                     if (this.navigationState.backward) {
-                        let cells = DomHandler.find(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled)');
-                        cell = cells[cells.length - 1];
+                        let cells;
+
+                        if (this.currentView === 'month') {
+                            cells = DomHandler.find(this.overlay, '.p-monthpicker .p-monthpicker-month:not(.p-disabled)');
+                        }
+                        else if (this.currentView === 'year') {
+                            cells = DomHandler.find(this.overlay, '.p-yearpicker .p-yearpicker-year:not(.p-disabled)');
+                        }
+                        else {
+                            cells = DomHandler.find(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink)');
+                        }
+
+                        if (cells && cells.length > 0) {
+                            cell = cells[cells.length - 1];
+                        }
                     }
                     else {
-                        cell = DomHandler.findSingle(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled)');
+                        if (this.currentView === 'month') {
+                            cell = DomHandler.findSingle(this.overlay, '.p-monthpicker .p-monthpicker-month:not(.p-disabled)');
+                        }
+                        else if (this.currentView === 'year') {
+                            cell = DomHandler.findSingle(this.overlay, '.p-yearpicker .p-yearpicker-year:not(.p-disabled)');
+                        }
+                        else {
+                            cell = DomHandler.findSingle(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink)');
+                        }
                     }
 
                     if (cell) {
@@ -1863,25 +2060,35 @@ export default {
         initFocusableCell() {
             let cell;
 
-            if (this.view === 'month') {
+            if (this.currentView === 'month') {
                 let cells = DomHandler.find(this.overlay, '.p-monthpicker .p-monthpicker-month');
                 let selectedCell= DomHandler.findSingle(this.overlay, '.p-monthpicker .p-monthpicker-month.p-highlight');
+                cells.forEach(cell => cell.tabIndex = -1);
+                cell = selectedCell || cells[0];
+            }
+            else if (this.currentView === 'year') {
+                let cells = DomHandler.find(this.overlay, '.p-yearpicker .p-yearpicker-year');
+                let selectedCell= DomHandler.findSingle(this.overlay, '.p-yearpicker .p-yearpicker-year.p-highlight');
                 cells.forEach(cell => cell.tabIndex = -1);
                 cell = selectedCell || cells[0];
             }
             else {
                 cell = DomHandler.findSingle(this.overlay, 'span.p-highlight');
                 if (!cell) {
-                    let todayCell = DomHandler.findSingle(this.overlay, 'td.p-datepicker-today span:not(.p-disabled)');
+                    let todayCell = DomHandler.findSingle(this.overlay, 'td.p-datepicker-today span:not(.p-disabled):not(.p-ink');
                     if (todayCell)
                         cell = todayCell;
                     else
-                        cell = DomHandler.findSingle(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled)');
+                        cell = DomHandler.findSingle(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink');
                 }
             }
 
             if (cell) {
                 cell.tabIndex = '0';
+
+                if ((!this.navigationState || !this.navigationState.button) && !this.timePickerChange) {
+                    cell.focus();
+                }
             }
         },
         trapFocus(event) {
@@ -1929,12 +2136,6 @@ export default {
              }
         },
         onInput(event) {
-            // IE 11 Workaround for input placeholder : https://github.com/primefaces/primeng/issues/2026
-            if (!this.isKeydown) {
-                return;
-            }
-            this.isKeydown = false;
-
             try {
                 this.selectionStart = this.$refs.input.$el.selectionStart;
                 this.selectionEnd = this.$refs.input.$el.selectionEnd;
@@ -1945,9 +2146,9 @@ export default {
                 }
             }
             catch(err) {
-                // invalid date
-                let value = this.keepInvalid ? event.target.value : null;
-                this.updateModel(value);
+                if (this.keepInvalid) {
+                    this.updateModel(event.target.value);
+                }
             }
         },
         onFocus() {
@@ -1959,8 +2160,7 @@ export default {
         onBlur() {
             this.focused = false;
         },
-        onKeyDown(event) {
-            this.isKeydown = true;
+        onKeyDown() {
             if (event.keyCode === 40 && this.overlay) {
                 this.trapFocus(event);
             }
@@ -1993,23 +2193,81 @@ export default {
                     target: this.$el
                 });
             }
+        },
+        onOverlayMouseUp(event) {
+            this.onOverlayClick(event);
+        },
+        createResponsiveStyle() {
+            if (this.numberOfMonths > 1 && this.responsiveOptions) {
+                if (!this.responsiveStyleElement) {
+                    this.responsiveStyleElement = document.createElement('style');
+                    this.responsiveStyleElement.type = 'text/css';
+                    document.body.appendChild(this.responsiveStyleElement);
+                }
+
+                let innerHTML = '';
+                if (this.responsiveOptions) {
+                    let responsiveOptions = [...this.responsiveOptions]
+                        .filter(o => !!(o.breakpoint && o.numMonths))
+                        .sort((o1, o2) => -1 * o1.breakpoint.localeCompare(o2.breakpoint, undefined, { numeric: true }));
+
+                    for (let i = 0; i < responsiveOptions.length; i++) {
+                        let { breakpoint, numMonths } = responsiveOptions[i];
+                        let styles = `
+                            .p-datepicker[${this.attributeSelector}] .p-datepicker-group:nth-child(${numMonths}) .p-datepicker-next {
+                                display: inline-flex !important;
+                            }
+                        `;
+
+                        for (let j = numMonths; j < this.numberOfMonths; j++) {
+                            styles += `
+                                .p-datepicker[${this.attributeSelector}] .p-datepicker-group:nth-child(${j + 1}) {
+                                    display: none !important;
+                                }
+                            `
+                        }
+
+                        innerHTML += `
+                            @media screen and (max-width: ${breakpoint}) {
+                                ${styles}
+                            }
+                        `
+                    }
+                }
+
+                this.responsiveStyleElement.innerHTML = innerHTML;
+            }
+		},
+        destroyResponsiveStyleElement() {
+            if (this.responsiveStyleElement) {
+                this.responsiveStyleElement.remove();
+                this.responsiveStyleElement = null;
+            }
         }
     },
     computed: {
         viewDate() {
             let propValue = this.modelValue;
-            if (typeof propValue === 'string') {
-                return new Date();
-            }
-
             if (propValue && Array.isArray(propValue)) {
                 propValue = propValue[0];
             }
 
-            return propValue || new Date();
+            if (propValue && typeof propValue !== 'string') {
+                return propValue;
+            }
+            else {
+                let today = new Date();
+                if (this.maxDate && this.maxDate < today) {
+                    return this.maxDate;
+                }
+                if (this.minDate && this.minDate > today) {
+                    return this.minDate;
+                }
+                return today;
+            }
         },
         inputFieldValue() {
-            return this.keepInvalid ? this.modelValue : this.formatValue(this.modelValue);
+            return this.formatValue(this.modelValue);
         },
         containerClass() {
             return [
@@ -2028,7 +2286,8 @@ export default {
                 'p-disabled': this.$attrs.disabled,
                 'p-datepicker-timeonly': this.timeOnly,
                 'p-datepicker-multiple-month': this.numberOfMonths > 1,
-                'p-datepicker-monthpicker': (this.view === 'month'),
+                'p-datepicker-monthpicker': (this.currentView === 'month'),
+                'p-datepicker-yearpicker': (this.currentView === 'year'),
                 'p-datepicker-touch-ui': this.touchUI,
                 'p-input-filled': this.$primevue.config.inputStyle === 'filled',
                 'p-ripple-disabled': this.$primevue.config.ripple === false
@@ -2156,6 +2415,15 @@ export default {
 
             return monthPickerValues;
         },
+        yearPickerValues() {
+            let yearPickerValues = [];
+            let base = this.currentYear -  (this.currentYear % 10);
+            for (let i = 0; i < 10; i++) {
+                yearPickerValues.push(base + i);
+            }
+
+            return yearPickerValues;
+        },
         formattedCurrentHour() {
             return this.currentHour < 10 ? '0' + this.currentHour : this.currentHour;
         },
@@ -2182,6 +2450,12 @@ export default {
         },
         appendTarget() {
             return this.appendDisabled ? null : this.appendTo;
+        },
+        attributeSelector() {
+            return UniqueComponentId();
+        },
+        switchViewButtonDisabled() {
+            return this.numberOfMonths > 1 || this.$attrs.disabled;
         }
     },
     components: {
@@ -2198,6 +2472,7 @@ export default {
 .p-calendar {
     position: relative;
     display: inline-flex;
+    max-width: 100%;
 }
 
 .p-calendar .p-inputtext {
@@ -2237,8 +2512,9 @@ export default {
 }
 
 .p-datepicker-inline {
-    display: inline-flex;
+    display: inline-block;
     position: static;
+    overflow-x: auto;
 }
 
 /* Header */
@@ -2267,6 +2543,10 @@ export default {
     display: flex;
 }
 
+.p-datepicker-multiple-month .p-datepicker-group-container .p-datepicker-group {
+    flex: 1 1 auto;
+}
+
 /* DatePicker Table */
 .p-datepicker table {
 	width: 100%;
@@ -2286,6 +2566,17 @@ export default {
 /* Month Picker */
 .p-monthpicker-month {
     width: 33.3%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Year Picker */
+.p-yearpicker-year {
+    width: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2331,14 +2622,5 @@ export default {
     left: 50%;
     min-width: 80vw;
     transform: translate(-50%, -50%);
-}
-
-.p-datepicker-mask {
-    background-color: transparent;
-    transition-property: background-color;
-}
-
-.p-datepicker-mask.p-datepicker-mask-leave.p-component-overlay {
-    background-color: transparent;
 }
 </style>

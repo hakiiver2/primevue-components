@@ -59,7 +59,7 @@ var script = {
         },
         onTabKeydown(event, tab, i) {
             if (event.which === 13) {
-                this.onTabClick(event, i);
+                this.onTabClick(event, tab, i);
             }
         },
         isTabActive(index) {

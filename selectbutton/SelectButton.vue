@@ -1,5 +1,5 @@
 <template>
-    <div class="p-selectbutton p-buttonset p-component" role="group">
+    <div :class="containerClass" role="group">
         <div v-for="(option, i) of options" :key="getOptionRenderKey(option)" :aria-label="getOptionLabel(option)" role="button" :aria-pressed="isSelected(option)"
             @click="onOptionSelect($event, option, i)" @keydown.enter.prevent="onOptionSelect($event, option, i)" @keydown.space.prevent="onOptionSelect($event, option)"
             :tabindex="isOptionDisabled(option) ? null : '0'" @focus="onFocus($event)" @blur="onBlur($event)" :aria-labelledby="ariaLabelledBy" v-ripple
@@ -17,7 +17,7 @@ import Ripple from 'primevue/ripple';
 
 export default {
     name: 'SelectButton',
-    emits: ['update:modelValue', 'focus', 'blur'],
+    emits: ['update:modelValue', 'focus', 'blur', 'change'],
     props: {
         modelValue: null,
         options: Array,
@@ -62,6 +62,7 @@ export default {
             }
 
             this.$emit('update:modelValue', newValue);
+            this.$emit('change', {event: event, value: newValue});
         },
         isSelected(option) {
             let selected = false;
@@ -97,6 +98,11 @@ export default {
         }
     },
 	computed: {
+        containerClass() {
+            return ['p-selectbutton p-buttonset p-component', {
+                'p-disabled': this.disabled
+            }];
+        },
         equalityKey() {
             return this.optionValue ? null : this.dataKey;
         }

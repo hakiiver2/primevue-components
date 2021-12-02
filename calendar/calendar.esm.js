@@ -1,9 +1,9 @@
-import { ZIndexUtils, ConnectedOverlayScrollHandler, DomHandler } from 'primevue/utils';
+import { DomHandler, ZIndexUtils, ConnectedOverlayScrollHandler, UniqueComponentId } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, mergeProps, createCommentVNode, Teleport, createVNode, Transition, withCtx, Fragment, renderList, renderSlot, withDirectives, toDisplayString, createTextVNode, withKeys } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createBlock, mergeProps, createCommentVNode, Teleport, createVNode, Transition, withCtx, Fragment, renderList, renderSlot, withDirectives, vShow, toDisplayString, createTextVNode, withKeys } from 'vue';
 
 var script = {
     name: 'Calendar',
@@ -43,6 +43,7 @@ var script = {
             type: Number,
             default: 1
         },
+        responsiveOptions: Array,
         view: {
             type: String,
             default: 'date'
@@ -165,6 +166,7 @@ var script = {
         style: null
     },
     navigationState: null,
+    timePickerChange: false,
     scrollHandler: null,
     outsideClickListener: null,
     maskClickListener: null,
@@ -172,13 +174,22 @@ var script = {
     overlay: null,
     mask: null,
     timePickerTimer: null,
-    isKeydown: false,
     created() {
         this.updateCurrentMetaData();
     },
     mounted() {
-        if (this.inline && !this.$attrs.disabled) {
-            this.initFocusableCell();
+        this.createResponsiveStyle();
+
+        if (this.inline) {
+            this.overlay && this.overlay.setAttribute(this.attributeSelector, '');
+
+            if (!this.$attrs.disabled) {
+                this.initFocusableCell();
+
+                if (this.numberOfMonths === 1) {
+                    this.overlay.style.width = DomHandler.getOuterWidth(this.$el) + 'px';
+                }
+            }
         }
     },
     updated() {
@@ -199,8 +210,9 @@ var script = {
         }
 
         if (this.mask) {
-            this.destroyMask();
+           this.destroyMask();
         }
+        this.destroyResponsiveStyleElement();
 
         this.unbindOutsideClickListener();
         this.unbindResizeListener();
@@ -224,7 +236,8 @@ var script = {
             currentSecond: null,
             pm: null,
 			focused: false,
-            overlayVisible: false
+            overlayVisible: false,
+            currentView: this.view
         }
     },
     watch: {
@@ -238,6 +251,14 @@ var script = {
             if (this.overlay) {
                 setTimeout(this.updateFocus, 0);
             }
+        },
+        numberOfMonths() {
+            this.destroyResponsiveStyleElement();
+            this.createResponsiveStyle();
+        },
+        responsiveOptions() {
+            this.destroyResponsiveStyleElement();
+            this.createResponsiveStyle();
         }
     },
     methods: {
@@ -278,6 +299,9 @@ var script = {
         },
         isMonthSelected(month) {
             return this.isComparable() ? (this.modelValue.getMonth() === month && this.modelValue.getFullYear() === this.currentYear) : false;
+        },
+        isYearSelected(year) {
+            return this.isComparable() ? (this.modelValue.getFullYear() === year) : false;
         },
         isDateEquals(value, dateMeta) {
             if (value)
@@ -403,12 +427,15 @@ var script = {
             return validMin && validMax && validDate && validDay;
         },
         onOverlayEnter(el) {
+            el.setAttribute(this.attributeSelector, '');
+
             if (this.autoZIndex) {
                 if (this.touchUI)
                     ZIndexUtils.set('modal', el, this.baseZIndex || this.$primevue.config.zIndex.modal);
                 else
                     ZIndexUtils.set('overlay', el, this.baseZIndex || this.$primevue.config.zIndex.overlay);
             }
+
             this.alignOverlay();
             this.$emit('show');
         },
@@ -423,6 +450,7 @@ var script = {
             }
         },
         onOverlayLeave() {
+            this.currentView = this.view;
             this.unbindOutsideClickListener();
             this.unbindScrollListener();
             this.unbindResizeListener();
@@ -453,8 +481,11 @@ var script = {
                 return;
             }
 
-            if (this.view === 'month') {
+            if (this.currentView === 'month') {
                 this.decrementYear();
+            }
+            else if (this.currentView === 'year') {
+                this.decrementDecade();
             }
             else {
                 if (this.currentMonth === 0) {
@@ -475,8 +506,11 @@ var script = {
                 return;
             }
 
-            if (this.view === 'month') {
+            if (this.currentView === 'month') {
                 this.incrementYear();
+            }
+            else if (this.currentView === 'year') {
+                this.incrementDecade();
             }
             else {
                 if (this.currentMonth === 11) {
@@ -493,8 +527,24 @@ var script = {
         decrementYear() {
             this.currentYear--;
         },
+        decrementDecade() {
+            this.currentYear = this.currentYear - 10;
+        },
         incrementYear() {
             this.currentYear++;
+        },
+        incrementDecade() {
+            this.currentYear = this.currentYear + 10;
+        },
+        switchToMonthView(event) {
+            this.currentView = 'month';
+            setTimeout(this.updateFocus, 0);
+            event.preventDefault();
+        },
+        switchToYearView(event) {
+            this.currentView = 'year';
+            setTimeout(this.updateFocus, 0);
+            event.preventDefault();
         },
         isEnabled() {
             return !this.$attrs.disabled && !this.$attrs.readonly;
@@ -580,7 +630,14 @@ var script = {
                     DomHandler.relativePosition(this.overlay, this.$el);
                 }
                 else {
-                    this.overlay.style.minWidth = DomHandler.getOuterWidth(this.$el) + 'px';
+                    if (this.view === 'date') {
+                        this.overlay.style.width = DomHandler.getOuterWidth(this.overlay) + 'px';
+                        this.overlay.style.minWidth = DomHandler.getOuterWidth(this.$el) + 'px';
+                    }
+                    else {
+                        this.overlay.style.width = DomHandler.getOuterWidth(this.$el) + 'px';
+                    }
+
                     DomHandler.absolutePosition(this.overlay, this.$el);
                 }
             }
@@ -981,12 +1038,10 @@ var script = {
             }
             return hours;
         },
-         validateTime(hour, minute, second, pm) {
-            let value = this.modelValue;
+        validateTime(hour, minute, second, pm) {
+            let value = this.isComparable() ? this.modelValue : this.viewDate;
             const convertedHour = this.convertTo24Hour(hour, pm);
-            if (!this.isComparable()) {
-                return true;
-            }
+
             if (this.isRangeSelection()) {
                 value = this.modelValue[1] || this.modelValue[0];
             }
@@ -1032,7 +1087,6 @@ var script = {
             let newHour = this.currentHour + this.stepHour;
             let newPM = this.pm;
 
-
             if (this.hourFormat == '24')
                 newHour = (newHour >= 24) ? (newHour - 24) : newHour;
             else if (this.hourFormat == '12') {
@@ -1042,7 +1096,6 @@ var script = {
                 }
                 newHour = (newHour >= 13) ? (newHour - 12) : newHour;
             }
-
 
             if (this.validateTime(newHour, this.currentMinute, this.currentSecond, newPM)) {
                 this.currentHour = newHour;
@@ -1103,7 +1156,8 @@ var script = {
             event.preventDefault();
         },
         updateModelTime() {
-            let value = this.isComparable() ? this.modelValue : new Date();
+            this.timePickerChange = true;
+            let value = this.isComparable() ? this.modelValue : this.viewDate;
 
             if (this.isRangeSelection()) {
                 value = this.modelValue[1] || this.modelValue[0];
@@ -1139,6 +1193,7 @@ var script = {
 
             this.updateModel(value);
             this.$emit('date-select', value);
+            setTimeout(() => this.timePickerChange = false, 0);
         },
         toggleAMPM(event) {
             this.pm = !this.pm;
@@ -1151,13 +1206,34 @@ var script = {
             }
         },
         onMonthSelect(event, index) {
-            this.onDateSelect(event, {year: this.currentYear, month: index, day: 1, selectable: true});
+            if (this.view === 'month') {
+                this.onDateSelect(event, {year: this.currentYear, month: index, day: 1, selectable: true});
+            }
+            else {
+                this.currentMonth = index;
+                this.currentView = 'date';
+                this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+            }
+
+            setTimeout(this.updateFocus, 0);
+        },
+        onYearSelect(event, year) {
+            if (this.view === 'year') {
+                this.onDateSelect(event, {year: year, month: 0, day: 1, selectable: true});
+            }
+            else {
+                this.currentYear = year;
+                this.currentView = 'month';
+                this.$emit('year-change', {month: this.currentMonth + 1, year: this.currentYear});
+            }
+
+            setTimeout(this.updateFocus, 0);
         },
         enableModality() {
             if (!this.mask) {
                 this.mask = document.createElement('div');
                 this.mask.style.zIndex = String(parseInt(this.overlay.style.zIndex, 10) - 1);
-                DomHandler.addMultipleClasses(this.mask, 'p-datepicker-mask p-datepicker-mask-scrollblocker');
+                DomHandler.addMultipleClasses(this.mask, 'p-datepicker-mask p-datepicker-mask-scrollblocker p-component-overlay p-component-overlay-enter');
 
                 this.maskClickListener = () => {
                     this.overlayVisible = false;
@@ -1166,16 +1242,12 @@ var script = {
 
                 document.body.appendChild(this.mask);
                 DomHandler.addClass(document.body, 'p-overflow-hidden');
-
-                setTimeout(() => {
-                    DomHandler.addClass(this.mask, 'p-component-overlay');
-                }, 1);
             }
         },
         disableModality() {
             if (this.mask) {
-                DomHandler.addClass(this.mask, 'p-datepicker-mask-leave');
-                this.mask.addEventListener('transitionend', () => {
+                DomHandler.addClass(this.mask, 'p-component-overlay-leave');
+                this.mask.addEventListener('animationend', () => {
                     this.destroyMask();
                 });
             }
@@ -1210,6 +1282,10 @@ var script = {
             }
         },
         isValidSelection(value) {
+            if (value == null) {
+                return true;
+            }
+
             let isValid = true;
             if (this.isSingleSelection()) {
                 if (!this.isSelectable(value.getDate(), value.getMonth(), value.getFullYear(), false)) {
@@ -1378,7 +1454,7 @@ var script = {
                 iValue++;
             };
 
-            if (this.view === 'month') {
+            if (this.currentView === 'month') {
                 day = 1;
             }
 
@@ -1573,7 +1649,9 @@ var script = {
                 }
 
                 //enter
-                case 13: {
+                //space
+                case 13:
+                case 32: {
                     this.onDateSelect(event, date);
                     event.preventDefault();
                     break;
@@ -1603,7 +1681,7 @@ var script = {
                 }
                 else {
                     let prevMonthContainer = this.overlay.children[groupIndex - 1];
-                    let cells = DomHandler.find(prevMonthContainer, '.p-datepicker-calendar td span:not(.p-disabled)');
+                    let cells = DomHandler.find(prevMonthContainer, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink)');
                     let focusCell = cells[cells.length - 1];
                     focusCell.tabIndex = '0';
                     focusCell.focus();
@@ -1616,7 +1694,7 @@ var script = {
                 }
                 else {
                     let nextMonthContainer = this.overlay.children[groupIndex + 1];
-                    let focusCell = DomHandler.findSingle(nextMonthContainer, '.p-datepicker-calendar td span:not(.p-disabled)');
+                    let focusCell = DomHandler.findSingle(nextMonthContainer, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink)');
                     focusCell.tabIndex = '0';
                     focusCell.focus();
                 }
@@ -1649,6 +1727,10 @@ var script = {
                         prevCell.tabIndex = '0';
                         prevCell.focus();
                     }
+                    else {
+                        this.navigationState = {backward: true};
+                        this.navBackward(event);
+                    }
                     event.preventDefault();
                     break;
                 }
@@ -1661,13 +1743,93 @@ var script = {
                         nextCell.tabIndex = '0';
                         nextCell.focus();
                     }
+                    else {
+                        this.navigationState = {backward: false};
+                        this.navForward(event);
+                    }
                     event.preventDefault();
                     break;
                 }
 
                 //enter
-                case 13: {
+                //space
+                case 13:
+                case 32: {
                     this.onMonthSelect(event, index);
+                    event.preventDefault();
+                    break;
+                }
+
+                //escape
+                case 27: {
+                    this.overlayVisible = false;
+                    event.preventDefault();
+                    break;
+                }
+
+                //tab
+                case 9: {
+                    this.trapFocus(event);
+                    break;
+                }
+            }
+        },
+        onYearCellKeydown(event, index) {
+            const cell = event.currentTarget;
+
+            switch (event.which) {
+                //arrows
+                case 38:
+                case 40: {
+                    cell.tabIndex = '-1';
+                    var cells = cell.parentElement.children;
+                    var cellIndex = DomHandler.index(cell);
+                    let nextCell = cells[event.which === 40 ? cellIndex + 2 : cellIndex - 2];
+                    if (nextCell) {
+                        nextCell.tabIndex = '0';
+                        nextCell.focus();
+                    }
+                    event.preventDefault();
+                    break;
+                }
+
+                //left arrow
+                case 37: {
+                    cell.tabIndex = '-1';
+                    let prevCell = cell.previousElementSibling;
+                    if (prevCell) {
+                        prevCell.tabIndex = '0';
+                        prevCell.focus();
+                    }
+                    else {
+                        this.navigationState = {backward: true};
+                        this.navBackward(event);
+                    }
+                    event.preventDefault();
+                    break;
+                }
+
+                //right arrow
+                case 39: {
+                    cell.tabIndex = '-1';
+                    let nextCell = cell.nextElementSibling;
+                    if (nextCell) {
+                        nextCell.tabIndex = '0';
+                        nextCell.focus();
+                    }
+                    else {
+                        this.navigationState = {backward: false};
+                        this.navForward(event);
+                    }
+                    event.preventDefault();
+                    break;
+                }
+
+                //enter
+                //space
+                case 13:
+                case 32: {
+                    this.onYearSelect(event, index);
                     event.preventDefault();
                     break;
                 }
@@ -1688,6 +1850,7 @@ var script = {
         },
         updateFocus() {
             let cell;
+
             if (this.navigationState) {
                 if (this.navigationState.button) {
                     this.initFocusableCell();
@@ -1699,11 +1862,32 @@ var script = {
                 }
                 else {
                     if (this.navigationState.backward) {
-                        let cells = DomHandler.find(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled)');
-                        cell = cells[cells.length - 1];
+                        let cells;
+
+                        if (this.currentView === 'month') {
+                            cells = DomHandler.find(this.overlay, '.p-monthpicker .p-monthpicker-month:not(.p-disabled)');
+                        }
+                        else if (this.currentView === 'year') {
+                            cells = DomHandler.find(this.overlay, '.p-yearpicker .p-yearpicker-year:not(.p-disabled)');
+                        }
+                        else {
+                            cells = DomHandler.find(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink)');
+                        }
+
+                        if (cells && cells.length > 0) {
+                            cell = cells[cells.length - 1];
+                        }
                     }
                     else {
-                        cell = DomHandler.findSingle(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled)');
+                        if (this.currentView === 'month') {
+                            cell = DomHandler.findSingle(this.overlay, '.p-monthpicker .p-monthpicker-month:not(.p-disabled)');
+                        }
+                        else if (this.currentView === 'year') {
+                            cell = DomHandler.findSingle(this.overlay, '.p-yearpicker .p-yearpicker-year:not(.p-disabled)');
+                        }
+                        else {
+                            cell = DomHandler.findSingle(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink)');
+                        }
                     }
 
                     if (cell) {
@@ -1721,25 +1905,35 @@ var script = {
         initFocusableCell() {
             let cell;
 
-            if (this.view === 'month') {
+            if (this.currentView === 'month') {
                 let cells = DomHandler.find(this.overlay, '.p-monthpicker .p-monthpicker-month');
                 let selectedCell= DomHandler.findSingle(this.overlay, '.p-monthpicker .p-monthpicker-month.p-highlight');
+                cells.forEach(cell => cell.tabIndex = -1);
+                cell = selectedCell || cells[0];
+            }
+            else if (this.currentView === 'year') {
+                let cells = DomHandler.find(this.overlay, '.p-yearpicker .p-yearpicker-year');
+                let selectedCell= DomHandler.findSingle(this.overlay, '.p-yearpicker .p-yearpicker-year.p-highlight');
                 cells.forEach(cell => cell.tabIndex = -1);
                 cell = selectedCell || cells[0];
             }
             else {
                 cell = DomHandler.findSingle(this.overlay, 'span.p-highlight');
                 if (!cell) {
-                    let todayCell = DomHandler.findSingle(this.overlay, 'td.p-datepicker-today span:not(.p-disabled)');
+                    let todayCell = DomHandler.findSingle(this.overlay, 'td.p-datepicker-today span:not(.p-disabled):not(.p-ink');
                     if (todayCell)
                         cell = todayCell;
                     else
-                        cell = DomHandler.findSingle(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled)');
+                        cell = DomHandler.findSingle(this.overlay, '.p-datepicker-calendar td span:not(.p-disabled):not(.p-ink');
                 }
             }
 
             if (cell) {
                 cell.tabIndex = '0';
+
+                if ((!this.navigationState || !this.navigationState.button) && !this.timePickerChange) {
+                    cell.focus();
+                }
             }
         },
         trapFocus(event) {
@@ -1783,12 +1977,6 @@ var script = {
              }
         },
         onInput(event) {
-            // IE 11 Workaround for input placeholder : https://github.com/primefaces/primeng/issues/2026
-            if (!this.isKeydown) {
-                return;
-            }
-            this.isKeydown = false;
-
             try {
                 this.selectionStart = this.$refs.input.$el.selectionStart;
                 this.selectionEnd = this.$refs.input.$el.selectionEnd;
@@ -1799,9 +1987,9 @@ var script = {
                 }
             }
             catch(err) {
-                // invalid date
-                let value = this.keepInvalid ? event.target.value : null;
-                this.updateModel(value);
+                if (this.keepInvalid) {
+                    this.updateModel(event.target.value);
+                }
             }
         },
         onFocus() {
@@ -1813,8 +2001,7 @@ var script = {
         onBlur() {
             this.focused = false;
         },
-        onKeyDown(event) {
-            this.isKeydown = true;
+        onKeyDown() {
             if (event.keyCode === 40 && this.overlay) {
                 this.trapFocus(event);
             }
@@ -1847,23 +2034,81 @@ var script = {
                     target: this.$el
                 });
             }
+        },
+        onOverlayMouseUp(event) {
+            this.onOverlayClick(event);
+        },
+        createResponsiveStyle() {
+            if (this.numberOfMonths > 1 && this.responsiveOptions) {
+                if (!this.responsiveStyleElement) {
+                    this.responsiveStyleElement = document.createElement('style');
+                    this.responsiveStyleElement.type = 'text/css';
+                    document.body.appendChild(this.responsiveStyleElement);
+                }
+
+                let innerHTML = '';
+                if (this.responsiveOptions) {
+                    let responsiveOptions = [...this.responsiveOptions]
+                        .filter(o => !!(o.breakpoint && o.numMonths))
+                        .sort((o1, o2) => -1 * o1.breakpoint.localeCompare(o2.breakpoint, undefined, { numeric: true }));
+
+                    for (let i = 0; i < responsiveOptions.length; i++) {
+                        let { breakpoint, numMonths } = responsiveOptions[i];
+                        let styles = `
+                            .p-datepicker[${this.attributeSelector}] .p-datepicker-group:nth-child(${numMonths}) .p-datepicker-next {
+                                display: inline-flex !important;
+                            }
+                        `;
+
+                        for (let j = numMonths; j < this.numberOfMonths; j++) {
+                            styles += `
+                                .p-datepicker[${this.attributeSelector}] .p-datepicker-group:nth-child(${j + 1}) {
+                                    display: none !important;
+                                }
+                            `;
+                        }
+
+                        innerHTML += `
+                            @media screen and (max-width: ${breakpoint}) {
+                                ${styles}
+                            }
+                        `;
+                    }
+                }
+
+                this.responsiveStyleElement.innerHTML = innerHTML;
+            }
+		},
+        destroyResponsiveStyleElement() {
+            if (this.responsiveStyleElement) {
+                this.responsiveStyleElement.remove();
+                this.responsiveStyleElement = null;
+            }
         }
     },
     computed: {
         viewDate() {
             let propValue = this.modelValue;
-            if (typeof propValue === 'string') {
-                return new Date();
-            }
-
             if (propValue && Array.isArray(propValue)) {
                 propValue = propValue[0];
             }
 
-            return propValue || new Date();
+            if (propValue && typeof propValue !== 'string') {
+                return propValue;
+            }
+            else {
+                let today = new Date();
+                if (this.maxDate && this.maxDate < today) {
+                    return this.maxDate;
+                }
+                if (this.minDate && this.minDate > today) {
+                    return this.minDate;
+                }
+                return today;
+            }
         },
         inputFieldValue() {
-            return this.keepInvalid ? this.modelValue : this.formatValue(this.modelValue);
+            return this.formatValue(this.modelValue);
         },
         containerClass() {
             return [
@@ -1882,7 +2127,8 @@ var script = {
                 'p-disabled': this.$attrs.disabled,
                 'p-datepicker-timeonly': this.timeOnly,
                 'p-datepicker-multiple-month': this.numberOfMonths > 1,
-                'p-datepicker-monthpicker': (this.view === 'month'),
+                'p-datepicker-monthpicker': (this.currentView === 'month'),
+                'p-datepicker-yearpicker': (this.currentView === 'year'),
                 'p-datepicker-touch-ui': this.touchUI,
                 'p-input-filled': this.$primevue.config.inputStyle === 'filled',
                 'p-ripple-disabled': this.$primevue.config.ripple === false
@@ -2010,6 +2256,15 @@ var script = {
 
             return monthPickerValues;
         },
+        yearPickerValues() {
+            let yearPickerValues = [];
+            let base = this.currentYear -  (this.currentYear % 10);
+            for (let i = 0; i < 10; i++) {
+                yearPickerValues.push(base + i);
+            }
+
+            return yearPickerValues;
+        },
         formattedCurrentHour() {
             return this.currentHour < 10 ? '0' + this.currentHour : this.currentHour;
         },
@@ -2036,6 +2291,12 @@ var script = {
         },
         appendTarget() {
             return this.appendDisabled ? null : this.appendTo;
+        },
+        attributeSelector() {
+            return UniqueComponentId();
+        },
+        switchViewButtonDisabled() {
+            return this.numberOfMonths > 1 || this.$attrs.disabled;
         }
     },
     components: {
@@ -2052,36 +2313,36 @@ const _hoisted_2 = { class: "p-datepicker-header" };
 const _hoisted_3 = /*#__PURE__*/createVNode("span", { class: "p-datepicker-prev-icon pi pi-chevron-left" }, null, -1);
 const _hoisted_4 = { class: "p-datepicker-title" };
 const _hoisted_5 = {
-  key: 0,
-  class: "p-datepicker-month"
-};
-const _hoisted_6 = {
   key: 2,
-  class: "p-datepicker-year"
+  class: "p-datepicker-decade"
 };
-const _hoisted_7 = /*#__PURE__*/createVNode("span", { class: "p-datepicker-next-icon pi pi-chevron-right" }, null, -1);
-const _hoisted_8 = {
+const _hoisted_6 = /*#__PURE__*/createVNode("span", { class: "p-datepicker-next-icon pi pi-chevron-right" }, null, -1);
+const _hoisted_7 = {
   key: 0,
   class: "p-datepicker-calendar-container"
 };
-const _hoisted_9 = { class: "p-datepicker-calendar" };
-const _hoisted_10 = {
+const _hoisted_8 = { class: "p-datepicker-calendar" };
+const _hoisted_9 = {
   key: 0,
   scope: "col",
   class: "p-datepicker-weekheader p-disabled"
 };
-const _hoisted_11 = {
+const _hoisted_10 = {
   key: 0,
   class: "p-datepicker-weeknumber"
 };
-const _hoisted_12 = { class: "p-disabled" };
-const _hoisted_13 = {
+const _hoisted_11 = { class: "p-disabled" };
+const _hoisted_12 = {
   key: 0,
   style: {"visibility":"hidden"}
 };
-const _hoisted_14 = {
+const _hoisted_13 = {
   key: 0,
   class: "p-monthpicker"
+};
+const _hoisted_14 = {
+  key: 1,
+  class: "p-yearpicker"
 };
 const _hoisted_15 = {
   key: 1,
@@ -2164,7 +2425,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, [
       createVNode(Transition, {
         name: "p-connected-overlay",
-        onEnter: _cache[48] || (_cache[48] = $event => ($options.onOverlayEnter($event))),
+        onEnter: _cache[61] || (_cache[61] = $event => ($options.onOverlayEnter($event))),
         onAfterEnter: $options.onOverlayEnterComplete,
         onAfterLeave: $options.onOverlayAfterLeave,
         onLeave: $options.onOverlayLeave
@@ -2176,7 +2437,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ref: $options.overlayRef,
                 class: $options.panelStyleClass,
                 role: $props.inline ? null : 'dialog',
-                onClick: _cache[47] || (_cache[47] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                onClick: _cache[59] || (_cache[59] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                onMouseup: _cache[60] || (_cache[60] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
               }, [
                 (!$props.timeOnly)
                   ? (openBlock(), createBlock(Fragment, { key: 0 }, [
@@ -2188,80 +2450,65 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           }, [
                             createVNode("div", _hoisted_2, [
                               renderSlot(_ctx.$slots, "header"),
-                              (groupIndex === 0)
-                                ? withDirectives((openBlock(), createBlock("button", {
-                                    key: 0,
-                                    class: "p-datepicker-prev p-link",
-                                    onClick: _cache[1] || (_cache[1] = (...args) => ($options.onPrevButtonClick && $options.onPrevButtonClick(...args))),
-                                    type: "button",
-                                    onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                                    disabled: _ctx.$attrs.disabled
-                                  }, [
-                                    _hoisted_3
-                                  ], 40, ["disabled"])), [
-                                    [_directive_ripple]
-                                  ])
-                                : createCommentVNode("", true),
+                              withDirectives(createVNode("button", {
+                                class: "p-datepicker-prev p-link",
+                                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onPrevButtonClick && $options.onPrevButtonClick(...args))),
+                                type: "button",
+                                onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                                disabled: _ctx.$attrs.disabled
+                              }, [
+                                _hoisted_3
+                              ], 40, ["disabled"]), [
+                                [vShow, groupIndex === 0],
+                                [_directive_ripple]
+                              ]),
                               createVNode("div", _hoisted_4, [
-                                (!$props.monthNavigator && ($props.view !== 'month'))
-                                  ? (openBlock(), createBlock("span", _hoisted_5, toDisplayString($options.getMonthName(month.month)), 1))
+                                ($data.currentView === 'date')
+                                  ? (openBlock(), createBlock("button", {
+                                      key: 0,
+                                      type: "button",
+                                      onClick: _cache[3] || (_cache[3] = (...args) => ($options.switchToMonthView && $options.switchToMonthView(...args))),
+                                      class: "p-datepicker-month p-link",
+                                      disabled: $options.switchViewButtonDisabled
+                                    }, toDisplayString($options.getMonthName(month.month)), 9, ["disabled"]))
                                   : createCommentVNode("", true),
-                                ($props.monthNavigator && ($props.view !== 'month') && $props.numberOfMonths === 1)
-                                  ? (openBlock(), createBlock("select", {
+                                ($data.currentView !== 'year')
+                                  ? (openBlock(), createBlock("button", {
                                       key: 1,
-                                      class: "p-datepicker-month",
-                                      onChange: _cache[3] || (_cache[3] = $event => ($options.onMonthDropdownChange($event.target.value)))
-                                    }, [
-                                      (openBlock(true), createBlock(Fragment, null, renderList($options.monthNames, (monthName, index) => {
-                                        return (openBlock(), createBlock("option", {
-                                          value: index,
-                                          key: monthName,
-                                          selected: index === month.month
-                                        }, toDisplayString(monthName), 9, ["value", "selected"]))
-                                      }), 128))
-                                    ], 32))
+                                      type: "button",
+                                      onClick: _cache[4] || (_cache[4] = (...args) => ($options.switchToYearView && $options.switchToYearView(...args))),
+                                      class: "p-datepicker-year p-link",
+                                      disabled: $options.switchViewButtonDisabled
+                                    }, toDisplayString($data.currentYear), 9, ["disabled"]))
                                   : createCommentVNode("", true),
-                                (!$props.yearNavigator)
-                                  ? (openBlock(), createBlock("span", _hoisted_6, toDisplayString($props.view === 'month' ? $data.currentYear : month.year), 1))
-                                  : createCommentVNode("", true),
-                                ($props.yearNavigator && $props.numberOfMonths === 1)
-                                  ? (openBlock(), createBlock("select", {
-                                      key: 3,
-                                      class: "p-datepicker-year",
-                                      onChange: _cache[4] || (_cache[4] = $event => ($options.onYearDropdownChange($event.target.value)))
-                                    }, [
-                                      (openBlock(true), createBlock(Fragment, null, renderList($options.yearOptions, (year) => {
-                                        return (openBlock(), createBlock("option", {
-                                          value: year,
-                                          key: year,
-                                          selected: year === $data.currentYear
-                                        }, toDisplayString(year), 9, ["value", "selected"]))
-                                      }), 128))
-                                    ], 32))
+                                ($data.currentView === 'year')
+                                  ? (openBlock(), createBlock("span", _hoisted_5, [
+                                      renderSlot(_ctx.$slots, "decade", { years: $options.yearPickerValues }, () => [
+                                        createTextVNode(toDisplayString($options.yearPickerValues[0]) + " - " + toDisplayString($options.yearPickerValues[$options.yearPickerValues.length - 1]), 1)
+                                      ])
+                                    ]))
                                   : createCommentVNode("", true)
                               ]),
-                              ($props.numberOfMonths === 1 ? true : (groupIndex === $props.numberOfMonths - 1))
-                                ? withDirectives((openBlock(), createBlock("button", {
-                                    key: 1,
-                                    class: "p-datepicker-next p-link",
-                                    onClick: _cache[5] || (_cache[5] = (...args) => ($options.onNextButtonClick && $options.onNextButtonClick(...args))),
-                                    type: "button",
-                                    onKeydown: _cache[6] || (_cache[6] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                                    disabled: _ctx.$attrs.disabled
-                                  }, [
-                                    _hoisted_7
-                                  ], 40, ["disabled"])), [
-                                    [_directive_ripple]
-                                  ])
-                                : createCommentVNode("", true)
+                              withDirectives(createVNode("button", {
+                                class: "p-datepicker-next p-link",
+                                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onNextButtonClick && $options.onNextButtonClick(...args))),
+                                type: "button",
+                                onKeydown: _cache[6] || (_cache[6] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                                disabled: _ctx.$attrs.disabled
+                              }, [
+                                _hoisted_6
+                              ], 40, ["disabled"]), [
+                                [vShow, $props.numberOfMonths === 1 ? true : (groupIndex === $props.numberOfMonths - 1)],
+                                [_directive_ripple]
+                              ])
                             ]),
-                            ($props.view ==='date')
-                              ? (openBlock(), createBlock("div", _hoisted_8, [
-                                  createVNode("table", _hoisted_9, [
+                            ($data.currentView ==='date')
+                              ? (openBlock(), createBlock("div", _hoisted_7, [
+                                  createVNode("table", _hoisted_8, [
                                     createVNode("thead", null, [
                                       createVNode("tr", null, [
                                         ($props.showWeek)
-                                          ? (openBlock(), createBlock("th", _hoisted_10, [
+                                          ? (openBlock(), createBlock("th", _hoisted_9, [
                                               createVNode("span", null, toDisplayString($options.weekHeaderLabel), 1)
                                             ]))
                                           : createCommentVNode("", true),
@@ -2281,10 +2528,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                           key: week[0].day + '' + week[0].month
                                         }, [
                                           ($props.showWeek)
-                                            ? (openBlock(), createBlock("td", _hoisted_11, [
-                                                createVNode("span", _hoisted_12, [
+                                            ? (openBlock(), createBlock("td", _hoisted_10, [
+                                                createVNode("span", _hoisted_11, [
                                                   (month.weekNumbers[i] < 10)
-                                                    ? (openBlock(), createBlock("span", _hoisted_13, "0"))
+                                                    ? (openBlock(), createBlock("span", _hoisted_12, "0"))
                                                     : createCommentVNode("", true),
                                                   createTextVNode(" " + toDisplayString(month.weekNumbers[i]), 1)
                                                 ])
@@ -2318,8 +2565,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           ]))
                         }), 128))
                       ]),
-                      ($props.view === 'month')
-                        ? (openBlock(), createBlock("div", _hoisted_14, [
+                      ($data.currentView === 'month')
+                        ? (openBlock(), createBlock("div", _hoisted_13, [
                             (openBlock(true), createBlock(Fragment, null, renderList($options.monthPickerValues, (m, i) => {
                               return withDirectives((openBlock(), createBlock("span", {
                                 key: m,
@@ -2328,6 +2575,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 class: ["p-monthpicker-month", {'p-highlight': $options.isMonthSelected(i)}]
                               }, [
                                 createTextVNode(toDisplayString(m), 1)
+                              ], 42, ["onClick", "onKeydown"])), [
+                                [_directive_ripple]
+                              ])
+                            }), 128))
+                          ]))
+                        : createCommentVNode("", true),
+                      ($data.currentView === 'year')
+                        ? (openBlock(), createBlock("div", _hoisted_14, [
+                            (openBlock(true), createBlock(Fragment, null, renderList($options.yearPickerValues, (y) => {
+                              return withDirectives((openBlock(), createBlock("span", {
+                                key: y,
+                                onClick: $event => ($options.onYearSelect($event, y)),
+                                onKeydown: $event => ($options.onYearCellKeydown($event,y)),
+                                class: ["p-yearpicker-year", {'p-highlight': $options.isYearSelected(y)}]
+                              }, [
+                                createTextVNode(toDisplayString(y), 1)
                               ], 42, ["onClick", "onKeydown"])), [
                                 [_directive_ripple]
                               ])
@@ -2345,10 +2608,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           onMouseup: _cache[8] || (_cache[8] = $event => ($options.onTimePickerElementMouseUp($event))),
                           onKeydown: [
                             _cache[9] || (_cache[9] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                            _cache[11] || (_cache[11] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, 1)), ["enter"]))
+                            _cache[11] || (_cache[11] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, 1)), ["enter"])),
+                            _cache[12] || (_cache[12] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, 1)), ["space"]))
                           ],
                           onMouseleave: _cache[10] || (_cache[10] = $event => ($options.onTimePickerElementMouseLeave())),
-                          onKeyup: _cache[12] || (_cache[12] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                          onKeyup: [
+                            _cache[13] || (_cache[13] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                            _cache[14] || (_cache[14] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                          ],
                           type: "button"
                         }, [
                           _hoisted_17
@@ -2358,14 +2625,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         createVNode("span", null, toDisplayString($options.formattedCurrentHour), 1),
                         withDirectives(createVNode("button", {
                           class: "p-link",
-                          onMousedown: _cache[13] || (_cache[13] = $event => ($options.onTimePickerElementMouseDown($event, 0, -1))),
-                          onMouseup: _cache[14] || (_cache[14] = $event => ($options.onTimePickerElementMouseUp($event))),
+                          onMousedown: _cache[15] || (_cache[15] = $event => ($options.onTimePickerElementMouseDown($event, 0, -1))),
+                          onMouseup: _cache[16] || (_cache[16] = $event => ($options.onTimePickerElementMouseUp($event))),
                           onKeydown: [
-                            _cache[15] || (_cache[15] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                            _cache[17] || (_cache[17] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, -1)), ["enter"]))
+                            _cache[17] || (_cache[17] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                            _cache[19] || (_cache[19] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, -1)), ["enter"])),
+                            _cache[20] || (_cache[20] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, -1)), ["space"]))
                           ],
-                          onMouseleave: _cache[16] || (_cache[16] = $event => ($options.onTimePickerElementMouseLeave())),
-                          onKeyup: _cache[18] || (_cache[18] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                          onMouseleave: _cache[18] || (_cache[18] = $event => ($options.onTimePickerElementMouseLeave())),
+                          onKeyup: [
+                            _cache[21] || (_cache[21] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                            _cache[22] || (_cache[22] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                          ],
                           type: "button"
                         }, [
                           _hoisted_18
@@ -2379,15 +2650,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       createVNode("div", _hoisted_20, [
                         withDirectives(createVNode("button", {
                           class: "p-link",
-                          onMousedown: _cache[19] || (_cache[19] = $event => ($options.onTimePickerElementMouseDown($event, 1, 1))),
-                          onMouseup: _cache[20] || (_cache[20] = $event => ($options.onTimePickerElementMouseUp($event))),
+                          onMousedown: _cache[23] || (_cache[23] = $event => ($options.onTimePickerElementMouseDown($event, 1, 1))),
+                          onMouseup: _cache[24] || (_cache[24] = $event => ($options.onTimePickerElementMouseUp($event))),
                           onKeydown: [
-                            _cache[21] || (_cache[21] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                            _cache[23] || (_cache[23] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["enter"]))
+                            _cache[25] || (_cache[25] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                            _cache[27] || (_cache[27] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["enter"])),
+                            _cache[28] || (_cache[28] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["space"]))
                           ],
                           disabled: _ctx.$attrs.disabled,
-                          onMouseleave: _cache[22] || (_cache[22] = $event => ($options.onTimePickerElementMouseLeave())),
-                          onKeyup: _cache[24] || (_cache[24] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                          onMouseleave: _cache[26] || (_cache[26] = $event => ($options.onTimePickerElementMouseLeave())),
+                          onKeyup: [
+                            _cache[29] || (_cache[29] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                            _cache[30] || (_cache[30] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                          ],
                           type: "button"
                         }, [
                           _hoisted_21
@@ -2397,15 +2672,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         createVNode("span", null, toDisplayString($options.formattedCurrentMinute), 1),
                         withDirectives(createVNode("button", {
                           class: "p-link",
-                          onMousedown: _cache[25] || (_cache[25] = $event => ($options.onTimePickerElementMouseDown($event, 1, -1))),
-                          onMouseup: _cache[26] || (_cache[26] = $event => ($options.onTimePickerElementMouseUp($event))),
+                          onMousedown: _cache[31] || (_cache[31] = $event => ($options.onTimePickerElementMouseDown($event, 1, -1))),
+                          onMouseup: _cache[32] || (_cache[32] = $event => ($options.onTimePickerElementMouseUp($event))),
                           onKeydown: [
-                            _cache[27] || (_cache[27] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                            _cache[29] || (_cache[29] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["enter"]))
+                            _cache[33] || (_cache[33] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                            _cache[35] || (_cache[35] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["enter"])),
+                            _cache[36] || (_cache[36] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["space"]))
                           ],
                           disabled: _ctx.$attrs.disabled,
-                          onMouseleave: _cache[28] || (_cache[28] = $event => ($options.onTimePickerElementMouseLeave())),
-                          onKeyup: _cache[30] || (_cache[30] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                          onMouseleave: _cache[34] || (_cache[34] = $event => ($options.onTimePickerElementMouseLeave())),
+                          onKeyup: [
+                            _cache[37] || (_cache[37] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                            _cache[38] || (_cache[38] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                          ],
                           type: "button"
                         }, [
                           _hoisted_22
@@ -2422,15 +2701,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ? (openBlock(), createBlock("div", _hoisted_24, [
                             withDirectives(createVNode("button", {
                               class: "p-link",
-                              onMousedown: _cache[31] || (_cache[31] = $event => ($options.onTimePickerElementMouseDown($event, 2, 1))),
-                              onMouseup: _cache[32] || (_cache[32] = $event => ($options.onTimePickerElementMouseUp($event))),
+                              onMousedown: _cache[39] || (_cache[39] = $event => ($options.onTimePickerElementMouseDown($event, 2, 1))),
+                              onMouseup: _cache[40] || (_cache[40] = $event => ($options.onTimePickerElementMouseUp($event))),
                               onKeydown: [
-                                _cache[33] || (_cache[33] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                                _cache[35] || (_cache[35] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["enter"]))
+                                _cache[41] || (_cache[41] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                                _cache[43] || (_cache[43] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["enter"])),
+                                _cache[44] || (_cache[44] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["space"]))
                               ],
                               disabled: _ctx.$attrs.disabled,
-                              onMouseleave: _cache[34] || (_cache[34] = $event => ($options.onTimePickerElementMouseLeave())),
-                              onKeyup: _cache[36] || (_cache[36] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                              onMouseleave: _cache[42] || (_cache[42] = $event => ($options.onTimePickerElementMouseLeave())),
+                              onKeyup: [
+                                _cache[45] || (_cache[45] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                                _cache[46] || (_cache[46] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                              ],
                               type: "button"
                             }, [
                               _hoisted_25
@@ -2440,15 +2723,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             createVNode("span", null, toDisplayString($options.formattedCurrentSecond), 1),
                             withDirectives(createVNode("button", {
                               class: "p-link",
-                              onMousedown: _cache[37] || (_cache[37] = $event => ($options.onTimePickerElementMouseDown($event, 2, -1))),
-                              onMouseup: _cache[38] || (_cache[38] = $event => ($options.onTimePickerElementMouseUp($event))),
+                              onMousedown: _cache[47] || (_cache[47] = $event => ($options.onTimePickerElementMouseDown($event, 2, -1))),
+                              onMouseup: _cache[48] || (_cache[48] = $event => ($options.onTimePickerElementMouseUp($event))),
                               onKeydown: [
-                                _cache[39] || (_cache[39] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                                _cache[41] || (_cache[41] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["enter"]))
+                                _cache[49] || (_cache[49] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                                _cache[51] || (_cache[51] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["enter"])),
+                                _cache[52] || (_cache[52] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["space"]))
                               ],
                               disabled: _ctx.$attrs.disabled,
-                              onMouseleave: _cache[40] || (_cache[40] = $event => ($options.onTimePickerElementMouseLeave())),
-                              onKeyup: _cache[42] || (_cache[42] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                              onMouseleave: _cache[50] || (_cache[50] = $event => ($options.onTimePickerElementMouseLeave())),
+                              onKeyup: [
+                                _cache[53] || (_cache[53] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                                _cache[54] || (_cache[54] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                              ],
                               type: "button"
                             }, [
                               _hoisted_26
@@ -2466,7 +2753,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ? (openBlock(), createBlock("div", _hoisted_28, [
                             withDirectives(createVNode("button", {
                               class: "p-link",
-                              onClick: _cache[43] || (_cache[43] = $event => ($options.toggleAMPM($event))),
+                              onClick: _cache[55] || (_cache[55] = $event => ($options.toggleAMPM($event))),
                               type: "button",
                               disabled: _ctx.$attrs.disabled
                             }, [
@@ -2477,7 +2764,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             createVNode("span", null, toDisplayString($data.pm ? 'PM' : 'AM'), 1),
                             withDirectives(createVNode("button", {
                               class: "p-link",
-                              onClick: _cache[44] || (_cache[44] = $event => ($options.toggleAMPM($event))),
+                              onClick: _cache[56] || (_cache[56] = $event => ($options.toggleAMPM($event))),
                               type: "button",
                               disabled: _ctx.$attrs.disabled
                             }, [
@@ -2494,21 +2781,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       createVNode(_component_CalendarButton, {
                         type: "button",
                         label: $options.todayLabel,
-                        onClick: _cache[45] || (_cache[45] = $event => ($options.onTodayButtonClick($event))),
+                        onClick: _cache[57] || (_cache[57] = $event => ($options.onTodayButtonClick($event))),
                         class: "p-button-text",
                         onKeydown: $options.onContainerButtonKeydown
                       }, null, 8, ["label", "onKeydown"]),
                       createVNode(_component_CalendarButton, {
                         type: "button",
                         label: $options.clearLabel,
-                        onClick: _cache[46] || (_cache[46] = $event => ($options.onClearButtonClick($event))),
+                        onClick: _cache[58] || (_cache[58] = $event => ($options.onClearButtonClick($event))),
                         class: "p-button-text",
                         onKeydown: $options.onContainerButtonKeydown
                       }, null, 8, ["label", "onKeydown"])
                     ]))
                   : createCommentVNode("", true),
                 renderSlot(_ctx.$slots, "footer")
-              ], 10, ["role"]))
+              ], 42, ["role"]))
             : createCommentVNode("", true)
         ]),
         _: 3
@@ -2544,7 +2831,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-calendar {\n    position: relative;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n}\n.p-calendar .p-inputtext {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-calendar-w-btn .p-inputtext {\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0;\n}\n.p-calendar-w-btn .p-datepicker-trigger {\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0;\n}\n\n/* Fluid */\n.p-fluid .p-calendar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-fluid .p-calendar .p-inputtext {\n    width: 1%;\n}\n\n/* Datepicker */\n.p-calendar .p-datepicker {\n    min-width: 100%;\n}\n.p-datepicker {\n\twidth: auto;\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-datepicker-inline {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: static;\n}\n\n/* Header */\n.p-datepicker-header {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n.p-datepicker-header .p-datepicker-title {\n    margin: 0 auto;\n}\n.p-datepicker-prev,\n.p-datepicker-next {\n    cursor: pointer;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Multiple Month DatePicker */\n.p-datepicker-multiple-month .p-datepicker-group-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n\n/* DatePicker Table */\n.p-datepicker table {\n\twidth: 100%;\n\tborder-collapse: collapse;\n}\n.p-datepicker td > span {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    cursor: pointer;\n    margin: 0 auto;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Month Picker */\n.p-monthpicker-month {\n    width: 33.3%;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    cursor: pointer;\n    overflow: hidden;\n    position: relative;\n}\n\n/*  Button Bar */\n.p-datepicker-buttonbar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n/* Time Picker */\n.p-timepicker {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-timepicker button {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    cursor: pointer;\n    overflow: hidden;\n    position: relative;\n}\n.p-timepicker > div {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n\n/* Touch UI */\n.p-datepicker-touch-ui,\n.p-calendar .p-datepicker-touch-ui {\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    min-width: 80vw;\n    -webkit-transform: translate(-50%, -50%);\n            transform: translate(-50%, -50%);\n}\n.p-datepicker-mask {\n    background-color: transparent;\n    -webkit-transition-property: background-color;\n    transition-property: background-color;\n}\n.p-datepicker-mask.p-datepicker-mask-leave.p-component-overlay {\n    background-color: transparent;\n}\n";
+var css_248z = "\n.p-calendar {\n    position: relative;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    max-width: 100%;\n}\n.p-calendar .p-inputtext {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-calendar-w-btn .p-inputtext {\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0;\n}\n.p-calendar-w-btn .p-datepicker-trigger {\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0;\n}\n\n/* Fluid */\n.p-fluid .p-calendar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-fluid .p-calendar .p-inputtext {\n    width: 1%;\n}\n\n/* Datepicker */\n.p-calendar .p-datepicker {\n    min-width: 100%;\n}\n.p-datepicker {\n\twidth: auto;\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-datepicker-inline {\n    display: inline-block;\n    position: static;\n    overflow-x: auto;\n}\n\n/* Header */\n.p-datepicker-header {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n.p-datepicker-header .p-datepicker-title {\n    margin: 0 auto;\n}\n.p-datepicker-prev,\n.p-datepicker-next {\n    cursor: pointer;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Multiple Month DatePicker */\n.p-datepicker-multiple-month .p-datepicker-group-container {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.p-datepicker-multiple-month .p-datepicker-group-container .p-datepicker-group {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n}\n\n/* DatePicker Table */\n.p-datepicker table {\n\twidth: 100%;\n\tborder-collapse: collapse;\n}\n.p-datepicker td > span {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    cursor: pointer;\n    margin: 0 auto;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Month Picker */\n.p-monthpicker-month {\n    width: 33.3%;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    cursor: pointer;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Year Picker */\n.p-yearpicker-year {\n    width: 50%;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    cursor: pointer;\n    overflow: hidden;\n    position: relative;\n}\n\n/*  Button Bar */\n.p-datepicker-buttonbar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n/* Time Picker */\n.p-timepicker {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-timepicker button {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    cursor: pointer;\n    overflow: hidden;\n    position: relative;\n}\n.p-timepicker > div {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n\n/* Touch UI */\n.p-datepicker-touch-ui,\n.p-calendar .p-datepicker-touch-ui {\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    min-width: 80vw;\n    -webkit-transform: translate(-50%, -50%);\n            transform: translate(-50%, -50%);\n}\n";
 styleInject(css_248z);
 
 script.render = render;

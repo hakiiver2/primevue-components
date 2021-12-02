@@ -1,3 +1,4 @@
+import Ripple from 'primevue/ripple';
 import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, Fragment, renderList, withCtx, withDirectives, resolveDynamicComponent } from 'vue';
 
 var script$1 = {
@@ -7,14 +8,15 @@ var script$1 = {
             type: Array,
             default: null
         },
-        template: {
-            type: Function,
+        templates: {
+            type: null,
             default: null
         },
         exact: {
             type: Boolean,
             default: true
-        }
+        },
+        tooltipOptions: null
     },
     data() {
         return {
@@ -64,6 +66,9 @@ var script$1 = {
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
         }
+    },
+    directives: {
+        'ripple': Ripple
     }
 };
 
@@ -72,6 +77,7 @@ const _hoisted_1 = { class: "p-dock-list-container" };
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = resolveComponent("router-link");
   const _directive_ripple = resolveDirective("ripple");
+  const _directive_tooltip = resolveDirective("tooltip");
 
   return (openBlock(), createBlock("div", _hoisted_1, [
     createVNode("ul", {
@@ -87,7 +93,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
           role: "none",
           onMouseenter: $event => ($options.onItemMouseEnter(index))
         }, [
-          (!$props.template)
+          (!$props.templates['item'])
             ? (openBlock(), createBlock(Fragment, { key: 0 }, [
                 (item.to && !$options.disabled(item))
                   ? (openBlock(), createBlock(_component_router_link, {
@@ -96,47 +102,55 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                       custom: ""
                     }, {
                       default: withCtx(({navigate, href, isActive, isExactActive}) => [
-                        createVNode("a", {
+                        withDirectives(createVNode("a", {
                           href: href,
                           role: "menuitem",
                           class: $options.linkClass(item, {isActive, isExactActive}),
                           target: item.target,
-                          "data-pr-tooltip": item.label,
                           onClick: $event => ($options.onItemClick($event, item, navigate))
                         }, [
-                          (typeof item.icon === 'string')
+                          (!$props.templates['icon'])
                             ? withDirectives((openBlock(), createBlock("span", {
                                 key: 0,
                                 class: ['p-dock-action-icon', item.icon]
                               }, null, 2)), [
                                 [_directive_ripple]
                               ])
-                            : (openBlock(), createBlock(resolveDynamicComponent(item.icon), { key: 1 }))
-                        ], 10, ["href", "target", "data-pr-tooltip", "onClick"])
+                            : (openBlock(), createBlock(resolveDynamicComponent($props.templates['icon']), {
+                                key: 1,
+                                item: item
+                              }, null, 8, ["item"]))
+                        ], 10, ["href", "target", "onClick"]), [
+                          [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions]
+                        ])
                       ]),
                       _: 2
                     }, 1032, ["to"]))
-                  : (openBlock(), createBlock("a", {
+                  : withDirectives((openBlock(), createBlock("a", {
                       key: 1,
                       href: item.url,
                       role: "menuitem",
                       class: $options.linkClass(item),
                       target: item.target,
-                      "data-pr-tooltip": item.label,
                       onClick: $event => ($options.onItemClick($event, item)),
                       tabindex: $options.disabled(item) ? null : '0'
                     }, [
-                      (typeof item.icon === 'string')
+                      (!$props.templates['icon'])
                         ? withDirectives((openBlock(), createBlock("span", {
                             key: 0,
                             class: ['p-dock-action-icon', item.icon]
                           }, null, 2)), [
                             [_directive_ripple]
                           ])
-                        : (openBlock(), createBlock(resolveDynamicComponent(item.icon), { key: 1 }))
-                    ], 10, ["href", "target", "data-pr-tooltip", "onClick", "tabindex"]))
+                        : (openBlock(), createBlock(resolveDynamicComponent($props.templates['icon']), {
+                            key: 1,
+                            item: item
+                          }, null, 8, ["item"]))
+                    ], 10, ["href", "target", "onClick", "tabindex"])), [
+                      [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions]
+                    ])
               ], 64))
-            : (openBlock(), createBlock(resolveDynamicComponent($props.template), {
+            : (openBlock(), createBlock(resolveDynamicComponent($props.templates['item']), {
                 key: 1,
                 item: item
               }, null, 8, ["item"]))
@@ -158,6 +172,7 @@ var script = {
         model: null,
         class: null,
         style: null,
+        tooltipOptions: null,
         exact: {
             type: Boolean,
             default: true
@@ -182,9 +197,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, [
     createVNode(_component_DockSub, {
       model: $props.model,
-      template: _ctx.$slots.item,
-      exact: $props.exact
-    }, null, 8, ["model", "template", "exact"])
+      templates: _ctx.$slots,
+      exact: $props.exact,
+      tooltipOptions: $props.tooltipOptions
+    }, null, 8, ["model", "templates", "exact", "tooltipOptions"])
   ], 6))
 }
 

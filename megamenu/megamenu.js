@@ -248,6 +248,9 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
             },
             disabled(item) {
                 return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+            },
+            label(item) {
+                return (typeof item.disabled === 'function' ? item.label() : item.label);
             }
         },
         computed: {
@@ -304,7 +307,7 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
         vue.createVNode("ul", _hoisted_2, [
           (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (category, index) => {
             return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-              key: category.label + '_' + index
+              key: $options.label(category) + '_' + index
             }, [
               ($options.visible(category))
                 ? (vue.openBlock(), vue.createBlock("li", {
@@ -336,7 +339,7 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                           class: $options.getCategoryIcon(category)
                                         }, null, 2))
                                       : vue.createCommentVNode("", true),
-                                    vue.createVNode("span", _hoisted_3, vue.toDisplayString(category.label), 1)
+                                    vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(category)), 1)
                                   ], 42, ["href", "onClick", "onKeydown"]), [
                                     [_directive_ripple]
                                   ])
@@ -361,7 +364,7 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                       class: $options.getCategoryIcon(category)
                                     }, null, 2))
                                   : vue.createCommentVNode("", true),
-                                vue.createVNode("span", _hoisted_4, vue.toDisplayString(category.label), 1),
+                                vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.label(category)), 1),
                                 (category.items)
                                   ? (vue.openBlock(), vue.createBlock("span", {
                                       key: 1,
@@ -374,14 +377,14 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                         ], 64))
                       : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {
                           key: 1,
-                          item: _ctx.item
+                          item: category
                         }, null, 8, ["item"])),
                     (category.items)
                       ? (vue.openBlock(), vue.createBlock("div", _hoisted_5, [
                           vue.createVNode("div", _hoisted_6, [
                             (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList(category.items, (column, columnIndex) => {
                               return (vue.openBlock(), vue.createBlock("div", {
-                                key: category.label + '_column_' + columnIndex,
+                                key: $options.label(category) + '_column_' + columnIndex,
                                 class: $options.getColumnClassName(category)
                               }, [
                                 (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList(column, (submenu, submenuIndex) => {
@@ -397,7 +400,7 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                     }, vue.toDisplayString(submenu.label), 7),
                                     (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList(submenu.items, (item, i) => {
                                       return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-                                        key: item.label + i.toString()
+                                        key: $options.label(item) + i.toString()
                                       }, [
                                         ($options.visible(item) && !item.separator)
                                           ? (vue.openBlock(), vue.createBlock("li", {
@@ -427,7 +430,7 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                                                     class: ['p-menuitem-icon', item.icon]
                                                                   }, null, 2))
                                                                 : vue.createCommentVNode("", true),
-                                                              vue.createVNode("span", _hoisted_7, vue.toDisplayString(item.label), 1)
+                                                              vue.createVNode("span", _hoisted_7, vue.toDisplayString($options.label(item)), 1)
                                                             ], 10, ["href", "onClick"]), [
                                                               [_directive_ripple]
                                                             ])
@@ -449,7 +452,7 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                                                 class: ['p-menuitem-icon', item.icon]
                                                               }, null, 2))
                                                             : vue.createCommentVNode("", true),
-                                                          vue.createVNode("span", _hoisted_8, vue.toDisplayString(item.label), 1),
+                                                          vue.createVNode("span", _hoisted_8, vue.toDisplayString($options.label(item)), 1),
                                                           (item.items)
                                                             ? (vue.openBlock(), vue.createBlock("span", {
                                                                 key: 1,

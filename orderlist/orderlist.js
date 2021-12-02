@@ -349,6 +349,7 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
 
       return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
         vue.createVNode("div", _hoisted_2, [
+          vue.renderSlot(_ctx.$slots, "controlsstart"),
           vue.createVNode(_component_OLButton, {
             type: "button",
             icon: "pi pi-angle-up",
@@ -368,7 +369,8 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
             type: "button",
             icon: "pi pi-angle-double-down",
             onClick: $options.moveBottom
-          }, null, 8, ["onClick"])
+          }, null, 8, ["onClick"]),
+          vue.renderSlot(_ctx.$slots, "controlsend")
         ]),
         vue.createVNode("div", _hoisted_3, [
           (_ctx.$slots.header)

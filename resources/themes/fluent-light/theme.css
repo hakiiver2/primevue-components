@@ -1,4 +1,3 @@
-@charset "UTF-8";
 :root {
   --surface-a:#ffffff;
   --surface-b:#faf9f8;
@@ -41,6 +40,8 @@
   --surface-overlay:#ffffff;
   --surface-border:#edebe9;
   --surface-hover:#f3f2f1;
+  --focus-ring: inset 0 0 0 1px #605e5c;
+  --maskbg: rgba(0, 0, 0, 0.4);
 }
 
 * {
@@ -83,6 +84,31 @@
   outline: 0 none;
   outline-offset: 0;
   box-shadow: inset 0 0 0 1px #605e5c;
+}
+
+.p-component-overlay-enter {
+  animation: p-component-overlay-enter-animation 150ms forwards;
+}
+
+.p-component-overlay-leave {
+  animation: p-component-overlay-leave-animation 150ms forwards;
+}
+
+@keyframes p-component-overlay-enter-animation {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: var(--maskbg);
+  }
+}
+@keyframes p-component-overlay-leave-animation {
+  from {
+    background-color: var(--maskbg);
+  }
+  to {
+    background-color: transparent;
+  }
 }
 
 :root {
@@ -319,14 +345,16 @@
 .p-datepicker .p-datepicker-header .p-datepicker-title {
   line-height: 2rem;
 }
-.p-datepicker .p-datepicker-header .p-datepicker-title select {
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year,
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
+  color: #323130;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  font-weight: 600;
+  padding: 0.5rem;
 }
-.p-datepicker .p-datepicker-header .p-datepicker-title select:focus {
-  outline: 0 none;
-  outline-offset: 0;
-  box-shadow: inset 0 0 0 1px #605e5c;
-  border-color: #0078d4;
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year:enabled:hover,
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month:enabled:hover {
+  color: #0078d4;
 }
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
   margin-right: 0.5rem;
@@ -424,8 +452,20 @@
   color: #323130;
   background: #edebe9;
 }
+.p-datepicker .p-yearpicker {
+  margin: 0;
+}
+.p-datepicker .p-yearpicker .p-yearpicker-year {
+  padding: 1px;
+  transition: box-shadow 0.2s;
+  border-radius: 2px;
+}
+.p-datepicker .p-yearpicker .p-yearpicker-year.p-highlight {
+  color: #323130;
+  background: #edebe9;
+}
 .p-datepicker.p-datepicker-multiple-month .p-datepicker-group {
-  border-right: 1px solid #edebe9;
+  border-left: 1px solid #edebe9;
   padding-right: 0.75rem;
   padding-left: 0.75rem;
   padding-top: 0;
@@ -433,10 +473,10 @@
 }
 .p-datepicker.p-datepicker-multiple-month .p-datepicker-group:first-child {
   padding-left: 0;
+  border-left: 0 none;
 }
 .p-datepicker.p-datepicker-multiple-month .p-datepicker-group:last-child {
   padding-right: 0;
-  border-right: 0 none;
 }
 .p-datepicker:not(.p-disabled) table td span:not(.p-highlight):not(.p-disabled):hover {
   background: #f3f2f1;
@@ -446,17 +486,21 @@
   outline-offset: 0;
   box-shadow: inset 0 0 0 1px #605e5c;
 }
-.p-datepicker:not(.p-disabled) .p-monthpicker .p-monthpicker-month:not(.p-highlight):not(.p-disabled):hover {
+.p-datepicker:not(.p-disabled) .p-monthpicker .p-monthpicker-month:not(.p-disabled):not(.p-highlight):hover {
   background: #f3f2f1;
 }
-.p-datepicker:not(.p-disabled) .p-monthpicker .p-monthpicker-month:not(.p-highlight):not(.p-disabled):focus {
+.p-datepicker:not(.p-disabled) .p-monthpicker .p-monthpicker-month:not(.p-disabled):focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: inset 0 0 0 1px #605e5c;
 }
-
-.p-datepicker-mask.p-component-overlay {
-  background: rgba(0, 0, 0, 0.4);
+.p-datepicker:not(.p-disabled) .p-yearpicker .p-yearpicker-year:not(.p-disabled):not(.p-highlight):hover {
+  background: #f3f2f1;
+}
+.p-datepicker:not(.p-disabled) .p-yearpicker .p-yearpicker-year:not(.p-disabled):focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 1px #605e5c;
 }
 
 @media screen and (max-width: 769px) {
@@ -646,7 +690,7 @@
 
 .p-colorpicker-panel {
   background: #323232;
-  border-color: #191919;
+  border: 1px solid #191919;
 }
 .p-colorpicker-panel .p-colorpicker-color-handle,
 .p-colorpicker-panel .p-colorpicker-hue-handle {
@@ -719,6 +763,7 @@
 }
 .p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
   padding-right: 1.5rem;
+  margin-right: -1.5rem;
 }
 .p-dropdown-panel .p-dropdown-header .p-dropdown-filter-icon {
   right: 0.5rem;
@@ -1384,7 +1429,7 @@
 .p-rating .p-rating-icon:first-child {
   margin-left: 0;
 }
-.p-rating .p-rating-icon.pi-star {
+.p-rating .p-rating-icon.pi-star-fill {
   color: #323130;
 }
 .p-rating:not(.p-disabled):not(.p-readonly) .p-rating-icon:hover {
@@ -2247,7 +2292,6 @@
   background: #ffffff;
   color: #323130;
   transition: box-shadow 0.2s;
-  outline-color: #605e5c;
 }
 .p-datatable .p-datatable-tbody > tr > td {
   text-align: left;
@@ -2289,6 +2333,10 @@
 .p-datatable .p-datatable-tbody > tr > td > .p-column-title {
   font-weight: 600;
 }
+.p-datatable .p-datatable-tbody > tr:focus {
+  outline: 1px solid #605e5c;
+  outline-offset: -1px;
+}
 .p-datatable .p-datatable-tbody > tr.p-highlight {
   background: #edebe9;
   color: #323130;
@@ -2309,6 +2357,10 @@
 .p-datatable .p-datatable-scrollable-header,
 .p-datatable .p-datatable-scrollable-footer {
   background: #faf9f8;
+}
+.p-datatable.p-datatable-scrollable > .p-datatable-wrapper > .p-datatable-table > .p-datatable-thead,
+.p-datatable.p-datatable-scrollable > .p-datatable-wrapper > .p-datatable-table > .p-datatable-tfoot {
+  background-color: #ffffff;
 }
 .p-datatable .p-datatable-loading-icon {
   font-size: 2rem;
@@ -2609,7 +2661,7 @@
   font-size: 1rem;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-left:before {
-  content: "";
+  content: "\e900";
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-right {
   font-family: "PrimeIcons" !important;
@@ -2617,7 +2669,7 @@
   font-size: 1rem;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-right:before {
-  content: "";
+  content: "\e901";
 }
 .fc.fc-unthemed .fc-toolbar .fc-button:focus {
   outline: 0 none;
@@ -2704,7 +2756,7 @@
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .fc.fc-theme-standard .fc-view-harness .fc-popover .fc-popover-header .fc-popover-close:before {
-  content: "";
+  content: "\e90b";
 }
 .fc.fc-theme-standard .fc-view-harness .fc-popover .fc-popover-header .fc-popover-close:hover {
   color: #605e5c;
@@ -2777,7 +2829,7 @@
   font-size: 1rem;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button .fc-icon-chevron-left:before {
-  content: "";
+  content: "\e900";
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button .fc-icon-chevron-right {
   font-family: "PrimeIcons" !important;
@@ -2785,7 +2837,7 @@
   font-size: 1rem;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button .fc-icon-chevron-right:before {
-  content: "";
+  content: "\e901";
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button:focus {
   outline: 0 none;
@@ -2829,6 +2881,10 @@
 .fc.fc-theme-standard .fc-toolbar .fc-button-group .fc-button:last-child {
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
+}
+.fc.fc-theme-standard .fc-highlight {
+  color: #323130;
+  background: #edebe9;
 }
 
 .p-orderlist .p-orderlist-controls {
@@ -2960,6 +3016,13 @@
 }
 .p-paginator .p-dropdown .p-dropdown-label {
   padding-right: 0;
+}
+.p-paginator .p-paginator-page-input {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+.p-paginator .p-paginator-page-input .p-inputtext {
+  max-width: 2.357rem;
 }
 .p-paginator .p-paginator-current {
   background-color: transparent;
@@ -3223,7 +3286,6 @@
   background: #ffffff;
   color: #323130;
   transition: box-shadow 0.2s;
-  outline-color: #605e5c;
 }
 .p-treetable .p-treetable-tbody > tr > td {
   text-align: left;
@@ -3256,6 +3318,10 @@
 }
 .p-treetable .p-treetable-tbody > tr > td .p-treetable-toggler + .p-checkbox .p-indeterminate .p-checkbox-icon {
   color: #323130;
+}
+.p-treetable .p-treetable-tbody > tr:focus {
+  outline: 1px solid #605e5c;
+  outline-offset: -1px;
 }
 .p-treetable .p-treetable-tbody > tr.p-highlight {
   background: #edebe9;
@@ -3443,6 +3509,9 @@
   outline-offset: 0;
   box-shadow: inset 0 0 0 1px #605e5c;
 }
+.p-fieldset.p-fieldset-toggleable .p-fieldset-legend a:hover {
+  color: #323130;
+}
 .p-fieldset.p-fieldset-toggleable .p-fieldset-legend:hover {
   background: #f3f2f1;
   border-color: #a19f9d;
@@ -3572,7 +3641,7 @@
 .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: inset 0 0 0 1px #605e5c;
+  box-shadow: inset inset 0 0 0 1px #605e5c;
 }
 .p-tabview .p-tabview-nav li:not(.p-highlight):not(.p-disabled):hover .p-tabview-nav-link {
   background: #f3f2f1;
@@ -3583,6 +3652,18 @@
   background: #ffffff;
   border-color: #0078d4;
   color: #323130;
+}
+.p-tabview .p-tabview-nav-btn.p-link {
+  background: #ffffff;
+  color: #323130;
+  width: 2.357rem;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 0;
+}
+.p-tabview .p-tabview-nav-btn.p-link:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: inset inset 0 0 0 1px #605e5c;
 }
 .p-tabview .p-tabview-panels {
   background: #ffffff;
@@ -3712,10 +3793,6 @@
   margin-left: 1rem;
 }
 
-.p-dialog-mask.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
 .p-overlaypanel {
   background: #ffffff;
   color: #323130;
@@ -3794,10 +3871,6 @@
 }
 .p-sidebar .p-sidebar-content {
   padding: 1rem;
-}
-
-.p-sidebar-mask.p-component-overlay {
-  background: rgba(0, 0, 0, 0.4);
 }
 
 .p-tooltip .p-tooltip-text {
@@ -3904,6 +3977,7 @@
   color: #323130;
   border: 0 none;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
   width: 12.5rem;
 }
 .p-contextmenu .p-menuitem-link {
@@ -3945,6 +4019,7 @@
   background: #ffffff;
   border: 0 none;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
 }
 .p-contextmenu .p-menuitem.p-menuitem-active > .p-menuitem-link {
   background: #edebe9;
@@ -4619,7 +4694,7 @@
 .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link:not(.p-disabled):focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: inset 0 0 0 1px #605e5c;
+  box-shadow: inset inset 0 0 0 1px #605e5c;
 }
 .p-tabmenu .p-tabmenu-nav .p-tabmenuitem:not(.p-highlight):not(.p-disabled):hover .p-menuitem-link {
   background: #f3f2f1;
@@ -5012,12 +5087,46 @@
   box-shadow: inset 0 0 0 1px #605e5c;
 }
 
-.p-galleria-mask.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0.9);
+.p-galleria-mask {
+  --maskbg: rgba(0, 0, 0, 0.9);
 }
 
-.p-image-mask.p-component-overlay {
-  background: rgba(0, 0, 0, 0.4);
+.p-image-mask {
+  --maskbg: rgba(0, 0, 0, 0.9);
+}
+
+.p-image-preview-indicator {
+  background-color: transparent;
+  color: #f8f9fa;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.p-image-preview-container:hover > .p-image-preview-indicator {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.p-image-toolbar {
+  padding: 1rem;
+}
+
+.p-image-action.p-link {
+  color: #f8f9fa;
+  background-color: transparent;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  margin-right: 0.5rem;
+}
+.p-image-action.p-link:last-child {
+  margin-right: 0;
+}
+.p-image-action.p-link:hover {
+  color: #f8f9fa;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.p-image-action.p-link i {
+  font-size: 1.5rem;
 }
 
 .p-avatar {
@@ -5087,10 +5196,6 @@
   line-height: 3rem;
 }
 
-.p-blockui.p-component-overlay {
-  background: rgba(0, 0, 0, 0.4);
-}
-
 .p-chip {
   background-color: #edebe9;
   color: #323130;
@@ -5149,7 +5254,7 @@
   background: #0078d4;
 }
 .p-progressbar .p-progressbar-label {
-  color: #323130;
+  color: #ffffff;
   line-height: 2px;
 }
 
@@ -5270,14 +5375,14 @@
   order: 2;
 }
 .p-datepicker .p-datepicker-prev .p-datepicker-prev-icon:before {
-  content: "";
+  content: "\e919";
 }
 .p-datepicker .p-datepicker-next {
   order: 3;
   font-size: 90%;
 }
 .p-datepicker .p-datepicker-next .p-datepicker-next-icon:before {
-  content: "";
+  content: "\e91c";
 }
 .p-datepicker .p-datepicker-buttonbar {
   border-top: 0 none;
@@ -5289,10 +5394,10 @@
   font-size: 90%;
 }
 .p-datepicker .p-timepicker .pi-chevron-up:before {
-  content: "";
+  content: "\e91c";
 }
 .p-datepicker .p-timepicker .pi-chevron-down:before {
-  content: "";
+  content: "\e919";
 }
 .p-datepicker table {
   font-size: 90%;
@@ -5412,4 +5517,11 @@
   box-shadow: none;
   outline: 1px solid #605e5c;
   outline-offset: 2px;
+}
+
+.p-datatable .p-datatable-tbody > tr.p-datatable-dragpoint-top > td {
+  box-shadow: inset 0 2px 0 0 #0078d4;
+}
+.p-datatable .p-datatable-tbody > tr.p-datatable-dragpoint-bottom > td {
+  box-shadow: inset 0 -2px 0 0 #0078d4;
 }

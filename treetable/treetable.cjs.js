@@ -73,7 +73,7 @@ var script$4 = {
             this.$emit('node-toggle', this.node);
         },
         columnProp(prop) {
-            return this.column.props ? ((this.column.type.props[prop].type === Boolean && this.column.props[prop] === '') ? true : this.column.props[prop]) : null;
+            return utils.ObjectUtils.getVNodeProp(this.column, prop);
         },
         updateStickyPosition() {
             if (this.columnProp('frozen')) {
@@ -244,7 +244,7 @@ var script$3 = {
     nodeTouched: false,
     methods: {
         columnProp(col, prop) {
-            return col.props ? ((col.type.props[prop].type === Boolean && col.props[prop] === '') ? true : col.props[prop]) : null;
+            return utils.ObjectUtils.getVNodeProp(col, prop);
         },
         toggle() {
             this.$emit('node-toggle', this.node);
@@ -541,7 +541,7 @@ var script$2 = {
     },
     methods: {
         columnProp(prop) {
-            return this.column.props ? ((this.column.type.props[prop].type === Boolean && this.column.props[prop] === '') ? true : this.column.props[prop]) : null;
+            return utils.ObjectUtils.getVNodeProp(this.column, prop);
         },
         updateStickyPosition() {
             if (this.columnProp('frozen')) {
@@ -731,7 +731,7 @@ var script$1 = {
     },
     methods: {
         columnProp(prop) {
-            return this.column.props ? ((this.column.type.props[prop].type === Boolean && this.column.props[prop] === '') ? true : this.column.props[prop]) : null;
+            return utils.ObjectUtils.getVNodeProp(this.column, prop);
         },
         updateStickyPosition() {
             if (this.columnProp('frozen')) {
@@ -987,7 +987,7 @@ var script = {
     },
     methods: {
         columnProp(col, prop) {
-            return col.props ? ((col.type.props[prop].type === Boolean && col.props[prop] === '') ? true : col.props[prop]) : null;
+            return utils.ObjectUtils.getVNodeProp(col, prop);
         },
         onNodeToggle(node) {
             const key = node.key;
@@ -1400,7 +1400,7 @@ var script = {
                 else if (this.columnResizeMode === 'expand') {
                     this.$refs.table.style.width = this.$refs.table.offsetWidth + delta + 'px';
 
-                    if (!this.scrollable) 
+                    if (!this.scrollable)
                         this.resizeColumnElement.style.width = newColumnWidth + 'px';
                     else
                         this.resizeTableCells(newColumnWidth);
@@ -1679,19 +1679,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event))),
           alwaysShow: $props.alwaysShowPaginator
         }, vue.createSlots({ _: 2 }, [
-          (_ctx.$slots.paginatorLeft)
+          (_ctx.$slots.paginatorstart)
             ? {
-                name: "left",
+                name: "start",
                 fn: vue.withCtx(() => [
-                  vue.renderSlot(_ctx.$slots, "paginatorLeft")
+                  vue.renderSlot(_ctx.$slots, "paginatorstart")
                 ])
               }
             : undefined,
-          (_ctx.$slots.paginatorRight)
+          (_ctx.$slots.paginatorend)
             ? {
-                name: "right",
+                name: "end",
                 fn: vue.withCtx(() => [
-                  vue.renderSlot(_ctx.$slots, "paginatorRight")
+                  vue.renderSlot(_ctx.$slots, "paginatorend")
                 ])
               }
             : undefined
@@ -1808,19 +1808,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onPage: _cache[2] || (_cache[2] = $event => ($options.onPage($event))),
           alwaysShow: $props.alwaysShowPaginator
         }, vue.createSlots({ _: 2 }, [
-          (_ctx.$slots.paginatorLeft)
+          (_ctx.$slots.paginatorstart)
             ? {
-                name: "left",
+                name: "start",
                 fn: vue.withCtx(() => [
-                  vue.renderSlot(_ctx.$slots, "paginatorLeft")
+                  vue.renderSlot(_ctx.$slots, "paginatorstart")
                 ])
               }
             : undefined,
-          (_ctx.$slots.paginatorRight)
+          (_ctx.$slots.paginatorend)
             ? {
-                name: "right",
+                name: "end",
                 fn: vue.withCtx(() => [
-                  vue.renderSlot(_ctx.$slots, "paginatorRight")
+                  vue.renderSlot(_ctx.$slots, "paginatorend")
                 ])
               }
             : undefined

@@ -12,7 +12,7 @@ var script$1 = {
             default: null
         },
         template: {
-            type: Object,
+            type: Function,
             default: null
         },
         expandedKeys: {
@@ -34,7 +34,7 @@ var script$1 = {
             if (this.isActive(item) && this.activeItem === null) {
                 this.activeItem = item;
             }
-            
+
             if (this.disabled(item)) {
                 event.preventDefault();
                 return;
@@ -80,6 +80,9 @@ var script$1 = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         }
     }
 };
@@ -99,7 +102,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   return (vue.openBlock(), vue.createBlock("ul", _hoisted_1$1, [
     (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
       return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-        key: item.label + i.toString()
+        key: $options.label(item) + i.toString()
       }, [
         ($options.visible(item) && !item.separator)
           ? (vue.openBlock(), vue.createBlock("li", {
@@ -116,18 +119,18 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           to: item.to,
                           custom: ""
                         }, {
-                          default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
+                          default: vue.withCtx(({navigate, href, isActive:isRouterActive, isExactActive}) => [
                             vue.createVNode("a", {
                               href: href,
-                              class: $options.linkClass(item, {isActive, isExactActive}),
+                              class: $options.linkClass(item, {isRouterActive, isExactActive}),
                               onClick: $event => ($options.onItemClick($event, item, navigate)),
                               role: "treeitem",
-                              "aria-expanded": isActive(item)
+                              "aria-expanded": $options.isActive(item)
                             }, [
                               vue.createVNode("span", {
                                 class: ['p-menuitem-icon', item.icon]
                               }, null, 2),
-                              vue.createVNode("span", _hoisted_2$1, vue.toDisplayString(item.label), 1)
+                              vue.createVNode("span", _hoisted_2$1, vue.toDisplayString($options.label(item)), 1)
                             ], 10, ["href", "onClick", "aria-expanded"])
                           ]),
                           _: 2
@@ -151,7 +154,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           vue.createVNode("span", {
                             class: ['p-menuitem-icon', item.icon]
                           }, null, 2),
-                          vue.createVNode("span", _hoisted_3$1, vue.toDisplayString(item.label), 1)
+                          vue.createVNode("span", _hoisted_3$1, vue.toDisplayString($options.label(item)), 1)
                         ], 10, ["href", "target", "onClick", "aria-expanded", "tabindex"]))
                   ], 64))
                 : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.template), {
@@ -164,7 +167,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     ($options.visible(item) && item.items)
                       ? (vue.openBlock(), vue.createBlock(_component_PanelMenuSub, {
                           model: item.items,
-                          key: item.label + '_sub_',
+                          key: $options.label(item) + '_sub_',
                           template: $props.template,
                           expandedKeys: $props.expandedKeys,
                           onItemToggle: _cache[1] || (_cache[1] = $event => (_ctx.$emit('item-toggle', $event))),
@@ -284,6 +287,9 @@ var script = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         }
     },
     components: {
@@ -311,7 +317,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
     (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, index) => {
       return (vue.openBlock(), vue.createBlock(vue.Fragment, {
-        key: item.label + '_' + index
+        key: $options.label(item) + '_' + index
       }, [
         ($options.visible(item))
           ? (vue.openBlock(), vue.createBlock("div", {
@@ -344,7 +350,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                       class: $options.getPanelIcon(item)
                                     }, null, 2))
                                   : vue.createCommentVNode("", true),
-                                vue.createVNode("span", _hoisted_2, vue.toDisplayString(item.label), 1)
+                                vue.createVNode("span", _hoisted_2, vue.toDisplayString($options.label(item)), 1)
                               ], 10, ["href", "onClick"])
                             ]),
                             _: 2
@@ -371,7 +377,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   class: $options.getPanelIcon(item)
                                 }, null, 2))
                               : vue.createCommentVNode("", true),
-                            vue.createVNode("span", _hoisted_3, vue.toDisplayString(item.label), 1)
+                            vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
                           ], 10, ["href", "onClick", "tabindex", "aria-expanded", "id", "aria-controls"]))
                     ], 64))
                   : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {

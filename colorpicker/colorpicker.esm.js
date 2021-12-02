@@ -4,7 +4,7 @@ import { openBlock, createBlock, createCommentVNode, Teleport, createVNode, Tran
 
 var script = {
     name: 'ColorPicker',
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'change', 'show', 'hide'],
     props: {
         modelValue: {
             type: null,
@@ -116,6 +116,7 @@ var script = {
             this.updateColorHandle();
             this.updateInput();
             this.updateModel();
+            this.$emit('change', {event: event, value: this.modelValue});
         },
         pickHue(event) {
             let top = this.hueView.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
@@ -130,6 +131,7 @@ var script = {
             this.updateHue();
             this.updateModel();
             this.updateInput();
+            this.$emit('change', {event: event, value: this.modelValue});
         },
         updateModel() {
             switch(this.format) {
@@ -322,12 +324,15 @@ var script = {
             if (this.autoZIndex) {
                 ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
             }
+            
+            this.$emit('show');
         },
         onOverlayLeave() {
             this.unbindOutsideClickListener();
             this.unbindScrollListener();
             this.unbindResizeListener();
             this.clearRefs();
+            this.$emit('hide');
         },
         onOverlayAfterLeave(el) {
             if (this.autoZIndex) {

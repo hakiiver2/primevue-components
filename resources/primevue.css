@@ -93,6 +93,10 @@ button {
     user-select: none;
 }
 
+.p-link:disabled {
+	cursor: default;
+}
+
 /* Non vue overlay animations */
 .p-connected-overlay {
     opacity: 0;
@@ -162,6 +166,7 @@ button {
     width: 1px;
     word-wrap: normal !important;
 }
+
 .p-badge {
     display: inline-block;
     border-radius: 10px;
@@ -271,6 +276,7 @@ button {
     cursor: pointer;
     user-select: none;
     vertical-align: bottom;
+    position: relative;
 }
 
 .p-checkbox-box {
@@ -278,6 +284,7 @@ button {
     justify-content: center;
     align-items: center;
 }
+
 .p-colorpicker-panel .p-colorpicker-color {
      background: transparent url("./images/color.png") no-repeat left top; 
 }
@@ -444,6 +451,7 @@ button {
 
 .p-tooltip .p-tooltip-text {
    white-space: pre-line;
+   word-break: break-word;
 }
 
 .p-tooltip-arrow {

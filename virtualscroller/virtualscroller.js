@@ -368,7 +368,7 @@ this.primevue.virtualscroller = (function (vue) {
                         isHorizontal ? scrollTo(calculateCoord(newFirst, itemSize, contentPadding.left), 0) : scrollTo(0, calculateCoord(newFirst, itemSize, contentPadding.top));
                     }
 
-                    this.first = newFirst.index;
+                    this.first = newFirst;
                 }
             },
             scrollInView(index, to, behavior = 'auto') {

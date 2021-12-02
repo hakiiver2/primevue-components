@@ -21,11 +21,11 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("input", {
+  return (vue.openBlock(), vue.createBlock("input", vue.mergeProps({
     class: ['p-inputtext p-component', {'p-filled': $options.filled}],
     value: $props.modelValue,
     onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args)))
-  }, null, 42, ["value"]))
+  }, _ctx.$attrs), null, 16, ["value"]))
 }
 
 script.render = render;

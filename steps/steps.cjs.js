@@ -64,6 +64,9 @@ var script = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         }
     },
     computed: {
@@ -119,7 +122,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 role: "presentation"
                               }, [
                                 vue.createVNode("span", _hoisted_2, vue.toDisplayString(index + 1), 1),
-                                vue.createVNode("span", _hoisted_3, vue.toDisplayString(item.label), 1)
+                                vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
                               ], 10, ["href", "onClick"])
                             ]),
                             _: 2
@@ -130,7 +133,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             role: "presentation"
                           }, [
                             vue.createVNode("span", _hoisted_4, vue.toDisplayString(index + 1), 1),
-                            vue.createVNode("span", _hoisted_5, vue.toDisplayString(item.label), 1)
+                            vue.createVNode("span", _hoisted_5, vue.toDisplayString($options.label(item)), 1)
                           ], 2))
                     ], 64))
                   : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {

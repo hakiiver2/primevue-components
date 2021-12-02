@@ -2,7 +2,7 @@ import ConfirmationEventBus from 'primevue/confirmationeventbus';
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
-import { resolveComponent, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, mergeProps, toDisplayString, createCommentVNode } from 'vue';
+import { resolveComponent, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, mergeProps, toDisplayString, resolveDynamicComponent, createCommentVNode } from 'vue';
 
 var script = {
     name: 'ConfirmPopup',
@@ -206,7 +206,10 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-confirm-popup-content" };
+const _hoisted_1 = {
+  key: 0,
+  class: "p-confirm-popup-content"
+};
 const _hoisted_2 = { class: "p-confirm-popup-message" };
 const _hoisted_3 = { class: "p-confirm-popup-footer" };
 
@@ -229,10 +232,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, _ctx.$attrs, {
               onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
             }), [
-              createVNode("div", _hoisted_1, [
-                createVNode("i", { class: $options.iconClass }, null, 2),
-                createVNode("span", _hoisted_2, toDisplayString($data.confirmation.message), 1)
-              ]),
+              (!_ctx.$slots.message)
+                ? (openBlock(), createBlock("div", _hoisted_1, [
+                    createVNode("i", { class: $options.iconClass }, null, 2),
+                    createVNode("span", _hoisted_2, toDisplayString($data.confirmation.message), 1)
+                  ]))
+                : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.message), {
+                    key: 1,
+                    message: $data.confirmation
+                  }, null, 8, ["message"])),
               createVNode("div", _hoisted_3, [
                 createVNode(_component_CPButton, {
                   label: $options.rejectLabel,

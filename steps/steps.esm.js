@@ -62,6 +62,9 @@ var script = {
         },
         disabled(item) {
             return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
+        },
+        label(item) {
+            return (typeof item.label === 'function' ? item.label() : item.label);
         }
     },
     computed: {
@@ -117,7 +120,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 role: "presentation"
                               }, [
                                 createVNode("span", _hoisted_2, toDisplayString(index + 1), 1),
-                                createVNode("span", _hoisted_3, toDisplayString(item.label), 1)
+                                createVNode("span", _hoisted_3, toDisplayString($options.label(item)), 1)
                               ], 10, ["href", "onClick"])
                             ]),
                             _: 2
@@ -128,7 +131,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             role: "presentation"
                           }, [
                             createVNode("span", _hoisted_4, toDisplayString(index + 1), 1),
-                            createVNode("span", _hoisted_5, toDisplayString(item.label), 1)
+                            createVNode("span", _hoisted_5, toDisplayString($options.label(item)), 1)
                           ], 2))
                     ], 64))
                   : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.item), {

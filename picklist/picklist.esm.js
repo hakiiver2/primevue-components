@@ -528,6 +528,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (openBlock(), createBlock("div", _hoisted_1, [
     createVNode("div", _hoisted_2, [
+      renderSlot(_ctx.$slots, "sourcecontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-up",
@@ -547,12 +548,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "button",
         icon: "pi pi-angle-double-down",
         onClick: _cache[4] || (_cache[4] = $event => ($options.moveBottom($event, 0)))
-      })
+      }),
+      renderSlot(_ctx.$slots, "sourcecontrolsend")
     ]),
     createVNode("div", _hoisted_3, [
-      (_ctx.$slots.sourceHeader)
+      (_ctx.$slots.sourceheader)
         ? (openBlock(), createBlock("div", _hoisted_4, [
-            renderSlot(_ctx.$slots, "sourceHeader")
+            renderSlot(_ctx.$slots, "sourceheader")
           ]))
         : createCommentVNode("", true),
       createVNode(TransitionGroup, {
@@ -590,6 +592,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, 8, ["style"])
     ]),
     createVNode("div", _hoisted_5, [
+      renderSlot(_ctx.$slots, "movecontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-right",
@@ -609,12 +612,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "button",
         icon: "pi pi-angle-double-left",
         onClick: $options.moveAllToSource
-      }, null, 8, ["onClick"])
+      }, null, 8, ["onClick"]),
+      renderSlot(_ctx.$slots, "movecontrolsend")
     ]),
     createVNode("div", _hoisted_6, [
-      (_ctx.$slots.targetHeader)
+      (_ctx.$slots.targetheader)
         ? (openBlock(), createBlock("div", _hoisted_7, [
-            renderSlot(_ctx.$slots, "targetHeader")
+            renderSlot(_ctx.$slots, "targetheader")
           ]))
         : createCommentVNode("", true),
       createVNode(TransitionGroup, {
@@ -652,6 +656,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, 8, ["style"])
     ]),
     createVNode("div", _hoisted_8, [
+      renderSlot(_ctx.$slots, "targetcontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-up",
@@ -671,7 +676,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "button",
         icon: "pi pi-angle-double-down",
         onClick: _cache[10] || (_cache[10] = $event => ($options.moveBottom($event, 1)))
-      })
+      }),
+      renderSlot(_ctx.$slots, "targetcontrolsend")
     ])
   ]))
 }

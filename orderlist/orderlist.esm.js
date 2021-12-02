@@ -345,6 +345,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (openBlock(), createBlock("div", _hoisted_1, [
     createVNode("div", _hoisted_2, [
+      renderSlot(_ctx.$slots, "controlsstart"),
       createVNode(_component_OLButton, {
         type: "button",
         icon: "pi pi-angle-up",
@@ -364,7 +365,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "button",
         icon: "pi pi-angle-double-down",
         onClick: $options.moveBottom
-      }, null, 8, ["onClick"])
+      }, null, 8, ["onClick"]),
+      renderSlot(_ctx.$slots, "controlsend")
     ]),
     createVNode("div", _hoisted_3, [
       (_ctx.$slots.header)
