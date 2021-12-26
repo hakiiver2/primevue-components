@@ -45,6 +45,7 @@ export declare namespace FilterService {
         dateIs(value: any, filter: string): boolean;
         dateIsNot(value: any, filter: string): boolean;
         dateBefore(value: any, filter: string): boolean;
+        dateOnOrBefore(value: any, filter: string): boolean;
         dateAfter(value: any, filter: string): boolean;
     }
     export function register(rule: string, fn: (...arg: any[]) => boolean): void;

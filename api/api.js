@@ -18,6 +18,7 @@ this.primevue.api = (function (exports, utils) {
         DATE_IS : 'dateIs',
         DATE_IS_NOT : 'dateIsNot',
         DATE_BEFORE : 'dateBefore',
+        DATE_ON_OR_BEFORE : 'dateOnOrBefore',
         DATE_AFTER : 'dateAfter'
     };
 
@@ -245,6 +246,17 @@ this.primevue.api = (function (exports, utils) {
                 }
 
                 return value.getTime() < filter.getTime();
+            },
+            dateOnOrBefore(value, filter) {
+                if (filter === undefined || filter === null) {
+                    return true;
+                }
+        
+                if (value === undefined || value === null) {
+                    return false;
+                }
+
+                return value.getTime() <= filter.getTime();
             },
             dateAfter(value, filter) {
                 if (filter === undefined || filter === null) {

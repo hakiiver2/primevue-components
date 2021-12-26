@@ -12,7 +12,7 @@ type TreeTableSortOrderType = 1 | 0 | -1 | undefined | null;
 
 type TreeTableSortModeType = 'single' | 'multiple' | undefined;
 
-type TreeTableFilterMatchModeType = 'startsWith' | 'contains' | 'notContains' | 'endsWith' | 'equals' | 'notEquals' | 'in' | 'lt' | 'lte' | 'gt' | 'gte' | 'between' | 'dateIs' | 'dateIsNot' | 'dateBefore' | 'dateAfter' | undefined;
+type TreeTableFilterMatchModeType = 'startsWith' | 'contains' | 'notContains' | 'endsWith' | 'equals' | 'notEquals' | 'in' | 'lt' | 'lte' | 'gt' | 'gte' | 'between' | 'dateIs' | 'dateIsNot' | 'dateBefore' | 'dateOnOrBefore' | 'dateAfter' | undefined;
 
 type TreeTableSelectionModeType = 'single' | 'multiple' | undefined;
 

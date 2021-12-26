@@ -23,6 +23,7 @@ const defaultOptions = {
         dateIs: 'Date is',
         dateIsNot: 'Date is not',
         dateBefore: 'Date is before',
+        dateOnOrBefore: 'Date is on or before',
         dateAfter: 'Date is after',
         clear: 'Clear',
         apply: 'Apply',
