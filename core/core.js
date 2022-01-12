@@ -1091,7 +1091,27 @@ this.primevue.api = (function (exports, utils) {
                     return false;
                 }
 
-                return value.getTime() < filter.getTime();
+                const year1 = value.getFullYear();
+                const month1 = value.getMonth() + 1;
+                const day1 = value.getDate();
+
+                const year2 = filter.getFullYear();
+                const month2 = filter.getMonth() + 1;
+                const day2 = filter.getDate();
+
+
+                if (year1 == year2) {
+                    if (month1 == month2) {
+                        return day1 < day2;
+                    } else {
+                        return month1 < month2;
+                    }
+                } else {
+                    return year1 < year2;
+                }
+
+
+
             },
             dateOnOrBefore(value, filter) {
                 if (filter === undefined || filter === null) {
@@ -1101,8 +1121,24 @@ this.primevue.api = (function (exports, utils) {
                 if (value === undefined || value === null) {
                     return false;
                 }
+                const year1 = value.getFullYear();
+                const month1 = value.getMonth() + 1;
+                const day1 = value.getDate();
 
-                return value.getTime() <= filter.getTime();
+                const year2 = filter.getFullYear();
+                const month2 = filter.getMonth() + 1;
+                const day2 = filter.getDate();
+
+
+                if (year1 == year2) {
+                    if (month1 == month2) {
+                        return day1 <= day2;
+                    } else {
+                        return month1 < month2;
+                    }
+                } else {
+                    return year1 < year2;
+                }
             },
             dateAfter(value, filter) {
                 if (filter === undefined || filter === null) {
@@ -1113,7 +1149,25 @@ this.primevue.api = (function (exports, utils) {
                     return false;
                 }
 
-                return value.getTime() > filter.getTime();
+                const year1 = value.getFullYear();
+                const month1 = value.getMonth() + 1;
+                const day1 = value.getDate();
+
+                const year2 = filter.getFullYear();
+                const month2 = filter.getMonth() + 1;
+                const day2 = filter.getDate();
+
+
+                if (year1 == year2) {
+                    if (month1 == month2) {
+                        return day1 >= day2;
+                    } else {
+                        return month1 > month2;
+                    }
+                } else {
+                    return year1 > year2;
+                }
+
             }
         },
         register(rule, fn) {
@@ -1420,6 +1474,7 @@ this.primevue.config = (function (exports, vue, api) {
             monthNames: ["January","February","March","April","May","June","July","August","September","October","November","December"],
             monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             today: 'Today',
+            now: 'Now',
             weekHeader: 'Wk',
             firstDayOfWeek: 0,
             dateFormat: 'mm/dd/yy',
@@ -1451,6 +1506,7 @@ this.primevue.config = (function (exports, vue, api) {
                 api.FilterMatchMode.DATE_IS,
                 api.FilterMatchMode.DATE_IS_NOT,
                 api.FilterMatchMode.DATE_BEFORE,
+                api.FilterMatchMode.DATE_ON_OR_BEFORE,
                 api.FilterMatchMode.DATE_AFTER
             ]
         },

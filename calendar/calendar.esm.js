@@ -975,6 +975,11 @@ var script = {
             this.$emit('today-click', date);
             event.preventDefault();
         },
+        onNowButtonClick(event) {
+            let date = new Date();
+            this.updateCurrentTimeMeta(date);
+            this.onTimePickerElementMouseUp(event);
+        },
         onClearButtonClick(event) {
             this.updateModel(null);
             this.overlayVisible = false;
@@ -2277,6 +2282,9 @@ var script = {
         todayLabel() {
             return this.$primevue.config.locale.today;
         },
+        nowLabel() {
+            return this.$primevue.config.locale.now;
+        },
         clearLabel() {
             return this.$primevue.config.locale.clear;
         },
@@ -2425,7 +2433,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, [
       createVNode(Transition, {
         name: "p-connected-overlay",
-        onEnter: _cache[61] || (_cache[61] = $event => ($options.onOverlayEnter($event))),
+        onEnter: _cache[62] || (_cache[62] = $event => ($options.onOverlayEnter($event))),
         onAfterEnter: $options.onOverlayEnterComplete,
         onAfterLeave: $options.onOverlayAfterLeave,
         onLeave: $options.onOverlayLeave
@@ -2437,8 +2445,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ref: $options.overlayRef,
                 class: $options.panelStyleClass,
                 role: $props.inline ? null : 'dialog',
-                onClick: _cache[59] || (_cache[59] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
-                onMouseup: _cache[60] || (_cache[60] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
+                onClick: _cache[60] || (_cache[60] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                onMouseup: _cache[61] || (_cache[61] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
               }, [
                 (!$props.timeOnly)
                   ? (openBlock(), createBlock(Fragment, { key: 0 }, [
@@ -2778,17 +2786,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   : createCommentVNode("", true),
                 ($props.showButtonBar)
                   ? (openBlock(), createBlock("div", _hoisted_31, [
-                      createVNode(_component_CalendarButton, {
-                        type: "button",
-                        label: $options.todayLabel,
-                        onClick: _cache[57] || (_cache[57] = $event => ($options.onTodayButtonClick($event))),
-                        class: "p-button-text",
-                        onKeydown: $options.onContainerButtonKeydown
-                      }, null, 8, ["label", "onKeydown"]),
+                      ($props.timeOnly)
+                        ? (openBlock(), createBlock(_component_CalendarButton, {
+                            key: 0,
+                            type: "button",
+                            label: $options.nowLabel,
+                            onClick: _cache[57] || (_cache[57] = $event => ($options.onNowButtonClick($event))),
+                            class: "p-button-text",
+                            onKeydown: $options.onContainerButtonKeydown
+                          }, null, 8, ["label", "onKeydown"]))
+                        : (openBlock(), createBlock(_component_CalendarButton, {
+                            key: 1,
+                            type: "button",
+                            label: $options.todayLabel,
+                            onClick: _cache[58] || (_cache[58] = $event => ($options.onTodayButtonClick($event))),
+                            class: "p-button-text",
+                            onKeydown: $options.onContainerButtonKeydown
+                          }, null, 8, ["label", "onKeydown"])),
                       createVNode(_component_CalendarButton, {
                         type: "button",
                         label: $options.clearLabel,
-                        onClick: _cache[58] || (_cache[58] = $event => ($options.onClearButtonClick($event))),
+                        onClick: _cache[59] || (_cache[59] = $event => ($options.onClearButtonClick($event))),
                         class: "p-button-text",
                         onKeydown: $options.onContainerButtonKeydown
                       }, null, 8, ["label", "onKeydown"])

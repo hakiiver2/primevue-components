@@ -40,6 +40,7 @@ interface PrimeVueLocaleOptions {
     monthNames: string[];
     monthNamesShort: string[];
     today?: string;
+    now?: string;
     weekHeader?: string;
     firstDayOfWeek?: number;
     dateFormat?: string;

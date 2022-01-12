@@ -131,7 +131,8 @@
                         </div>
                     </div>
                     <div class="p-datepicker-buttonbar" v-if="showButtonBar">
-                        <CalendarButton type="button" :label="todayLabel" @click="onTodayButtonClick($event)" class="p-button-text" @keydown="onContainerButtonKeydown"/>
+                        <CalendarButton v-if="timeOnly" type="button" :label="nowLabel" @click="onNowButtonClick($event)" class="p-button-text" @keydown="onContainerButtonKeydown"/>
+                        <CalendarButton v-else type="button" :label="todayLabel" @click="onTodayButtonClick($event)" class="p-button-text" @keydown="onContainerButtonKeydown"/>
                         <CalendarButton type="button" :label="clearLabel" @click="onClearButtonClick($event)" class="p-button-text" @keydown="onContainerButtonKeydown"/>
                     </div>
                     <slot name="footer"></slot>
@@ -1117,6 +1118,11 @@ export default {
             this.onDateSelect(null, dateMeta);
             this.$emit('today-click', date);
             event.preventDefault();
+        },
+        onNowButtonClick(event) {
+            let date = new Date();
+            this.updateCurrentTimeMeta(date)
+            this.onTimePickerElementMouseUp(event)
         },
         onClearButtonClick(event) {
             this.updateModel(null);
@@ -2435,6 +2441,9 @@ export default {
         },
         todayLabel() {
             return this.$primevue.config.locale.today;
+        },
+        nowLabel() {
+            return this.$primevue.config.locale.now;
         },
         clearLabel() {
             return this.$primevue.config.locale.clear;

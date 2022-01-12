@@ -42,6 +42,7 @@ const defaultOptions = {
         monthNames: ["January","February","March","April","May","June","July","August","September","October","November","December"],
         monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
         today: 'Today',
+        now: 'Now',
         weekHeader: 'Wk',
         firstDayOfWeek: 0,
         dateFormat: 'mm/dd/yy',
@@ -73,6 +74,7 @@ const defaultOptions = {
             api.FilterMatchMode.DATE_IS,
             api.FilterMatchMode.DATE_IS_NOT,
             api.FilterMatchMode.DATE_BEFORE,
+            api.FilterMatchMode.DATE_ON_OR_BEFORE,
             api.FilterMatchMode.DATE_AFTER
         ]
     },
