@@ -988,6 +988,9 @@ var script = {
             let date = new Date();
             this.updateCurrentTimeMeta(date);
             this.onTimePickerElementMouseUp(event);
+
+            this.overlayVisible = false;
+            event.preventDefault();
         },
         onClearButtonClick(event) {
             this.updateModel(null);
