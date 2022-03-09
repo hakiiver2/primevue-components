@@ -1,9 +1,9 @@
 <template>
-   <td :style="containerStyle" :class="containerClass">
+    <td :style="containerStyle" :class="containerClass">
         <button type="button" class="p-treetable-toggler p-link" @click="toggle" v-if="columnProp('expander')" :style="togglerStyle" tabindex="-1" v-ripple>
             <i :class="togglerIcon"></i>
         </button>
-        <div class="p-checkbox p-treetable-checkbox p-component" @click="toggleCheckbox" v-if="checkboxSelectionMode && columnProp('expander')" role="checkbox" :aria-checked="checked">
+        <div :class="['p-checkbox p-treetable-checkbox p-component', {'p-checkbox-focused': checkboxFocused}]" @click="toggleCheckbox" v-if="checkboxSelectionMode && columnProp('expander')" role="checkbox" :aria-checked="checked">
             <div class="p-hidden-accessible">
                 <input type="checkbox" @focus="onCheckboxFocus" @blur="onCheckboxBlur" />
             </div>
@@ -91,7 +91,7 @@ export default {
                     let right = 0;
                     let next = this.$el.nextElementSibling;
                     if (next) {
-                        right = DomHandler.getOuterWidth(next) + parseFloat(next.style.right);
+                        right = DomHandler.getOuterWidth(next) + parseFloat(next.style.right || 0);
                     }
                     this.styleObject.right = right + 'px';
                 }
@@ -99,7 +99,7 @@ export default {
                     let left = 0;
                     let prev = this.$el.previousElementSibling;
                     if (prev) {
-                        left = DomHandler.getOuterWidth(prev) + parseFloat(prev.style.left);
+                        left = DomHandler.getOuterWidth(prev) + parseFloat(prev.style.left || 0);
                     }
                     this.styleObject.left = left + 'px';
                 }
@@ -112,7 +112,7 @@ export default {
             this.$emit('checkbox-toggle');
         },
         onCheckboxFocus() {
-           this.checkboxFocused = true;
+            this.checkboxFocused = true;
         },
         onCheckboxBlur() {
             this.checkboxFocused = false;

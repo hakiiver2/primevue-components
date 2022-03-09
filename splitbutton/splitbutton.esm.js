@@ -1,7 +1,7 @@
 import Button from 'primevue/button';
 import TieredMenu from 'primevue/tieredmenu';
 import { UniqueComponentId } from 'primevue/utils';
-import { resolveComponent, openBlock, createBlock, createVNode, mergeProps, withScopeId } from 'vue';
+import { resolveComponent, openBlock, createBlock, renderSlot, createVNode, mergeProps, withScopeId } from 'vue';
 
 var script = {
     name: 'SplitButton',
@@ -56,7 +56,7 @@ var script = {
     }
 };
 
-const _withId = /*#__PURE__*/withScopeId("data-v-5bb97d91");
+const _withId = /*#__PURE__*/withScopeId("data-v-3d44cde8");
 
 const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $options) => {
   const _component_PVSButton = resolveComponent("PVSButton");
@@ -66,14 +66,16 @@ const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $optio
     class: $options.containerClass,
     style: $props.style
   }, [
-    createVNode(_component_PVSButton, mergeProps({
-      type: "button",
-      class: "p-splitbutton-defaultbutton"
-    }, _ctx.$attrs, {
-      icon: $props.icon,
-      label: $props.label,
-      onClick: $options.onDefaultButtonClick
-    }), null, 16, ["icon", "label", "onClick"]),
+    renderSlot(_ctx.$slots, "default", {}, () => [
+      createVNode(_component_PVSButton, mergeProps({
+        type: "button",
+        class: "p-splitbutton-defaultbutton"
+      }, _ctx.$attrs, {
+        icon: $props.icon,
+        label: $props.label,
+        onClick: $options.onDefaultButtonClick
+      }), null, 16, ["icon", "label", "onClick"])
+    ]),
     createVNode(_component_PVSButton, {
       type: "button",
       class: "p-splitbutton-menubutton",
@@ -122,10 +124,10 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-splitbutton[data-v-5bb97d91] {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: relative;\n}\n.p-splitbutton .p-splitbutton-defaultbutton[data-v-5bb97d91] {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0;\n    border-right: 0 none;\n}\n.p-splitbutton-menubutton[data-v-5bb97d91] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0;\n}\n.p-splitbutton .p-menu[data-v-5bb97d91] {\n    min-width: 100%;\n}\n.p-fluid .p-splitbutton[data-v-5bb97d91]  {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n";
+var css_248z = "\n.p-splitbutton[data-v-3d44cde8] {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: relative;\n}\n.p-splitbutton .p-splitbutton-defaultbutton[data-v-3d44cde8],\n.p-splitbutton.p-button-rounded > .p-splitbutton-defaultbutton.p-button[data-v-3d44cde8],\n.p-splitbutton.p-button-outlined > .p-splitbutton-defaultbutton.p-button[data-v-3d44cde8] {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0;\n    border-right: 0 none;\n}\n.p-splitbutton-menubutton[data-v-3d44cde8],\n.p-splitbutton.p-button-rounded > .p-splitbutton-menubutton.p-button[data-v-3d44cde8],\n.p-splitbutton.p-button-outlined > .p-splitbutton-menubutton.p-button[data-v-3d44cde8] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0;\n}\n.p-splitbutton .p-menu[data-v-3d44cde8] {\n    min-width: 100%;\n}\n.p-fluid .p-splitbutton[data-v-3d44cde8]  {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n";
 styleInject(css_248z);
 
 script.render = render;
-script.__scopeId = "data-v-5bb97d91";
+script.__scopeId = "data-v-3d44cde8";
 
 export { script as default };

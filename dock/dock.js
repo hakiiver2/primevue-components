@@ -1,10 +1,11 @@
 this.primevue = this.primevue || {};
-this.primevue.dock = (function (Ripple, vue) {
+this.primevue.dock = (function (Ripple, Tooltip, vue) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+    var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
 
     var script$1 = {
         name: 'DockSub',
@@ -73,7 +74,8 @@ this.primevue.dock = (function (Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default['default'],
+            'tooltip': Tooltip__default['default']
         }
     };
 
@@ -243,4 +245,4 @@ this.primevue.dock = (function (Ripple, vue) {
 
     return script;
 
-}(primevue.ripple, Vue));
+}(primevue.ripple, primevue.tooltip, Vue));

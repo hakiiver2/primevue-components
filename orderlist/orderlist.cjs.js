@@ -41,6 +41,10 @@ var script = {
         breakpoint: {
             type: String,
             default: '960px'
+        },
+        stripedRows: {
+            type: Boolean,
+            default: false
         }
     },
     itemTouched: false,
@@ -326,6 +330,11 @@ var script = {
         }
     },
     computed: {
+        containerClass() {
+            return ['p-orderlist p-component', {
+                'p-orderlist-striped': this.stripedRows
+            }];
+        },
         attributeSelector() {
             return utils.UniqueComponentId();
         }
@@ -338,10 +347,9 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-orderlist p-component" };
-const _hoisted_2 = { class: "p-orderlist-controls" };
-const _hoisted_3 = { class: "p-orderlist-list-container" };
-const _hoisted_4 = {
+const _hoisted_1 = { class: "p-orderlist-controls" };
+const _hoisted_2 = { class: "p-orderlist-list-container" };
+const _hoisted_3 = {
   key: 0,
   class: "p-orderlist-header"
 };
@@ -350,8 +358,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_OLButton = vue.resolveComponent("OLButton");
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-    vue.createVNode("div", _hoisted_2, [
+  return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+    vue.createVNode("div", _hoisted_1, [
       vue.renderSlot(_ctx.$slots, "controlsstart"),
       vue.createVNode(_component_OLButton, {
         type: "button",
@@ -375,9 +383,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8, ["onClick"]),
       vue.renderSlot(_ctx.$slots, "controlsend")
     ]),
-    vue.createVNode("div", _hoisted_3, [
+    vue.createVNode("div", _hoisted_2, [
       (_ctx.$slots.header)
-        ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
+        ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
             vue.renderSlot(_ctx.$slots, "header")
           ]))
         : vue.createCommentVNode("", true),
@@ -414,7 +422,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 3
       }, 8, ["style"])
     ])
-  ]))
+  ], 2))
 }
 
 function styleInject(css, ref) {

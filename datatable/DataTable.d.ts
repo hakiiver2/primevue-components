@@ -1,6 +1,7 @@
 import { VNode } from 'vue';
-import { ClassComponent, GlobalComponentConstructor } from '../ts-helpers';
+import { ClassComponent, GlobalComponentConstructor, Nullable } from '../ts-helpers';
 import Column from '../column';
+import { VirtualScrollerProps } from '../virtualscroller';
 
 type DataTablePaginatorPositionType = 'top' | 'bottom' | 'both' | undefined;
 
@@ -54,7 +55,7 @@ export interface DataTableFilterMetaData {
      * Filter match mode
      * @see DataTableFilterMatchModeType
      */
-    matchMode: DataTableFilterMatchModeType;
+    matchMode: string;
 }
 
 export interface DataTableOperatorFilterMetaData {
@@ -232,6 +233,17 @@ export interface DataTableRowUnselectAllEvent {
      * Browser event
      */
     originalEvent: Event;
+}
+
+export interface DataTableSelectAllChangeEvent {
+    /**
+     * Browser event
+     */
+    originalEvent: Event;
+    /**
+     * Whether all data is selected.
+     */
+    checked: boolean;
 }
 
 export interface DataTableColumnResizeEndEvent {
@@ -607,6 +619,10 @@ export interface DataTableProps {
      */
     contextMenuSelection?: any | any[] | undefined;
     /**
+     * Whether all data is selected.
+     */
+    selectAll?: Nullable<boolean>;
+    /**
      * When enabled, background of the rows change on hover.
      */
     rowHover?: boolean | undefined;
@@ -721,6 +737,12 @@ export interface DataTableProps {
      */
     scrollDirection?: DataTableScrollDirectionType;
     /**
+     * Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.
+     * Note: Currently only vertical orientation mode is supported.
+     * @see VirtualScroller.VirtualScrollerProps
+     */
+    virtualScrollerOptions?: VirtualScrollerProps;
+    /**
      * Items of the frozen part in scrollable DataTable.
      */
     frozenValue?: any[] | undefined;
@@ -750,30 +772,18 @@ export interface DataTableProps {
     /**
      * Style class of the table element.
      */
-    tableClass?: string | undefined;
+    tableClass?: any;
 }
 
 export interface DataTableSlots {
     /**
      * Custom header template.
-     * @param {Object} scope - header slot's params.
      */
-    header: (scope: {
-        /**
-         * Column node
-         */
-        column: Column;
-    }) => VNode[];
+    header: () => VNode[];
     /**
      * Custom footer template.
-     * @param {Object} scope - footer slot's params.
      */
-    footer: (scope: {
-        /**
-         * Column node
-         */
-        column: Column;
-    }) => VNode[];
+    footer: () => VNode[];
     /**
      * Custom paginator start template.
      */
@@ -946,6 +956,11 @@ export declare type DataTableEmits = {
      */
     'row-unselect': (event: DataTableRowUnselectEvent) => void;
     /**
+     * Callback to invoke when all data is selected.
+     * @param {DataTableSelectAllChangeEvent} event - Custom select all change event.
+     */
+    'select-all-change': (event: DataTableSelectAllChangeEvent) => void;
+    /**
      * Callback to invoke when a column is resized.
      * @param {DataTableColumnResizeEndEvent} - Custom column resize event.
      */
@@ -1025,9 +1040,10 @@ export declare type DataTableEmits = {
 declare class DataTable extends ClassComponent<DataTableProps, DataTableSlots, DataTableEmits> {
     /**
      * Exports the data to CSV format.
-     * @param {DataTableExportCSVOptions} options - Export options.
+     * @param {DataTableExportCSVOptions} [options] - Export options.
+     * @param {Object[]} [data] - Custom exportable data. This param can be used on lazy dataTable.
      */
-    exportCSV: (options?: DataTableExportCSVOptions) => void;
+    exportCSV: (options?: DataTableExportCSVOptions, data?: any[]) => void;
 }
 
 declare module '@vue/runtime-core' {

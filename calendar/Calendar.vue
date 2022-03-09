@@ -1,7 +1,7 @@
 <template>
     <span ref="container" :class="containerClass" :style="style">
-        <CalendarInputText ref="input" v-if="!inline" type="text" v-bind="$attrs" :value="inputFieldValue" @input="onInput" @focus="onFocus" @blur="onBlur" @keydown="onKeyDown" :readonly="!manualInput" inputmode="none"
-            :class="inputClass" :style="inputStyle" />
+        <input :ref="inputRef" v-if="!inline" type="text" :class="['p-inputtext p-component', inputClass]" :style="inputStyle" @input="onInput" v-bind="$attrs"
+            @focus="onFocus" @blur="onBlur" @keydown="onKeyDown" :readonly="!manualInput" inputmode="none">
         <CalendarButton v-if="showIcon" :icon="icon" tabindex="-1" class="p-datepicker-trigger" :disabled="$attrs.disabled" @click="onButtonClick" type="button" :aria-label="inputFieldValue"/>
         <Teleport :to="appendTarget" :disabled="appendDisabled">
             <transition name="p-connected-overlay" @enter="onOverlayEnter($event)" @after-enter="onOverlayEnterComplete" @after-leave="onOverlayAfterLeave" @leave="onOverlayLeave">
@@ -15,11 +15,11 @@
                                         <span class="p-datepicker-prev-icon pi pi-chevron-left"></span>
                                     </button>
                                     <div class="p-datepicker-title">
-                                        <button type="button" @click="switchToMonthView" v-if="currentView === 'date'" class="p-datepicker-month p-link" :disabled="switchViewButtonDisabled">
+                                        <button type="button" @click="switchToMonthView" @keydown="onContainerButtonKeydown" v-if="currentView === 'date'" class="p-datepicker-month p-link" :disabled="switchViewButtonDisabled">
                                             {{getMonthName(month.month)}}
                                         </button>
-                                        <button type="button" @click="switchToYearView" v-if="currentView !== 'year'" class="p-datepicker-year p-link" :disabled="switchViewButtonDisabled">
-                                            {{currentYear}}
+                                        <button type="button" @click="switchToYearView" @keydown="onContainerButtonKeydown" v-if="currentView !== 'year'" class="p-datepicker-year p-link" :disabled="switchViewButtonDisabled">
+                                            {{getYear(month)}}
                                         </button>
                                         <span class="p-datepicker-decade" v-if="currentView === 'year'">
                                             <slot name="decade" :years="yearPickerValues">
@@ -77,7 +77,7 @@
                             </span>
                         </div>
                     </template>
-                    <div class="p-timepicker" v-if="showTime||timeOnly">
+                    <div class="p-timepicker" v-if="(showTime||timeOnly) && currentView === 'date'">
                         <div class="p-hour-picker">
                             <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 0, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple
                                 @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 0, 1)" @keydown.space="onTimePickerElementMouseDown($event, 0, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
@@ -145,14 +145,13 @@
 <script>
 import {ConnectedOverlayScrollHandler,DomHandler,ZIndexUtils,UniqueComponentId} from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
 
 export default {
     name: 'Calendar',
     inheritAttrs: false,
-    emits: ['show', 'hide', 'month-change', 'year-change', 'date-select', 'update:modelValue', 'today-click', 'clear-click'],
+    emits: ['show', 'hide', 'input', 'month-change', 'year-change', 'date-select', 'update:modelValue', 'today-click', 'clear-click', 'focus', 'blur', 'keydown'],
     props: {
         modelValue: null,
         selectionMode: {
@@ -300,10 +299,6 @@ export default {
             type: String,
             default: 'body'
         },
-        keepInvalid: {
-            type: Boolean,
-            default: false
-        },
         inputClass: null,
         inputStyle: null,
         class: null,
@@ -316,8 +311,11 @@ export default {
     maskClickListener: null,
     resizeListener: null,
     overlay: null,
+    input: null,
     mask: null,
     timePickerTimer: null,
+    preventFocus: false,
+    typeUpdate: false,
     created() {
         this.updateCurrentMetaData();
     },
@@ -328,6 +326,7 @@ export default {
             this.overlay && this.overlay.setAttribute(this.attributeSelector, '');
 
             if (!this.$attrs.disabled) {
+                this.preventFocus = true;
                 this.initFocusableCell();
 
                 if (this.numberOfMonths === 1) {
@@ -335,15 +334,19 @@ export default {
                 }
             }
         }
+        else {
+            this.input.value = this.formatValue(this.modelValue);
+        }
     },
     updated() {
         if (this.overlay) {
+            this.preventFocus = true;
             this.updateFocus();
         }
 
-        if (this.$refs.input && this.selectionStart != null && this.selectionEnd != null) {
-            this.$refs.input.$el.selectionStart = this.selectionStart;
-            this.$refs.input.$el.selectionEnd = this.selectionEnd;
+        if (this.input && this.selectionStart != null && this.selectionEnd != null) {
+            this.input.selectionStart = this.selectionStart;
+            this.input.selectionEnd = this.selectionEnd;
             this.selectionStart = null;
             this.selectionEnd = null;
         }
@@ -354,7 +357,7 @@ export default {
         }
 
         if (this.mask) {
-           this.destroyMask();
+            this.destroyMask();
         }
         this.destroyResponsiveStyleElement();
 
@@ -385,15 +388,21 @@ export default {
         }
     },
     watch: {
-        modelValue() {
+        modelValue(newValue) {
             this.updateCurrentMetaData();
+            if (!this.typeUpdate && !this.inline && this.input) {
+                this.input.value = this.formatValue(newValue);
+            }
+            this.typeUpdate = false;
         },
         showTime() {
             this.updateCurrentMetaData();
         },
         months() {
             if (this.overlay) {
-                setTimeout(this.updateFocus, 0);
+                if (!this.focused) {
+                    setTimeout(this.updateFocus, 0);
+                }
             }
         },
         numberOfMonths() {
@@ -442,10 +451,22 @@ export default {
             return false;
         },
         isMonthSelected(month) {
-            return this.isComparable() ? (this.modelValue.getMonth() === month && this.modelValue.getFullYear() === this.currentYear) : false;
+            if (this.isComparable()) {
+                let value = this.isRangeSelection() ? this.modelValue[0] : this.modelValue;
+
+                return !this.isMultipleSelection() ? (value.getMonth() === month && value.getFullYear() === this.currentYear) : false;
+            }
+
+            return false;
         },
         isYearSelected(year) {
-            return this.isComparable() ? (this.modelValue.getFullYear() === year) : false;
+            if (this.isComparable()) {
+                let value = this.isRangeSelection() ? this.modelValue[0] : this.modelValue;
+
+                return !this.isMultipleSelection() && this.isComparable() ? (value.getFullYear() === year) : false;
+            }
+
+            return false;
         },
         isDateEquals(value, dateMeta) {
             if (value)
@@ -789,7 +810,7 @@ export default {
         onButtonClick() {
             if (this.isEnabled()) {
                 if (!this.overlayVisible) {
-                    this.$refs.input.$el.focus();
+                    this.input.focus();
                     this.overlayVisible = true;
                 }
                 else {
@@ -1226,9 +1247,9 @@ export default {
                         return false;
                     }
                     if (this.maxDate.getMinutes() === minute) {
-                      if (this.maxDate.getSeconds() < second) {
-                          return false;
-                      }
+                        if (this.maxDate.getSeconds() < second) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -2095,9 +2116,11 @@ export default {
             if (cell) {
                 cell.tabIndex = '0';
 
-                if ((!this.navigationState || !this.navigationState.button) && !this.timePickerChange) {
+                if (!this.preventFocus && (!this.navigationState || !this.navigationState.button) && !this.timePickerChange) {
                     cell.focus();
                 }
+
+                this.preventFocus = false;
             }
         },
         trapFocus(event) {
@@ -2127,7 +2150,7 @@ export default {
             }
         },
         onContainerButtonKeydown(event) {
-             switch (event.which) {
+            switch (event.which) {
                 //tab
                 case 9:
                     this.trapFocus(event);
@@ -2142,32 +2165,39 @@ export default {
                 default:
                     //Noop
                 break;
-             }
+            }
+
+            this.$emit('keydown', event);
         },
         onInput(event) {
             try {
-                this.selectionStart = this.$refs.input.$el.selectionStart;
-                this.selectionEnd = this.$refs.input.$el.selectionEnd;
+                this.selectionStart = this.input.selectionStart;
+                this.selectionEnd = this.input.selectionEnd;
 
                 let value = this.parseValue(event.target.value);
                 if (this.isValidSelection(value)) {
+                    this.typeUpdate = true;
                     this.updateModel(value);
                 }
             }
             catch(err) {
-                if (this.keepInvalid) {
-                    this.updateModel(event.target.value);
-                }
+                /* NoOp */
             }
+
+            this.$emit('input', event);
         },
-        onFocus() {
+        onFocus(event) {
             if (this.showOnFocus && this.isEnabled()) {
                 this.overlayVisible = true;
             }
             this.focused = true;
+            this.$emit('focus', event);
         },
-        onBlur() {
+        onBlur(event) {
+            this.$emit('blur', {originalEvent: event, value: this.input.value});
+
             this.focused = false;
+            this.input.value = this.formatValue(this.modelValue);
         },
         onKeyDown() {
             if (event.keyCode === 40 && this.overlay) {
@@ -2192,8 +2222,14 @@ export default {
         overlayRef(el) {
             this.overlay = el;
         },
+        inputRef(el) {
+            this.input = el;
+        },
         getMonthName(index) {
             return this.$primevue.config.locale.monthNames[index];
+        },
+        getYear(month) {
+            return this.currentView === 'month' ? this.currentYear : month.year;
         },
         onOverlayClick(event) {
             if (!this.inline) {
@@ -2284,6 +2320,7 @@ export default {
                 {
                     'p-calendar-w-btn': this.showIcon,
                     'p-calendar-timeonly': this.timeOnly,
+                    'p-calendar-disabled': this.$attrs.disabled,
                     'p-inputwrapper-filled': this.modelValue,
                     'p-inputwrapper-focus': this.focused
                 }
@@ -2471,7 +2508,6 @@ export default {
         }
     },
     components: {
-        'CalendarInputText': InputText,
         'CalendarButton': Button
     },
     directives: {

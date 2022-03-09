@@ -34,6 +34,10 @@ var script = {
         breakpoint: {
             type: String,
             default: '960px'
+        },
+        stripedRows: {
+            type: Boolean,
+            default: false
         }
     },
     itemTouched: false,
@@ -319,6 +323,11 @@ var script = {
         }
     },
     computed: {
+        containerClass() {
+            return ['p-orderlist p-component', {
+                'p-orderlist-striped': this.stripedRows
+            }];
+        },
         attributeSelector() {
             return UniqueComponentId();
         }
@@ -331,10 +340,9 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-orderlist p-component" };
-const _hoisted_2 = { class: "p-orderlist-controls" };
-const _hoisted_3 = { class: "p-orderlist-list-container" };
-const _hoisted_4 = {
+const _hoisted_1 = { class: "p-orderlist-controls" };
+const _hoisted_2 = { class: "p-orderlist-list-container" };
+const _hoisted_3 = {
   key: 0,
   class: "p-orderlist-header"
 };
@@ -343,8 +351,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_OLButton = resolveComponent("OLButton");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    createVNode("div", _hoisted_2, [
+  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
+    createVNode("div", _hoisted_1, [
       renderSlot(_ctx.$slots, "controlsstart"),
       createVNode(_component_OLButton, {
         type: "button",
@@ -368,9 +376,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8, ["onClick"]),
       renderSlot(_ctx.$slots, "controlsend")
     ]),
-    createVNode("div", _hoisted_3, [
+    createVNode("div", _hoisted_2, [
       (_ctx.$slots.header)
-        ? (openBlock(), createBlock("div", _hoisted_4, [
+        ? (openBlock(), createBlock("div", _hoisted_3, [
             renderSlot(_ctx.$slots, "header")
           ]))
         : createCommentVNode("", true),
@@ -407,7 +415,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 3
       }, 8, ["style"])
     ])
-  ]))
+  ], 2))
 }
 
 function styleInject(css, ref) {

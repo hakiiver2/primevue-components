@@ -696,11 +696,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   items: $props.suggestions,
                   disabled: $options.virtualScrollerDisabled
                 }), createSlots({
-                  content: withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+                  content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
                     createVNode("ul", {
                       id: $options.listId,
                       ref: (el) => $options.listRef(el, contentRef),
                       class: ['p-autocomplete-items', styleClass],
+                      style: contentStyle,
                       role: "listbox"
                     }, [
                       (!$props.optionGroupLabel)
@@ -755,7 +756,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               }), 128))
                             ], 64))
                           }), 128))
-                    ], 10, ["id"])
+                    ], 14, ["id"])
                   ]),
                   _: 2
                 }, [

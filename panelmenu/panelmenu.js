@@ -57,6 +57,11 @@ this.primevue.panelmenu = (function (vue, utils) {
                     navigate(event);
                 }
             },
+            onItemKeydown(event, item) {
+                if (event.which === 13) {
+                    this.onItemClick(event, item);
+                }
+            },
             getItemClass(item) {
                 return ['p-menuitem', item.className];
             },
@@ -140,6 +145,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                               class: $options.linkClass(item),
                               target: item.target,
                               onClick: $event => ($options.onItemClick($event, item)),
+                              onKeydown: $event => ($options.onItemKeydown($event, item)),
                               role: "treeitem",
                               "aria-expanded": $options.isActive(item),
                               tabindex: $options.disabled(item) ? null : '0'
@@ -154,7 +160,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                                 class: ['p-menuitem-icon', item.icon]
                               }, null, 2),
                               vue.createVNode("span", _hoisted_3$1, vue.toDisplayString($options.label(item)), 1)
-                            ], 10, ["href", "target", "onClick", "aria-expanded", "tabindex"]))
+                            ], 42, ["href", "target", "onClick", "onKeydown", "aria-expanded", "tabindex"]))
                       ], 64))
                     : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.template), {
                         key: 1,
@@ -222,7 +228,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                 if (this.isActive(item) && this.activeItem === null) {
                     this.activeItem = item;
                 }
-                
+
                 if (this.disabled(item)) {
                     event.preventDefault();
                     return;
@@ -241,9 +247,14 @@ this.primevue.panelmenu = (function (vue, utils) {
                     this.activeItem = item;
 
                 this.updateExpandedKeys({item: item, expanded: this.activeItem != null});
-            
+
                 if (item.to && navigate) {
                     navigate(event);
+                }
+            },
+            onItemKeydown(event, item) {
+                if (event.which === 13) {
+                    this.onItemClick(event, item);
                 }
             },
             updateExpandedKeys(event) {
@@ -359,10 +370,11 @@ this.primevue.panelmenu = (function (vue, utils) {
                                 href: item.url,
                                 class: $options.getHeaderLinkClass(item),
                                 onClick: $event => ($options.onItemClick($event, item)),
+                                onKeydown: $event => ($options.onItemKeydown($event, item)),
                                 tabindex: $options.disabled(item) ? null : '0',
                                 "aria-expanded": $options.isActive(item),
-                                id: $options.ariaId +'_header',
-                                "aria-controls": $options.ariaId +'_content'
+                                id: $options.ariaId +'_header_' + index,
+                                "aria-controls": $options.ariaId +'_content_' + index
                               }, [
                                 (item.items)
                                   ? (vue.openBlock(), vue.createBlock("span", {
@@ -377,7 +389,7 @@ this.primevue.panelmenu = (function (vue, utils) {
                                     }, null, 2))
                                   : vue.createCommentVNode("", true),
                                 vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
-                              ], 10, ["href", "onClick", "tabindex", "aria-expanded", "id", "aria-controls"]))
+                              ], 42, ["href", "onClick", "onKeydown", "tabindex", "aria-expanded", "id", "aria-controls"]))
                         ], 64))
                       : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {
                           key: 1,
@@ -389,8 +401,8 @@ this.primevue.panelmenu = (function (vue, utils) {
                       vue.withDirectives(vue.createVNode("div", {
                         class: "p-toggleable-content",
                         role: "region",
-                        id: $options.ariaId +'_content' ,
-                        "aria-labelledby": $options.ariaId +'_header'
+                        id: $options.ariaId +'_content_' + index,
+                        "aria-labelledby": $options.ariaId +'_header_' + index
                       }, [
                         (item.items)
                           ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [

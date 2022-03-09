@@ -10,7 +10,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
     var script = {
         name: 'InputNumber',
         inheritAttrs: false,
-        emits: ['update:modelValue', 'input'],
+        emits: ['update:modelValue', 'input', 'focus', 'blur'],
         props: {
             modelValue: {
                 type: Number,
@@ -887,14 +887,18 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 this.d_modelValue = value;
                 this.$emit('update:modelValue', value);
             },
-            onInputFocus() {
+            onInputFocus(event) {
                 this.focused = true;
+                this.$emit('focus', event);
             },
             onInputBlur(event) {
                 this.focused = false;
 
                 let input = event.target;
                 let newValue = this.validateValue(this.parseValue(input.value));
+
+                this.$emit('blur', { originalEvent: event, value: input.value});
+                
                 input.value = this.formatValue(newValue);
                 input.setAttribute('aria-valuenow', newValue);
                 this.updateModel(event, newValue);

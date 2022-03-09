@@ -82,7 +82,7 @@ var script$4 = {
                     let right = 0;
                     let next = this.$el.nextElementSibling;
                     if (next) {
-                        right = utils.DomHandler.getOuterWidth(next) + parseFloat(next.style.right);
+                        right = utils.DomHandler.getOuterWidth(next) + parseFloat(next.style.right || 0);
                     }
                     this.styleObject.right = right + 'px';
                 }
@@ -90,7 +90,7 @@ var script$4 = {
                     let left = 0;
                     let prev = this.$el.previousElementSibling;
                     if (prev) {
-                        left = utils.DomHandler.getOuterWidth(prev) + parseFloat(prev.style.left);
+                        left = utils.DomHandler.getOuterWidth(prev) + parseFloat(prev.style.left || 0);
                     }
                     this.styleObject.left = left + 'px';
                 }
@@ -103,7 +103,7 @@ var script$4 = {
             this.$emit('checkbox-toggle');
         },
         onCheckboxFocus() {
-           this.checkboxFocused = true;
+            this.checkboxFocused = true;
         },
         onCheckboxBlur() {
             this.checkboxFocused = false;
@@ -172,7 +172,7 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
     ($options.checkboxSelectionMode && $options.columnProp('expander'))
       ? (vue.openBlock(), vue.createBlock("div", {
           key: 1,
-          class: "p-checkbox p-treetable-checkbox p-component",
+          class: ['p-checkbox p-treetable-checkbox p-component', {'p-checkbox-focused': $data.checkboxFocused}],
           onClick: _cache[4] || (_cache[4] = (...args) => ($options.toggleCheckbox && $options.toggleCheckbox(...args))),
           role: "checkbox",
           "aria-checked": $props.checked
@@ -190,7 +190,7 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
           }, [
             vue.createVNode("span", { class: $options.checkboxIcon }, null, 2)
           ], 2)
-        ], 8, ["aria-checked"]))
+        ], 10, ["aria-checked"]))
       : vue.createCommentVNode("", true),
     ($props.column.children && $props.column.children.body)
       ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.column.children.body), {
@@ -550,7 +550,7 @@ var script$2 = {
                     let right = 0;
                     let next = this.$el.nextElementSibling;
                     if (next) {
-                        right = utils.DomHandler.getOuterWidth(next) + parseFloat(next.style.right);
+                        right = utils.DomHandler.getOuterWidth(next) + parseFloat(next.style.right || 0);
                     }
                     this.styleObject.right = right + 'px';
                 }
@@ -558,7 +558,7 @@ var script$2 = {
                     let left = 0;
                     let prev = this.$el.previousElementSibling;
                     if (prev) {
-                        left = utils.DomHandler.getOuterWidth(prev) + parseFloat(prev.style.left);
+                        left = utils.DomHandler.getOuterWidth(prev) + parseFloat(prev.style.left || 0);
                     }
                     this.styleObject.left = left + 'px';
                 }
@@ -740,7 +740,7 @@ var script$1 = {
                     let right = 0;
                     let next = this.$el.nextElementSibling;
                     if (next) {
-                        right = utils.DomHandler.getOuterWidth(next) + parseFloat(next.style.right);
+                        right = utils.DomHandler.getOuterWidth(next) + parseFloat(next.style.right || 0);
                     }
                     this.styleObject.right = right + 'px';
                 }
@@ -748,7 +748,7 @@ var script$1 = {
                     let left = 0;
                     let prev = this.$el.previousElementSibling;
                     if (prev) {
-                        left = utils.DomHandler.getOuterWidth(prev) + parseFloat(prev.style.left);
+                        left = utils.DomHandler.getOuterWidth(prev) + parseFloat(prev.style.left || 0);
                     }
                     this.styleObject.left = left + 'px';
                 }
@@ -778,7 +778,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
     ($props.column.children && $props.column.children.footer)
       ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.column.children.footer), {
           key: 0,
-          column: _ctx.col
+          column: $props.column
         }, null, 8, ["column"]))
       : vue.createCommentVNode("", true),
     vue.createTextVNode(" " + vue.toDisplayString($options.columnProp('footer')), 1)
@@ -1862,7 +1862,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-treetable {\n    position: relative;\n}\n.p-treetable table {\n    border-collapse: collapse;\n    width: 100%;\n    table-layout: fixed;\n}\n.p-treetable .p-sortable-column {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-treetable-responsive-scroll > .p-treetable-wrapper {\n    overflow-x: auto;\n}\n.p-treetable-responsive-scroll > .p-treetable-wrapper > table,\n.p-treetable-auto-layout > .p-treetable-wrapper > table {\n    table-layout: auto;\n}\n.p-treetable-hoverable-rows .p-treetable-tbody > tr {\n    cursor: pointer;\n}\n.p-treetable-toggler {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    vertical-align: middle;\n    overflow: hidden;\n    position: relative;\n}\n.p-treetable-toggler + .p-checkbox {\n    vertical-align: middle;\n}\n.p-treetable-toggler + .p-checkbox + span {\n    vertical-align: middle;\n}\n\n/* Resizable */\n.p-treetable-resizable > .p-treetable-wrapper {\n    overflow-x: auto;\n}\n.p-treetable-resizable .p-treetable-thead > tr > th,\n.p-treetable-resizable .p-treetable-tfoot > tr > td,\n.p-treetable-resizable .p-treetable-tbody > tr > td {\n    overflow: hidden;\n}\n.p-treetable-resizable .p-resizable-column {\n    background-clip: padding-box;\n    position: relative;\n}\n.p-treetable-resizable-fit .p-resizable-column:last-child .p-column-resizer {\n    display: none;\n}\n.p-treetable .p-column-resizer {\n    display: block;\n    position: absolute !important;\n    top: 0;\n    right: 0;\n    margin: 0;\n    width: .5rem;\n    height: 100%;\n    padding: 0px;\n    cursor:col-resize;\n    border: 1px solid transparent;\n}\n.p-treetable .p-column-resizer-helper {\n    width: 1px;\n    position: absolute;\n    z-index: 10;\n    display: none;\n}\n.p-treetable .p-treetable-loading-overlay {\n    position: absolute;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    z-index: 2;\n}\n\n/* Scrollable */\n.p-treetable-scrollable .p-treetable-wrapper {\n    position: relative;\n    overflow: auto;\n}\n.p-treetable-scrollable .p-treetable-table {\n    display: block;\n}\n.p-treetable-scrollable .p-treetable-thead,\n.p-treetable-scrollable .p-treetable-tbody,\n.p-treetable-scrollable .p-treetable-tfoot {\n    display: block;\n}\n.p-treetable-scrollable .p-treetable-thead > tr,\n.p-treetable-scrollable .p-treetable-tbody > tr,\n.p-treetable-scrollable .p-treetable-tfoot > tr {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n    width: 100%;\n}\n.p-treetable-scrollable .p-treetable-thead > tr > th,\n.p-treetable-scrollable .p-treetable-tbody > tr > td,\n.p-treetable-scrollable .p-treetable-tfoot > tr > td {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 0px;\n            flex: 1 1 0;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-treetable-scrollable .p-treetable-thead {\n    position: sticky;\n    top: 0;\n    z-index: 1;\n}\n.p-treetable-scrollable .p-treetable-tfoot {\n    position: sticky;\n    bottom: 0;\n    z-index: 1;\n}\n.p-treetable-scrollable .p-frozen-column {\n    position: sticky;\n    background: inherit;\n}\n.p-treetable-scrollable-both .p-treetable-thead > tr > th,\n.p-treetable-scrollable-both .p-treetable-tbody > tr > td,\n.p-treetable-scrollable-both .p-treetable-tfoot > tr > td,\n.p-treetable-scrollable-horizontal .p-treetable-thead > tr > th\n.p-treetable-scrollable-horizontal .p-treetable-tbody > tr > td,\n.p-treetable-scrollable-horizontal .p-treetable-tfoot > tr > td {\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-treetable-flex-scrollable {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    height: 100%;\n}\n.p-treetable-flex-scrollable .p-treetable-wrapper {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    height: 100%;\n}\n";
+var css_248z = "\n.p-treetable {\n    position: relative;\n}\n.p-treetable table {\n    border-collapse: collapse;\n    width: 100%;\n    table-layout: fixed;\n}\n.p-treetable .p-sortable-column {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-treetable-responsive-scroll > .p-treetable-wrapper {\n    overflow-x: auto;\n}\n.p-treetable-responsive-scroll > .p-treetable-wrapper > table,\n.p-treetable-auto-layout > .p-treetable-wrapper > table {\n    table-layout: auto;\n}\n.p-treetable-hoverable-rows .p-treetable-tbody > tr {\n    cursor: pointer;\n}\n.p-treetable-toggler {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    vertical-align: middle;\n    overflow: hidden;\n    position: relative;\n}\n.p-treetable-toggler + .p-checkbox {\n    vertical-align: middle;\n}\n.p-treetable-toggler + .p-checkbox + span {\n    vertical-align: middle;\n}\n\n/* Resizable */\n.p-treetable-resizable > .p-treetable-wrapper {\n    overflow-x: auto;\n}\n.p-treetable-resizable .p-treetable-thead > tr > th,\n.p-treetable-resizable .p-treetable-tfoot > tr > td,\n.p-treetable-resizable .p-treetable-tbody > tr > td {\n    overflow: hidden;\n}\n.p-treetable-resizable .p-resizable-column:not(.p-frozen-column) {\n    background-clip: padding-box;\n    position: relative;\n}\n.p-treetable-resizable-fit .p-resizable-column:last-child .p-column-resizer {\n    display: none;\n}\n.p-treetable .p-column-resizer {\n    display: block;\n    position: absolute !important;\n    top: 0;\n    right: 0;\n    margin: 0;\n    width: .5rem;\n    height: 100%;\n    padding: 0px;\n    cursor:col-resize;\n    border: 1px solid transparent;\n}\n.p-treetable .p-column-resizer-helper {\n    width: 1px;\n    position: absolute;\n    z-index: 10;\n    display: none;\n}\n.p-treetable .p-treetable-loading-overlay {\n    position: absolute;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    z-index: 2;\n}\n\n/* Scrollable */\n.p-treetable-scrollable .p-treetable-wrapper {\n    position: relative;\n    overflow: auto;\n}\n.p-treetable-scrollable .p-treetable-table {\n    display: block;\n}\n.p-treetable-scrollable .p-treetable-thead,\n.p-treetable-scrollable .p-treetable-tbody,\n.p-treetable-scrollable .p-treetable-tfoot {\n    display: block;\n}\n.p-treetable-scrollable .p-treetable-thead > tr,\n.p-treetable-scrollable .p-treetable-tbody > tr,\n.p-treetable-scrollable .p-treetable-tfoot > tr {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n    width: 100%;\n}\n.p-treetable-scrollable .p-treetable-thead > tr > th,\n.p-treetable-scrollable .p-treetable-tbody > tr > td,\n.p-treetable-scrollable .p-treetable-tfoot > tr > td {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 0px;\n            flex: 1 1 0;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-treetable-scrollable .p-treetable-thead {\n    position: sticky;\n    top: 0;\n    z-index: 1;\n}\n.p-treetable-scrollable .p-treetable-tfoot {\n    position: sticky;\n    bottom: 0;\n    z-index: 1;\n}\n.p-treetable-scrollable .p-frozen-column {\n    position: sticky;\n    background: inherit;\n}\n.p-treetable-scrollable th.p-frozen-column {\n    z-index: 1;\n}\n.p-treetable-scrollable-both .p-treetable-thead > tr > th,\n.p-treetable-scrollable-both .p-treetable-tbody > tr > td,\n.p-treetable-scrollable-both .p-treetable-tfoot > tr > td,\n.p-treetable-scrollable-horizontal .p-treetable-thead > tr > th\n.p-treetable-scrollable-horizontal .p-treetable-tbody > tr > td,\n.p-treetable-scrollable-horizontal .p-treetable-tfoot > tr > td {\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-treetable-flex-scrollable {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    height: 100%;\n}\n.p-treetable-flex-scrollable .p-treetable-wrapper {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    height: 100%;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

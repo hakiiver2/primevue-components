@@ -78,7 +78,7 @@ var script = {
             const width = DomHandler.getWidth(content);
 
             this.backwardIsDisabled = scrollLeft === 0;
-            this.forwardIsDisabled = scrollLeft === scrollWidth - width;
+            this.forwardIsDisabled = parseInt(scrollLeft) === scrollWidth - width;
         },
         getKey(tab, i) {
             return (tab.props && tab.props.header) ? tab.props.header : i;

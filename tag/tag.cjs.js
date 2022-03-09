@@ -30,13 +30,13 @@ const _hoisted_1 = { class: "p-tag-value" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (vue.openBlock(), vue.createBlock("span", vue.mergeProps({ class: $options.containerClass }, _ctx.$attrs), [
+    ($props.icon)
+      ? (vue.openBlock(), vue.createBlock("span", {
+          key: 0,
+          class: $options.iconClass
+        }, null, 2))
+      : vue.createCommentVNode("", true),
     vue.renderSlot(_ctx.$slots, "default", {}, () => [
-      ($props.icon)
-        ? (vue.openBlock(), vue.createBlock("span", {
-            key: 0,
-            class: $options.iconClass
-          }, null, 2))
-        : vue.createCommentVNode("", true),
       vue.createVNode("span", _hoisted_1, vue.toDisplayString($props.value), 1)
     ])
   ], 16))

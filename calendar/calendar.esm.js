@@ -1,6 +1,5 @@
 import { DomHandler, ZIndexUtils, ConnectedOverlayScrollHandler, UniqueComponentId } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
 import { resolveComponent, resolveDirective, openBlock, createBlock, mergeProps, createCommentVNode, Teleport, createVNode, Transition, withCtx, Fragment, renderList, renderSlot, withDirectives, vShow, toDisplayString, createTextVNode, withKeys } from 'vue';
@@ -8,7 +7,7 @@ import { resolveComponent, resolveDirective, openBlock, createBlock, mergeProps,
 var script = {
     name: 'Calendar',
     inheritAttrs: false,
-    emits: ['show', 'hide', 'month-change', 'year-change', 'date-select', 'update:modelValue', 'today-click', 'clear-click'],
+    emits: ['show', 'hide', 'input', 'month-change', 'year-change', 'date-select', 'update:modelValue', 'today-click', 'clear-click', 'focus', 'blur', 'keydown'],
     props: {
         modelValue: null,
         selectionMode: {
@@ -156,10 +155,6 @@ var script = {
             type: String,
             default: 'body'
         },
-        keepInvalid: {
-            type: Boolean,
-            default: false
-        },
         inputClass: null,
         inputStyle: null,
         class: null,
@@ -172,8 +167,11 @@ var script = {
     maskClickListener: null,
     resizeListener: null,
     overlay: null,
+    input: null,
     mask: null,
     timePickerTimer: null,
+    preventFocus: false,
+    typeUpdate: false,
     created() {
         this.updateCurrentMetaData();
     },
@@ -184,6 +182,7 @@ var script = {
             this.overlay && this.overlay.setAttribute(this.attributeSelector, '');
 
             if (!this.$attrs.disabled) {
+                this.preventFocus = true;
                 this.initFocusableCell();
 
                 if (this.numberOfMonths === 1) {
@@ -191,15 +190,19 @@ var script = {
                 }
             }
         }
+        else {
+            this.input.value = this.formatValue(this.modelValue);
+        }
     },
     updated() {
         if (this.overlay) {
+            this.preventFocus = true;
             this.updateFocus();
         }
 
-        if (this.$refs.input && this.selectionStart != null && this.selectionEnd != null) {
-            this.$refs.input.$el.selectionStart = this.selectionStart;
-            this.$refs.input.$el.selectionEnd = this.selectionEnd;
+        if (this.input && this.selectionStart != null && this.selectionEnd != null) {
+            this.input.selectionStart = this.selectionStart;
+            this.input.selectionEnd = this.selectionEnd;
             this.selectionStart = null;
             this.selectionEnd = null;
         }
@@ -210,7 +213,7 @@ var script = {
         }
 
         if (this.mask) {
-           this.destroyMask();
+            this.destroyMask();
         }
         this.destroyResponsiveStyleElement();
 
@@ -241,15 +244,21 @@ var script = {
         }
     },
     watch: {
-        modelValue() {
+        modelValue(newValue) {
             this.updateCurrentMetaData();
+            if (!this.typeUpdate && !this.inline && this.input) {
+                this.input.value = this.formatValue(newValue);
+            }
+            this.typeUpdate = false;
         },
         showTime() {
             this.updateCurrentMetaData();
         },
         months() {
             if (this.overlay) {
-                setTimeout(this.updateFocus, 0);
+                if (!this.focused) {
+                    setTimeout(this.updateFocus, 0);
+                }
             }
         },
         numberOfMonths() {
@@ -298,10 +307,22 @@ var script = {
             return false;
         },
         isMonthSelected(month) {
-            return this.isComparable() ? (this.modelValue.getMonth() === month && this.modelValue.getFullYear() === this.currentYear) : false;
+            if (this.isComparable()) {
+                let value = this.isRangeSelection() ? this.modelValue[0] : this.modelValue;
+
+                return !this.isMultipleSelection() ? (value.getMonth() === month && value.getFullYear() === this.currentYear) : false;
+            }
+
+            return false;
         },
         isYearSelected(year) {
-            return this.isComparable() ? (this.modelValue.getFullYear() === year) : false;
+            if (this.isComparable()) {
+                let value = this.isRangeSelection() ? this.modelValue[0] : this.modelValue;
+
+                return !this.isMultipleSelection() && this.isComparable() ? (value.getFullYear() === year) : false;
+            }
+
+            return false;
         },
         isDateEquals(value, dateMeta) {
             if (value)
@@ -645,7 +666,7 @@ var script = {
         onButtonClick() {
             if (this.isEnabled()) {
                 if (!this.overlayVisible) {
-                    this.$refs.input.$el.focus();
+                    this.input.focus();
                     this.overlayVisible = true;
                 }
                 else {
@@ -1082,9 +1103,9 @@ var script = {
                         return false;
                     }
                     if (this.maxDate.getMinutes() === minute) {
-                      if (this.maxDate.getSeconds() < second) {
-                          return false;
-                      }
+                        if (this.maxDate.getSeconds() < second) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -1939,9 +1960,11 @@ var script = {
             if (cell) {
                 cell.tabIndex = '0';
 
-                if ((!this.navigationState || !this.navigationState.button) && !this.timePickerChange) {
+                if (!this.preventFocus && (!this.navigationState || !this.navigationState.button) && !this.timePickerChange) {
                     cell.focus();
                 }
+
+                this.preventFocus = false;
             }
         },
         trapFocus(event) {
@@ -1971,7 +1994,7 @@ var script = {
             }
         },
         onContainerButtonKeydown(event) {
-             switch (event.which) {
+            switch (event.which) {
                 //tab
                 case 9:
                     this.trapFocus(event);
@@ -1982,32 +2005,39 @@ var script = {
                     this.overlayVisible = false;
                     event.preventDefault();
                 break;
-             }
+            }
+
+            this.$emit('keydown', event);
         },
         onInput(event) {
             try {
-                this.selectionStart = this.$refs.input.$el.selectionStart;
-                this.selectionEnd = this.$refs.input.$el.selectionEnd;
+                this.selectionStart = this.input.selectionStart;
+                this.selectionEnd = this.input.selectionEnd;
 
                 let value = this.parseValue(event.target.value);
                 if (this.isValidSelection(value)) {
+                    this.typeUpdate = true;
                     this.updateModel(value);
                 }
             }
             catch(err) {
-                if (this.keepInvalid) {
-                    this.updateModel(event.target.value);
-                }
+                /* NoOp */
             }
+
+            this.$emit('input', event);
         },
-        onFocus() {
+        onFocus(event) {
             if (this.showOnFocus && this.isEnabled()) {
                 this.overlayVisible = true;
             }
             this.focused = true;
+            this.$emit('focus', event);
         },
-        onBlur() {
+        onBlur(event) {
+            this.$emit('blur', {originalEvent: event, value: this.input.value});
+
             this.focused = false;
+            this.input.value = this.formatValue(this.modelValue);
         },
         onKeyDown() {
             if (event.keyCode === 40 && this.overlay) {
@@ -2032,8 +2062,14 @@ var script = {
         overlayRef(el) {
             this.overlay = el;
         },
+        inputRef(el) {
+            this.input = el;
+        },
         getMonthName(index) {
             return this.$primevue.config.locale.monthNames[index];
+        },
+        getYear(month) {
+            return this.currentView === 'month' ? this.currentYear : month.year;
         },
         onOverlayClick(event) {
             if (!this.inline) {
@@ -2124,6 +2160,7 @@ var script = {
                 {
                     'p-calendar-w-btn': this.showIcon,
                     'p-calendar-timeonly': this.timeOnly,
+                    'p-calendar-disabled': this.$attrs.disabled,
                     'p-inputwrapper-filled': this.modelValue,
                     'p-inputwrapper-focus': this.focused
                 }
@@ -2311,7 +2348,6 @@ var script = {
         }
     },
     components: {
-        'CalendarInputText': InputText,
         'CalendarButton': Button
     },
     directives: {
@@ -2392,7 +2428,6 @@ const _hoisted_31 = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_CalendarInputText = resolveComponent("CalendarInputText");
   const _component_CalendarButton = resolveComponent("CalendarButton");
   const _directive_ripple = resolveDirective("ripple");
 
@@ -2402,21 +2437,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     style: $props.style
   }, [
     (!$props.inline)
-      ? (openBlock(), createBlock(_component_CalendarInputText, mergeProps({
+      ? (openBlock(), createBlock("input", mergeProps({
           key: 0,
-          ref: "input",
-          type: "text"
+          ref: $options.inputRef,
+          type: "text",
+          class: ['p-inputtext p-component', $props.inputClass],
+          style: $props.inputStyle,
+          onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args)))
         }, _ctx.$attrs, {
-          value: $options.inputFieldValue,
-          onInput: $options.onInput,
-          onFocus: $options.onFocus,
-          onBlur: $options.onBlur,
-          onKeydown: $options.onKeyDown,
+          onFocus: _cache[2] || (_cache[2] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+          onBlur: _cache[3] || (_cache[3] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+          onKeydown: _cache[4] || (_cache[4] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
           readonly: !$props.manualInput,
-          inputmode: "none",
-          class: $props.inputClass,
-          style: $props.inputStyle
-        }), null, 16, ["value", "onInput", "onFocus", "onBlur", "onKeydown", "readonly", "class", "style"]))
+          inputmode: "none"
+        }), null, 16, ["readonly"]))
       : createCommentVNode("", true),
     ($props.showIcon)
       ? (openBlock(), createBlock(_component_CalendarButton, {
@@ -2436,7 +2470,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, [
       createVNode(Transition, {
         name: "p-connected-overlay",
-        onEnter: _cache[62] || (_cache[62] = $event => ($options.onOverlayEnter($event))),
+        onEnter: _cache[68] || (_cache[68] = $event => ($options.onOverlayEnter($event))),
         onAfterEnter: $options.onOverlayEnterComplete,
         onAfterLeave: $options.onOverlayAfterLeave,
         onLeave: $options.onOverlayLeave
@@ -2448,8 +2482,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ref: $options.overlayRef,
                 class: $options.panelStyleClass,
                 role: $props.inline ? null : 'dialog',
-                onClick: _cache[60] || (_cache[60] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
-                onMouseup: _cache[61] || (_cache[61] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
+                onClick: _cache[66] || (_cache[66] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                onMouseup: _cache[67] || (_cache[67] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
               }, [
                 (!$props.timeOnly)
                   ? (openBlock(), createBlock(Fragment, { key: 0 }, [
@@ -2463,9 +2497,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               renderSlot(_ctx.$slots, "header"),
                               withDirectives(createVNode("button", {
                                 class: "p-datepicker-prev p-link",
-                                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onPrevButtonClick && $options.onPrevButtonClick(...args))),
+                                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onPrevButtonClick && $options.onPrevButtonClick(...args))),
                                 type: "button",
-                                onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                                onKeydown: _cache[6] || (_cache[6] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
                                 disabled: _ctx.$attrs.disabled
                               }, [
                                 _hoisted_3
@@ -2478,19 +2512,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   ? (openBlock(), createBlock("button", {
                                       key: 0,
                                       type: "button",
-                                      onClick: _cache[3] || (_cache[3] = (...args) => ($options.switchToMonthView && $options.switchToMonthView(...args))),
+                                      onClick: _cache[7] || (_cache[7] = (...args) => ($options.switchToMonthView && $options.switchToMonthView(...args))),
+                                      onKeydown: _cache[8] || (_cache[8] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
                                       class: "p-datepicker-month p-link",
                                       disabled: $options.switchViewButtonDisabled
-                                    }, toDisplayString($options.getMonthName(month.month)), 9, ["disabled"]))
+                                    }, toDisplayString($options.getMonthName(month.month)), 41, ["disabled"]))
                                   : createCommentVNode("", true),
                                 ($data.currentView !== 'year')
                                   ? (openBlock(), createBlock("button", {
                                       key: 1,
                                       type: "button",
-                                      onClick: _cache[4] || (_cache[4] = (...args) => ($options.switchToYearView && $options.switchToYearView(...args))),
+                                      onClick: _cache[9] || (_cache[9] = (...args) => ($options.switchToYearView && $options.switchToYearView(...args))),
+                                      onKeydown: _cache[10] || (_cache[10] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
                                       class: "p-datepicker-year p-link",
                                       disabled: $options.switchViewButtonDisabled
-                                    }, toDisplayString($data.currentYear), 9, ["disabled"]))
+                                    }, toDisplayString($options.getYear(month)), 41, ["disabled"]))
                                   : createCommentVNode("", true),
                                 ($data.currentView === 'year')
                                   ? (openBlock(), createBlock("span", _hoisted_5, [
@@ -2502,9 +2538,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               ]),
                               withDirectives(createVNode("button", {
                                 class: "p-datepicker-next p-link",
-                                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onNextButtonClick && $options.onNextButtonClick(...args))),
+                                onClick: _cache[11] || (_cache[11] = (...args) => ($options.onNextButtonClick && $options.onNextButtonClick(...args))),
                                 type: "button",
-                                onKeydown: _cache[6] || (_cache[6] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                                onKeydown: _cache[12] || (_cache[12] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
                                 disabled: _ctx.$attrs.disabled
                               }, [
                                 _hoisted_6
@@ -2610,22 +2646,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         : createCommentVNode("", true)
                     ], 64))
                   : createCommentVNode("", true),
-                ($props.showTime||$props.timeOnly)
+                (($props.showTime||$props.timeOnly) && $data.currentView === 'date')
                   ? (openBlock(), createBlock("div", _hoisted_15, [
                       createVNode("div", _hoisted_16, [
                         withDirectives(createVNode("button", {
                           class: "p-link",
-                          onMousedown: _cache[7] || (_cache[7] = $event => ($options.onTimePickerElementMouseDown($event, 0, 1))),
-                          onMouseup: _cache[8] || (_cache[8] = $event => ($options.onTimePickerElementMouseUp($event))),
+                          onMousedown: _cache[13] || (_cache[13] = $event => ($options.onTimePickerElementMouseDown($event, 0, 1))),
+                          onMouseup: _cache[14] || (_cache[14] = $event => ($options.onTimePickerElementMouseUp($event))),
                           onKeydown: [
-                            _cache[9] || (_cache[9] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                            _cache[11] || (_cache[11] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, 1)), ["enter"])),
-                            _cache[12] || (_cache[12] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, 1)), ["space"]))
+                            _cache[15] || (_cache[15] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                            _cache[17] || (_cache[17] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, 1)), ["enter"])),
+                            _cache[18] || (_cache[18] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, 1)), ["space"]))
                           ],
-                          onMouseleave: _cache[10] || (_cache[10] = $event => ($options.onTimePickerElementMouseLeave())),
+                          onMouseleave: _cache[16] || (_cache[16] = $event => ($options.onTimePickerElementMouseLeave())),
                           onKeyup: [
-                            _cache[13] || (_cache[13] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
-                            _cache[14] || (_cache[14] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                            _cache[19] || (_cache[19] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                            _cache[20] || (_cache[20] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                           ],
                           type: "button"
                         }, [
@@ -2636,17 +2672,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         createVNode("span", null, toDisplayString($options.formattedCurrentHour), 1),
                         withDirectives(createVNode("button", {
                           class: "p-link",
-                          onMousedown: _cache[15] || (_cache[15] = $event => ($options.onTimePickerElementMouseDown($event, 0, -1))),
-                          onMouseup: _cache[16] || (_cache[16] = $event => ($options.onTimePickerElementMouseUp($event))),
+                          onMousedown: _cache[21] || (_cache[21] = $event => ($options.onTimePickerElementMouseDown($event, 0, -1))),
+                          onMouseup: _cache[22] || (_cache[22] = $event => ($options.onTimePickerElementMouseUp($event))),
                           onKeydown: [
-                            _cache[17] || (_cache[17] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                            _cache[19] || (_cache[19] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, -1)), ["enter"])),
-                            _cache[20] || (_cache[20] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, -1)), ["space"]))
+                            _cache[23] || (_cache[23] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                            _cache[25] || (_cache[25] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, -1)), ["enter"])),
+                            _cache[26] || (_cache[26] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 0, -1)), ["space"]))
                           ],
-                          onMouseleave: _cache[18] || (_cache[18] = $event => ($options.onTimePickerElementMouseLeave())),
+                          onMouseleave: _cache[24] || (_cache[24] = $event => ($options.onTimePickerElementMouseLeave())),
                           onKeyup: [
-                            _cache[21] || (_cache[21] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
-                            _cache[22] || (_cache[22] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                            _cache[27] || (_cache[27] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                            _cache[28] || (_cache[28] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                           ],
                           type: "button"
                         }, [
@@ -2661,18 +2697,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       createVNode("div", _hoisted_20, [
                         withDirectives(createVNode("button", {
                           class: "p-link",
-                          onMousedown: _cache[23] || (_cache[23] = $event => ($options.onTimePickerElementMouseDown($event, 1, 1))),
-                          onMouseup: _cache[24] || (_cache[24] = $event => ($options.onTimePickerElementMouseUp($event))),
+                          onMousedown: _cache[29] || (_cache[29] = $event => ($options.onTimePickerElementMouseDown($event, 1, 1))),
+                          onMouseup: _cache[30] || (_cache[30] = $event => ($options.onTimePickerElementMouseUp($event))),
                           onKeydown: [
-                            _cache[25] || (_cache[25] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                            _cache[27] || (_cache[27] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["enter"])),
-                            _cache[28] || (_cache[28] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["space"]))
+                            _cache[31] || (_cache[31] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                            _cache[33] || (_cache[33] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["enter"])),
+                            _cache[34] || (_cache[34] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["space"]))
                           ],
                           disabled: _ctx.$attrs.disabled,
-                          onMouseleave: _cache[26] || (_cache[26] = $event => ($options.onTimePickerElementMouseLeave())),
+                          onMouseleave: _cache[32] || (_cache[32] = $event => ($options.onTimePickerElementMouseLeave())),
                           onKeyup: [
-                            _cache[29] || (_cache[29] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
-                            _cache[30] || (_cache[30] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                            _cache[35] || (_cache[35] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                            _cache[36] || (_cache[36] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                           ],
                           type: "button"
                         }, [
@@ -2683,18 +2719,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         createVNode("span", null, toDisplayString($options.formattedCurrentMinute), 1),
                         withDirectives(createVNode("button", {
                           class: "p-link",
-                          onMousedown: _cache[31] || (_cache[31] = $event => ($options.onTimePickerElementMouseDown($event, 1, -1))),
-                          onMouseup: _cache[32] || (_cache[32] = $event => ($options.onTimePickerElementMouseUp($event))),
+                          onMousedown: _cache[37] || (_cache[37] = $event => ($options.onTimePickerElementMouseDown($event, 1, -1))),
+                          onMouseup: _cache[38] || (_cache[38] = $event => ($options.onTimePickerElementMouseUp($event))),
                           onKeydown: [
-                            _cache[33] || (_cache[33] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                            _cache[35] || (_cache[35] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["enter"])),
-                            _cache[36] || (_cache[36] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["space"]))
+                            _cache[39] || (_cache[39] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                            _cache[41] || (_cache[41] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["enter"])),
+                            _cache[42] || (_cache[42] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["space"]))
                           ],
                           disabled: _ctx.$attrs.disabled,
-                          onMouseleave: _cache[34] || (_cache[34] = $event => ($options.onTimePickerElementMouseLeave())),
+                          onMouseleave: _cache[40] || (_cache[40] = $event => ($options.onTimePickerElementMouseLeave())),
                           onKeyup: [
-                            _cache[37] || (_cache[37] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
-                            _cache[38] || (_cache[38] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                            _cache[43] || (_cache[43] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                            _cache[44] || (_cache[44] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                           ],
                           type: "button"
                         }, [
@@ -2712,18 +2748,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ? (openBlock(), createBlock("div", _hoisted_24, [
                             withDirectives(createVNode("button", {
                               class: "p-link",
-                              onMousedown: _cache[39] || (_cache[39] = $event => ($options.onTimePickerElementMouseDown($event, 2, 1))),
-                              onMouseup: _cache[40] || (_cache[40] = $event => ($options.onTimePickerElementMouseUp($event))),
+                              onMousedown: _cache[45] || (_cache[45] = $event => ($options.onTimePickerElementMouseDown($event, 2, 1))),
+                              onMouseup: _cache[46] || (_cache[46] = $event => ($options.onTimePickerElementMouseUp($event))),
                               onKeydown: [
-                                _cache[41] || (_cache[41] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                                _cache[43] || (_cache[43] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["enter"])),
-                                _cache[44] || (_cache[44] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["space"]))
+                                _cache[47] || (_cache[47] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                                _cache[49] || (_cache[49] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["enter"])),
+                                _cache[50] || (_cache[50] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["space"]))
                               ],
                               disabled: _ctx.$attrs.disabled,
-                              onMouseleave: _cache[42] || (_cache[42] = $event => ($options.onTimePickerElementMouseLeave())),
+                              onMouseleave: _cache[48] || (_cache[48] = $event => ($options.onTimePickerElementMouseLeave())),
                               onKeyup: [
-                                _cache[45] || (_cache[45] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
-                                _cache[46] || (_cache[46] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                                _cache[51] || (_cache[51] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                                _cache[52] || (_cache[52] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                               ],
                               type: "button"
                             }, [
@@ -2734,18 +2770,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             createVNode("span", null, toDisplayString($options.formattedCurrentSecond), 1),
                             withDirectives(createVNode("button", {
                               class: "p-link",
-                              onMousedown: _cache[47] || (_cache[47] = $event => ($options.onTimePickerElementMouseDown($event, 2, -1))),
-                              onMouseup: _cache[48] || (_cache[48] = $event => ($options.onTimePickerElementMouseUp($event))),
+                              onMousedown: _cache[53] || (_cache[53] = $event => ($options.onTimePickerElementMouseDown($event, 2, -1))),
+                              onMouseup: _cache[54] || (_cache[54] = $event => ($options.onTimePickerElementMouseUp($event))),
                               onKeydown: [
-                                _cache[49] || (_cache[49] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                                _cache[51] || (_cache[51] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["enter"])),
-                                _cache[52] || (_cache[52] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["space"]))
+                                _cache[55] || (_cache[55] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
+                                _cache[57] || (_cache[57] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["enter"])),
+                                _cache[58] || (_cache[58] = withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["space"]))
                               ],
                               disabled: _ctx.$attrs.disabled,
-                              onMouseleave: _cache[50] || (_cache[50] = $event => ($options.onTimePickerElementMouseLeave())),
+                              onMouseleave: _cache[56] || (_cache[56] = $event => ($options.onTimePickerElementMouseLeave())),
                               onKeyup: [
-                                _cache[53] || (_cache[53] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
-                                _cache[54] || (_cache[54] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
+                                _cache[59] || (_cache[59] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
+                                _cache[60] || (_cache[60] = withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                               ],
                               type: "button"
                             }, [
@@ -2764,7 +2800,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ? (openBlock(), createBlock("div", _hoisted_28, [
                             withDirectives(createVNode("button", {
                               class: "p-link",
-                              onClick: _cache[55] || (_cache[55] = $event => ($options.toggleAMPM($event))),
+                              onClick: _cache[61] || (_cache[61] = $event => ($options.toggleAMPM($event))),
                               type: "button",
                               disabled: _ctx.$attrs.disabled
                             }, [
@@ -2775,7 +2811,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             createVNode("span", null, toDisplayString($data.pm ? 'PM' : 'AM'), 1),
                             withDirectives(createVNode("button", {
                               class: "p-link",
-                              onClick: _cache[56] || (_cache[56] = $event => ($options.toggleAMPM($event))),
+                              onClick: _cache[62] || (_cache[62] = $event => ($options.toggleAMPM($event))),
                               type: "button",
                               disabled: _ctx.$attrs.disabled
                             }, [
@@ -2794,7 +2830,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             key: 0,
                             type: "button",
                             label: $options.nowLabel,
-                            onClick: _cache[57] || (_cache[57] = $event => ($options.onNowButtonClick($event))),
+                            onClick: _cache[63] || (_cache[63] = $event => ($options.onNowButtonClick($event))),
                             class: "p-button-text",
                             onKeydown: $options.onContainerButtonKeydown
                           }, null, 8, ["label", "onKeydown"]))
@@ -2802,14 +2838,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             key: 1,
                             type: "button",
                             label: $options.todayLabel,
-                            onClick: _cache[58] || (_cache[58] = $event => ($options.onTodayButtonClick($event))),
+                            onClick: _cache[64] || (_cache[64] = $event => ($options.onTodayButtonClick($event))),
                             class: "p-button-text",
                             onKeydown: $options.onContainerButtonKeydown
                           }, null, 8, ["label", "onKeydown"])),
                       createVNode(_component_CalendarButton, {
                         type: "button",
                         label: $options.clearLabel,
-                        onClick: _cache[59] || (_cache[59] = $event => ($options.onClearButtonClick($event))),
+                        onClick: _cache[65] || (_cache[65] = $event => ($options.onClearButtonClick($event))),
                         class: "p-button-text",
                         onKeydown: $options.onContainerButtonKeydown
                       }, null, 8, ["label", "onKeydown"])

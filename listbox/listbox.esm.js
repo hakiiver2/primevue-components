@@ -337,10 +337,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         items: $options.visibleOptions,
         disabled: $options.virtualScrollerDisabled
       }), createSlots({
-        content: withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+        content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
           createVNode("ul", {
             ref: contentRef,
             class: ['p-listbox-list', styleClass],
+            style: contentStyle,
             role: "listbox",
             "aria-multiselectable": "multiple"
           }, [
@@ -416,7 +417,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     ])
                   ]))
                 : createCommentVNode("", true)
-          ], 2)
+          ], 6)
         ]),
         _: 2
       }, [

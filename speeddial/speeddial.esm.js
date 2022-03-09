@@ -1,5 +1,6 @@
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
+import Tooltip from 'primevue/tooltip';
 import { DomHandler } from 'primevue/utils';
 import { resolveComponent, resolveDirective, openBlock, createBlock, Fragment, createVNode, renderSlot, renderList, withDirectives, createCommentVNode, resolveDynamicComponent } from 'vue';
 
@@ -240,7 +241,8 @@ var script = {
         'SDButton': Button
     },
     directives: {
-        'ripple': Ripple
+        'ripple': Ripple,
+        'tooltip': Tooltip
     }
 };
 

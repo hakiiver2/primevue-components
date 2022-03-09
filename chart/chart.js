@@ -4,11 +4,12 @@ this.primevue.chart = (function (vue) {
 
     var script = {
         name: 'Chart',
-        emits: ['select'],
+        emits: ['select', 'loaded'],
         props: {
             type: String,
             data: null,
             options: null,
+            plugins: null,
             width: {
                 type: Number,
                 default: 300
@@ -58,13 +59,19 @@ this.primevue.chart = (function (vue) {
                         this.chart = new module.default(this.$refs.canvas, {
                             type: this.type,
                             data: this.data,
-                            options: this.options
+                            options: this.options,
+                            plugins: this.plugins
                         });
                     }
+
+                    this.$emit('loaded', this.chart);
                 });
             },
             getCanvas() {
                 return this.$canvas;
+            },
+            getChart() {
+                return this.chart;
             },
             getBase64Image() {
                 return this.chart.toBase64Image();

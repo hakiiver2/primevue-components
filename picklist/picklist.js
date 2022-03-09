@@ -38,6 +38,10 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             breakpoint: {
                 type: String,
                 default: '960px'
+            },
+            stripedRows: {
+                type: Boolean,
+                default: false
             }
         },
         itemTouched: false,
@@ -493,6 +497,11 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             }
         },
         computed: {
+            containerClass() {
+                return ['p-picklist p-component', {
+                    'p-picklist-striped': this.stripedRows
+                }];
+            },
             sourceList() {
                 return this.modelValue && this.modelValue[0] ? this.modelValue[0] : null;
             },
@@ -511,27 +520,26 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
         }
     };
 
-    const _hoisted_1 = { class: "p-picklist p-component" };
-    const _hoisted_2 = { class: "p-picklist-buttons p-picklist-source-controls" };
-    const _hoisted_3 = { class: "p-picklist-list-wrapper p-picklist-source-wrapper" };
-    const _hoisted_4 = {
+    const _hoisted_1 = { class: "p-picklist-buttons p-picklist-source-controls" };
+    const _hoisted_2 = { class: "p-picklist-list-wrapper p-picklist-source-wrapper" };
+    const _hoisted_3 = {
       key: 0,
       class: "p-picklist-header"
     };
-    const _hoisted_5 = { class: "p-picklist-buttons p-picklist-transfer-buttons" };
-    const _hoisted_6 = { class: "p-picklist-list-wrapper p-picklist-target-wrapper" };
-    const _hoisted_7 = {
+    const _hoisted_4 = { class: "p-picklist-buttons p-picklist-transfer-buttons" };
+    const _hoisted_5 = { class: "p-picklist-list-wrapper p-picklist-target-wrapper" };
+    const _hoisted_6 = {
       key: 0,
       class: "p-picklist-header"
     };
-    const _hoisted_8 = { class: "p-picklist-buttons p-picklist-target-controls" };
+    const _hoisted_7 = { class: "p-picklist-buttons p-picklist-target-controls" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_PLButton = vue.resolveComponent("PLButton");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-        vue.createVNode("div", _hoisted_2, [
+      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+        vue.createVNode("div", _hoisted_1, [
           vue.renderSlot(_ctx.$slots, "sourcecontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
@@ -555,9 +563,9 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
           }),
           vue.renderSlot(_ctx.$slots, "sourcecontrolsend")
         ]),
-        vue.createVNode("div", _hoisted_3, [
+        vue.createVNode("div", _hoisted_2, [
           (_ctx.$slots.sourceheader)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
+            ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
                 vue.renderSlot(_ctx.$slots, "sourceheader")
               ]))
             : vue.createCommentVNode("", true),
@@ -595,7 +603,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             _: 3
           }, 8, ["style"])
         ]),
-        vue.createVNode("div", _hoisted_5, [
+        vue.createVNode("div", _hoisted_4, [
           vue.renderSlot(_ctx.$slots, "movecontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
@@ -619,9 +627,9 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
           }, null, 8, ["onClick"]),
           vue.renderSlot(_ctx.$slots, "movecontrolsend")
         ]),
-        vue.createVNode("div", _hoisted_6, [
+        vue.createVNode("div", _hoisted_5, [
           (_ctx.$slots.targetheader)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_7, [
+            ? (vue.openBlock(), vue.createBlock("div", _hoisted_6, [
                 vue.renderSlot(_ctx.$slots, "targetheader")
               ]))
             : vue.createCommentVNode("", true),
@@ -659,7 +667,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             _: 3
           }, 8, ["style"])
         ]),
-        vue.createVNode("div", _hoisted_8, [
+        vue.createVNode("div", _hoisted_7, [
           vue.renderSlot(_ctx.$slots, "targetcontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
@@ -683,7 +691,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
           }),
           vue.renderSlot(_ctx.$slots, "targetcontrolsend")
         ])
-      ]))
+      ], 2))
     }
 
     function styleInject(css, ref) {

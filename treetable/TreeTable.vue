@@ -8,7 +8,7 @@
         <div class="p-treetable-header" v-if="$slots.header">
             <slot name="header"></slot>
         </div>
-         <TTPaginator v-if="paginatorTop" :rows="d_rows" :first="d_first" :totalRecords="totalRecordsLength" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions"
+        <TTPaginator v-if="paginatorTop" :rows="d_rows" :first="d_first" :totalRecords="totalRecordsLength" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions"
                 :currentPageReportTemplate="currentPageReportTemplate" class="p-paginator-top" @page="onPage($event)" :alwaysShow="alwaysShowPaginator">
             <template #start v-if="$slots.paginatorstart">
                 <slot name="paginatorstart"></slot>
@@ -965,7 +965,7 @@ export default {
     overflow: hidden;
 }
 
-.p-treetable-resizable .p-resizable-column {
+.p-treetable-resizable .p-resizable-column:not(.p-frozen-column) {
     background-clip: padding-box;
     position: relative;
 }
@@ -1049,6 +1049,10 @@ export default {
 .p-treetable-scrollable .p-frozen-column {
     position: sticky;
     background: inherit;
+}
+
+.p-treetable-scrollable th.p-frozen-column {
+    z-index: 1;
 }
 
 .p-treetable-scrollable-both .p-treetable-thead > tr > th,

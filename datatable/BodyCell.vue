@@ -1,12 +1,15 @@
 <template>
-    <td :style="containerStyle" :class="containerClass" @click="onClick" @keydown="onKeyDown" role="cell">
+    <td v-if="loading" :style="containerStyle" :class="containerClass">
+        <component :is="column.children.loading" :data="rowData" :column="column" :field="field" :index="rowIndex" :frozenRow="frozenRow" :loadingOptions="loadingOptions"  />
+    </td>
+    <td v-else :style="containerStyle" :class="containerClass" @click="onClick" @keydown="onKeyDown" role="cell">
         <span v-if="responsiveLayout === 'stack'" class="p-column-title">{{columnProp('header')}}</span>
         <component :is="column.children.body" :data="rowData" :column="column" :field="field" :index="rowIndex" :frozenRow="frozenRow" v-if="column.children && column.children.body && !d_editing" />
         <component :is="column.children.editor" :data="editingRowData" :column="column" :field="field" :index="rowIndex" :frozenRow="frozenRow" v-else-if="column.children && column.children.editor && d_editing" />
         <component :is="column.children.body" :data="editingRowData" :column="column" :field="field" :index="rowIndex" :frozenRow="frozenRow" v-else-if="column.children && column.children.body && !column.children.editor && d_editing" />
         <template v-else-if="columnProp('selectionMode')">
-            <DTRadioButton :value="rowData" :checked="selected" @change="toggleRowWithRadio" v-if="columnProp('selectionMode') === 'single'" />
-            <DTCheckbox :value="rowData" :checked="selected" @change="toggleRowWithCheckbox" v-else-if="columnProp('selectionMode') ==='multiple'" />
+            <DTRadioButton :value="rowData" :checked="selected" @change="toggleRowWithRadio($event, rowIndex)" v-if="columnProp('selectionMode') === 'single'" />
+            <DTCheckbox :value="rowData" :checked="selected" @change="toggleRowWithCheckbox($event, rowIndex)" v-else-if="columnProp('selectionMode') ==='multiple'" />
         </template>
         <template v-else-if="columnProp('rowReorder')">
             <i :class="['p-datatable-reorderablerow-handle', (columnProp('rowReorderIcon') || 'pi pi-bars')]"></i>
@@ -86,6 +89,10 @@ export default {
         responsiveLayout: {
             type: String,
             default: 'stack'
+        },
+        virtualScrollerContentProps: {
+            type: Object,
+            default: null
         }
     },
     documentEditListener: null,
@@ -139,11 +146,11 @@ export default {
                 data: this.rowData
             });
         },
-        toggleRowWithRadio(event) {
-            this.$emit('radio-change', event);
+        toggleRowWithRadio(event, index) {
+            this.$emit('radio-change', { originalEvent: event.originalEvent, index: index, data: event.data});
         },
-        toggleRowWithCheckbox(event) {
-            this.$emit('checkbox-change', event);
+        toggleRowWithCheckbox(event, index) {
+            this.$emit('checkbox-change', { originalEvent: event.originalEvent, index: index, data: event.data });
         },
         isEditable() {
             return this.column.children && this.column.children.editor != null;
@@ -339,6 +346,9 @@ export default {
                     this.styleObject.left = left + 'px';
                 }
             }
+        },
+        getVirtualScrollerProp(option) {
+            return this.virtualScrollerContentProps ? this.virtualScrollerContentProps[option] : null;
         }
     },
     computed: {
@@ -361,6 +371,21 @@ export default {
             let columnStyle = this.columnProp('style');
 
             return this.columnProp('frozen') ? [columnStyle, bodyStyle, this.styleObject]: [columnStyle, bodyStyle];
+        },
+        loading() {
+            return this.getVirtualScrollerProp('loading');
+        },
+        loadingOptions() {
+            const getLoaderOptions = this.getVirtualScrollerProp('getLoaderOptions');
+            return getLoaderOptions && getLoaderOptions(this.rowIndex, {
+                cellIndex: this.index,
+                cellFirst: this.index === 0,
+                cellLast: this.index === (this.getVirtualScrollerProp('columns').length - 1),
+                cellEven: this.index % 2 === 0,
+                cellOdd: this.index % 2 !== 0,
+                column: this.column,
+                field: this.field
+            });
         }
     },
     components: {

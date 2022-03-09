@@ -16,19 +16,19 @@
             </slot>
         </div>
         <Teleport :to="appendTarget" :disabled="appendDisabled">
-            <transition name="p-connected-overlay" @enter="onOverlayEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
+            <transition name="p-connected-overlay" @enter="onOverlayEnter" @after-enter="onOverlayAfterEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
                 <div :ref="overlayRef" :class="panelStyleClass" v-if="overlayVisible" @click="onOverlayClick">
                     <slot name="header" :value="modelValue" :options="visibleOptions"></slot>
                     <div class="p-dropdown-header" v-if="filter">
                         <div  class="p-dropdown-filter-container">
-                            <input type="text" ref="filterInput" v-model="filterValue" @vnode-updated="onFilterUpdated" autoComplete="off" class="p-dropdown-filter p-inputtext p-component" :placeholder="filterPlaceholder" @keydown="onFilterKeyDown"  @input="onFilterChange"/>
+                            <input type="text" ref="filterInput" :value="filterValue" @vnode-updated="onFilterUpdated" autoComplete="off" class="p-dropdown-filter p-inputtext p-component" :placeholder="filterPlaceholder" @keydown="onFilterKeyDown" @input="onFilterChange"/>
                             <span class="p-dropdown-filter-icon pi pi-search"></span>
                         </div>
                     </div>
                     <div :ref="itemsWrapperRef" class="p-dropdown-items-wrapper" :style="{'max-height': virtualScrollerDisabled ? scrollHeight : ''}">
                         <VirtualScroller :ref="virtualScrollerRef" v-bind="virtualScrollerOptions" :items="visibleOptions" :style="{'height': scrollHeight}" :disabled="virtualScrollerDisabled">
-                            <template v-slot:content="{ styleClass, contentRef, items, getItemOptions }">
-                                <ul :ref="contentRef" :class="['p-dropdown-items', styleClass]" role="listbox">
+                            <template v-slot:content="{ styleClass, contentRef, items, getItemOptions, contentStyle }">
+                                <ul :ref="contentRef" :class="['p-dropdown-items', styleClass]" :style="contentStyle" role="listbox">
                                     <template v-if="!optionGroupLabel">
                                         <li v-for="(option, i) of items" :class="['p-dropdown-item', {'p-highlight': isSelected(option), 'p-disabled': isOptionDisabled(option)}]" v-ripple
                                             :key="getOptionRenderKey(option)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
@@ -437,21 +437,25 @@ export default {
         onOverlayEnter(el) {
             ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
             this.alignOverlay();
-            this.bindOutsideClickListener();
-            this.bindScrollListener();
-            this.bindResizeListener();
             this.scrollValueInView();
-
-            if (this.filter) {
-                this.$refs.filterInput.focus();
-            }
 
             if (!this.virtualScrollerDisabled) {
                 const selectedIndex = this.getSelectedOptionIndex();
                 if (selectedIndex !== -1) {
-                    this.virtualScroller.scrollToIndex(selectedIndex);
+                    setTimeout(() => {
+                        this.virtualScroller && this.virtualScroller.scrollToIndex(selectedIndex)
+                    }, 0);
                 }
             }
+        },
+        onOverlayAfterEnter() {
+            if (this.filter) {
+                this.$refs.filterInput.focus();
+            }
+
+            this.bindOutsideClickListener();
+            this.bindScrollListener();
+            this.bindResizeListener();
 
             this.$emit('show');
         },
@@ -608,6 +612,7 @@ export default {
             return label.startsWith(this.searchValue.toLocaleLowerCase(this.filterLocale));
         },
         onFilterChange(event) {
+            this.filterValue = event.target.value;
             this.$emit('filter', {originalEvent: event, value: event.target.value});
         },
         onFilterUpdated() {
@@ -691,7 +696,7 @@ export default {
         },
         label() {
             let selectedOption = this.getSelectedOption();
-            if (selectedOption)
+            if (selectedOption !== null)
                 return this.getOptionLabel(selectedOption);
             else
                 return this.placeholder||'p-emptylabel';

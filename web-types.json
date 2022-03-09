@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "framework": "vue",
   "name": "PrimeVue",
-  "version": "3.9.1",
+  "version": "3.12.1-SNAPSHOT",
   "contributions": {
     "html": {
       "types-syntax": "typescript",
@@ -1191,19 +1191,22 @@
                 "kind": "expression",
                 "type": "any"
               }
-            },
-            {
-              "name": "keepInvalid",
-              "default": "false",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
-              "description": "Keep invalid value when input blur.",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
-              }
             }
           ],
           "events": [
+            {
+              "name": "input",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Callback to invoke when input field is being typed.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+                  "type": "object",
+                  "description": "New date"
+                }
+              ]
+            },
             {
               "name": "date-select",
               "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
@@ -1288,6 +1291,51 @@
                   "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
                   "type": "number",
                   "description": "New year"
+                }
+              ]
+            },
+            {
+              "name": "focus",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Callback to invoke on focus of input field.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+                  "type": "object",
+                  "description": "Focus event"
+                }
+              ]
+            },
+            {
+              "name": "blur",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Callback to invoke on blur of input field.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+                  "type": "object",
+                  "description": "Browser event"
+                },
+                {
+                  "name": "event.value",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+                  "type": "string",
+                  "description": "Input value"
+                }
+              ]
+            },
+            {
+              "name": "keydown",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Callback to invoke when a key is pressed.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+                  "type": "object",
+                  "description": "Keydown event"
                 }
               ]
             }
@@ -1535,7 +1583,7 @@
               "description": "Property name or getter function to use as the label of an option.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -1545,7 +1593,7 @@
               "description": "Property name or getter function to use as the value of an option, defaults to the option itself when not defined.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -1555,7 +1603,7 @@
               "description": "Property name or getter function to use as the label of an option group.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -1565,7 +1613,7 @@
               "description": "Property name or getter function to retrieve the items of a group.",
               "value": {
                 "kind": "expression",
-                "type": "array"
+                "type": "array | function"
               }
             },
             {
@@ -1787,6 +1835,16 @@
               }
             },
             {
+              "name": "plugins",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/chart",
+              "description": "Used to custom plugins of the chart.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
               "name": "width",
               "default": "300",
               "doc-url": "https://primefaces.org/primevue/showcase/#/chart",
@@ -1842,6 +1900,19 @@
                   "doc-url": "https://primefaces.org/primevue/showcase/#/chart",
                   "type": "number",
                   "description": "Index of the data in dataset"
+                }
+              ]
+            },
+            {
+              "name": "loaded",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/chart",
+              "description": "Callback to invoke when chart is loaded.",
+              "arguments": [
+                {
+                  "name": "chart",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/chart",
+                  "type": "object",
+                  "description": "Chart instance."
                 }
               ]
             }
@@ -1908,7 +1979,7 @@
             },
             {
               "name": "trueValue",
-              "default": "true",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
               "description": "Value in checked state.",
               "value": {
@@ -1918,7 +1989,7 @@
             },
             {
               "name": "falseValue",
-              "default": "true",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
               "description": "Value in unchecked state.",
               "value": {
@@ -2701,6 +2772,16 @@
               }
             },
             {
+              "name": "exportHeader",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Custom export header of the column to be exported as CSV.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "hidden",
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
@@ -3225,6 +3306,16 @@
               }
             },
             {
+              "name": "selectAll",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Whether all data is selected.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
               "name": "csvSeparator",
               "default": ",",
               "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
@@ -3452,6 +3543,16 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "virtualScrollerOptions",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it. Note: Currently only vertical orientation mode is supported.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             },
             {
@@ -3831,6 +3932,25 @@
                   "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
                   "type": "string",
                   "description": "Type of the selection, valid values are \"row\", \"radio\" or \"checkbox\"."
+                }
+              ]
+            },
+            {
+              "name": "select-all-change",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Callback to invoke when all data is selected.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "Browser event."
+                },
+                {
+                  "name": "event.checked",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+                  "type": "object",
+                  "description": "Whether all data is selected."
                 }
               ]
             },
@@ -4846,7 +4966,7 @@
               }
             },
             {
-              "name": "maxiizable",
+              "name": "maximizable",
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dialog",
               "description": "Whether the dialog can be displayed full screen.",
@@ -5140,7 +5260,7 @@
               "description": "Property name or getter function to use as the label of an option.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -5150,7 +5270,7 @@
               "description": "Property name or getter function to use as the value of an option, defaults to the option itself when not defined.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -5170,7 +5290,7 @@
               "description": "Property name or getter function to use as the label of an option group.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -5180,7 +5300,7 @@
               "description": "Property name or getter function that refers to the children options of option group.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -6373,17 +6493,17 @@
               "description": "Inline style of the component on fullscreen mode. Otherwise, the 'style' property can be used.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "any"
               }
             },
             {
-              "name": "galleriaClass",
+              "name": "containerClass",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/galleria",
               "description": "Style class of the component on fullscreen mode. Otherwise, the 'class' property can be used.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "any"
               }
             }
           ],
@@ -6912,6 +7032,38 @@
                   "description": "New value"
                 }
               ]
+            },
+            {
+              "name": "focus",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+              "description": "Callback to invoke on focus of input field.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+                  "type": "object",
+                  "description": "Focus event"
+                }
+              ]
+            },
+            {
+              "name": "blur",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+              "description": "Callback to invoke on blur of input field.",
+              "arguments": [
+                {
+                  "name": "event.originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+                  "type": "object",
+                  "description": "Browser event"
+                },
+                {
+                  "name": "event.value",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+                  "type": "string",
+                  "description": "Input value"
+                }
+              ]
             }
           ]
         },
@@ -6956,7 +7108,7 @@
             },
             {
               "name": "trueValue",
-              "default": "true",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
               "description": "Value in checked state.",
               "value": {
@@ -6966,7 +7118,7 @@
             },
             {
               "name": "falseValue",
-              "default": "true",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
               "description": "Value in unchecked state.",
               "value": {
@@ -7206,7 +7358,7 @@
               "description": "Property name or getter function to use as the label of an option.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -7216,7 +7368,7 @@
               "description": "Property name or getter function to use as the value of an option, defaults to the option itself when not defined.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -7226,7 +7378,7 @@
               "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.",
               "value": {
                 "kind": "expression",
-                "type": "boolean"
+                "type": "boolean | function"
               }
             },
             {
@@ -7236,7 +7388,7 @@
               "description": "Property name or getter function to use as the label of an option group.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -7246,7 +7398,7 @@
               "description": "Property name or getter function that refers to the children options of option group.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -7778,7 +7930,7 @@
               "description": "Property name or getter function to use as the value of an option, defaults to the option itself when not defined.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -7788,7 +7940,7 @@
               "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.",
               "value": {
                 "kind": "expression",
-                "type": "boolean"
+                "type": "boolean | function"
               }
             },
             {
@@ -7798,7 +7950,7 @@
               "description": "Property name or getter function to use as the label of an option group.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -7808,7 +7960,7 @@
               "description": "Property name or getter function that refers to the children options of option group.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "string | function"
               }
             },
             {
@@ -8266,6 +8418,16 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "stripedRows",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/orderlist",
+              "description": "Whether to displays rows with alternating colors.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
               }
             }
           ],
@@ -9079,6 +9241,16 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "stripedRows",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Whether to displays rows with alternating colors.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
               }
             }
           ],
@@ -11146,12 +11318,12 @@
           "description": "Toolbar is a grouping component for buttons and other content.",
           "slots": [
             {
-              "name": "left",
+              "name": "start",
               "doc-url": "https://primefaces.org/primevue/showcase/#/toolbar",
               "description": "Custom content for the component's left side"
             },
             {
-              "name": "right",
+              "name": "end",
               "doc-url": "https://primefaces.org/primevue/showcase/#/toolbar",
               "description": "Custom content for the component's right side"
             }
@@ -12341,6 +12513,36 @@
           "description": "VirtualScroller is a performant approach to handle huge data efficiently.",
           "attributes": [
             {
+              "name": "id",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Unique identifier of the element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "style",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Inline style of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "class",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Style class of the component.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "items",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
@@ -12421,6 +12623,46 @@
               }
             },
             {
+              "name": "disabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "If disabled, the VirtualScroller feature is eliminated and the content is displayed directly.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "loaderDisabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Used to implement a custom loader instead of using the loader feature in the VirtualScroller.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "loading",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Whether the data is loaded.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "showSpacer",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Used to implement a custom spacer instead of using the spacer feature in the VirtualScroller.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
               "name": "showLoader",
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
@@ -12429,29 +12671,22 @@
                 "kind": "expression",
                 "type": "boolean"
               }
-            },
-            {
-              "name": "style",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
-              "description": "Inline style of the component.",
-              "value": {
-                "kind": "expression",
-                "type": "any"
-              }
-            },
-            {
-              "name": "class",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
-              "description": "Style class of the component.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
             }
           ],
           "events": [
+            {
+              "name": "scroll",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Callback to invoke when scroll position changes.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+                  "type": "any",
+                  "description": "Browser event."
+                }
+              ]
+            },
             {
               "name": "scroll-index-change",
               "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",

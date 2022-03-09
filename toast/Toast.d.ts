@@ -1,17 +1,17 @@
 import { VNode } from 'vue';
 import { ClassComponent, GlobalComponentConstructor } from '../ts-helpers';
 
-type ToastPositionType = 'top-left' | 'top-center' | 'bottom-left' | 'bottom-center' | 'bottom-right' | 'center' | undefined;
+type ToastPositionType = 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right' | 'center' | undefined;
 
 type ToastMessageSeverityType = 'success' | 'info' | 'warn' | 'error' | undefined;
 
 export interface ToastMessageOptions {
     /**
      * Severity level of the message.
-     * @see MessageSeverityType
+     * @see ToastMessageSeverityType
      * Default value is 'info'.
      */
-    severity?: ToastMessageSeverityType;
+    severity?: any | undefined;
     /**
      * Summary content of the message.
      */
@@ -19,7 +19,7 @@ export interface ToastMessageOptions {
     /**
      * Detail content of the message.
      */
-    detail?: string | undefined;
+    detail?: any | undefined;
     /**
      * Whether the message can be closed manually using the close icon.
      * Default value is true.
@@ -37,11 +37,11 @@ export interface ToastMessageOptions {
     /**
      * Style class of the message.
      */
-    styleClass?: string | undefined;
+    styleClass?: any;
     /**
      * Style class of the content.
      */
-    contentStyleClass?: string | undefined;
+    contentStyleClass?: any;
 }
 
 export interface ToastBreakpointsType {
@@ -87,8 +87,16 @@ export interface ToastProps {
 export interface ToastSlots {
     /**
      * Custom message template.
+     * @param {Object} scope - message slot's params.
      */
-    message: () => VNode[];
+    message: (
+        scope: {
+            /**
+             * Message of the component
+             */
+            message: any;
+        }
+    ) => VNode[];
 }
 
 export declare type ToastEmits = {

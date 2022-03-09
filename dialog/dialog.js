@@ -468,8 +468,7 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
                                       class: "p-dialog-header-icon p-dialog-header-close p-link",
                                       onClick: _cache[2] || (_cache[2] = (...args) => ($options.close && $options.close(...args))),
                                       "aria-label": $props.ariaCloseLabel,
-                                      type: "button",
-                                      tabindex: "-1"
+                                      type: "button"
                                     }, [
                                       _hoisted_2
                                     ], 8, ["aria-label"])), [

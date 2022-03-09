@@ -3,7 +3,7 @@ import OverlayEventBus from 'primevue/overlayeventbus';
 import { FilterService } from 'primevue/api';
 import Ripple from 'primevue/ripple';
 import VirtualScroller from 'primevue/virtualscroller';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, createCommentVNode, renderSlot, createTextVNode, toDisplayString, Teleport, Transition, withCtx, withDirectives, vModelText, mergeProps, createSlots, Fragment, renderList } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, createCommentVNode, renderSlot, createTextVNode, toDisplayString, Teleport, Transition, withCtx, mergeProps, createSlots, Fragment, renderList, withDirectives } from 'vue';
 
 var script = {
     name: 'Dropdown',
@@ -366,21 +366,25 @@ var script = {
         onOverlayEnter(el) {
             ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
             this.alignOverlay();
-            this.bindOutsideClickListener();
-            this.bindScrollListener();
-            this.bindResizeListener();
             this.scrollValueInView();
-
-            if (this.filter) {
-                this.$refs.filterInput.focus();
-            }
 
             if (!this.virtualScrollerDisabled) {
                 const selectedIndex = this.getSelectedOptionIndex();
                 if (selectedIndex !== -1) {
-                    this.virtualScroller.scrollToIndex(selectedIndex);
+                    setTimeout(() => {
+                        this.virtualScroller && this.virtualScroller.scrollToIndex(selectedIndex);
+                    }, 0);
                 }
             }
+        },
+        onOverlayAfterEnter() {
+            if (this.filter) {
+                this.$refs.filterInput.focus();
+            }
+
+            this.bindOutsideClickListener();
+            this.bindScrollListener();
+            this.bindResizeListener();
 
             this.$emit('show');
         },
@@ -537,6 +541,7 @@ var script = {
             return label.startsWith(this.searchValue.toLocaleLowerCase(this.filterLocale));
         },
         onFilterChange(event) {
+            this.filterValue = event.target.value;
             this.$emit('filter', {originalEvent: event, value: event.target.value});
         },
         onFilterUpdated() {
@@ -620,7 +625,7 @@ var script = {
         },
         label() {
             let selectedOption = this.getSelectedOption();
-            if (selectedOption)
+            if (selectedOption !== null)
                 return this.getOptionLabel(selectedOption);
             else
                 return this.placeholder||'p-emptylabel';
@@ -689,7 +694,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
     ref: "container",
     class: $options.containerClass,
-    onClick: _cache[13] || (_cache[13] = $event => ($options.onClick($event)))
+    onClick: _cache[12] || (_cache[12] = $event => ($options.onClick($event)))
   }, [
     createVNode("div", _hoisted_1, [
       createVNode("input", {
@@ -759,6 +764,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       createVNode(Transition, {
         name: "p-connected-overlay",
         onEnter: $options.onOverlayEnter,
+        onAfterEnter: $options.onOverlayAfterEnter,
         onLeave: $options.onOverlayLeave,
         onAfterLeave: $options.onOverlayAfterLeave
       }, {
@@ -768,7 +774,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 key: 0,
                 ref: $options.overlayRef,
                 class: $options.panelStyleClass,
-                onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                onClick: _cache[11] || (_cache[11] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
                 renderSlot(_ctx.$slots, "header", {
                   value: $props.modelValue,
@@ -777,19 +783,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ($props.filter)
                   ? (openBlock(), createBlock("div", _hoisted_2, [
                       createVNode("div", _hoisted_3, [
-                        withDirectives(createVNode("input", {
+                        createVNode("input", {
                           type: "text",
                           ref: "filterInput",
-                          "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => ($data.filterValue = $event)),
-                          onVnodeUpdated: _cache[9] || (_cache[9] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
+                          value: $data.filterValue,
+                          onVnodeUpdated: _cache[8] || (_cache[8] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
                           autoComplete: "off",
                           class: "p-dropdown-filter p-inputtext p-component",
                           placeholder: $props.filterPlaceholder,
-                          onKeydown: _cache[10] || (_cache[10] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
-                          onInput: _cache[11] || (_cache[11] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
-                        }, null, 40, ["placeholder"]), [
-                          [vModelText, $data.filterValue]
-                        ]),
+                          onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
+                          onInput: _cache[10] || (_cache[10] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                        }, null, 40, ["value", "placeholder"]),
                         _hoisted_4
                       ])
                     ]))
@@ -804,10 +808,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     style: {'height': $props.scrollHeight},
                     disabled: $options.virtualScrollerDisabled
                   }), createSlots({
-                    content: withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+                    content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
                       createVNode("ul", {
                         ref: contentRef,
                         class: ['p-dropdown-items', styleClass],
+                        style: contentStyle,
                         role: "listbox"
                       }, [
                         (!$props.optionGroupLabel)
@@ -876,7 +881,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 ])
                               ]))
                             : createCommentVNode("", true)
-                      ], 2)
+                      ], 6)
                     ]),
                     _: 2
                   }, [
@@ -898,7 +903,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             : createCommentVNode("", true)
         ]),
         _: 3
-      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+      }, 8, ["onEnter", "onAfterEnter", "onLeave", "onAfterLeave"])
     ], 8, ["to", "disabled"]))
   ], 2))
 }

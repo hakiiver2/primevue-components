@@ -214,7 +214,7 @@ var script = {
                     if (this.isSplitterPanel(child)) {
                         panels.push(child);
                     }
-                    else if (child.children.length > 0) {
+                    else if (child.children instanceof Array) {
                         child.children.forEach(nestedChild => {
                             if (this.isSplitterPanel(nestedChild)) {
                                 panels.push(nestedChild);

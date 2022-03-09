@@ -6,7 +6,7 @@ var script = {
             default: null
         },
         field: {
-            type: String,
+            type: [String, Function],
             default: null
         },
         sortField: {
@@ -14,7 +14,7 @@ var script = {
             default: null
         },
         filterField: {
-            type: String,
+            type: [String, Function],
             default: null
         },
         dataType: {
@@ -160,6 +160,10 @@ var script = {
         exportable: {
             type: Boolean,
             default: true
+        },
+        exportHeader: {
+            type: String,
+            default: null
         },
         filterMatchMode: {
             type: String,

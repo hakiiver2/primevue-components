@@ -60,7 +60,7 @@ this.primevue.splitbutton = (function (Button, TieredMenu, utils, vue) {
         }
     };
 
-    const _withId = /*#__PURE__*/vue.withScopeId("data-v-5bb97d91");
+    const _withId = /*#__PURE__*/vue.withScopeId("data-v-3d44cde8");
 
     const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $options) => {
       const _component_PVSButton = vue.resolveComponent("PVSButton");
@@ -70,14 +70,16 @@ this.primevue.splitbutton = (function (Button, TieredMenu, utils, vue) {
         class: $options.containerClass,
         style: $props.style
       }, [
-        vue.createVNode(_component_PVSButton, vue.mergeProps({
-          type: "button",
-          class: "p-splitbutton-defaultbutton"
-        }, _ctx.$attrs, {
-          icon: $props.icon,
-          label: $props.label,
-          onClick: $options.onDefaultButtonClick
-        }), null, 16, ["icon", "label", "onClick"]),
+        vue.renderSlot(_ctx.$slots, "default", {}, () => [
+          vue.createVNode(_component_PVSButton, vue.mergeProps({
+            type: "button",
+            class: "p-splitbutton-defaultbutton"
+          }, _ctx.$attrs, {
+            icon: $props.icon,
+            label: $props.label,
+            onClick: $options.onDefaultButtonClick
+          }), null, 16, ["icon", "label", "onClick"])
+        ]),
         vue.createVNode(_component_PVSButton, {
           type: "button",
           class: "p-splitbutton-menubutton",
@@ -126,11 +128,11 @@ this.primevue.splitbutton = (function (Button, TieredMenu, utils, vue) {
       }
     }
 
-    var css_248z = "\n.p-splitbutton[data-v-5bb97d91] {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: relative;\n}\n.p-splitbutton .p-splitbutton-defaultbutton[data-v-5bb97d91] {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0;\n    border-right: 0 none;\n}\n.p-splitbutton-menubutton[data-v-5bb97d91] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0;\n}\n.p-splitbutton .p-menu[data-v-5bb97d91] {\n    min-width: 100%;\n}\n.p-fluid .p-splitbutton[data-v-5bb97d91]  {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n";
+    var css_248z = "\n.p-splitbutton[data-v-3d44cde8] {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    position: relative;\n}\n.p-splitbutton .p-splitbutton-defaultbutton[data-v-3d44cde8],\n.p-splitbutton.p-button-rounded > .p-splitbutton-defaultbutton.p-button[data-v-3d44cde8],\n.p-splitbutton.p-button-outlined > .p-splitbutton-defaultbutton.p-button[data-v-3d44cde8] {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0;\n    border-right: 0 none;\n}\n.p-splitbutton-menubutton[data-v-3d44cde8],\n.p-splitbutton.p-button-rounded > .p-splitbutton-menubutton.p-button[data-v-3d44cde8],\n.p-splitbutton.p-button-outlined > .p-splitbutton-menubutton.p-button[data-v-3d44cde8] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0;\n}\n.p-splitbutton .p-menu[data-v-3d44cde8] {\n    min-width: 100%;\n}\n.p-fluid .p-splitbutton[data-v-3d44cde8]  {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n";
     styleInject(css_248z);
 
     script.render = render;
-    script.__scopeId = "data-v-5bb97d91";
+    script.__scopeId = "data-v-3d44cde8";
 
     return script;
 

@@ -12,9 +12,9 @@
                     </template>
                     <template v-else-if="display === 'chip'">
                         <div v-for="item of modelValue" class="p-multiselect-token" :key="getLabelByValue(item)">
-                             <slot name="chip" :value="item">
+                            <slot name="chip" :value="item">
                                 <span class="p-multiselect-token-label">{{getLabelByValue(item)}}</span>
-                             </slot>
+                            </slot>
                             <span v-if="!disabled" class="p-multiselect-token-icon pi pi-times-circle" @click="removeChip(item)"></span>
                         </div>
                         <template v-if="!modelValue || modelValue.length === 0">{{placeholder || 'empty'}}</template>
@@ -28,7 +28,7 @@
             </slot>
         </div>
         <Teleport :to="appendTarget" :disabled="appendDisabled">
-            <transition name="p-connected-overlay" @enter="onOverlayEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
+            <transition name="p-connected-overlay" @enter="onOverlayEnter" @after-enter="onOverlayAfterEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
                 <div :ref="overlayRef" :class="panelStyleClass" v-if="overlayVisible" @click="onOverlayClick">
                     <slot name="header" :value="modelValue" :options="visibleOptions"></slot>
                     <div class="p-multiselect-header" v-if="(showToggleAll && selectionLimit == null) || filter">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div v-if="filter" class="p-multiselect-filter-container">
-                            <input type="text" ref="filterInput" v-model="filterValue" class="p-multiselect-filter p-inputtext p-component" :placeholder="filterPlaceholder" @input="onFilterChange">
+                            <input type="text" ref="filterInput" v-model="filterValue" autoComplete="on" class="p-multiselect-filter p-inputtext p-component" :placeholder="filterPlaceholder" @input="onFilterChange">
                             <span class="p-multiselect-filter-icon pi pi-search"></span>
                         </div>
                         <button class="p-multiselect-close p-link" @click="onCloseClick" type="button" v-ripple>
@@ -50,8 +50,8 @@
                     </div>
                     <div class="p-multiselect-items-wrapper" :style="{'max-height': virtualScrollerDisabled ? scrollHeight : ''}">
                         <VirtualScroller :ref="virtualScrollerRef" v-bind="virtualScrollerOptions" :items="visibleOptions" :style="{'height': scrollHeight}" :disabled="virtualScrollerDisabled">
-                            <template v-slot:content="{ styleClass, contentRef, items, getItemOptions }">
-                                <ul :ref="contentRef" :class="['p-multiselect-items p-component', styleClass]" role="listbox" aria-multiselectable="true">
+                            <template v-slot:content="{ styleClass, contentRef, items, getItemOptions, contentStyle}">
+                                <ul :ref="contentRef" :class="['p-multiselect-items p-component', styleClass]" :style="contentStyle" role="listbox" aria-multiselectable="true">
                                     <template v-if="!optionGroupLabel">
                                         <li v-for="(option, i) of items" :class="['p-multiselect-item', {'p-highlight': isSelected(option), 'p-disabled': isOptionDisabled(option)}]" role="option" :aria-selected="isSelected(option)"
                                             :key="getOptionRenderKey(option)" @click="onOptionSelect($event, option)" @keydown="onOptionKeyDown($event, option)" :tabindex="tabindex||'0'" :aria-label="getOptionLabel(option)"  v-ripple>
@@ -333,8 +333,7 @@ export default {
                     }
                 break;
 
-                //enter and escape
-                case 13:
+                //escape
                 case 27:
                     if (this.overlayVisible) {
                         this.hide();
@@ -420,19 +419,23 @@ export default {
         onOverlayEnter(el) {
             ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
             this.alignOverlay();
+
+            if (!this.virtualScrollerDisabled) {
+                const selectedIndex = this.getSelectedOptionIndex();
+                if (selectedIndex !== -1) {
+                    setTimeout(() => {
+                        this.virtualScroller && this.virtualScroller.scrollToIndex(selectedIndex)
+                    }, 0);
+                }
+            }
+        },
+        onOverlayAfterEnter() {
             this.bindOutsideClickListener();
             this.bindScrollListener();
             this.bindResizeListener();
 
             if (this.filter) {
                 this.$refs.filterInput.focus();
-            }
-
-            if (!this.virtualScrollerDisabled) {
-                const selectedIndex = this.getSelectedOptionIndex();
-                if (selectedIndex !== -1) {
-                    this.virtualScroller.scrollToIndex(selectedIndex);
-                }
             }
 
             this.$emit('show');

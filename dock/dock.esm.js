@@ -1,4 +1,5 @@
 import Ripple from 'primevue/ripple';
+import Tooltip from 'primevue/tooltip';
 import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, Fragment, renderList, withCtx, withDirectives, resolveDynamicComponent } from 'vue';
 
 var script$1 = {
@@ -68,7 +69,8 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple
+        'ripple': Ripple,
+        'tooltip': Tooltip
     }
 };
 

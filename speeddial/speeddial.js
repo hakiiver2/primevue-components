@@ -1,11 +1,12 @@
 this.primevue = this.primevue || {};
-this.primevue.speeddial = (function (Button, Ripple, utils, vue) {
+this.primevue.speeddial = (function (Button, Ripple, Tooltip, utils, vue) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+    var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
 
     var script = {
         name: 'SpeedDial',
@@ -244,7 +245,8 @@ this.primevue.speeddial = (function (Button, Ripple, utils, vue) {
             'SDButton': Button__default['default']
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default['default'],
+            'tooltip': Tooltip__default['default']
         }
     };
 
@@ -351,4 +353,4 @@ this.primevue.speeddial = (function (Button, Ripple, utils, vue) {
 
     return script;
 
-}(primevue.button, primevue.ripple, primevue.utils, Vue));
+}(primevue.button, primevue.ripple, primevue.tooltip, primevue.utils, Vue));

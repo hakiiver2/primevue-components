@@ -700,11 +700,12 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                       items: $props.suggestions,
                       disabled: $options.virtualScrollerDisabled
                     }), vue.createSlots({
-                      content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+                      content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
                         vue.createVNode("ul", {
                           id: $options.listId,
                           ref: (el) => $options.listRef(el, contentRef),
                           class: ['p-autocomplete-items', styleClass],
+                          style: contentStyle,
                           role: "listbox"
                         }, [
                           (!$props.optionGroupLabel)
@@ -759,7 +760,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                                   }), 128))
                                 ], 64))
                               }), 128))
-                        ], 10, ["id"])
+                        ], 14, ["id"])
                       ]),
                       _: 2
                     }, [

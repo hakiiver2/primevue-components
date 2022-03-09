@@ -1,4 +1,4 @@
-import { openBlock, createBlock, mergeProps, renderSlot, createCommentVNode, createVNode, toDisplayString } from 'vue';
+import { openBlock, createBlock, mergeProps, createCommentVNode, renderSlot, createVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'Tag',
@@ -28,13 +28,13 @@ const _hoisted_1 = { class: "p-tag-value" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("span", mergeProps({ class: $options.containerClass }, _ctx.$attrs), [
+    ($props.icon)
+      ? (openBlock(), createBlock("span", {
+          key: 0,
+          class: $options.iconClass
+        }, null, 2))
+      : createCommentVNode("", true),
     renderSlot(_ctx.$slots, "default", {}, () => [
-      ($props.icon)
-        ? (openBlock(), createBlock("span", {
-            key: 0,
-            class: $options.iconClass
-          }, null, 2))
-        : createCommentVNode("", true),
       createVNode("span", _hoisted_1, toDisplayString($props.value), 1)
     ])
   ], 16))

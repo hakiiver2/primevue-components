@@ -355,10 +355,6 @@
     "description": "Inline style of the component.",
     "type": "any"
   },
-  "calendar/keepInvalid": {
-    "description": "Keep invalid value when input blur.",
-    "type": "boolean"
-  },
   "carousel/value": {
     "description": "An array of objects to display.",
     "type": "array"
@@ -417,19 +413,19 @@
   },
   "cascadeselect/optionLabel": {
     "description": "Property name or getter function to use as the label of an option.",
-    "type": "string"
+    "type": "string | function"
   },
   "cascadeselect/optionValue": {
     "description": "Property name or getter function to use as the value of an option, defaults to the option itself when not defined.",
-    "type": "string"
+    "type": "string | function"
   },
   "cascadeselect/optionGroupLabel": {
     "description": "Property name or getter function to use as the label of an option group.",
-    "type": "string"
+    "type": "string | function"
   },
   "cascadeselect/optionGroupChildren": {
     "description": "Property name or getter function to retrieve the items of a group.",
-    "type": "array"
+    "type": "array | function"
   },
   "cascadeselect/placeholder": {
     "description": "Default text to display when no option is selected.",
@@ -481,6 +477,10 @@
   },
   "chart/options": {
     "description": "Options to customize the chart.",
+    "type": "any"
+  },
+  "chart/plugins": {
+    "description": "Used to custom plugins of the chart.",
     "type": "any"
   },
   "chart/width": {
@@ -767,6 +767,10 @@
     "description": "Whether the column is included in data export.",
     "type": "boolean"
   },
+  "column/exportHeader": {
+    "description": "Custom export header of the column to be exported as CSV.",
+    "type": "string"
+  },
   "column/hidden": {
     "description": "Whether the column is rendered.",
     "type": "boolean"
@@ -931,6 +935,10 @@
     "description": "When enabled, background of the rows change on hover.",
     "type": "boolean"
   },
+  "datatable/selectAll": {
+    "description": "Whether all data is selected.",
+    "type": "boolean"
+  },
   "datatable/csvSeparator": {
     "description": "Character to use as the csv separator.",
     "type": "string"
@@ -1022,6 +1030,10 @@
   "datatable/scrollHeight": {
     "description": "Height of the scroll viewport in fixed units or the \"flex\" keyword for a dynamic size.",
     "type": "string"
+  },
+  "datatable/virtualScrollerOptions": {
+    "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it. Note: Currently only vertical orientation mode is supported.",
+    "type": "object"
   },
   "datatable/frozenValue": {
     "description": "Items of the frozen part in scrollable DataTable.",
@@ -1171,7 +1183,7 @@
     "description": "Aria label of the close icon.",
     "type": "string"
   },
-  "dialog/maxiizable": {
+  "dialog/maximizable": {
     "description": "Whether the dialog can be displayed full screen.",
     "type": "boolean"
   },
@@ -1245,11 +1257,11 @@
   },
   "dropdown/optionLabel": {
     "description": "Property name or getter function to use as the label of an option.",
-    "type": "string"
+    "type": "string | function"
   },
   "dropdown/optionValue": {
     "description": "Property name or getter function to use as the value of an option, defaults to the option itself when not defined.",
-    "type": "string"
+    "type": "string | function"
   },
   "dropdown/optionDisabled": {
     "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.",
@@ -1257,11 +1269,11 @@
   },
   "dropdown/optionGroupLabel": {
     "description": "Property name or getter function to use as the label of an option group.",
-    "type": "string"
+    "type": "string | function"
   },
   "dropdown/optionGroupChildren": {
     "description": "Property name or getter function that refers to the children options of option group.",
-    "type": "string"
+    "type": "string | function"
   },
   "dropdown/scrollHeight": {
     "description": "Height of the viewport, a scrollbar is defined if height of list exceeds this value.",
@@ -1557,11 +1569,11 @@
   },
   "galleria/containerStyle": {
     "description": "Inline style of the component on fullscreen mode. Otherwise, the 'style' property can be used.",
-    "type": "string"
+    "type": "any"
   },
-  "galleria/galleriaClass": {
+  "galleria/containerClass": {
     "description": "Style class of the component on fullscreen mode. Otherwise, the 'class' property can be used.",
-    "type": "string"
+    "type": "any"
   },
   "image/preview": {
     "description": "Controls the preview functionality.",
@@ -1793,23 +1805,23 @@
   },
   "listbox/optionLabel": {
     "description": "Property name or getter function to use as the label of an option.",
-    "type": "string"
+    "type": "string | function"
   },
   "listbox/optionValue": {
     "description": "Property name or getter function to use as the value of an option, defaults to the option itself when not defined.",
-    "type": "string"
+    "type": "string | function"
   },
   "listbox/optionDisabled": {
     "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.",
-    "type": "boolean"
+    "type": "boolean | function"
   },
   "listbox/optionGroupLabel": {
     "description": "Property name or getter function to use as the label of an option group.",
-    "type": "string"
+    "type": "string | function"
   },
   "listbox/optionGroupChildren": {
     "description": "Property name or getter function that refers to the children options of option group.",
-    "type": "string"
+    "type": "string | function"
   },
   "listbox/listStyle": {
     "description": "Inline style of inner list element.",
@@ -1937,19 +1949,19 @@
   },
   "multiselect/optionValue": {
     "description": "Property name or getter function to use as the value of an option, defaults to the option itself when not defined.",
-    "type": "string"
+    "type": "string | function"
   },
   "multiselect/optionDisabled": {
     "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.",
-    "type": "boolean"
+    "type": "boolean | function"
   },
   "multiselect/optionGroupLabel": {
     "description": "Property name or getter function to use as the label of an option group.",
-    "type": "string"
+    "type": "string | function"
   },
   "multiselect/optionGroupChildren": {
     "description": "Property name or getter function that refers to the children options of option group.",
-    "type": "string"
+    "type": "string | function"
   },
   "multiselect/scrollHeight": {
     "description": "Height of the viewport, a scrollbar is defined if height of list exceeds this value.",
@@ -2074,6 +2086,10 @@
   "orderlist/breakpoint": {
     "description": "The breakpoint to define the maximum width boundary when responsiveness is enabled.",
     "type": "string"
+  },
+  "orderlist/stripedRows": {
+    "description": "Whether to displays rows with alternating colors.",
+    "type": "boolean"
   },
   "organizationchart/value": {
     "description": "Value of the component.",
@@ -2274,6 +2290,10 @@
   "picklist/breakpoint": {
     "description": "The breakpoint to define the maximum width boundary when responsiveness is enabled.",
     "type": "string"
+  },
+  "picklist/stripedRows": {
+    "description": "Whether to displays rows with alternating colors.",
+    "type": "boolean"
   },
   "progressbar/value": {
     "description": "Current value of the progress.",
@@ -3035,6 +3055,18 @@
     "description": "Inline of the component.",
     "type": "any"
   },
+  "virtualscroller/id": {
+    "description": "Unique identifier of the element.",
+    "type": "string"
+  },
+  "virtualscroller/style": {
+    "description": "Inline style of the component.",
+    "type": "any"
+  },
+  "virtualscroller/class": {
+    "description": "Style class of the component.",
+    "type": "string"
+  },
   "virtualscroller/items": {
     "description": "An array of objects to display.",
     "type": "array"
@@ -3067,16 +3099,24 @@
     "description": "Defines if data is loaded and interacted with in lazy manner.",
     "type": "boolean"
   },
+  "virtualscroller/disabled": {
+    "description": "If disabled, the VirtualScroller feature is eliminated and the content is displayed directly.",
+    "type": "boolean"
+  },
+  "virtualscroller/loaderDisabled": {
+    "description": "Used to implement a custom loader instead of using the loader feature in the VirtualScroller.",
+    "type": "boolean"
+  },
+  "virtualscroller/loading": {
+    "description": "Whether the data is loaded.",
+    "type": "boolean"
+  },
+  "virtualscroller/showSpacer": {
+    "description": "Used to implement a custom spacer instead of using the spacer feature in the VirtualScroller.",
+    "type": "boolean"
+  },
   "virtualscroller/showLoader": {
     "description": "Whether to show loader.",
     "type": "boolean"
-  },
-  "virtualscroller/style": {
-    "description": "Inline style of the component.",
-    "type": "any"
-  },
-  "virtualscroller/class": {
-    "description": "Style class of the component.",
-    "type": "string"
   }
 }

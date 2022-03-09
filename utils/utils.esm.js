@@ -488,10 +488,10 @@ var DomHandler = {
 
     applyStyle(element, style) {
         if (typeof style === 'string') {
-            element.style.cssText = this.style;
+            element.style.cssText = style;
         }
         else {
-            for (let prop in this.style) {
+            for (let prop in style) {
                 element.style[prop] = style[prop];
             }
         }
@@ -507,6 +507,31 @@ var DomHandler = {
 
     isTouchDevice() {
         return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+    },
+
+    exportCSV(csv, filename) {
+        let blob = new Blob([csv], {
+            type: 'application/csv;charset=utf-8;'
+        });
+
+        if (window.navigator.msSaveOrOpenBlob) {
+            navigator.msSaveOrOpenBlob(blob, filename + '.csv');
+        }
+        else {
+            let link = document.createElement("a");
+            if (link.download !== undefined) {
+                link.setAttribute('href', URL.createObjectURL(blob));
+                link.setAttribute('download', filename + '.csv');
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            else {
+                csv = 'data:text/csv;charset=utf-8,' + csv;
+                window.open(encodeURI(csv));
+            }
+        }
     }
 };
 
@@ -740,11 +765,23 @@ var ObjectUtils = {
             let kebapProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
             let propName = Object.prototype.hasOwnProperty.call(props, kebapProp) ? kebapProp : prop;
 
-            return ((vnode.type.props[prop].type === Boolean && props[propName] === '') ? true : props[propName]);            
+            return ((vnode.type.props[prop].type === Boolean && props[propName] === '') ? true : props[propName]);
         }
 
         return null;
-    }  
+    },
+
+    isEmpty(value) {
+        return (
+            value === null || value === undefined || value === '' ||
+            (Array.isArray(value) && value.length === 0) ||
+            (!(value instanceof Date) && typeof value === 'object' && Object.keys(value).length === 0)
+        );
+    },
+
+    isNotEmpty(value) {
+        return !this.isEmpty(value);
+    }
 
 };
 

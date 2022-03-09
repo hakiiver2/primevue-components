@@ -130,8 +130,7 @@
       "inputStyle",
       "inputClass",
       "class",
-      "style",
-      "keepInvalid"
+      "style"
     ]
   },
   "Carousel": {
@@ -178,6 +177,7 @@
       "type",
       "data",
       "options",
+      "plugins",
       "width",
       "height"
     ]
@@ -274,6 +274,7 @@
       "frozen",
       "alignFrozen",
       "exportable",
+      "exportHeader",
       "hidden"
     ]
   },
@@ -335,6 +336,7 @@
       "contextMenu",
       "contextMenuSelection",
       "rowHover",
+      "selectAll",
       "csvSeparator",
       "exportFilename",
       "exportFunction",
@@ -358,6 +360,7 @@
       "scrollable",
       "scrollDirection",
       "scrollHeight",
+      "virtualScrollerOptions",
       "frozenValue",
       "responsiveLayout",
       "breakpoint",
@@ -405,7 +408,7 @@
       "baseZIndex",
       "autoZIndex",
       "ariaCloseLabel",
-      "maxiizable",
+      "maximizable",
       "breakpoints",
       "draggable",
       "minX",
@@ -542,7 +545,7 @@
       "baseZIndex",
       "maskClass",
       "containerStyle",
-      "galleriaClass"
+      "containerClass"
     ]
   },
   "Image": {
@@ -745,7 +748,8 @@
       "dataKey",
       "listStyle",
       "responsive",
-      "breakpoint"
+      "breakpoint",
+      "stripedRows"
     ]
   },
   "OrganizationChart": {
@@ -830,7 +834,8 @@
       "dataKey",
       "listStyle",
       "responsive",
-      "breakpoint"
+      "breakpoint",
+      "stripedRows"
     ]
   },
   "ProgressBar": {
@@ -1166,6 +1171,9 @@
   "VirtualScroller": {
     "description": "VirtualScroller is a performant approach to handle huge data efficiently.",
     "attributes": [
+      "id",
+      "style",
+      "class",
       "items",
       "itemSize",
       "scrollHeight",
@@ -1174,9 +1182,11 @@
       "numToleratedItems",
       "delay",
       "lazy",
-      "showLoader",
-      "style",
-      "class"
+      "disabled",
+      "loaderDisabled",
+      "loading",
+      "showSpacer",
+      "showLoader"
     ]
   }
 }

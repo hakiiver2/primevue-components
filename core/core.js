@@ -492,10 +492,10 @@ this.primevue.utils = (function (exports) {
 
         applyStyle(element, style) {
             if (typeof style === 'string') {
-                element.style.cssText = this.style;
+                element.style.cssText = style;
             }
             else {
-                for (let prop in this.style) {
+                for (let prop in style) {
                     element.style[prop] = style[prop];
                 }
             }
@@ -511,6 +511,31 @@ this.primevue.utils = (function (exports) {
 
         isTouchDevice() {
             return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+        },
+
+        exportCSV(csv, filename) {
+            let blob = new Blob([csv], {
+                type: 'application/csv;charset=utf-8;'
+            });
+
+            if (window.navigator.msSaveOrOpenBlob) {
+                navigator.msSaveOrOpenBlob(blob, filename + '.csv');
+            }
+            else {
+                let link = document.createElement("a");
+                if (link.download !== undefined) {
+                    link.setAttribute('href', URL.createObjectURL(blob));
+                    link.setAttribute('download', filename + '.csv');
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+                else {
+                    csv = 'data:text/csv;charset=utf-8,' + csv;
+                    window.open(encodeURI(csv));
+                }
+            }
         }
     };
 
@@ -744,11 +769,23 @@ this.primevue.utils = (function (exports) {
                 let kebapProp = prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
                 let propName = Object.prototype.hasOwnProperty.call(props, kebapProp) ? kebapProp : prop;
 
-                return ((vnode.type.props[prop].type === Boolean && props[propName] === '') ? true : props[propName]);            
+                return ((vnode.type.props[prop].type === Boolean && props[propName] === '') ? true : props[propName]);
             }
 
             return null;
-        }  
+        },
+
+        isEmpty(value) {
+            return (
+                value === null || value === undefined || value === '' ||
+                (Array.isArray(value) && value.length === 0) ||
+                (!(value instanceof Date) && typeof value === 'object' && Object.keys(value).length === 0)
+            );
+        },
+
+        isNotEmpty(value) {
+            return !this.isEmpty(value);
+        }
 
     };
 
@@ -1631,20 +1668,359 @@ this.primevue.ripple = (function (utils) {
 }(primevue.utils));
 
 this.primevue = this.primevue || {};
+this.primevue.tooltip = (function (utils) {
+    'use strict';
+
+    function bindEvents(el) {
+        const modifiers = el.$_ptooltipModifiers;
+        if (modifiers.focus) {
+            el.addEventListener('focus', onFocus);
+            el.addEventListener('blur', onBlur);
+        }
+        else {
+            el.addEventListener('mouseenter', onMouseEnter);
+            el.addEventListener('mouseleave', onMouseLeave);
+            el.addEventListener('click', onClick);
+        }
+    }
+
+    function unbindEvents(el) {
+        const modifiers = el.$_ptooltipModifiers;
+        if (modifiers.focus) {
+            el.removeEventListener('focus', onFocus);
+            el.removeEventListener('blur', onBlur);
+        }
+        else {
+            el.removeEventListener('mouseenter', onMouseEnter);
+            el.removeEventListener('mouseleave', onMouseLeave);
+            el.removeEventListener('click', onClick);
+        }
+    }
+
+    function bindScrollListener(el) {
+        if (!el.$_ptooltipScrollHandler) {
+            el.$_ptooltipScrollHandler = new utils.ConnectedOverlayScrollHandler(el, function() {
+                hide(el);
+            });
+        }
+
+        el.$_ptooltipScrollHandler.bindScrollListener();
+    }
+
+    function unbindScrollListener(el) {
+        if (el.$_ptooltipScrollHandler) {
+            el.$_ptooltipScrollHandler.unbindScrollListener();
+        }
+    }
+
+    function onMouseEnter(event) {
+        show(event.currentTarget);
+    }
+
+    function onMouseLeave(event) {
+        hide(event.currentTarget);
+    }
+
+    function onFocus(event) {
+        show(event.currentTarget);
+    }
+
+    function onBlur(event) {
+        hide(event.currentTarget);
+    }
+
+    function onClick(event) {
+        hide(event.currentTarget);
+    }
+
+    function show(el) {
+        if (el.$_ptooltipDisabled) {
+            return;
+        }
+
+        let tooltipElement = create(el);
+        align(el);
+        utils.DomHandler.fadeIn(tooltipElement, 250);
+
+        window.addEventListener('resize', function onWindowResize() {
+            if (!utils.DomHandler.isAndroid()) {
+                hide(el);
+            }
+            this.removeEventListener('resize', onWindowResize);
+        });
+
+        bindScrollListener(el);
+        utils.ZIndexUtils.set('tooltip', tooltipElement, el.$_ptooltipZIndex);
+    }
+
+    function hide(el) {
+        remove(el);
+        unbindScrollListener(el);
+        utils.ZIndexUtils.clear(el);
+    }
+
+    function getTooltipElement(el) {
+        return document.getElementById(el.$_ptooltipId);
+    }
+
+    function escapeHtml(str) {
+        if(str !== undefined && str !== null) {
+            str = String(str);
+            str = str.replace(/&/g, '&amp;');
+            str = str.replace(/</g, '&lt;');
+            str = str.replace(/>/g, '&gt;');
+            str = str.replace(/"/g, '&quot;');
+            str = str.replace(/'/g, '&#39;');
+        }
+        return str;
+    }
+
+    function create(el) {
+        const id = utils.UniqueComponentId() + '_tooltip';
+        el.$_ptooltipId = id;
+
+        let container = document.createElement('div');
+        container.id = id;
+
+        let tooltipArrow = document.createElement('div');
+        tooltipArrow.className = 'p-tooltip-arrow';
+        container.appendChild(tooltipArrow);
+
+        let tooltipText = document.createElement('div');
+        tooltipText.className = 'p-tooltip-text';
+        tooltipText.innerHTML = escapeHtml(el.$_ptooltipValue);
+
+        container.appendChild(tooltipText);
+        document.body.appendChild(container);
+
+        container.style.display = 'inline-block';
+
+        return container;
+    }
+
+    function remove(el) {
+        if (el) {
+            let tooltipElement = getTooltipElement(el);
+            if (tooltipElement && tooltipElement.parentElement) {
+                document.body.removeChild(tooltipElement);
+            }
+            el.$_ptooltipId = null;
+        }
+    }
+
+    function align(el) {
+        const modifiers = el.$_ptooltipModifiers;
+
+        if (modifiers.top) {
+            alignTop(el);
+            if (isOutOfBounds(el)) {
+                alignBottom(el);
+            }
+        }
+        else if (modifiers.left) {
+            alignLeft(el);
+            if (isOutOfBounds(el)) {
+                alignRight(el);
+
+                if (isOutOfBounds(el)) {
+                    alignTop(el);
+
+                    if (isOutOfBounds(el)) {
+                        alignBottom(el);
+                    }
+                }
+            }
+        }
+        else if (modifiers.bottom) {
+            alignBottom(el);
+            if (isOutOfBounds(el)) {
+                alignTop(el);
+            }
+        }
+        else {
+            alignRight(el);
+            if (isOutOfBounds(el)) {
+                alignLeft(el);
+
+                if (isOutOfBounds(el)) {
+                    alignTop(el);
+
+                    if (isOutOfBounds(el)) {
+                        alignBottom(el);
+                    }
+                }
+            }
+        }
+    }
+
+    function getHostOffset(el) {
+        let offset = el.getBoundingClientRect();
+        let targetLeft = offset.left + utils.DomHandler.getWindowScrollLeft();
+        let targetTop = offset.top + utils.DomHandler.getWindowScrollTop();
+
+        return {left: targetLeft, top: targetTop};
+    }
+
+    function alignRight(el) {
+        preAlign(el, 'right');
+        let tooltipElement = getTooltipElement(el);
+        let hostOffset = getHostOffset(el);
+        let left = hostOffset.left + utils.DomHandler.getOuterWidth(el);
+        let top = hostOffset.top + (utils.DomHandler.getOuterHeight(el) - utils.DomHandler.getOuterHeight(tooltipElement)) / 2;
+        tooltipElement.style.left = left + 'px';
+        tooltipElement.style.top = top + 'px';
+    }
+
+    function alignLeft(el) {
+        preAlign(el, 'left');
+        let tooltipElement = getTooltipElement(el);
+        let hostOffset = getHostOffset(el);
+        let left = hostOffset.left - utils.DomHandler.getOuterWidth(tooltipElement);
+        let top = hostOffset.top + (utils.DomHandler.getOuterHeight(el) - utils.DomHandler.getOuterHeight(tooltipElement)) / 2;
+        tooltipElement.style.left = left + 'px';
+        tooltipElement.style.top = top + 'px';
+    }
+
+    function alignTop(el) {
+        preAlign(el, 'top');
+        let tooltipElement = getTooltipElement(el);
+        let hostOffset = getHostOffset(el);
+        let left = hostOffset.left + (utils.DomHandler.getOuterWidth(el) - utils.DomHandler.getOuterWidth(tooltipElement)) / 2;
+        let top = hostOffset.top - utils.DomHandler.getOuterHeight(tooltipElement);
+        tooltipElement.style.left = left + 'px';
+        tooltipElement.style.top = top + 'px';
+    }
+
+    function alignBottom(el) {
+        preAlign(el, 'bottom');
+        let tooltipElement = getTooltipElement(el);
+        let hostOffset = getHostOffset(el);
+        let left = hostOffset.left + (utils.DomHandler.getOuterWidth(el) - utils.DomHandler.getOuterWidth(tooltipElement)) / 2;
+        let top = hostOffset.top + utils.DomHandler.getOuterHeight(el);
+        tooltipElement.style.left = left + 'px';
+        tooltipElement.style.top = top + 'px';
+    }
+
+    function preAlign(el, position) {
+        let tooltipElement = getTooltipElement(el);
+        tooltipElement.style.left = -999 + 'px';
+        tooltipElement.style.top = -999 + 'px';
+        tooltipElement.className = `p-tooltip p-component p-tooltip-${position} ${el.$_ptooltipClass||''}`;
+    }
+
+    function isOutOfBounds(el) {
+        let tooltipElement = getTooltipElement(el);
+        let offset = tooltipElement.getBoundingClientRect();
+        let targetTop = offset.top;
+        let targetLeft = offset.left;
+        let width = utils.DomHandler.getOuterWidth(tooltipElement);
+        let height = utils.DomHandler.getOuterHeight(tooltipElement);
+        let viewport = utils.DomHandler.getViewport();
+
+        return (targetLeft + width > viewport.width) || (targetLeft < 0) || (targetTop < 0) || (targetTop + height > viewport.height);
+    }
+
+    function getTarget(el) {
+        return utils.DomHandler.hasClass(el, 'p-inputwrapper') ? utils.DomHandler.findSingle(el, 'input'): el;
+    }
+
+    function getModifiers(options) {
+        // modifiers
+        if (options.modifiers && Object.keys(options.modifiers).length) {
+            return options.modifiers;
+        }
+
+        // arg
+        if (options.arg && typeof options.arg === 'object') {
+            return Object.entries(options.arg).reduce((acc, [key, val]) => {
+                if (key === 'event' || key === 'position') acc[val] = true;
+                return acc;
+            }, {});
+        }
+
+        return {};
+    }
+
+    const Tooltip = {
+        beforeMount(el, options) {
+            let target = getTarget(el);
+            target.$_ptooltipModifiers = getModifiers(options);
+
+            if (!options.value) return;
+            else if (typeof options.value === 'string') {
+                target.$_ptooltipValue = options.value;
+                target.$_ptooltipDisabled = false;
+                target.$_ptooltipClass = null;
+            }
+            else {
+                // target.$_ptooltipValue = options.value.value;
+                target.$_ptooltipValue = options.value;
+                // target.$_ptooltipDisabled = options.value.disabled || false;
+                target.$_ptooltipDisabled = options.disabled || false;
+
+                target.$_ptooltipClass = options.value.class;
+            }
+
+            target.$_ptooltipZIndex = options.instance.$primevue && options.instance.$primevue.config && options.instance.$primevue.config.zIndex.tooltip;
+            bindEvents(target);
+        },
+        unmounted(el) {
+            let target = getTarget(el);
+            remove(target);
+            unbindEvents(target);
+
+            if (target.$_ptooltipScrollHandler) {
+                target.$_ptooltipScrollHandler.destroy();
+                target.$_ptooltipScrollHandler = null;
+            }
+
+            utils.ZIndexUtils.clear(el);
+        },
+        updated(el, options) {
+            let target = getTarget(el);
+            target.$_ptooltipModifiers = getModifiers(options);
+
+            if (!options.value) return;
+            if (typeof options.value === 'string') {
+                target.$_ptooltipValue = options.value;
+                target.$_ptooltipDisabled = false;
+                target.$_ptooltipClass = null;
+            }
+            else {
+                // target.$_ptooltipValue = options.value.value;
+                target.$_ptooltipValue = options.value;
+                // target.$_ptooltipDisabled = options.value.disabled || false;
+                target.$_ptooltipDisabled = options.disabled || false;
+                target.$_ptooltipClass = options.value.class;
+            }
+        }
+    };
+
+    return Tooltip;
+
+}(primevue.utils));
+
+this.primevue = this.primevue || {};
 this.primevue.virtualscroller = (function (vue) {
     'use strict';
 
     var script = {
         name: 'VirtualScroller',
-        emits: ['update:numToleratedItems', 'scroll-index-change', 'lazy-load'],
+        emits: ['update:numToleratedItems', 'scroll', 'scroll-index-change', 'lazy-load'],
         props: {
+            id: {
+                type: String,
+                default: null
+            },
+            style: null,
+            class: null,
             items: {
                 type: Array,
                 default: null
             },
             itemSize: {
                 type: [Number,Array],
-                default: null
+                default: 0
             },
             scrollHeight: null,
             scrollWidth: null,
@@ -1664,17 +2040,27 @@ this.primevue.virtualscroller = (function (vue) {
                 type: Boolean,
                 default: false
             },
-            showLoader: {
+            disabled: {
                 type: Boolean,
                 default: false
+            },
+            loaderDisabled: {
+                type: Boolean,
+                default: false
+            },
+            columns: {
+                type: Array,
+                default: null
             },
             loading: {
                 type: Boolean,
                 default: false
             },
-            style: null,
-            class: null,
-            disabled: {
+            showSpacer: {
+                type: Boolean,
+                default: true
+            },
+            showLoader: {
                 type: Boolean,
                 default: false
             }
@@ -1687,15 +2073,19 @@ this.primevue.virtualscroller = (function (vue) {
                 lastScrollPos: this.isBoth() ? { top: 0, left: 0 } : 0,
                 d_numToleratedItems: this.numToleratedItems,
                 d_loading: this.loading,
-                loaderArr: null
+                loaderArr: [],
+                spacerStyle: {},
+                contentStyle: {}
             }
         },
         element: null,
         content: null,
-        spacer: null,
+        lastScrollPos: null,
         scrollTimeout: null,
         mounted() {
             this.init();
+
+            this.lastScrollPos = this.isBoth() ? { top: 0, left: 0 } : 0;
         },
         watch: {
             numToleratedItems(newValue) {
@@ -1704,67 +2094,195 @@ this.primevue.virtualscroller = (function (vue) {
             loading(newValue) {
                 this.d_loading = newValue;
             },
-            items(newValue, oldVal) {
-                if (!oldVal || oldVal.length !== (newValue || []).length) {
+            items(newValue, oldValue) {
+                if (!oldValue || oldValue.length !== (newValue || []).length) {
                     this.init();
                 }
+            },
+            orientation() {
+                this.lastScrollPos = this.isBoth() ? { top: 0, left: 0 } : 0;
             }
         },
         methods: {
             init() {
-                if (!this.disabled) {
-                    this.setSize();
-                    this.calculateOptions();
-                    this.setSpacerSize();
+                this.setSize();
+                this.calculateOptions();
+                this.setSpacerSize();
+            },
+            isVertical() {
+                return this.orientation === 'vertical';
+            },
+            isHorizontal() {
+                return this.orientation === 'horizontal';
+            },
+            isBoth() {
+                return this.orientation === 'both';
+            },
+            scrollTo(options) {
+                this.element && this.element.scrollTo(options);
+            },
+            scrollToIndex(index, behavior = 'auto') {
+                const both = this.isBoth();
+                const horizontal = this.isHorizontal();
+                const first = this.first;
+                const { numToleratedItems } = this.calculateNumItems();
+                const itemSize = this.itemSize;
+                const contentPos = this.getContentPosition();
+                const calculateFirst = (_index = 0, _numT) => (_index <= _numT ? 0 : _index);
+                const calculateCoord = (_first, _size, _cpos) => (_first * _size) + _cpos;
+                const scrollTo = (left = 0, top = 0) => this.scrollTo({ left, top, behavior });
+
+                if (both) {
+                    const newFirst = { rows: calculateFirst(index[0], numToleratedItems[0]), cols: calculateFirst(index[1], numToleratedItems[1]) };
+                    if (newFirst.rows !== first.rows || newFirst.cols !== first.cols) {
+                        scrollTo(calculateCoord(newFirst.cols, itemSize[1], contentPos.left), calculateCoord(newFirst.rows, itemSize[0], contentPos.top));
+                        this.first = newFirst;
+                    }
+                }
+                else {
+                    const newFirst = calculateFirst(index, numToleratedItems);
+
+                    if (newFirst !== first) {
+                        horizontal ? scrollTo(calculateCoord(newFirst, itemSize, contentPos.left), 0) : scrollTo(0, calculateCoord(newFirst, itemSize, contentPos.top));
+                        this.first = newFirst;
+                    }
                 }
             },
-            getLast(last, isCols) {
-                return this.items ? Math.min((isCols ? this.items[0].length : this.items.length), last) : 0;
+            scrollInView(index, to, behavior = 'auto') {
+                if (to) {
+                    const both = this.isBoth();
+                    const horizontal = this.isHorizontal();
+                    const { first, viewport } = this.getRenderedRange();
+                    const scrollTo = (left = 0, top = 0) => this.scrollTo({ left, top, behavior });
+                    const isToStart = to === 'to-start';
+                    const isToEnd = to === 'to-end';
+
+                    if (isToStart) {
+                        if (both) {
+                            if (viewport.first.rows - first.rows > index[0]) {
+                                scrollTo(viewport.first.cols * this.itemSize[1], (viewport.first.rows - 1) * this.itemSize[0]);
+                            }
+                            else if (viewport.first.cols - first.cols > index[1]) {
+                                scrollTo((viewport.first.cols - 1) * this.itemSize[1], viewport.first.rows * this.itemSize[0]);
+                            }
+                        }
+                        else {
+                            if (viewport.first - first > index) {
+                                const pos = (viewport.first - 1) * this.itemSize;
+                                horizontal ? scrollTo(pos, 0) : scrollTo(0, pos);
+                            }
+                        }
+                    }
+                    else if (isToEnd) {
+                        if (both) {
+                            if (viewport.last.rows - first.rows <= index[0] + 1) {
+                                scrollTo(viewport.first.cols * this.itemSize[1], (viewport.first.rows + 1) * this.itemSize[0]);
+                            }
+                            else if (viewport.last.cols - first.cols <= index[1] + 1) {
+                                scrollTo((viewport.first.cols + 1) * this.itemSize[1], viewport.first.rows * this.itemSize[0]);
+                            }
+                        }
+                        else {
+                            if (viewport.last - first <= index + 1) {
+                                const pos = (viewport.first + 1) * this.itemSize;
+                                horizontal ? scrollTo(pos, 0) : scrollTo(0, pos);
+                            }
+                        }
+                    }
+                }
+                else {
+                    this.scrollToIndex(index, behavior);
+                }
             },
-            calculateOptions() {
-                const isBoth = this.isBoth();
-                const isHorizontal = this.isHorizontal();
-                const first = this.first;
-                const itemSize = this.itemSize;
-                const contentPadding = this.getContentPadding();
-                const contentWidth = this.element ? this.element.offsetWidth - contentPadding.left : 0;
-                const contentHeight = this.element ? this.element.offsetHeight - contentPadding.top : 0;
-                const calculateNumItemsInViewport = (_contentSize, _itemSize) => Math.ceil(_contentSize / (_itemSize || _contentSize));
-                const numItemsInViewport = isBoth ?
-                    { rows: calculateNumItemsInViewport(contentHeight, itemSize[0]), cols: calculateNumItemsInViewport(contentWidth, itemSize[1]) } :
-                    calculateNumItemsInViewport((isHorizontal ? contentWidth : contentHeight), itemSize);
+            getRenderedRange() {
+                const calculateFirstInViewport = (_pos, _size) => Math.floor(_pos / (_size || _pos));
 
-                let numToleratedItems = this.d_numToleratedItems || Math.ceil((isBoth ? numItemsInViewport.rows : numItemsInViewport) / 2);
-                const calculateLast = (_first, _num, _isCols) => this.getLast(_first + _num + ((_first < numToleratedItems ? 2 : 3) * numToleratedItems), _isCols);
-                const last = isBoth ?
-                    { rows: calculateLast(first.rows, numItemsInViewport.rows), cols: calculateLast(first.cols, numItemsInViewport.cols, true) } :
-                    calculateLast(first, numItemsInViewport);
+                let firstInViewport = this.first;
+                let lastInViewport = 0;
 
-                this.d_numToleratedItems = numToleratedItems;
-                this.$emit('update:numToleratedItems', this.d_numToleratedItems);
-                this.last = last;
-                this.numItemsInViewport = numItemsInViewport;
+                if (this.element) {
+                    const both = this.isBoth();
+                    const horizontal = this.isHorizontal();
+                    const scrollTop = this.element.scrollTop;
+                    const scrollLeft = this.element.scrollLeft;
 
-                if (this.showLoader) {
-                    if (this.$slots && this.$slots.loader) {
-                        this.loaderArr = Array.from({ length: (isBoth ? numItemsInViewport.rows : numItemsInViewport) });
+                    if (both) {
+                        firstInViewport = { rows: calculateFirstInViewport(scrollTop, this.itemSize[0]), cols: calculateFirstInViewport(scrollLeft, this.itemSize[1]) };
+                        lastInViewport = { rows: firstInViewport.rows + this.numItemsInViewport.rows, cols: firstInViewport.cols + this.numItemsInViewport.cols };
                     }
                     else {
-                        this.loaderArr = Array.from({ length: 1});
+                        const scrollPos = horizontal ? scrollLeft : scrollTop;
+                        firstInViewport = calculateFirstInViewport(scrollPos, this.itemSize);
+                        lastInViewport = firstInViewport + this.numItemsInViewport;
                     }
+                }
+
+                return {
+                    first: this.first,
+                    last: this.last,
+                    viewport: {
+                        first: firstInViewport,
+                        last: lastInViewport
+                    }
+                };
+            },
+            calculateNumItems() {
+                const both = this.isBoth();
+                const horizontal = this.isHorizontal();
+                const itemSize = this.itemSize;
+                const contentPos = this.getContentPosition();
+                const contentWidth = this.element ? this.element.offsetWidth - contentPos.left : 0;
+                const contentHeight = this.element ? this.element.offsetHeight - contentPos.top : 0;
+                const calculateNumItemsInViewport = (_contentSize, _itemSize) => Math.ceil(_contentSize / (_itemSize || _contentSize));
+                const calculateNumToleratedItems = (_numItems) => Math.ceil(_numItems / 2);
+                const numItemsInViewport = both ?
+                    { rows: calculateNumItemsInViewport(contentHeight, itemSize[0]), cols: calculateNumItemsInViewport(contentWidth, itemSize[1]) } :
+                    calculateNumItemsInViewport((horizontal ? contentWidth : contentHeight), itemSize);
+
+                const numToleratedItems = this.d_numToleratedItems || (both ?
+                    [calculateNumToleratedItems(numItemsInViewport.rows), calculateNumToleratedItems(numItemsInViewport.cols)] :
+                    calculateNumToleratedItems(numItemsInViewport));
+
+                return { numItemsInViewport, numToleratedItems };
+            },
+            calculateOptions() {
+                const both = this.isBoth();
+                const first = this.first;
+                const { numItemsInViewport, numToleratedItems } = this.calculateNumItems();
+                const calculateLast = (_first, _num, _numT, _isCols) => this.getLast(_first + _num + ((_first < _numT ? 2 : 3) * _numT), _isCols);
+                const last = both ?
+                    { rows: calculateLast(first.rows, numItemsInViewport.rows, numToleratedItems[0]), cols: calculateLast(first.cols, numItemsInViewport.cols, numToleratedItems[1], true) } :
+                    calculateLast(first, numItemsInViewport, numToleratedItems);
+
+                this.last = last;
+                this.numItemsInViewport = numItemsInViewport;
+                this.d_numToleratedItems = numToleratedItems;
+                this.$emit('update:numToleratedItems', this.d_numToleratedItems);
+
+                if (this.showLoader) {
+                    this.loaderArr = both ?
+                        Array.from({ length: numItemsInViewport.rows }).map(() => Array.from({ length: numItemsInViewport.cols })) :
+                        Array.from({ length: numItemsInViewport });
                 }
 
                 if (this.lazy) {
                     this.$emit('lazy-load', { first, last });
                 }
             },
-            getContentPadding() {
+            getLast(last = 0, isCols) {
+                if (this.items) {
+                    return Math.min((isCols ? (this.columns || this.items[0]).length : this.items.length), last);
+                }
+
+                return 0;
+            },
+            getContentPosition() {
                 if (this.content) {
                     const style = getComputedStyle(this.content);
-                    const left = parseInt(parseFloat(style.paddingLeft.slice(0, -2)), 10);
-                    const right = parseInt(parseFloat(style.paddingRight.slice(0, -2)), 10);
-                    const top = parseInt(parseFloat(style.paddingTop.slice(0, -2)), 10);
-                    const bottom = parseInt(parseFloat(style.paddingBottom.slice(0, -2)), 10);
+                    const left = parseInt(style.paddingLeft, 10) + Math.max(parseInt(style.left, 10), 0);
+                    const right = parseInt(style.paddingRight, 10) + Math.max(parseInt(style.right, 10), 0);
+                    const top = parseInt(style.paddingTop, 10) + Math.max(parseInt(style.top, 10), 0);
+                    const bottom = parseInt(style.paddingBottom, 10) + Math.max(parseInt(style.bottom, 10), 0);
 
                     return { left, right, top, bottom, x: left + right, y: top + bottom };
                 }
@@ -1773,126 +2291,125 @@ this.primevue.virtualscroller = (function (vue) {
             },
             setSize() {
                 if (this.element) {
-                    const isBoth = this.isBoth();
-                    const isHorizontal = this.isHorizontal();
+                    const both = this.isBoth();
+                    const horizontal = this.isHorizontal();
                     const parentElement = this.element.parentElement;
                     const width = this.scrollWidth || `${(this.element.offsetWidth || parentElement.offsetWidth)}px`;
                     const height = this.scrollHeight || `${(this.element.offsetHeight || parentElement.offsetHeight)}px`;
                     const setProp = (_name, _value) => this.element.style[_name] = _value;
 
-                    if (isBoth) {
+                    if (both || horizontal) {
                         setProp('height', height);
                         setProp('width', width);
                     }
                     else {
-                        isHorizontal ? setProp('width', width) : setProp('height', height);
+                        setProp('height', height);
                     }
                 }
             },
             setSpacerSize() {
                 const items = this.items;
 
-                if (this.spacer && items) {
-                    const isBoth = this.isBoth();
-                    const isHorizontal = this.isHorizontal();
-                    const itemSize = this.itemSize;
-                    const contentPadding = this.getContentPadding();
-                    const setProp = (_name, _value, _size, _padding = 0) => this.spacer.style[_name] = (((_value || []).length * _size) + _padding) + 'px';
+                if (items) {
+                    const both = this.isBoth();
+                    const horizontal = this.isHorizontal();
+                    const contentPos = this.getContentPosition();
+                    const setProp = (_name, _value, _size, _cpos = 0) => this.spacerStyle = { ...this.spacerStyle, ...{ [`${_name}`]: (((_value || []).length * _size) + _cpos) + 'px' } };
 
-                    if (isBoth) {
-                        setProp('height', items[0], itemSize[0], contentPadding.y);
-                        setProp('width', items[1], itemSize[1], contentPadding.x);
+                    if (both) {
+                        setProp('height', items, this.itemSize[0], contentPos.y);
+                        setProp('width', (this.columns || items[1]), this.itemSize[1], contentPos.x);
                     }
                     else {
-                        isHorizontal ? setProp('width', items, itemSize, contentPadding.x) : setProp('height', items, itemSize, contentPadding.y);
+                        horizontal ? setProp('width', (this.columns || items), this.itemSize, contentPos.x) : setProp('height', items, this.itemSize, contentPos.y);
                     }
                 }
             },
             setContentPosition(pos) {
                 if (this.content) {
-                    const isBoth = this.isBoth();
-                    const isHorizontal = this.isHorizontal();
-                    const content = this.content;
+                    const both = this.isBoth();
+                    const horizontal = this.isHorizontal();
                     const first = pos ? pos.first : this.first;
-                    const itemSize = this.itemSize;
                     const calculateTranslateVal = (_first, _size) => (_first * _size);
-                    const setTransform = (_x = 0, _y = 0) => content.style.transform = `translate3d(${_x}px, ${_y}px, 0)`;
+                    const setTransform = (_x = 0, _y = 0) => {
+                        this.contentStyle = { ...this.contentStyle, ...{ transform: `translate3d(${_x}px, ${_y}px, 0)` } };
+                    };
 
-                    if (isBoth) {
-                        setTransform(calculateTranslateVal(first.cols, itemSize[1]), calculateTranslateVal(first.rows, itemSize[0]));
+                    if (both) {
+                        setTransform(calculateTranslateVal(first.cols, this.itemSize[1]), calculateTranslateVal(first.rows, this.itemSize[0]));
                     }
                     else {
-                        const translateVal = calculateTranslateVal(first, itemSize);
-                        isHorizontal ? setTransform(translateVal, 0) : setTransform(0, translateVal);
+                        const translateVal = calculateTranslateVal(first, this.itemSize);
+                        horizontal ? setTransform(translateVal, 0) : setTransform(0, translateVal);
                     }
                 }
             },
             onScrollPositionChange(event) {
                 const target = event.target;
-                const isBoth = this.isBoth();
-                const isHorizontal = this.isHorizontal();
-                const itemSize = this.itemSize;
-                const contentPadding = this.getContentPadding();
-                const calculateScrollPos = (_pos, _padding) => _pos ? (_pos > _padding ? _pos - _padding : _pos) : 0;
+                const both = this.isBoth();
+                const horizontal = this.isHorizontal();
+                const contentPos = this.getContentPosition();
+                const calculateScrollPos = (_pos, _cpos) => _pos ? (_pos > _cpos ? _pos - _cpos : _pos) : 0;
                 const calculateCurrentIndex = (_pos, _size) => Math.floor(_pos / (_size || _pos));
-                const calculateTriggerIndex = (_currentIndex, _first, _last, _num, _isScrollDownOrRight) => {
-                    return (_currentIndex <= this.d_numToleratedItems ? this.d_numToleratedItems : (_isScrollDownOrRight ? (_last - _num - this.d_numToleratedItems) : (_first + this.d_numToleratedItems - 1)))
+                const calculateTriggerIndex = (_currentIndex, _first, _last, _num, _numT, _isScrollDownOrRight) => {
+                    return (_currentIndex <= _numT ? _numT : (_isScrollDownOrRight ? (_last - _num - _numT) : (_first + _numT - 1)))
                 };
-                const calculateFirst = (_currentIndex, _triggerIndex, _first, _last, _num, _isScrollDownOrRight) => {
-                    if (_currentIndex <= this.d_numToleratedItems)
+                const calculateFirst = (_currentIndex, _triggerIndex, _first, _last, _num, _numT, _isScrollDownOrRight) => {
+                    if (_currentIndex <= _numT)
                         return 0;
                     else
-                        return _isScrollDownOrRight ?
-                            (_currentIndex < _triggerIndex ? _first : _currentIndex - this.d_numToleratedItems) :
-                            (_currentIndex > _triggerIndex ? _first : _currentIndex - (2 * this.d_numToleratedItems));
+                        return Math.max(0, _isScrollDownOrRight ?
+                                (_currentIndex < _triggerIndex ? _first : _currentIndex - _numT) :
+                                (_currentIndex > _triggerIndex ? _first : _currentIndex - (2 * _numT)));
                 };
-                const calculateLast = (_currentIndex, _first, _last, _num, _isCols) => {
-                    let lastValue = _first + _num + (2 * this.d_numToleratedItems);
+                const calculateLast = (_currentIndex, _first, _last, _num, _numT, _isCols) => {
+                    let lastValue = _first + _num + (2 * _numT);
 
-                    if (_currentIndex >= this.d_numToleratedItems) {
-                        lastValue += (this.d_numToleratedItems + 1);
+                    if (_currentIndex >= _numT) {
+                        lastValue += (_numT + 1);
                     }
 
                     return this.getLast(lastValue, _isCols);
                 };
 
-                const scrollTop = calculateScrollPos(target.scrollTop, contentPadding.top);
-                const scrollLeft = calculateScrollPos(target.scrollLeft, contentPadding.left);
+                const scrollTop = calculateScrollPos(target.scrollTop, contentPos.top);
+                const scrollLeft = calculateScrollPos(target.scrollLeft, contentPos.left);
 
                 let newFirst = 0;
                 let newLast = this.last;
                 let isRangeChanged = false;
 
-                if (isBoth) {
+                if (both) {
                     const isScrollDown = this.lastScrollPos.top <= scrollTop;
                     const isScrollRight = this.lastScrollPos.left <= scrollLeft;
-                    const currentIndex = { rows: calculateCurrentIndex(scrollTop, itemSize[0]), cols: calculateCurrentIndex(scrollLeft, itemSize[1]) };
+                    const currentIndex = { rows: calculateCurrentIndex(scrollTop, this.itemSize[0]), cols: calculateCurrentIndex(scrollLeft, this.itemSize[1]) };
                     const triggerIndex = {
-                        rows: calculateTriggerIndex(currentIndex.rows, this.first.rows, this.last.rows, this.numItemsInViewport.rows, isScrollDown),
-                        cols: calculateTriggerIndex(currentIndex.cols, this.first.cols, this.last.cols, this.numItemsInViewport.cols, isScrollRight)
+                        rows: calculateTriggerIndex(currentIndex.rows, this.first.rows, this.last.rows, this.numItemsInViewport.rows, this.d_numToleratedItems[0], isScrollDown),
+                        cols: calculateTriggerIndex(currentIndex.cols, this.first.cols, this.last.cols, this.numItemsInViewport.cols, this.d_numToleratedItems[1], isScrollRight)
                     };
 
                     newFirst = {
-                        rows: calculateFirst(currentIndex.rows, triggerIndex.rows, this.first.rows, this.last.rows, this.numItemsInViewport.rows, isScrollDown),
-                        cols: calculateFirst(currentIndex.cols, triggerIndex.cols, this.first.cols, this.last.cols, this.numItemsInViewport.cols, isScrollRight)
+                        rows: calculateFirst(currentIndex.rows, triggerIndex.rows, this.first.rows, this.last.rows, this.numItemsInViewport.rows, this.d_numToleratedItems[0], isScrollDown),
+                        cols: calculateFirst(currentIndex.cols, triggerIndex.cols, this.first.cols, this.last.cols, this.numItemsInViewport.cols, this.d_numToleratedItems[1], isScrollRight)
                     };
                     newLast = {
-                        rows: calculateLast(currentIndex.rows, newFirst.rows, this.last.rows, this.numItemsInViewport.rows),
-                        cols: calculateLast(currentIndex.cols, newFirst.cols, this.last.cols, this.numItemsInViewport.cols, true)
+                        rows: calculateLast(currentIndex.rows, newFirst.rows, this.last.rows, this.numItemsInViewport.rows, this.d_numToleratedItems[0]),
+                        cols: calculateLast(currentIndex.cols, newFirst.cols, this.last.cols, this.numItemsInViewport.cols, this.d_numToleratedItems[1], true)
                     };
-                    isRangeChanged = (newFirst.rows !== this.first.rows || newFirst.cols !== this.first.cols) || (newLast.rows !== this.last.rows || newLast.cols !== this.last.cols);
+
+                    isRangeChanged = (newFirst.rows !== this.first.rows && newLast.rows !== this.last.rows) || (newFirst.cols !== this.first.cols && newLast.cols !== this.last.cols);
 
                     this.lastScrollPos = { top: scrollTop, left: scrollLeft };
                 }
                 else {
-                    const scrollPos = isHorizontal ? scrollLeft : scrollTop;
+                    const scrollPos = horizontal ? scrollLeft : scrollTop;
                     const isScrollDownOrRight = this.lastScrollPos <= scrollPos;
-                    const currentIndex = calculateCurrentIndex(scrollPos, itemSize);
-                    const triggerIndex = calculateTriggerIndex(currentIndex, this.first, this.last, this.numItemsInViewport, isScrollDownOrRight);
+                    const currentIndex = calculateCurrentIndex(scrollPos, this.itemSize);
+                    const triggerIndex = calculateTriggerIndex(currentIndex, this.first, this.last, this.numItemsInViewport, this.d_numToleratedItems, isScrollDownOrRight);
 
-                    newFirst = calculateFirst(currentIndex, triggerIndex, this.first, this.last, this.numItemsInViewport, isScrollDownOrRight);
-                    newLast = calculateLast(currentIndex, newFirst, this.last, this.numItemsInViewport);
-                    isRangeChanged = newFirst !== this.first || newLast !== this.last;
+                    newFirst = calculateFirst(currentIndex, triggerIndex, this.first, this.last, this.numItemsInViewport, this.d_numToleratedItems, isScrollDownOrRight);
+                    newLast = calculateLast(currentIndex, newFirst, this.last, this.numItemsInViewport, this.d_numToleratedItems);
+                    isRangeChanged = newFirst !== this.first && newLast !== this.last;
 
                     this.lastScrollPos = scrollPos;
                 }
@@ -1911,27 +2428,27 @@ this.primevue.virtualscroller = (function (vue) {
 
                     this.setContentPosition(newState);
 
-                    if (this.lazy) {
-                        this.$emit('lazy-load', { first, last });
-                    }
                     this.first = first;
                     this.last = last;
 
-                    this.$emit('scroll-index-change', { first, last });
+                    this.$emit('scroll-index-change', newState);
+
+                    if (this.lazy) {
+                        this.$emit('lazy-load', newState);
+                    }
                 }
             },
             onScroll(event) {
-                if (this.delay && !this.lazy) {
+                this.$emit('scroll', event);
+
+                if (this.delay) {
                     if (this.scrollTimeout) {
                         clearTimeout(this.scrollTimeout);
                     }
 
                     if (!this.d_loading && this.showLoader) {
                         const { isRangeChanged: changed } = this.onScrollPositionChange(event);
-
-                        if (changed) {
-                            this.d_loading = true;
-                        }
+                        changed && (this.d_loading = true);
                     }
 
                     this.scrollTimeout = setTimeout(() => {
@@ -1947,8 +2464,8 @@ this.primevue.virtualscroller = (function (vue) {
                 }
             },
             getOptions(renderedIndex) {
-                let count = this.items.length;
-                let index = this.isBoth() ? this.first.rows + renderedIndex : this.first + renderedIndex;
+                const count = (this.items || []).length;
+                const index = this.isBoth() ? this.first.rows + renderedIndex : this.first + renderedIndex;
                 return {
                     index,
                     count,
@@ -1958,139 +2475,23 @@ this.primevue.virtualscroller = (function (vue) {
                     odd: index % 2 !== 0
                 };
             },
-            getLoaderOptions(index) {
+            getLoaderOptions(index, extOptions) {
                 let count = this.loaderArr.length;
                 return {
-                    loading: this.d_loading,
+                    index,
+                    count,
                     first: index === 0,
                     last: index === (count - 1),
                     even: index % 2 === 0,
-                    odd: index % 2 !== 0
+                    odd: index % 2 !== 0,
+                    ...extOptions
                 }
-            },
-            isHorizontal() {
-                return this.orientation === 'horizontal';
-            },
-            isBoth() {
-                return this.orientation === 'both';
-            },
-            scrollTo(options) {
-                if (this.element) {
-                    this.element.scrollTo(options);
-                }
-            },
-            scrollToIndex(index, behavior = 'auto') {
-                const isBoth = this.isBoth();
-                const isHorizontal = this.isHorizontal();
-                const itemSize = this.itemSize;
-                const contentPadding = this.getContentPadding();
-                const calculateFirst = (_index = 0) => (_index <= this.d_numToleratedItems ? 0 : _index);
-                const calculateCoord = (_first, _size, _padding) => (_first * _size) + _padding;
-                const scrollTo = (left = 0, top = 0) => this.scrollTo({ left, top, behavior });
-
-                if (isBoth) {
-                    const newFirst = { rows: calculateFirst(index[0]), cols: calculateFirst(index[1]) };
-                    if (newFirst.rows !== this.first.rows || newFirst.cols !== this.first.cols)
-                        scrollTo(calculateCoord(newFirst.cols, itemSize[1], contentPadding.left),calculateCoord(newFirst.rows, itemSize[0], contentPadding.top));
-                }
-                else {
-                    const newFirst = calculateFirst(index);
-
-                    if (newFirst !== this.first) {
-                        isHorizontal ? scrollTo(calculateCoord(newFirst, itemSize, contentPadding.left), 0) : scrollTo(0, calculateCoord(newFirst, itemSize, contentPadding.top));
-                    }
-
-                    this.first = newFirst;
-                }
-            },
-            scrollInView(index, to, behavior = 'auto') {
-                if (to) {
-                    const isBoth = this.isBoth();
-                    const isHorizontal = this.isHorizontal();
-                    const { first, viewport } = this.getRenderedRange();
-                    const itemSize = this.itemSize;
-                    const scrollTo = (left = 0, top = 0) => this.scrollTo({ left, top, behavior });
-                    const isToStart = to === 'to-start';
-                    const isToEnd = to === 'to-end';
-
-                    if (isToStart) {
-                        if (isBoth) {
-                            if (viewport.first.rows - first.rows > index[0]) {
-                                scrollTo(viewport.first.cols * itemSize[1], (viewport.first.rows - 1) * itemSize[0]);
-                            }
-                            else if (viewport.first.cols - first.cols > index[1]) {
-                                scrollTo((viewport.first.cols - 1) * itemSize[1], viewport.first.rows * itemSize[0]);
-                            }
-                        }
-                        else {
-                            if (viewport.first - first > index) {
-                                const pos = (viewport.first - 1) * itemSize;
-                                isHorizontal ? scrollTo(pos, 0) : scrollTo(0, pos);
-                            }
-                        }
-                    }
-                    else if (isToEnd) {
-                        if (isBoth) {
-                            if (viewport.last.rows - first.rows <= index[0] + 1) {
-                                scrollTo(viewport.first.cols * itemSize[1], (viewport.first.rows + 1) * itemSize[0]);
-                            }
-                            else if (viewport.last.cols - first.cols <= index[1] + 1) {
-                                scrollTo((viewport.first.cols + 1) * itemSize[1], viewport.first.rows * itemSize[0]);
-                            }
-                        }
-                        else {
-                            if (viewport.last - first <= index + 1) {
-                                const pos = (viewport.first + 1) * itemSize;
-                                isHorizontal ? scrollTo(pos, 0) : scrollTo(0, pos);
-                            }
-                        }
-                    }
-                }
-                else {
-                    this.scrollToIndex(index, behavior);
-                }
-            },
-            getRenderedRange() {
-                const isBoth = this.isBoth();
-                const isHorizontal = this.isHorizontal();
-                const itemSize = this.itemSize;
-                const calculateFirstInViewport = (_pos, _size) => Math.floor(_pos / (_size || _pos));
-
-                let firstInViewport = this.first;
-                let lastInViewport = 0;
-
-                if (this.element) {
-                    const scrollTop = this.element.scrollTop;
-                    const scrollLeft = this.element.scrollLeft;
-
-                    if (isBoth) {
-                        firstInViewport = { rows: calculateFirstInViewport(scrollTop, itemSize[0]), cols: calculateFirstInViewport(scrollLeft, itemSize[1]) };
-                        lastInViewport = { rows: firstInViewport.rows + this.numItemsInViewport.rows, cols: firstInViewport.cols + this.numItemsInViewport.cols };
-                    }
-                    else {
-                        const scrollPos = isHorizontal ? scrollLeft : scrollTop;
-                        firstInViewport = calculateFirstInViewport(scrollPos, itemSize);
-                        lastInViewport = firstInViewport + this.numItemsInViewport;
-                    }
-                }
-
-                return {
-                    first: this.first,
-                    last: this.last,
-                    viewport: {
-                        first: firstInViewport,
-                        last: lastInViewport
-                    }
-                };
             },
             elementRef(el) {
                 this.element = el;
             },
             contentRef(el) {
                 this.content = el;
-            },
-            spacerRef(el) {
-                this.spacer = el;
             }
         },
         computed: {
@@ -2100,6 +2501,11 @@ this.primevue.virtualscroller = (function (vue) {
                     'p-horizontal-scroll': this.isHorizontal()
                 }, this.class];
             },
+            contentClass() {
+                return ['p-virtualscroller-content', {
+                    'p-virtualscroller-loading': this.d_loading
+                }];
+            },
             loaderClass() {
                 return ['p-virtualscroller-loader', {
                     'p-component-overlay': !this.$slots.loader
@@ -2108,27 +2514,41 @@ this.primevue.virtualscroller = (function (vue) {
             loadedItems() {
                 const items = this.items;
                 if (items && !this.d_loading) {
-                    const isBoth = this.isBoth();
-
-                    if (isBoth) {
-                        return items.slice(this.first.rows, this.last.rows).map((item) => {
-                            const items = item.slice(this.first.cols, this.last.cols);
-                            return items;
-                        });
+                    if (this.isBoth()) {
+                        return items.slice(this.first.rows, this.last.rows).map(item => this.columns ? item : item.slice(this.first.cols, this.last.cols));
                     }
-                    else {
-                        return items.slice(this.first, this.last).map((item) => {
-                            return item;
-                        });
-                    }
+                    else if (this.isHorizontal() && this.columns)
+                        return items;
+                    else
+                        return items.slice(this.first, this.last);
                 }
 
                 return [];
+            },
+            loadedRows() {
+                return this.d_loading ? (this.loaderDisabled ? this.loaderArr : []) : this.loadedItems;
+            },
+            loadedColumns() {
+                if (this.columns) {
+                    const both = this.isBoth();
+                    const horizontal = this.isHorizontal();
+
+                    if (both || horizontal) {
+                        return this.d_loading && this.loaderDisabled ?
+                        (both ? this.loaderArr[0] : this.loaderArr):
+                        this.columns.slice((both ? this.first.cols : this.first), (both ? this.last.cols : this.last));
+                    }
+                }
+
+                return this.columns;
             }
         }
     };
 
-    const _hoisted_1 = /*#__PURE__*/vue.createVNode("i", { class: "p-virtualscroller-loading-icon pi pi-spinner pi-spin" }, null, -1);
+    const _hoisted_1 = {
+      key: 1,
+      class: "p-virtualscroller-loading-icon pi pi-spinner pi-spin"
+    };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       return (!$props.disabled)
@@ -2136,18 +2556,30 @@ this.primevue.virtualscroller = (function (vue) {
             key: 0,
             ref: $options.elementRef,
             class: $options.containerClass,
+            tabindex: 0,
             style: $props.style,
             onScroll: _cache[1] || (_cache[1] = (...args) => ($options.onScroll && $options.onScroll(...args)))
           }, [
             vue.renderSlot(_ctx.$slots, "content", {
-              styleClass: "p-virtualscroller-content",
-              contentRef: $options.contentRef,
+              styleClass: $options.contentClass,
               items: $options.loadedItems,
-              getItemOptions: $options.getOptions
+              getItemOptions: $options.getOptions,
+              loading: $data.d_loading,
+              getLoaderOptions: $options.getLoaderOptions,
+              itemSize: $props.itemSize,
+              rows: $options.loadedRows,
+              columns: $options.loadedColumns,
+              contentRef: $options.contentRef,
+              spacerStyle: $data.spacerStyle,
+              contentStyle: $data.contentStyle,
+              vertical: $options.isVertical(),
+              horizontal: $options.isHorizontal(),
+              both: $options.isBoth()
             }, () => [
               vue.createVNode("div", {
                 ref: $options.contentRef,
-                class: "p-virtualscroller-content"
+                class: $options.contentClass,
+                style: $data.contentStyle
               }, [
                 (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.loadedItems, (item, index) => {
                   return vue.renderSlot(_ctx.$slots, "item", {
@@ -2156,31 +2588,38 @@ this.primevue.virtualscroller = (function (vue) {
                     options: $options.getOptions(index)
                   })
                 }), 128))
-              ], 512)
+              ], 6)
             ]),
-            vue.createVNode("div", {
-              ref: $options.spacerRef,
-              class: "p-virtualscroller-spacer"
-            }, null, 512),
-            ($data.d_loading)
+            ($props.showSpacer)
               ? (vue.openBlock(), vue.createBlock("div", {
                   key: 0,
+                  class: "p-virtualscroller-spacer",
+                  style: $data.spacerStyle
+                }, null, 4))
+              : vue.createCommentVNode("", true),
+            (!$props.loaderDisabled && $props.showLoader && $data.d_loading)
+              ? (vue.openBlock(), vue.createBlock("div", {
+                  key: 1,
                   class: $options.loaderClass
                 }, [
-                  (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($data.loaderArr, (loadItem, index) => {
-                    return vue.renderSlot(_ctx.$slots, "loader", {
-                      key: index,
-                      options: $options.getLoaderOptions(index)
-                    }, () => [
-                      _hoisted_1
-                    ])
-                  }), 128))
+                  (_ctx.$slots && _ctx.$slots.loader)
+                    ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList($data.loaderArr, (_, index) => {
+                        return vue.renderSlot(_ctx.$slots, "loader", {
+                          key: index,
+                          options: $options.getLoaderOptions(index, $options.isBoth() && { numCols: _ctx.d_numItemsInViewport.cols })
+                        })
+                      }), 128))
+                    : (vue.openBlock(), vue.createBlock("i", _hoisted_1))
                 ], 2))
               : vue.createCommentVNode("", true)
           ], 38))
         : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
             vue.renderSlot(_ctx.$slots, "default"),
-            vue.renderSlot(_ctx.$slots, "content", { items: $props.items })
+            vue.renderSlot(_ctx.$slots, "content", {
+              items: $props.items,
+              rows: $props.items,
+              columns: $options.loadedColumns
+            })
           ], 64))
     }
 
@@ -2211,7 +2650,7 @@ this.primevue.virtualscroller = (function (vue) {
       }
     }
 
-    var css_248z = "\n.p-virtualscroller {\n    position: relative;\n    overflow: auto;\n    contain: strict;\n    -webkit-transform: translateZ(0);\n            transform: translateZ(0);\n    will-change: scroll-position;\n}\n.p-virtualscroller-content {\n    position: absolute;\n    top: 0;\n    left: 0;\n    contain: content;\n    min-height: 100%;\n    min-width: 100%;\n    will-change: transform;\n}\n.p-virtualscroller-spacer {\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 1px;\n    width: 1px;\n    -webkit-transform-origin: 0 0;\n            transform-origin: 0 0;\n    pointer-events: none;\n}\n.p-virtualscroller .p-virtualscroller-loader {\n    position: sticky;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n}\n.p-virtualscroller-loader.p-component-overlay {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n";
+    var css_248z = "\n.p-virtualscroller {\n    position: relative;\n    overflow: auto;\n    contain: strict;\n    -webkit-transform: translateZ(0);\n            transform: translateZ(0);\n    will-change: scroll-position;\n    outline: 0 none;\n}\n.p-virtualscroller-content {\n    position: absolute;\n    top: 0;\n    left: 0;\n    contain: content;\n    min-height: 100%;\n    min-width: 100%;\n    will-change: transform;\n}\n.p-virtualscroller-spacer {\n    position: absolute;\n    top: 0;\n    left: 0;\n    height: 1px;\n    width: 1px;\n    -webkit-transform-origin: 0 0;\n            transform-origin: 0 0;\n    pointer-events: none;\n}\n.p-virtualscroller .p-virtualscroller-loader {\n    position: sticky;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n}\n.p-virtualscroller-loader.p-component-overlay {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n";
     styleInject(css_248z);
 
     script.render = render;
@@ -2473,7 +2912,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
     var script = {
         name: 'InputNumber',
         inheritAttrs: false,
-        emits: ['update:modelValue', 'input'],
+        emits: ['update:modelValue', 'input', 'focus', 'blur'],
         props: {
             modelValue: {
                 type: Number,
@@ -3350,14 +3789,18 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 this.d_modelValue = value;
                 this.$emit('update:modelValue', value);
             },
-            onInputFocus() {
+            onInputFocus(event) {
                 this.focused = true;
+                this.$emit('focus', event);
             },
             onInputBlur(event) {
                 this.focused = false;
 
                 let input = event.target;
                 let newValue = this.validateValue(this.parseValue(input.value));
+
+                this.$emit('blur', { originalEvent: event, value: input.value});
+                
                 input.value = this.formatValue(newValue);
                 input.setAttribute('aria-valuenow', newValue);
                 this.updateModel(event, newValue);
@@ -4173,21 +4616,25 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             onOverlayEnter(el) {
                 utils.ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
                 this.alignOverlay();
-                this.bindOutsideClickListener();
-                this.bindScrollListener();
-                this.bindResizeListener();
                 this.scrollValueInView();
-
-                if (this.filter) {
-                    this.$refs.filterInput.focus();
-                }
 
                 if (!this.virtualScrollerDisabled) {
                     const selectedIndex = this.getSelectedOptionIndex();
                     if (selectedIndex !== -1) {
-                        this.virtualScroller.scrollToIndex(selectedIndex);
+                        setTimeout(() => {
+                            this.virtualScroller && this.virtualScroller.scrollToIndex(selectedIndex);
+                        }, 0);
                     }
                 }
+            },
+            onOverlayAfterEnter() {
+                if (this.filter) {
+                    this.$refs.filterInput.focus();
+                }
+
+                this.bindOutsideClickListener();
+                this.bindScrollListener();
+                this.bindResizeListener();
 
                 this.$emit('show');
             },
@@ -4344,6 +4791,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 return label.startsWith(this.searchValue.toLocaleLowerCase(this.filterLocale));
             },
             onFilterChange(event) {
+                this.filterValue = event.target.value;
                 this.$emit('filter', {originalEvent: event, value: event.target.value});
             },
             onFilterUpdated() {
@@ -4427,7 +4875,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             },
             label() {
                 let selectedOption = this.getSelectedOption();
-                if (selectedOption)
+                if (selectedOption !== null)
                     return this.getOptionLabel(selectedOption);
                 else
                     return this.placeholder||'p-emptylabel';
@@ -4496,7 +4944,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
       return (vue.openBlock(), vue.createBlock("div", {
         ref: "container",
         class: $options.containerClass,
-        onClick: _cache[13] || (_cache[13] = $event => ($options.onClick($event)))
+        onClick: _cache[12] || (_cache[12] = $event => ($options.onClick($event)))
       }, [
         vue.createVNode("div", _hoisted_1, [
           vue.createVNode("input", {
@@ -4566,6 +5014,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
           vue.createVNode(vue.Transition, {
             name: "p-connected-overlay",
             onEnter: $options.onOverlayEnter,
+            onAfterEnter: $options.onOverlayAfterEnter,
             onLeave: $options.onOverlayLeave,
             onAfterLeave: $options.onOverlayAfterLeave
           }, {
@@ -4575,7 +5024,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                     key: 0,
                     ref: $options.overlayRef,
                     class: $options.panelStyleClass,
-                    onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                    onClick: _cache[11] || (_cache[11] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                   }, [
                     vue.renderSlot(_ctx.$slots, "header", {
                       value: $props.modelValue,
@@ -4584,19 +5033,17 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                     ($props.filter)
                       ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
                           vue.createVNode("div", _hoisted_3, [
-                            vue.withDirectives(vue.createVNode("input", {
+                            vue.createVNode("input", {
                               type: "text",
                               ref: "filterInput",
-                              "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => ($data.filterValue = $event)),
-                              onVnodeUpdated: _cache[9] || (_cache[9] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
+                              value: $data.filterValue,
+                              onVnodeUpdated: _cache[8] || (_cache[8] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
                               autoComplete: "off",
                               class: "p-dropdown-filter p-inputtext p-component",
                               placeholder: $props.filterPlaceholder,
-                              onKeydown: _cache[10] || (_cache[10] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
-                              onInput: _cache[11] || (_cache[11] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
-                            }, null, 40, ["placeholder"]), [
-                              [vue.vModelText, $data.filterValue]
-                            ]),
+                              onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
+                              onInput: _cache[10] || (_cache[10] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                            }, null, 40, ["value", "placeholder"]),
                             _hoisted_4
                           ])
                         ]))
@@ -4611,10 +5058,11 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                         style: {'height': $props.scrollHeight},
                         disabled: $options.virtualScrollerDisabled
                       }), vue.createSlots({
-                        content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+                        content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
                           vue.createVNode("ul", {
                             ref: contentRef,
                             class: ['p-dropdown-items', styleClass],
+                            style: contentStyle,
                             role: "listbox"
                           }, [
                             (!$props.optionGroupLabel)
@@ -4683,7 +5131,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                                     ])
                                   ]))
                                 : vue.createCommentVNode("", true)
-                          ], 2)
+                          ], 6)
                         ]),
                         _: 2
                       }, [
@@ -4705,7 +5153,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 : vue.createCommentVNode("", true)
             ]),
             _: 3
-          }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+          }, 8, ["onEnter", "onAfterEnter", "onLeave", "onAfterLeave"])
         ], 8, ["to", "disabled"]))
       ], 2))
     }
@@ -5216,8 +5664,7 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
                                       class: "p-dialog-header-icon p-dialog-header-close p-link",
                                       onClick: _cache[2] || (_cache[2] = (...args) => ($options.close && $options.close(...args))),
                                       "aria-label": $props.ariaCloseLabel,
-                                      type: "button",
-                                      tabindex: "-1"
+                                      type: "button"
                                     }, [
                                       _hoisted_2
                                     ], 8, ["aria-label"])), [
@@ -6671,7 +7118,7 @@ this.primevue.tree = (function (utils, Ripple, vue) {
       }
     }
 
-    var css_248z = "\n.p-tree-container {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    overflow: auto;\n}\n.p-treenode-children {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n.p-tree-wrapper {\n    overflow: auto;\n}\n.p-treenode-selectable {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-tree-toggler {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n.p-treenode-leaf > .p-treenode-content .p-tree-toggler {\n    visibility: hidden;\n}\n.p-treenode-content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-tree-filter {\n    width: 100%;\n}\n.p-tree-filter-container {\n    position: relative;\n    display: block;\n    width: 100%;\n}\n.p-tree-filter-icon {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-tree-loading {\n    position: relative;\n    min-height: 4rem;\n}\n.p-tree .p-tree-loading-overlay {\n    position: absolute;\n    z-index: 1;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-tree-flex-scrollable {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    height: 100%;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n.p-tree-flex-scrollable .p-tree-wrapper {\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}\n";
+    var css_248z = "\n.p-tree-container {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n    overflow: auto;\n}\n.p-treenode-children {\n    margin: 0;\n    padding: 0;\n    list-style-type: none;\n}\n.p-tree-wrapper {\n    overflow: auto;\n}\n.p-treenode-selectable {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-tree-toggler {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n    -ms-flex-negative: 0;\n        flex-shrink: 0;\n}\n.p-treenode-leaf > .p-treenode-content .p-tree-toggler {\n    visibility: hidden;\n}\n.p-treenode-content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-tree-filter {\n    width: 100%;\n}\n.p-tree-filter-container {\n    position: relative;\n    display: block;\n    width: 100%;\n}\n.p-tree-filter-icon {\n    position: absolute;\n    top: 50%;\n    margin-top: -.5rem;\n}\n.p-tree-loading {\n    position: relative;\n    min-height: 4rem;\n}\n.p-tree .p-tree-loading-overlay {\n    position: absolute;\n    z-index: 1;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-tree-flex-scrollable {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    height: 100%;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n.p-tree-flex-scrollable .p-tree-wrapper {\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}\n";
     styleInject(css_248z);
 
     script.render = render;

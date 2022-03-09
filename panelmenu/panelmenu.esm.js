@@ -56,6 +56,11 @@ var script$1 = {
                 navigate(event);
             }
         },
+        onItemKeydown(event, item) {
+            if (event.which === 13) {
+                this.onItemClick(event, item);
+            }
+        },
         getItemClass(item) {
             return ['p-menuitem', item.className];
         },
@@ -139,6 +144,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           class: $options.linkClass(item),
                           target: item.target,
                           onClick: $event => ($options.onItemClick($event, item)),
+                          onKeydown: $event => ($options.onItemKeydown($event, item)),
                           role: "treeitem",
                           "aria-expanded": $options.isActive(item),
                           tabindex: $options.disabled(item) ? null : '0'
@@ -153,7 +159,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                             class: ['p-menuitem-icon', item.icon]
                           }, null, 2),
                           createVNode("span", _hoisted_3$1, toDisplayString($options.label(item)), 1)
-                        ], 10, ["href", "target", "onClick", "aria-expanded", "tabindex"]))
+                        ], 42, ["href", "target", "onClick", "onKeydown", "aria-expanded", "tabindex"]))
                   ], 64))
                 : (openBlock(), createBlock(resolveDynamicComponent($props.template), {
                     key: 1,
@@ -221,7 +227,7 @@ var script = {
             if (this.isActive(item) && this.activeItem === null) {
                 this.activeItem = item;
             }
-            
+
             if (this.disabled(item)) {
                 event.preventDefault();
                 return;
@@ -240,9 +246,14 @@ var script = {
                 this.activeItem = item;
 
             this.updateExpandedKeys({item: item, expanded: this.activeItem != null});
-        
+
             if (item.to && navigate) {
                 navigate(event);
+            }
+        },
+        onItemKeydown(event, item) {
+            if (event.which === 13) {
+                this.onItemClick(event, item);
             }
         },
         updateExpandedKeys(event) {
@@ -358,10 +369,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             href: item.url,
                             class: $options.getHeaderLinkClass(item),
                             onClick: $event => ($options.onItemClick($event, item)),
+                            onKeydown: $event => ($options.onItemKeydown($event, item)),
                             tabindex: $options.disabled(item) ? null : '0',
                             "aria-expanded": $options.isActive(item),
-                            id: $options.ariaId +'_header',
-                            "aria-controls": $options.ariaId +'_content'
+                            id: $options.ariaId +'_header_' + index,
+                            "aria-controls": $options.ariaId +'_content_' + index
                           }, [
                             (item.items)
                               ? (openBlock(), createBlock("span", {
@@ -376,7 +388,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 }, null, 2))
                               : createCommentVNode("", true),
                             createVNode("span", _hoisted_3, toDisplayString($options.label(item)), 1)
-                          ], 10, ["href", "onClick", "tabindex", "aria-expanded", "id", "aria-controls"]))
+                          ], 42, ["href", "onClick", "onKeydown", "tabindex", "aria-expanded", "id", "aria-controls"]))
                     ], 64))
                   : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.item), {
                       key: 1,
@@ -388,8 +400,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   withDirectives(createVNode("div", {
                     class: "p-toggleable-content",
                     role: "region",
-                    id: $options.ariaId +'_content' ,
-                    "aria-labelledby": $options.ariaId +'_header'
+                    id: $options.ariaId +'_content_' + index,
+                    "aria-labelledby": $options.ariaId +'_header_' + index
                   }, [
                     (item.items)
                       ? (openBlock(), createBlock("div", _hoisted_4, [

@@ -15,13 +15,13 @@ export interface SpeedDialTooltipOptions {
      * Event to show the tooltip, valid values are hover and focus.
      * @see SpeedDialTooltipEventType
      */
-    event: SpeedDialTooltipEventType;
+    event: string;
     /**
      * Position of element.
      * @see SpeedDialTooltipPositionType
      * Default value is 'bottom'.
      */
-    position: SpeedDialTooltipPositionType;
+    position: string;
     /**
      * Optional options.
      */
@@ -75,7 +75,7 @@ export interface SpeedDialProps {
     /**
      * Style class of the button element.
      */
-    buttonClass?: string | undefined;
+    buttonClass?: any;
     /**
      * Inline style of the mask element.
      */
@@ -101,7 +101,7 @@ export interface SpeedDialProps {
     /**
      * Style class of the element.
      */
-    class?: string | undefined;
+    class?: any;
     /**
      * Inline style of the element.
      */

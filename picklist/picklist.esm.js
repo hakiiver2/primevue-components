@@ -34,6 +34,10 @@ var script = {
         breakpoint: {
             type: String,
             default: '960px'
+        },
+        stripedRows: {
+            type: Boolean,
+            default: false
         }
     },
     itemTouched: false,
@@ -489,6 +493,11 @@ var script = {
         }
     },
     computed: {
+        containerClass() {
+            return ['p-picklist p-component', {
+                'p-picklist-striped': this.stripedRows
+            }];
+        },
         sourceList() {
             return this.modelValue && this.modelValue[0] ? this.modelValue[0] : null;
         },
@@ -507,27 +516,26 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-picklist p-component" };
-const _hoisted_2 = { class: "p-picklist-buttons p-picklist-source-controls" };
-const _hoisted_3 = { class: "p-picklist-list-wrapper p-picklist-source-wrapper" };
-const _hoisted_4 = {
+const _hoisted_1 = { class: "p-picklist-buttons p-picklist-source-controls" };
+const _hoisted_2 = { class: "p-picklist-list-wrapper p-picklist-source-wrapper" };
+const _hoisted_3 = {
   key: 0,
   class: "p-picklist-header"
 };
-const _hoisted_5 = { class: "p-picklist-buttons p-picklist-transfer-buttons" };
-const _hoisted_6 = { class: "p-picklist-list-wrapper p-picklist-target-wrapper" };
-const _hoisted_7 = {
+const _hoisted_4 = { class: "p-picklist-buttons p-picklist-transfer-buttons" };
+const _hoisted_5 = { class: "p-picklist-list-wrapper p-picklist-target-wrapper" };
+const _hoisted_6 = {
   key: 0,
   class: "p-picklist-header"
 };
-const _hoisted_8 = { class: "p-picklist-buttons p-picklist-target-controls" };
+const _hoisted_7 = { class: "p-picklist-buttons p-picklist-target-controls" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PLButton = resolveComponent("PLButton");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    createVNode("div", _hoisted_2, [
+  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
+    createVNode("div", _hoisted_1, [
       renderSlot(_ctx.$slots, "sourcecontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
@@ -551,9 +559,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }),
       renderSlot(_ctx.$slots, "sourcecontrolsend")
     ]),
-    createVNode("div", _hoisted_3, [
+    createVNode("div", _hoisted_2, [
       (_ctx.$slots.sourceheader)
-        ? (openBlock(), createBlock("div", _hoisted_4, [
+        ? (openBlock(), createBlock("div", _hoisted_3, [
             renderSlot(_ctx.$slots, "sourceheader")
           ]))
         : createCommentVNode("", true),
@@ -591,7 +599,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 3
       }, 8, ["style"])
     ]),
-    createVNode("div", _hoisted_5, [
+    createVNode("div", _hoisted_4, [
       renderSlot(_ctx.$slots, "movecontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
@@ -615,9 +623,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8, ["onClick"]),
       renderSlot(_ctx.$slots, "movecontrolsend")
     ]),
-    createVNode("div", _hoisted_6, [
+    createVNode("div", _hoisted_5, [
       (_ctx.$slots.targetheader)
-        ? (openBlock(), createBlock("div", _hoisted_7, [
+        ? (openBlock(), createBlock("div", _hoisted_6, [
             renderSlot(_ctx.$slots, "targetheader")
           ]))
         : createCommentVNode("", true),
@@ -655,7 +663,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 3
       }, 8, ["style"])
     ]),
-    createVNode("div", _hoisted_8, [
+    createVNode("div", _hoisted_7, [
       renderSlot(_ctx.$slots, "targetcontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
@@ -679,7 +687,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }),
       renderSlot(_ctx.$slots, "targetcontrolsend")
     ])
-  ]))
+  ], 2))
 }
 
 function styleInject(css, ref) {

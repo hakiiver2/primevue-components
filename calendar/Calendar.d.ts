@@ -44,6 +44,17 @@ export interface CalendarYearChangeEvent {
     year: number;
 }
 
+export interface CalendarBlurEvent {
+    /**
+     * Browser event
+     */
+    originalEvent: Event;
+    /**
+     * Input value
+     */
+    value: string;
+}
+
 export interface CalendarProps {
     /**
      * Value of the component.
@@ -122,7 +133,7 @@ export interface CalendarProps {
     /**
      * Style class of the datetimepicker panel.
      */
-    panelClass?: string | undefined;
+    panelClass?: any;
     /**
      * The minimum selectable date.
      */
@@ -228,7 +239,7 @@ export interface CalendarProps {
     /**
      * Style class of the input field.
      */
-    inputClass?: string | undefined;
+    inputClass?: any;
     /**
      * Inline style of the component.
      */
@@ -236,11 +247,7 @@ export interface CalendarProps {
     /**
      * Style class of the component.
      */
-    class?: string | undefined;
-    /**
-     * Keep invalid value when input blur.
-     */
-    keepInvalid?: boolean | undefined;
+    class?: any;
 }
 
 export interface CalendarSlots {
@@ -281,6 +288,11 @@ export declare type CalendarEmits = {
      */
     'update:modelValue': (value: CalendarValueType) => void;
     /**
+     * Callback to invoke when input field is being typed.
+     * @param {Event} event - Browser event
+     */
+    'input': (event: Event) => void;
+    /**
      * Callback to invoke when a date is selected.
      * @param {Date} value - Selected value.
      */
@@ -313,6 +325,20 @@ export declare type CalendarEmits = {
      * @param {CalendarYearChangeEvent} event - Custom year change event.
      */
     'year-change': (event: CalendarYearChangeEvent) => void;
+    /**
+     * Callback to invoke on focus of input field.
+     * @param {Event} event - Focus event
+     */
+    'focus': (event: Event) => void;
+    /**
+     * Callback to invoke on blur of input field.
+     * @param {CalendarBlurEvent} event - Blur event
+     */
+    'blur': (event: CalendarBlurEvent) => void;
+    /**
+     * Callback to invoke when a key is pressed.
+     */
+    'keydown': (event: Event) => void;
 }
 
 declare class Calendar extends ClassComponent<CalendarProps, CalendarSlots, CalendarEmits> { }

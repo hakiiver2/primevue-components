@@ -1,7 +1,8 @@
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler, ObjectUtils, UniqueComponentId } from 'primevue/utils';
 import { FilterOperator, FilterService, FilterMatchMode } from 'primevue/api';
 import Paginator from 'primevue/paginator';
-import { openBlock, createBlock, withKeys, withModifiers, createVNode, resolveComponent, resolveDynamicComponent, createCommentVNode, Teleport, Transition, withCtx, Fragment, renderList, toDisplayString, resolveDirective, withDirectives, createTextVNode, renderSlot, createSlots } from 'vue';
+import VirtualScroller from 'primevue/virtualscroller';
+import { openBlock, createBlock, withKeys, withModifiers, createVNode, resolveComponent, resolveDynamicComponent, createCommentVNode, Teleport, Transition, withCtx, Fragment, renderList, toDisplayString, resolveDirective, withDirectives, createTextVNode, renderSlot, createSlots, mergeProps } from 'vue';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
@@ -23,7 +24,10 @@ var script$a = {
         onClick(event) {
             if (!this.$attrs.disabled) {
                 this.focused = true;
-                this.$emit('change', event);
+                this.$emit('change', {
+                    originalEvent: event,
+                    checked: !this.checked
+                });
             }
         },
         onFocus() {
@@ -37,7 +41,7 @@ var script$a = {
 
 function render$a(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
-    class: "p-checkbox p-component",
+    class: ['p-checkbox p-component', {'p-checkbox-focused': $data.focused}],
     onClick: _cache[3] || (_cache[3] = (...args) => ($options.onClick && $options.onClick(...args))),
     onKeydown: _cache[4] || (_cache[4] = withKeys(withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["prevent"]), ["space"]))
   }, [
@@ -54,7 +58,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
         class: ['p-checkbox-icon', {'pi pi-check': $props.checked}]
       }, null, 2)
     ], 42, ["aria-checked", "tabindex"])
-  ], 32))
+  ], 34))
 }
 
 script$a.render = render$a;
@@ -521,7 +525,7 @@ const _hoisted_1$7 = {
   key: 0,
   class: "p-fluid p-column-filter-element"
 };
-const _hoisted_2$6 = /*#__PURE__*/createVNode("span", { class: "pi pi-filter-icon pi-filter" }, null, -1);
+const _hoisted_2$5 = /*#__PURE__*/createVNode("span", { class: "pi pi-filter-icon pi-filter" }, null, -1);
 const _hoisted_3$4 = /*#__PURE__*/createVNode("span", { class: "pi pi-filter-slash" }, null, -1);
 const _hoisted_4$2 = {
   key: 0,
@@ -564,7 +568,7 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: _cache[1] || (_cache[1] = $event => ($options.toggleMenu())),
           onKeydown: _cache[2] || (_cache[2] = $event => ($options.onToggleButtonKeyDown($event)))
         }, [
-          _hoisted_2$6
+          _hoisted_2$5
         ], 42, ["aria-expanded"]))
       : createCommentVNode("", true),
     ($props.showClearButton && $props.display === 'row')
@@ -954,7 +958,7 @@ var script$8 = {
 };
 
 const _hoisted_1$6 = { class: "p-column-header-content" };
-const _hoisted_2$5 = {
+const _hoisted_2$4 = {
   key: 1,
   class: "p-column-title"
 };
@@ -998,7 +1002,7 @@ function render$8(_ctx, _cache, $props, $setup, $data, $options) {
           }, null, 8, ["column"]))
         : createCommentVNode("", true),
       ($options.columnProp('header'))
-        ? (openBlock(), createBlock("span", _hoisted_2$5, toDisplayString($options.columnProp('header')), 1))
+        ? (openBlock(), createBlock("span", _hoisted_2$4, toDisplayString($options.columnProp('header')), 1))
         : createCommentVNode("", true),
       ($options.columnProp('sortable'))
         ? (openBlock(), createBlock("span", {
@@ -1134,6 +1138,23 @@ var script$7 = {
         getFilterColumnHeaderStyle(column) {
             return [this.columnProp(column, 'filterHeaderStyle'), this.columnProp(column, 'style')];
         },
+        getHeaderRows() {
+            let rows = [];
+
+            let columnGroup = this.columnGroup;
+            if (columnGroup.children && columnGroup.children.default) {
+                for (let child of columnGroup.children.default()) {
+                    if (child.type.name === 'Row') {
+                        rows.push(child);
+                    }
+                    else if (child.children && child.children instanceof Array) {
+                        rows = child.children;
+                    }
+                }
+
+                return rows;
+            }
+        },
         getHeaderColumns(row){
             let cols = [];
 
@@ -1160,7 +1181,7 @@ const _hoisted_1$5 = {
   class: "p-datatable-thead",
   role: "rowgroup"
 };
-const _hoisted_2$4 = { role: "row" };
+const _hoisted_2$3 = { role: "row" };
 const _hoisted_3$2 = {
   key: 0,
   role: "row"
@@ -1174,7 +1195,7 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("thead", _hoisted_1$5, [
     (!$props.columnGroup)
       ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-          createVNode("tr", _hoisted_2$4, [
+          createVNode("tr", _hoisted_2$3, [
             (openBlock(true), createBlock(Fragment, null, renderList($props.columns, (col, i) => {
               return (openBlock(), createBlock(Fragment, {
                 key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||i
@@ -1274,7 +1295,7 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
               ]))
             : createCommentVNode("", true)
         ], 64))
-      : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($props.columnGroup.children.default(), (row, i) => {
+      : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($options.getHeaderRows(), (row, i) => {
           return (openBlock(), createBlock("tr", {
             key: i,
             role: "row"
@@ -1356,7 +1377,7 @@ const _hoisted_1$4 = /*#__PURE__*/createVNode("div", { class: "p-radiobutton-ico
 
 function render$6(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
-    class: "p-radiobutton p-component",
+    class: ['p-radiobutton p-component', {'p-radiobutton-focused': $data.focused}],
     onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
     tabindex: "0",
     onFocus: _cache[2] || (_cache[2] = $event => ($options.onFocus($event))),
@@ -1371,7 +1392,7 @@ function render$6(_ctx, _cache, $props, $setup, $data, $options) {
     }, [
       _hoisted_1$4
     ], 10, ["aria-checked"])
-  ], 32))
+  ], 34))
 }
 
 script$6.render = render$6;
@@ -1410,7 +1431,7 @@ var script$5 = {
 
 function render$5(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
-    class: "p-checkbox p-component",
+    class: ['p-checkbox p-component', {'p-checkbox-focused': $data.focused}],
     onClick: _cache[4] || (_cache[4] = (...args) => ($options.onClick && $options.onClick(...args)))
   }, [
     createVNode("div", {
@@ -1427,7 +1448,7 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
         class: ['p-checkbox-icon', {'pi pi-check': $props.checked}]
       }, null, 2)
     ], 42, ["aria-checked", "tabindex"])
-  ]))
+  ], 2))
 }
 
 script$5.render = render$5;
@@ -1480,6 +1501,10 @@ var script$4 = {
         responsiveLayout: {
             type: String,
             default: 'stack'
+        },
+        virtualScrollerContentProps: {
+            type: Object,
+            default: null
         }
     },
     documentEditListener: null,
@@ -1533,11 +1558,11 @@ var script$4 = {
                 data: this.rowData
             });
         },
-        toggleRowWithRadio(event) {
-            this.$emit('radio-change', event);
+        toggleRowWithRadio(event, index) {
+            this.$emit('radio-change', { originalEvent: event.originalEvent, index: index, data: event.data});
         },
-        toggleRowWithCheckbox(event) {
-            this.$emit('checkbox-change', event);
+        toggleRowWithCheckbox(event, index) {
+            this.$emit('checkbox-change', { originalEvent: event.originalEvent, index: index, data: event.data });
         },
         isEditable() {
             return this.column.children && this.column.children.editor != null;
@@ -1733,6 +1758,9 @@ var script$4 = {
                     this.styleObject.left = left + 'px';
                 }
             }
+        },
+        getVirtualScrollerProp(option) {
+            return this.virtualScrollerContentProps ? this.virtualScrollerContentProps[option] : null;
         }
     },
     computed: {
@@ -1755,6 +1783,21 @@ var script$4 = {
             let columnStyle = this.columnProp('style');
 
             return this.columnProp('frozen') ? [columnStyle, bodyStyle, this.styleObject]: [columnStyle, bodyStyle];
+        },
+        loading() {
+            return this.getVirtualScrollerProp('loading');
+        },
+        loadingOptions() {
+            const getLoaderOptions = this.getVirtualScrollerProp('getLoaderOptions');
+            return getLoaderOptions && getLoaderOptions(this.rowIndex, {
+                cellIndex: this.index,
+                cellFirst: this.index === 0,
+                cellLast: this.index === (this.getVirtualScrollerProp('columns').length - 1),
+                cellEven: this.index % 2 === 0,
+                cellOdd: this.index % 2 !== 0,
+                column: this.column,
+                field: this.field
+            });
         }
     },
     components: {
@@ -1770,7 +1813,7 @@ const _hoisted_1$3 = {
   key: 0,
   class: "p-column-title"
 };
-const _hoisted_2$3 = /*#__PURE__*/createVNode("span", { class: "p-row-editor-init-icon pi pi-fw pi-pencil" }, null, -1);
+const _hoisted_2$2 = /*#__PURE__*/createVNode("span", { class: "p-row-editor-init-icon pi pi-fw pi-pencil" }, null, -1);
 const _hoisted_3$1 = /*#__PURE__*/createVNode("span", { class: "p-row-editor-save-icon pi pi-fw pi-check" }, null, -1);
 const _hoisted_4$1 = /*#__PURE__*/createVNode("span", { class: "p-row-editor-cancel-icon pi pi-fw pi-times" }, null, -1);
 
@@ -1779,120 +1822,136 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTCheckbox = resolveComponent("DTCheckbox");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("td", {
-    style: $options.containerStyle,
-    class: $options.containerClass,
-    onClick: _cache[5] || (_cache[5] = (...args) => ($options.onClick && $options.onClick(...args))),
-    onKeydown: _cache[6] || (_cache[6] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-    role: "cell"
-  }, [
-    ($props.responsiveLayout === 'stack')
-      ? (openBlock(), createBlock("span", _hoisted_1$3, toDisplayString($options.columnProp('header')), 1))
-      : createCommentVNode("", true),
-    ($props.column.children && $props.column.children.body && !$data.d_editing)
-      ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.body), {
-          key: 1,
+  return ($options.loading)
+    ? (openBlock(), createBlock("td", {
+        key: 0,
+        style: $options.containerStyle,
+        class: $options.containerClass
+      }, [
+        (openBlock(), createBlock(resolveDynamicComponent($props.column.children.loading), {
           data: $props.rowData,
           column: $props.column,
           field: $options.field,
           index: $props.rowIndex,
-          frozenRow: $props.frozenRow
-        }, null, 8, ["data", "column", "field", "index", "frozenRow"]))
-      : ($props.column.children && $props.column.children.editor && $data.d_editing)
-        ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.editor), {
-            key: 2,
-            data: $options.editingRowData,
-            column: $props.column,
-            field: $options.field,
-            index: $props.rowIndex,
-            frozenRow: $props.frozenRow
-          }, null, 8, ["data", "column", "field", "index", "frozenRow"]))
-        : ($props.column.children && $props.column.children.body && !$props.column.children.editor && $data.d_editing)
+          frozenRow: $props.frozenRow,
+          loadingOptions: $options.loadingOptions
+        }, null, 8, ["data", "column", "field", "index", "frozenRow", "loadingOptions"]))
+      ], 6))
+    : (openBlock(), createBlock("td", {
+        key: 1,
+        style: $options.containerStyle,
+        class: $options.containerClass,
+        onClick: _cache[7] || (_cache[7] = (...args) => ($options.onClick && $options.onClick(...args))),
+        onKeydown: _cache[8] || (_cache[8] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+        role: "cell"
+      }, [
+        ($props.responsiveLayout === 'stack')
+          ? (openBlock(), createBlock("span", _hoisted_1$3, toDisplayString($options.columnProp('header')), 1))
+          : createCommentVNode("", true),
+        ($props.column.children && $props.column.children.body && !$data.d_editing)
           ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.body), {
-              key: 3,
-              data: $options.editingRowData,
+              key: 1,
+              data: $props.rowData,
               column: $props.column,
               field: $options.field,
               index: $props.rowIndex,
               frozenRow: $props.frozenRow
             }, null, 8, ["data", "column", "field", "index", "frozenRow"]))
-          : ($options.columnProp('selectionMode'))
-            ? (openBlock(), createBlock(Fragment, { key: 4 }, [
-                ($options.columnProp('selectionMode') === 'single')
-                  ? (openBlock(), createBlock(_component_DTRadioButton, {
-                      key: 0,
-                      value: $props.rowData,
-                      checked: $props.selected,
-                      onChange: $options.toggleRowWithRadio
-                    }, null, 8, ["value", "checked", "onChange"]))
-                  : ($options.columnProp('selectionMode') ==='multiple')
-                    ? (openBlock(), createBlock(_component_DTCheckbox, {
-                        key: 1,
-                        value: $props.rowData,
-                        checked: $props.selected,
-                        onChange: $options.toggleRowWithCheckbox
-                      }, null, 8, ["value", "checked", "onChange"]))
-                    : createCommentVNode("", true)
-              ], 64))
-            : ($options.columnProp('rowReorder'))
-              ? (openBlock(), createBlock("i", {
-                  key: 5,
-                  class: ['p-datatable-reorderablerow-handle', ($options.columnProp('rowReorderIcon') || 'pi pi-bars')]
-                }, null, 2))
-              : ($options.columnProp('expander'))
-                ? withDirectives((openBlock(), createBlock("button", {
-                    key: 6,
-                    class: "p-row-toggler p-link",
-                    onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggleRow && $options.toggleRow(...args))),
-                    type: "button"
-                  }, [
-                    createVNode("span", { class: $props.rowTogglerIcon }, null, 2)
-                  ], 512)), [
-                    [_directive_ripple]
-                  ])
-                : ($props.editMode === 'row' && $options.columnProp('rowEditor'))
-                  ? (openBlock(), createBlock(Fragment, { key: 7 }, [
-                      (!$data.d_editing)
-                        ? withDirectives((openBlock(), createBlock("button", {
-                            key: 0,
-                            class: "p-row-editor-init p-link",
-                            onClick: _cache[2] || (_cache[2] = (...args) => ($options.onRowEditInit && $options.onRowEditInit(...args))),
-                            type: "button"
-                          }, [
-                            _hoisted_2$3
-                          ], 512)), [
-                            [_directive_ripple]
-                          ])
-                        : createCommentVNode("", true),
-                      ($data.d_editing)
-                        ? withDirectives((openBlock(), createBlock("button", {
+          : ($props.column.children && $props.column.children.editor && $data.d_editing)
+            ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.editor), {
+                key: 2,
+                data: $options.editingRowData,
+                column: $props.column,
+                field: $options.field,
+                index: $props.rowIndex,
+                frozenRow: $props.frozenRow
+              }, null, 8, ["data", "column", "field", "index", "frozenRow"]))
+            : ($props.column.children && $props.column.children.body && !$props.column.children.editor && $data.d_editing)
+              ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.body), {
+                  key: 3,
+                  data: $options.editingRowData,
+                  column: $props.column,
+                  field: $options.field,
+                  index: $props.rowIndex,
+                  frozenRow: $props.frozenRow
+                }, null, 8, ["data", "column", "field", "index", "frozenRow"]))
+              : ($options.columnProp('selectionMode'))
+                ? (openBlock(), createBlock(Fragment, { key: 4 }, [
+                    ($options.columnProp('selectionMode') === 'single')
+                      ? (openBlock(), createBlock(_component_DTRadioButton, {
+                          key: 0,
+                          value: $props.rowData,
+                          checked: $props.selected,
+                          onChange: _cache[1] || (_cache[1] = $event => ($options.toggleRowWithRadio($event, $props.rowIndex)))
+                        }, null, 8, ["value", "checked"]))
+                      : ($options.columnProp('selectionMode') ==='multiple')
+                        ? (openBlock(), createBlock(_component_DTCheckbox, {
                             key: 1,
-                            class: "p-row-editor-save p-link",
-                            onClick: _cache[3] || (_cache[3] = (...args) => ($options.onRowEditSave && $options.onRowEditSave(...args))),
-                            type: "button"
-                          }, [
-                            _hoisted_3$1
-                          ], 512)), [
-                            [_directive_ripple]
-                          ])
-                        : createCommentVNode("", true),
-                      ($data.d_editing)
-                        ? withDirectives((openBlock(), createBlock("button", {
-                            key: 2,
-                            class: "p-row-editor-cancel p-link",
-                            onClick: _cache[4] || (_cache[4] = (...args) => ($options.onRowEditCancel && $options.onRowEditCancel(...args))),
-                            type: "button"
-                          }, [
-                            _hoisted_4$1
-                          ], 512)), [
-                            [_directive_ripple]
-                          ])
+                            value: $props.rowData,
+                            checked: $props.selected,
+                            onChange: _cache[2] || (_cache[2] = $event => ($options.toggleRowWithCheckbox($event, $props.rowIndex)))
+                          }, null, 8, ["value", "checked"]))
                         : createCommentVNode("", true)
-                    ], 64))
-                  : (openBlock(), createBlock(Fragment, { key: 8 }, [
-                      createTextVNode(toDisplayString($options.resolveFieldData()), 1)
-                    ], 64))
-  ], 38))
+                  ], 64))
+                : ($options.columnProp('rowReorder'))
+                  ? (openBlock(), createBlock("i", {
+                      key: 5,
+                      class: ['p-datatable-reorderablerow-handle', ($options.columnProp('rowReorderIcon') || 'pi pi-bars')]
+                    }, null, 2))
+                  : ($options.columnProp('expander'))
+                    ? withDirectives((openBlock(), createBlock("button", {
+                        key: 6,
+                        class: "p-row-toggler p-link",
+                        onClick: _cache[3] || (_cache[3] = (...args) => ($options.toggleRow && $options.toggleRow(...args))),
+                        type: "button"
+                      }, [
+                        createVNode("span", { class: $props.rowTogglerIcon }, null, 2)
+                      ], 512)), [
+                        [_directive_ripple]
+                      ])
+                    : ($props.editMode === 'row' && $options.columnProp('rowEditor'))
+                      ? (openBlock(), createBlock(Fragment, { key: 7 }, [
+                          (!$data.d_editing)
+                            ? withDirectives((openBlock(), createBlock("button", {
+                                key: 0,
+                                class: "p-row-editor-init p-link",
+                                onClick: _cache[4] || (_cache[4] = (...args) => ($options.onRowEditInit && $options.onRowEditInit(...args))),
+                                type: "button"
+                              }, [
+                                _hoisted_2$2
+                              ], 512)), [
+                                [_directive_ripple]
+                              ])
+                            : createCommentVNode("", true),
+                          ($data.d_editing)
+                            ? withDirectives((openBlock(), createBlock("button", {
+                                key: 1,
+                                class: "p-row-editor-save p-link",
+                                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onRowEditSave && $options.onRowEditSave(...args))),
+                                type: "button"
+                              }, [
+                                _hoisted_3$1
+                              ], 512)), [
+                                [_directive_ripple]
+                              ])
+                            : createCommentVNode("", true),
+                          ($data.d_editing)
+                            ? withDirectives((openBlock(), createBlock("button", {
+                                key: 2,
+                                class: "p-row-editor-cancel p-link",
+                                onClick: _cache[6] || (_cache[6] = (...args) => ($options.onRowEditCancel && $options.onRowEditCancel(...args))),
+                                type: "button"
+                              }, [
+                                _hoisted_4$1
+                              ], 512)), [
+                                [_directive_ripple]
+                              ])
+                            : createCommentVNode("", true)
+                        ], 64))
+                      : (openBlock(), createBlock(Fragment, { key: 8 }, [
+                          createTextVNode(toDisplayString($options.resolveFieldData()), 1)
+                        ], 64))
+      ], 38))
 }
 
 script$4.render = render$4;
@@ -2019,6 +2078,21 @@ var script$3 = {
         responsiveLayout: {
             type: String,
             default: 'stack'
+        },
+        virtualScrollerContentProps: {
+            type: Object,
+            default: null
+        },
+        isVirtualScrollerDisabled: {
+            type: Boolean,
+            default: false
+        }
+    },
+    watch: {
+        virtualScrollerContentProps(newValue, oldValue) {
+            if (!this.isVirtualScrollerDisabled && this.getVirtualScrollerProp('vertical') && this.getVirtualScrollerProp('itemSize', oldValue) !== this.getVirtualScrollerProp('itemSize', newValue)) {
+                this.updateVirtualScrollerPosition();
+            }
         }
     },
     mounted() {
@@ -2028,6 +2102,10 @@ var script$3 = {
 
         if (this.scrollable && this.rowGroupMode === 'subheader') {
             this.updateFrozenRowGroupHeaderStickyPosition();
+        }
+
+        if (!this.isVirtualScrollerDisabled && this.getVirtualScrollerProp('vertical')) {
+            this.updateVirtualScrollerPosition();
         }
     },
     updated() {
@@ -2061,6 +2139,10 @@ var script$3 = {
         },
         getRowKey(rowData, index) {
             return this.dataKey ? ObjectUtils.resolveFieldData(rowData, this.dataKey): index;
+        },
+        getRowIndex(index) {
+            const getItemOptions = this.getVirtualScrollerProp('getItemOptions');
+            return getItemOptions ? getItemOptions(index).index : index;
         },
         getRowClass(rowData) {
             let rowStyleClass = [];
@@ -2314,6 +2396,19 @@ var script$3 = {
         updateFrozenRowGroupHeaderStickyPosition() {
             let tableHeaderHeight = DomHandler.getOuterHeight(this.$el.previousElementSibling);
             this.rowGroupHeaderStyleObject.top = tableHeaderHeight + 'px';
+        },
+        updateVirtualScrollerPosition() {
+            const tableHeaderHeight = DomHandler.getOuterHeight(this.$el.previousElementSibling);
+            this.$el.style.top = (this.$el.style.top || 0) + tableHeaderHeight + 'px';
+        },
+        getVirtualScrollerProp(option, options) {
+            options = options || this.virtualScrollerContentProps;
+            return options ? options[option] : null;
+        },
+        bodyRef(el) {
+            // For VirtualScroller
+            const contentRef = this.getVirtualScrollerProp('contentRef');
+            contentRef && contentRef(el);
         }
     },
     computed: {
@@ -2326,6 +2421,9 @@ var script$3 = {
             }
 
             return null;
+        },
+        bodyStyle() {
+            return this.getVirtualScrollerProp('contentStyle');
         }
     },
     components: {
@@ -2334,10 +2432,6 @@ var script$3 = {
 };
 
 const _hoisted_1$2 = {
-  class: "p-datatable-tbody",
-  role: "rowgroup"
-};
-const _hoisted_2$2 = {
   key: 1,
   class: "p-datatable-emptymessage",
   role: "row"
@@ -2346,13 +2440,18 @@ const _hoisted_2$2 = {
 function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTBodyCell = resolveComponent("DTBodyCell");
 
-  return (openBlock(), createBlock("tbody", _hoisted_1$2, [
+  return (openBlock(), createBlock("tbody", {
+    ref: $options.bodyRef,
+    class: "p-datatable-tbody",
+    role: "rowgroup",
+    style: $options.bodyStyle
+  }, [
     (!$props.empty)
       ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($props.value, (rowData, index) => {
           return (openBlock(), createBlock(Fragment, {
-            key: $options.getRowKey(rowData, index) + '_subheader'
+            key: $options.getRowKey(rowData, $options.getRowIndex(index)) + '_subheader'
           }, [
-            ($props.templates['groupheader'] && $props.rowGroupMode === 'subheader' && $options.shouldRenderRowGroupHeader($props.value, rowData, index))
+            ($props.templates['groupheader'] && $props.rowGroupMode === 'subheader' && $options.shouldRenderRowGroupHeader($props.value, rowData, $options.getRowIndex(index)))
               ? (openBlock(), createBlock("tr", {
                   key: 0,
                   class: "p-rowgroup-header",
@@ -2376,7 +2475,7 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
                       : createCommentVNode("", true),
                     (openBlock(), createBlock(resolveDynamicComponent($props.templates['groupheader']), {
                       data: rowData,
-                      index: index
+                      index: $options.getRowIndex(index)
                     }, null, 8, ["data", "index"]))
                   ], 8, ["colspan"])
                 ], 4))
@@ -2385,16 +2484,16 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
               ? (openBlock(), createBlock("tr", {
                   class: $options.getRowClass(rowData),
                   style: $props.rowStyle,
-                  key: $options.getRowKey(rowData, index),
-                  onClick: $event => ($options.onRowClick($event, rowData, index)),
-                  onDblclick: $event => ($options.onRowDblClick($event, rowData, index)),
-                  onContextmenu: $event => ($options.onRowRightClick($event, rowData, index)),
+                  key: $options.getRowKey(rowData, $options.getRowIndex(index)),
+                  onClick: $event => ($options.onRowClick($event, rowData, $options.getRowIndex(index))),
+                  onDblclick: $event => ($options.onRowDblClick($event, rowData, $options.getRowIndex(index))),
+                  onContextmenu: $event => ($options.onRowRightClick($event, rowData, $options.getRowIndex(index))),
                   onTouchend: _cache[10] || (_cache[10] = $event => ($options.onRowTouchEnd($event))),
-                  onKeydown: $event => ($options.onRowKeyDown($event, rowData, index)),
+                  onKeydown: $event => ($options.onRowKeyDown($event, rowData, $options.getRowIndex(index))),
                   tabindex: $props.selectionMode || $props.contextMenu ? '0' : null,
                   onMousedown: _cache[11] || (_cache[11] = $event => ($options.onRowMouseDown($event))),
-                  onDragstart: $event => ($options.onRowDragStart($event, index)),
-                  onDragover: $event => ($options.onRowDragOver($event,index)),
+                  onDragstart: $event => ($options.onRowDragStart($event, $options.getRowIndex(index))),
+                  onDragover: $event => ($options.onRowDragOver($event, $options.getRowIndex(index))),
                   onDragleave: _cache[12] || (_cache[12] = $event => ($options.onRowDragLeave($event))),
                   onDragend: _cache[13] || (_cache[13] = $event => ($options.onRowDragEnd($event))),
                   onDrop: _cache[14] || (_cache[14] = $event => ($options.onRowDrop($event))),
@@ -2404,17 +2503,17 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
                     return (openBlock(), createBlock(Fragment, {
                       key: $options.columnProp(col,'columnKey')||$options.columnProp(col,'field')||i
                     }, [
-                      ($options.shouldRenderBodyCell($props.value, col, index))
+                      ($options.shouldRenderBodyCell($props.value, col, $options.getRowIndex(index)))
                         ? (openBlock(), createBlock(_component_DTBodyCell, {
                             key: 0,
                             rowData: rowData,
                             column: col,
-                            rowIndex: index,
+                            rowIndex: $options.getRowIndex(index),
                             index: i,
                             selected: $options.isSelected(rowData),
                             rowTogglerIcon: $options.columnProp(col,'expander') ? $options.rowTogglerIcon(rowData): null,
                             frozenRow: $props.frozenRow,
-                            rowspan: $props.rowGroupMode === 'rowspan' ? $options.calculateRowGroupSize($props.value, col, index) : null,
+                            rowspan: $props.rowGroupMode === 'rowspan' ? $options.calculateRowGroupSize($props.value, col, $options.getRowIndex(index)) : null,
                             editMode: $props.editMode,
                             editing: $props.editMode === 'row' && $options.isRowEditing(rowData),
                             responsiveLayout: $props.responsiveLayout,
@@ -2428,8 +2527,9 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
                             onRowEditSave: _cache[8] || (_cache[8] = $event => ($options.onRowEditSave($event))),
                             onRowEditCancel: _cache[9] || (_cache[9] = $event => ($options.onRowEditCancel($event))),
                             editingMeta: $props.editingMeta,
-                            onEditingMetaChange: $options.onEditingMetaChange
-                          }, null, 8, ["rowData", "column", "rowIndex", "index", "selected", "rowTogglerIcon", "frozenRow", "rowspan", "editMode", "editing", "responsiveLayout", "editingMeta", "onEditingMetaChange"]))
+                            onEditingMetaChange: $options.onEditingMetaChange,
+                            virtualScrollerContentProps: $props.virtualScrollerContentProps
+                          }, null, 8, ["rowData", "column", "rowIndex", "index", "selected", "rowTogglerIcon", "frozenRow", "rowspan", "editMode", "editing", "responsiveLayout", "editingMeta", "onEditingMetaChange", "virtualScrollerContentProps"]))
                         : createCommentVNode("", true)
                     ], 64))
                   }), 128))
@@ -2438,32 +2538,32 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
             ($props.templates['expansion'] && $props.expandedRows && $options.isRowExpanded(rowData))
               ? (openBlock(), createBlock("tr", {
                   class: "p-datatable-row-expansion",
-                  key: $options.getRowKey(rowData, index) + '_expansion',
+                  key: $options.getRowKey(rowData, $options.getRowIndex(index)) + '_expansion',
                   role: "row"
                 }, [
                   createVNode("td", { colspan: $options.columnsLength }, [
                     (openBlock(), createBlock(resolveDynamicComponent($props.templates['expansion']), {
                       data: rowData,
-                      index: index
+                      index: $options.getRowIndex(index)
                     }, null, 8, ["data", "index"]))
                   ], 8, ["colspan"])
                 ]))
               : createCommentVNode("", true),
-            ($props.templates['groupfooter'] && $props.rowGroupMode === 'subheader' && $options.shouldRenderRowGroupFooter($props.value, rowData, index))
+            ($props.templates['groupfooter'] && $props.rowGroupMode === 'subheader' && $options.shouldRenderRowGroupFooter($props.value, rowData, $options.getRowIndex(index)))
               ? (openBlock(), createBlock("tr", {
                   class: "p-rowgroup-footer",
-                  key: $options.getRowKey(rowData, index) + '_subfooter',
+                  key: $options.getRowKey(rowData, $options.getRowIndex(index)) + '_subfooter',
                   role: "row"
                 }, [
                   (openBlock(), createBlock(resolveDynamicComponent($props.templates['groupfooter']), {
                     data: rowData,
-                    index: index
+                    index: $options.getRowIndex(index)
                   }, null, 8, ["data", "index"]))
                 ]))
               : createCommentVNode("", true)
           ], 64))
         }), 128))
-      : (openBlock(), createBlock("tr", _hoisted_2$2, [
+      : (openBlock(), createBlock("tr", _hoisted_1$2, [
           createVNode("td", { colspan: $options.columnsLength }, [
             ($props.templates.empty && !$props.loading)
               ? (openBlock(), createBlock(resolveDynamicComponent($props.templates.empty), { key: 0 }))
@@ -2473,7 +2573,7 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
               : createCommentVNode("", true)
           ], 8, ["colspan"])
         ]))
-  ]))
+  ], 4))
 }
 
 script$3.render = render$3;
@@ -2578,6 +2678,23 @@ var script$1 = {
         columnProp(col, prop) {
             return ObjectUtils.getVNodeProp(col, prop);
         },
+        getFooterRows() {
+            let rows = [];
+
+            let columnGroup = this.columnGroup;
+            if (columnGroup.children && columnGroup.children.default) {
+                for (let child of columnGroup.children.default()) {
+                    if (child.type.name === 'Row') {
+                        rows.push(child);
+                    }
+                    else if (child.children && child.children instanceof Array) {
+                        rows = child.children;
+                    }
+                }
+
+                return rows;
+            }
+        },
         getFooterColumns(row){
             let cols = [];
 
@@ -2647,7 +2764,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                 ], 64))
               }), 128))
             ]))
-          : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($props.columnGroup.children.default(), (row, i) => {
+          : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($options.getFooterRows(), (row, i) => {
               return (openBlock(), createBlock("tr", {
                 key: i,
                 role: "row"
@@ -2675,7 +2792,7 @@ script$1.render = render$1;
 var script = {
     name: 'DataTable',
     emits: ['value-change', 'update:first', 'update:rows', 'page', 'update:sortField', 'update:sortOrder', 'update:multiSortMeta', 'sort', 'filter', 'row-click', 'row-dblclick',
-        'update:selection', 'row-select', 'row-unselect', 'update:contextMenuSelection', 'row-contextmenu', 'row-unselect-all', 'row-select-all',
+        'update:selection', 'row-select', 'row-unselect', 'update:contextMenuSelection', 'row-contextmenu', 'row-unselect-all', 'row-select-all', 'select-all-change',
         'column-resize-end', 'column-reorder', 'row-reorder', 'update:expandedRows', 'row-collapse', 'row-expand',
         'update:expandedRowGroups', 'rowgroup-collapse', 'rowgroup-expand', 'update:filters', 'state-restore', 'state-save',
         'cell-edit-init', 'cell-edit-complete', 'cell-edit-cancel', 'update:editingRows', 'row-edit-init', 'row-edit-save', 'row-edit-cancel'],
@@ -2804,6 +2921,10 @@ var script = {
             type: Object,
             default: null
         },
+        selectAll: {
+            type: Boolean,
+            default: null
+        },
         rowHover: {
             type: Boolean,
             default: false
@@ -2895,6 +3016,10 @@ var script = {
         scrollDirection: {
             type: String,
             default: "vertical"
+        },
+        virtualScrollerOptions: {
+            type: Object,
+            default: null
         },
         scrollHeight: {
             type: String,
@@ -3323,7 +3448,7 @@ var script = {
                                 this.$emit('update:selection', _selection);
                             }
 
-                            this.$emit('row-unselect', {originalEvent: event, data: rowData, index: event.index, type: 'row'});
+                            this.$emit('row-unselect', {originalEvent: event, data: rowData, index: rowIndex, type: 'row'});
                         }
                         else {
                             if(this.isSingleSelectionMode()) {
@@ -3335,18 +3460,18 @@ var script = {
                                 this.$emit('update:selection', _selection);
                             }
 
-                            this.$emit('row-select', {originalEvent: event, data: rowData, index: event.index, type: 'row'});
+                            this.$emit('row-select', {originalEvent: event, data: rowData, index: rowIndex, type: 'row'});
                         }
                     }
                     else {
                         if (this.selectionMode === 'single') {
                             if (selected) {
                                 this.$emit('update:selection', null);
-                                this.$emit('row-unselect', {originalEvent: event, data: rowData, index: event.index, type: 'row'});
+                                this.$emit('row-unselect', {originalEvent: event, data: rowData, index: rowIndex, type: 'row'});
                             }
                             else {
                                 this.$emit('update:selection', rowData);
-                                this.$emit('row-select', {originalEvent: event, data: rowData, index: event.index, type: 'row'});
+                                this.$emit('row-select', {originalEvent: event, data: rowData, index: rowIndex, type: 'row'});
                             }
                         }
                         else if (this.selectionMode === 'multiple') {
@@ -3354,12 +3479,12 @@ var script = {
                                 const selectionIndex = this.findIndexInSelection(rowData);
                                 const _selection = this.selection.filter((val, i) => i != selectionIndex);
                                 this.$emit('update:selection', _selection);
-                                this.$emit('row-unselect', {originalEvent: event, data: rowData, index: event.index, type: 'row'});
+                                this.$emit('row-unselect', {originalEvent: event, data: rowData, index: rowIndex, type: 'row'});
                             }
                             else {
                                 const _selection = this.selection ? [...this.selection, rowData] : [rowData];
                                 this.$emit('update:selection', _selection);
-                                this.$emit('row-select', {originalEvent: event, data: rowData, index: event.index, type: 'row'});
+                                this.$emit('row-select', {originalEvent: event, data: rowData, index: rowIndex, type: 'row'});
                             }
                         }
                     }
@@ -3451,11 +3576,11 @@ var script = {
 
             if (this.isSelected(rowData)) {
                 this.$emit('update:selection', null);
-                this.$emit('row-unselect', {originalEvent: event, data: rowData, type: 'radiobutton'});
+                this.$emit('row-unselect', { originalEvent: event.originalEvent, data: rowData, index: event.index, type: 'radiobutton' });
             }
             else {
                 this.$emit('update:selection', rowData);
-                this.$emit('row-select', {originalEvent: event, data: rowData, type: 'radiobutton'});
+                this.$emit('row-select', { originalEvent: event.originalEvent, data: rowData, index: event.index, type: 'radiobutton' });
             }
         },
         toggleRowWithCheckbox(event) {
@@ -3465,25 +3590,34 @@ var script = {
                 const selectionIndex = this.findIndexInSelection(rowData);
                 const _selection = this.selection.filter((val, i) => i != selectionIndex);
                 this.$emit('update:selection', _selection);
-                this.$emit('row-unselect', {originalEvent: event, data: rowData, type: 'checkbox'});
+                this.$emit('row-unselect', { originalEvent: event.originalEvent, data: rowData, index: event.index, type: 'checkbox' });
             }
             else {
                 let _selection = this.selection ? [...this.selection] : [];
                 _selection = [..._selection, rowData];
                 this.$emit('update:selection', _selection);
-                this.$emit('row-select', {originalEvent: event, data: rowData, type: 'checkbox'});
+                this.$emit('row-select', { originalEvent: event.originalEvent, data: rowData, index: event.index, type: 'checkbox' });
             }
         },
         toggleRowsWithCheckbox(event) {
-            const processedData = this.processedData;
-            const checked = this.allRowsSelected;
-            const _selection = checked ? [] : (this.frozenValue ? [...this.frozenValue, ...processedData]: processedData);
-            this.$emit('update:selection', _selection);
+            if (this.selectAll !== null) {
+                this.$emit('select-all-change', event);
+            }
+            else {
+                const { originalEvent, checked } = event;
+                let _selection = [];
 
-            if (checked)
-                this.$emit('row-unselect-all', {originalEvent: event});
-            else
-                this.$emit('row-select-all', {originalEvent: event, data: _selection});
+                if (checked) {
+                    _selection = this.frozenValue ? [...this.frozenValue, ...this.processedData] : this.processedData;
+                    this.$emit('row-select-all', {originalEvent, data: _selection});
+                }
+                else {
+                    this.$emit('row-unselect-all', {originalEvent});
+                }
+
+                this.$emit('update:selection', _selection);
+
+            }
         },
         isSingleSelectionMode() {
             return this.selectionMode === 'single';
@@ -3589,14 +3723,17 @@ var script = {
 
             this.$emit('update:selection', _selection);
         },
-        exportCSV(options) {
-            let data = this.processedData;
+        exportCSV(options, data) {
             let csv = '\ufeff';
 
-            if (options && options.selectionOnly)
-                data = this.selection || [];
-            else if (this.frozenValue)
-                data = data ? [...this.frozenValue, ...data] : this.frozenValue;
+            if (!data) {
+                data = this.processedData;
+
+                if (options && options.selectionOnly)
+                    data = this.selection || [];
+                else if (this.frozenValue)
+                    data = data ? [...this.frozenValue, ...data] : this.frozenValue;
+            }
 
             //headers
             let headerInitiated = false;
@@ -3609,7 +3746,7 @@ var script = {
                     else
                         headerInitiated = true;
 
-                    csv += '"' + (this.columnProp(column, 'header') || this.columnProp(column, 'field')) + '"';
+                    csv += '"' + (this.columnProp(column, 'exportHeader') || this.columnProp(column, 'header') || this.columnProp(column, 'field')) + '"';
                 }
             }
 
@@ -3647,28 +3784,7 @@ var script = {
                 });
             }
 
-            let blob = new Blob([csv], {
-                type: 'text/csv;charset=utf-8;'
-            });
-
-            if (window.navigator.msSaveOrOpenBlob) {
-                navigator.msSaveOrOpenBlob(blob, this.exportFilename + '.csv');
-            }
-            else {
-                let link = document.createElement("a");
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                if (link.download !== undefined) {
-                    link.setAttribute('href', URL.createObjectURL(blob));
-                    link.setAttribute('download', this.exportFilename + '.csv');
-                    link.click();
-                }
-                else {
-                    csv = 'data:text/csv;charset=utf-8,' + csv;
-                    window.open(encodeURI(csv));
-                }
-                document.body.removeChild(link);
-            }
+            DomHandler.exportCSV(csv, this.exportFilename);
         },
         resetPage() {
             this.d_first = 0;
@@ -3703,15 +3819,7 @@ var script = {
                     let nextColumnWidth = nextColumn.offsetWidth - delta;
 
                     if (newColumnWidth > 15 && nextColumnWidth > 15) {
-                        if (!this.scrollable) {
-                            this.resizeColumnElement.style.width = newColumnWidth + 'px';
-                            if(nextColumn) {
-                                nextColumn.style.width = nextColumnWidth + 'px';
-                            }
-                        }
-                        else {
-                            this.resizeTableCells(newColumnWidth, nextColumnWidth);
-                        }
+                        this.resizeTableCells(newColumnWidth, nextColumnWidth);
                     }
                 }
                 else if (this.columnResizeMode === 'expand') {
@@ -3719,10 +3827,7 @@ var script = {
                     this.$refs.table.style.width = tableWidth;
                     this.$refs.table.style.minWidth = tableWidth;
 
-                    if (!this.scrollable)
-                        this.resizeColumnElement.style.width = newColumnWidth + 'px';
-                    else
-                        this.resizeTableCells(newColumnWidth);
+                    this.resizeTableCells(newColumnWidth);
                 }
 
                 this.$emit('column-resize-end', {
@@ -3751,18 +3856,18 @@ var script = {
             this.createStyleElement();
 
             let innerHTML = '';
-            widths.forEach((width,index) => {
+            widths.forEach((width, index) => {
                 let colWidth = index === colIndex ? newColumnWidth : (nextColumnWidth && index === colIndex + 1) ? nextColumnWidth : width;
+                let style = this.scrollable ? `flex: 1 1 ${colWidth}px !important` : `width: ${colWidth}px !important`;
                 innerHTML += `
-                    .p-datatable[${this.attributeSelector}] .p-datatable-thead > tr > th:nth-child(${index+1}) {
-                        flex: 0 0 ${colWidth}px !important;
-                    }
-
-                    .p-datatable[${this.attributeSelector}] .p-datatable-tbody > tr > td:nth-child(${index+1}) {
-                        flex: 0 0 ${colWidth}px !important;
+                    .p-datatable[${this.attributeSelector}] .p-datatable-thead > tr > th:nth-child(${index + 1}),
+                    .p-datatable[${this.attributeSelector}] .p-datatable-tbody > tr > td:nth-child(${index + 1}),
+                    .p-datatable[${this.attributeSelector}] .p-datatable-tfoot > tr > td:nth-child(${index + 1}) {
+                        ${style}
                     }
                 `;
             });
+
             this.styleElement.innerHTML = innerHTML;
         },
         bindColumnResizeEvents() {
@@ -3792,7 +3897,7 @@ var script = {
 
             if (this.documentColumnResizeEndListener) {
                 document.removeEventListener('document', this.documentColumnResizeEndListener);
-                 this.documentColumnResizeEndListener = null;
+                this.documentColumnResizeEndListener = null;
             }
         },
         onColumnHeaderMouseDown(e) {
@@ -4185,26 +4290,22 @@ var script = {
                     this.$el.style.width = this.tableWidthState;
                 }
 
-                this.createStyleElement();
+                if (ObjectUtils.isNotEmpty(widths)) {
+                    this.createStyleElement();
 
-                if (this.scrollable && widths && widths.length > 0) {
                     let innerHTML = '';
-                    widths.forEach((width,index) => {
+                    widths.forEach((width, index) => {
+                        let style = this.scrollable ? `flex: 1 1 ${width}px !important` : `width: ${width}px !important`;
                         innerHTML += `
-                            .p-datatable[${this.attributeSelector}] .p-datatable-thead > tr > th:nth-child(${index+1}) {
-                                flex: 0 0 ${width}px;
-                            }
-
-                            .p-datatable[${this.attributeSelector}] .p-datatable-tbody > tr > td:nth-child(${index+1}) {
-                                flex: 0 0 ${width}px;
+                            .p-datatable[${this.attributeSelector}] .p-datatable-thead > tr > th:nth-child(${index + 1}),
+                            .p-datatable[${this.attributeSelector}] .p-datatable-tbody > tr > td:nth-child(${index + 1}),
+                            .p-datatable[${this.attributeSelector}] .p-datatable-tfoot > tr > td:nth-child(${index + 1}) {
+                                ${style}
                             }
                         `;
                     });
 
                     this.styleElement.innerHTML = innerHTML;
-                }
-                else {
-                    DomHandler.find(this.$refs.table, '.p-datatable-thead > tr > th').forEach((header, index) => header.style.width = widths[index] + 'px');
                 }
             }
         },
@@ -4237,16 +4338,19 @@ var script = {
         },
         onEditingMetaChange(event) {
             let { data, field, index, editing } = event;
-            let meta = this.d_editingMeta[index];
+            let editingMeta = { ...this.d_editingMeta };
+            let meta = editingMeta[index];
 
             if (editing) {
-                !meta && (meta = this.d_editingMeta[index] = { data: { ...data }, fields: [] });
+                !meta && (meta = editingMeta[index] = { data: { ...data }, fields: [] });
                 meta['fields'].push(field);
             }
             else if (meta) {
                 const fields = meta['fields'].filter(f => f !== field);
-                !fields.length ? (delete this.d_editingMeta[index]) : (meta['fields'] = fields);
+                !fields.length ? (delete editingMeta[index]) : (meta['fields'] = fields);
             }
+
+            this.d_editingMeta = editingMeta;
         },
         clearEditingMetaData() {
             if (this.editMode) {
@@ -4368,6 +4472,16 @@ var script = {
             }
             return results;
         },
+        dataToRender(data) {
+            const _data = data || this.processedData;
+
+            if (_data && this.paginator) {
+                const first = this.lazy ? 0 : this.d_first;
+                return _data.slice(first, first + this.d_rows);
+            }
+
+            return _data;
+        }
     },
     computed: {
         containerClass() {
@@ -4461,17 +4575,6 @@ var script = {
 
             return data;
         },
-        dataToRender() {
-            const data = this.processedData;
-
-            if (data && this.paginator) {
-                const first = this.lazy ? 0 : this.d_first;
-                return data.slice(first, first + this.d_rows);
-            }
-            else {
-                return data;
-            }
-        },
         totalRecordsLength() {
             if (this.lazy) {
                 return this.totalRecords;
@@ -4498,15 +4601,22 @@ var script = {
             return ['p-datatable-loading-icon pi-spin', this.loadingIcon];
         },
         allRowsSelected() {
-            const val = this.frozenValue ? [...this.frozenValue, ...this.processedData]: this.processedData;
-            const length = this.lazy ? this.totalRecords : (val ? val.length : 0);
-            return (val && length > 0 && this.selection && this.selection.length > 0 && this.selection.length === length);
+            if (this.selectAll !== null) {
+                return this.selectAll;
+            }
+            else {
+                const val = this.frozenValue ? [...this.frozenValue, ...this.processedData] : this.processedData;
+                return val && this.selection && Array.isArray(this.selection) && val.every(v => this.selection.some(s => this.equals(s, v)));
+            }
         },
         attributeSelector() {
             return UniqueComponentId();
         },
         groupRowSortField() {
             return this.sortMode === 'single' ? this.sortField : (this.d_groupRowsSortMeta ? this.d_groupRowsSortMeta.field : null);
+        },
+        virtualScrollerDisabled() {
+            return ObjectUtils.isEmpty(this.virtualScrollerOptions) || !this.scrollable;
         }
     },
     components: {
@@ -4514,6 +4624,7 @@ var script = {
         'DTTableHeader': script$7,
         'DTTableBody': script$3,
         'DTTableFooter': script$1,
+        'DTVirtualScroller': VirtualScroller
     }
 };
 
@@ -4552,6 +4663,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTTableHeader = resolveComponent("DTTableHeader");
   const _component_DTTableBody = resolveComponent("DTTableBody");
   const _component_DTTableFooter = resolveComponent("DTTableFooter");
+  const _component_DTVirtualScroller = resolveComponent("DTVirtualScroller");
 
   return (openBlock(), createBlock("div", {
     class: $options.containerClass,
@@ -4572,7 +4684,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ? (openBlock(), createBlock(_component_DTPaginator, {
           key: 2,
           rows: $data.d_rows,
-          first: $props.lazy ? 0 : $data.d_first,
+          first: $data.d_first,
           totalRecords: $options.totalRecordsLength,
           pageLinkSize: $props.pageLinkSize,
           template: $props.paginatorTemplate,
@@ -4602,48 +4714,112 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       : createCommentVNode("", true),
     createVNode("div", {
       class: "p-datatable-wrapper",
-      style: {maxHeight: $props.scrollHeight}
+      style: { maxHeight: $options.virtualScrollerDisabled ? $props.scrollHeight : '' }
     }, [
-      createVNode("table", {
-        ref: "table",
-        role: "table",
-        class: [$props.tableClass, 'p-datatable-table'],
-        style: $props.tableStyle
-      }, [
-        createVNode(_component_DTTableHeader, {
-          columnGroup: $options.headerColumnGroup,
-          columns: $options.columns,
-          rowGroupMode: $props.rowGroupMode,
-          groupRowsBy: $props.groupRowsBy,
-          groupRowSortField: $options.groupRowSortField,
-          resizableColumns: $props.resizableColumns,
-          allRowsSelected: $options.allRowsSelected,
-          empty: $options.empty,
-          sortMode: $props.sortMode,
-          sortField: $data.d_sortField,
-          sortOrder: $data.d_sortOrder,
-          multiSortMeta: $data.d_multiSortMeta,
-          filters: $data.d_filters,
-          filtersStore: $props.filters,
-          filterDisplay: $props.filterDisplay,
-          onColumnClick: _cache[2] || (_cache[2] = $event => ($options.onColumnHeaderClick($event))),
-          onColumnMousedown: _cache[3] || (_cache[3] = $event => ($options.onColumnHeaderMouseDown($event))),
-          onFilterChange: $options.onFilterChange,
-          onFilterApply: $options.onFilterApply,
-          onColumnDragstart: _cache[4] || (_cache[4] = $event => ($options.onColumnHeaderDragStart($event))),
-          onColumnDragover: _cache[5] || (_cache[5] = $event => ($options.onColumnHeaderDragOver($event))),
-          onColumnDragleave: _cache[6] || (_cache[6] = $event => ($options.onColumnHeaderDragLeave($event))),
-          onColumnDrop: _cache[7] || (_cache[7] = $event => ($options.onColumnHeaderDrop($event))),
-          onColumnResizestart: _cache[8] || (_cache[8] = $event => ($options.onColumnResizeStart($event))),
-          onCheckboxChange: _cache[9] || (_cache[9] = $event => ($options.toggleRowsWithCheckbox($event)))
-        }, null, 8, ["columnGroup", "columns", "rowGroupMode", "groupRowsBy", "groupRowSortField", "resizableColumns", "allRowsSelected", "empty", "sortMode", "sortField", "sortOrder", "multiSortMeta", "filters", "filtersStore", "filterDisplay", "onFilterChange", "onFilterApply"]),
-        ($props.frozenValue)
-          ? (openBlock(), createBlock(_component_DTTableBody, {
-              key: 0,
-              value: $props.frozenValue,
-              frozenRow: true,
-              class: "p-datatable-frozen-tbody",
-              columns: $options.columns,
+      createVNode(_component_DTVirtualScroller, mergeProps($props.virtualScrollerOptions, {
+        items: $options.processedData,
+        columns: $options.columns,
+        style: { height: $props.scrollHeight },
+        disabled: $options.virtualScrollerDisabled,
+        loaderDisabled: "",
+        showSpacer: false
+      }), {
+        content: withCtx((slotProps) => [
+          createVNode("table", {
+            ref: "table",
+            role: "table",
+            class: [$props.tableClass, 'p-datatable-table'],
+            style: [$props.tableStyle, slotProps.spacerStyle]
+          }, [
+            createVNode(_component_DTTableHeader, {
+              columnGroup: $options.headerColumnGroup,
+              columns: slotProps.columns,
+              rowGroupMode: $props.rowGroupMode,
+              groupRowsBy: $props.groupRowsBy,
+              groupRowSortField: $options.groupRowSortField,
+              resizableColumns: $props.resizableColumns,
+              allRowsSelected: $options.allRowsSelected,
+              empty: $options.empty,
+              sortMode: $props.sortMode,
+              sortField: $data.d_sortField,
+              sortOrder: $data.d_sortOrder,
+              multiSortMeta: $data.d_multiSortMeta,
+              filters: $data.d_filters,
+              filtersStore: $props.filters,
+              filterDisplay: $props.filterDisplay,
+              onColumnClick: _cache[2] || (_cache[2] = $event => ($options.onColumnHeaderClick($event))),
+              onColumnMousedown: _cache[3] || (_cache[3] = $event => ($options.onColumnHeaderMouseDown($event))),
+              onFilterChange: $options.onFilterChange,
+              onFilterApply: $options.onFilterApply,
+              onColumnDragstart: _cache[4] || (_cache[4] = $event => ($options.onColumnHeaderDragStart($event))),
+              onColumnDragover: _cache[5] || (_cache[5] = $event => ($options.onColumnHeaderDragOver($event))),
+              onColumnDragleave: _cache[6] || (_cache[6] = $event => ($options.onColumnHeaderDragLeave($event))),
+              onColumnDrop: _cache[7] || (_cache[7] = $event => ($options.onColumnHeaderDrop($event))),
+              onColumnResizestart: _cache[8] || (_cache[8] = $event => ($options.onColumnResizeStart($event))),
+              onCheckboxChange: _cache[9] || (_cache[9] = $event => ($options.toggleRowsWithCheckbox($event)))
+            }, null, 8, ["columnGroup", "columns", "rowGroupMode", "groupRowsBy", "groupRowSortField", "resizableColumns", "allRowsSelected", "empty", "sortMode", "sortField", "sortOrder", "multiSortMeta", "filters", "filtersStore", "filterDisplay", "onFilterChange", "onFilterApply"]),
+            ($props.frozenValue)
+              ? (openBlock(), createBlock(_component_DTTableBody, {
+                  key: 0,
+                  value: $props.frozenValue,
+                  frozenRow: true,
+                  class: "p-datatable-frozen-tbody",
+                  columns: slotProps.columns,
+                  dataKey: $props.dataKey,
+                  selection: $props.selection,
+                  selectionKeys: $data.d_selectionKeys,
+                  selectionMode: $props.selectionMode,
+                  contextMenu: $props.contextMenu,
+                  contextMenuSelection: $props.contextMenuSelection,
+                  rowGroupMode: $props.rowGroupMode,
+                  groupRowsBy: $props.groupRowsBy,
+                  expandableRowGroups: $props.expandableRowGroups,
+                  rowClass: $props.rowClass,
+                  rowStyle: $props.rowStyle,
+                  editMode: $props.editMode,
+                  compareSelectionBy: $props.compareSelectionBy,
+                  scrollable: $props.scrollable,
+                  expandedRowIcon: $props.expandedRowIcon,
+                  collapsedRowIcon: $props.collapsedRowIcon,
+                  expandedRows: $props.expandedRows,
+                  expandedRowKeys: $data.d_expandedRowKeys,
+                  expandedRowGroups: $props.expandedRowGroups,
+                  editingRows: $props.editingRows,
+                  editingRowKeys: $data.d_editingRowKeys,
+                  templates: _ctx.$slots,
+                  loading: $props.loading,
+                  responsiveLayout: $props.responsiveLayout,
+                  onRowgroupToggle: $options.toggleRowGroup,
+                  onRowClick: _cache[10] || (_cache[10] = $event => ($options.onRowClick($event))),
+                  onRowDblclick: _cache[11] || (_cache[11] = $event => ($options.onRowDblClick($event))),
+                  onRowRightclick: _cache[12] || (_cache[12] = $event => ($options.onRowRightClick($event))),
+                  onRowTouchend: $options.onRowTouchEnd,
+                  onRowKeydown: $options.onRowKeyDown,
+                  onRowMousedown: $options.onRowMouseDown,
+                  onRowDragstart: _cache[13] || (_cache[13] = $event => ($options.onRowDragStart($event))),
+                  onRowDragover: _cache[14] || (_cache[14] = $event => ($options.onRowDragOver($event))),
+                  onRowDragleave: _cache[15] || (_cache[15] = $event => ($options.onRowDragLeave($event))),
+                  onRowDragend: _cache[16] || (_cache[16] = $event => ($options.onRowDragEnd($event))),
+                  onRowDrop: _cache[17] || (_cache[17] = $event => ($options.onRowDrop($event))),
+                  onRowToggle: _cache[18] || (_cache[18] = $event => ($options.toggleRow($event))),
+                  onRadioChange: _cache[19] || (_cache[19] = $event => ($options.toggleRowWithRadio($event))),
+                  onCheckboxChange: _cache[20] || (_cache[20] = $event => ($options.toggleRowWithCheckbox($event))),
+                  onCellEditInit: _cache[21] || (_cache[21] = $event => ($options.onCellEditInit($event))),
+                  onCellEditComplete: _cache[22] || (_cache[22] = $event => ($options.onCellEditComplete($event))),
+                  onCellEditCancel: _cache[23] || (_cache[23] = $event => ($options.onCellEditCancel($event))),
+                  onRowEditInit: _cache[24] || (_cache[24] = $event => ($options.onRowEditInit($event))),
+                  onRowEditSave: _cache[25] || (_cache[25] = $event => ($options.onRowEditSave($event))),
+                  onRowEditCancel: _cache[26] || (_cache[26] = $event => ($options.onRowEditCancel($event))),
+                  editingMeta: $data.d_editingMeta,
+                  onEditingMetaChange: $options.onEditingMetaChange,
+                  isVirtualScrollerDisabled: true
+                }, null, 8, ["value", "columns", "dataKey", "selection", "selectionKeys", "selectionMode", "contextMenu", "contextMenuSelection", "rowGroupMode", "groupRowsBy", "expandableRowGroups", "rowClass", "rowStyle", "editMode", "compareSelectionBy", "scrollable", "expandedRowIcon", "collapsedRowIcon", "expandedRows", "expandedRowKeys", "expandedRowGroups", "editingRows", "editingRowKeys", "templates", "loading", "responsiveLayout", "onRowgroupToggle", "onRowTouchend", "onRowKeydown", "onRowMousedown", "editingMeta", "onEditingMetaChange"]))
+              : createCommentVNode("", true),
+            createVNode(_component_DTTableBody, {
+              value: $options.dataToRender(slotProps.rows),
+              class: slotProps.styleClass,
+              columns: slotProps.columns,
+              empty: $options.empty,
               dataKey: $props.dataKey,
               selection: $props.selection,
               selectionKeys: $data.d_selectionKeys,
@@ -4669,93 +4845,45 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               loading: $props.loading,
               responsiveLayout: $props.responsiveLayout,
               onRowgroupToggle: $options.toggleRowGroup,
-              onRowClick: _cache[10] || (_cache[10] = $event => ($options.onRowClick($event))),
-              onRowDblclick: _cache[11] || (_cache[11] = $event => ($options.onRowDblClick($event))),
-              onRowRightclick: _cache[12] || (_cache[12] = $event => ($options.onRowRightClick($event))),
+              onRowClick: _cache[27] || (_cache[27] = $event => ($options.onRowClick($event))),
+              onRowDblclick: _cache[28] || (_cache[28] = $event => ($options.onRowDblClick($event))),
+              onRowRightclick: _cache[29] || (_cache[29] = $event => ($options.onRowRightClick($event))),
               onRowTouchend: $options.onRowTouchEnd,
               onRowKeydown: $options.onRowKeyDown,
               onRowMousedown: $options.onRowMouseDown,
-              onRowDragstart: _cache[13] || (_cache[13] = $event => ($options.onRowDragStart($event))),
-              onRowDragover: _cache[14] || (_cache[14] = $event => ($options.onRowDragOver($event))),
-              onRowDragleave: _cache[15] || (_cache[15] = $event => ($options.onRowDragLeave($event))),
-              onRowDragend: _cache[16] || (_cache[16] = $event => ($options.onRowDragEnd($event))),
-              onRowDrop: _cache[17] || (_cache[17] = $event => ($options.onRowDrop($event))),
-              onRowToggle: _cache[18] || (_cache[18] = $event => ($options.toggleRow($event))),
-              onRadioChange: _cache[19] || (_cache[19] = $event => ($options.toggleRowWithRadio($event))),
-              onCheckboxChange: _cache[20] || (_cache[20] = $event => ($options.toggleRowWithCheckbox($event))),
-              onCellEditInit: _cache[21] || (_cache[21] = $event => ($options.onCellEditInit($event))),
-              onCellEditComplete: _cache[22] || (_cache[22] = $event => ($options.onCellEditComplete($event))),
-              onCellEditCancel: _cache[23] || (_cache[23] = $event => ($options.onCellEditCancel($event))),
-              onRowEditInit: _cache[24] || (_cache[24] = $event => ($options.onRowEditInit($event))),
-              onRowEditSave: _cache[25] || (_cache[25] = $event => ($options.onRowEditSave($event))),
-              onRowEditCancel: _cache[26] || (_cache[26] = $event => ($options.onRowEditCancel($event))),
+              onRowDragstart: _cache[30] || (_cache[30] = $event => ($options.onRowDragStart($event))),
+              onRowDragover: _cache[31] || (_cache[31] = $event => ($options.onRowDragOver($event))),
+              onRowDragleave: _cache[32] || (_cache[32] = $event => ($options.onRowDragLeave($event))),
+              onRowDragend: _cache[33] || (_cache[33] = $event => ($options.onRowDragEnd($event))),
+              onRowDrop: _cache[34] || (_cache[34] = $event => ($options.onRowDrop($event))),
+              onRowToggle: _cache[35] || (_cache[35] = $event => ($options.toggleRow($event))),
+              onRadioChange: _cache[36] || (_cache[36] = $event => ($options.toggleRowWithRadio($event))),
+              onCheckboxChange: _cache[37] || (_cache[37] = $event => ($options.toggleRowWithCheckbox($event))),
+              onCellEditInit: _cache[38] || (_cache[38] = $event => ($options.onCellEditInit($event))),
+              onCellEditComplete: _cache[39] || (_cache[39] = $event => ($options.onCellEditComplete($event))),
+              onCellEditCancel: _cache[40] || (_cache[40] = $event => ($options.onCellEditCancel($event))),
+              onRowEditInit: _cache[41] || (_cache[41] = $event => ($options.onRowEditInit($event))),
+              onRowEditSave: _cache[42] || (_cache[42] = $event => ($options.onRowEditSave($event))),
+              onRowEditCancel: _cache[43] || (_cache[43] = $event => ($options.onRowEditCancel($event))),
               editingMeta: $data.d_editingMeta,
-              onEditingMetaChange: $options.onEditingMetaChange
-            }, null, 8, ["value", "columns", "dataKey", "selection", "selectionKeys", "selectionMode", "contextMenu", "contextMenuSelection", "rowGroupMode", "groupRowsBy", "expandableRowGroups", "rowClass", "rowStyle", "editMode", "compareSelectionBy", "scrollable", "expandedRowIcon", "collapsedRowIcon", "expandedRows", "expandedRowKeys", "expandedRowGroups", "editingRows", "editingRowKeys", "templates", "loading", "responsiveLayout", "onRowgroupToggle", "onRowTouchend", "onRowKeydown", "onRowMousedown", "editingMeta", "onEditingMetaChange"]))
-          : createCommentVNode("", true),
-        createVNode(_component_DTTableBody, {
-          value: $options.dataToRender,
-          columns: $options.columns,
-          empty: $options.empty,
-          dataKey: $props.dataKey,
-          selection: $props.selection,
-          selectionKeys: $data.d_selectionKeys,
-          selectionMode: $props.selectionMode,
-          contextMenu: $props.contextMenu,
-          contextMenuSelection: $props.contextMenuSelection,
-          rowGroupMode: $props.rowGroupMode,
-          groupRowsBy: $props.groupRowsBy,
-          expandableRowGroups: $props.expandableRowGroups,
-          rowClass: $props.rowClass,
-          rowStyle: $props.rowStyle,
-          editMode: $props.editMode,
-          compareSelectionBy: $props.compareSelectionBy,
-          scrollable: $props.scrollable,
-          expandedRowIcon: $props.expandedRowIcon,
-          collapsedRowIcon: $props.collapsedRowIcon,
-          expandedRows: $props.expandedRows,
-          expandedRowKeys: $data.d_expandedRowKeys,
-          expandedRowGroups: $props.expandedRowGroups,
-          editingRows: $props.editingRows,
-          editingRowKeys: $data.d_editingRowKeys,
-          templates: _ctx.$slots,
-          loading: $props.loading,
-          responsiveLayout: $props.responsiveLayout,
-          onRowgroupToggle: $options.toggleRowGroup,
-          onRowClick: _cache[27] || (_cache[27] = $event => ($options.onRowClick($event))),
-          onRowDblclick: _cache[28] || (_cache[28] = $event => ($options.onRowDblClick($event))),
-          onRowRightclick: _cache[29] || (_cache[29] = $event => ($options.onRowRightClick($event))),
-          onRowTouchend: $options.onRowTouchEnd,
-          onRowKeydown: $options.onRowKeyDown,
-          onRowMousedown: $options.onRowMouseDown,
-          onRowDragstart: _cache[30] || (_cache[30] = $event => ($options.onRowDragStart($event))),
-          onRowDragover: _cache[31] || (_cache[31] = $event => ($options.onRowDragOver($event))),
-          onRowDragleave: _cache[32] || (_cache[32] = $event => ($options.onRowDragLeave($event))),
-          onRowDragend: _cache[33] || (_cache[33] = $event => ($options.onRowDragEnd($event))),
-          onRowDrop: _cache[34] || (_cache[34] = $event => ($options.onRowDrop($event))),
-          onRowToggle: _cache[35] || (_cache[35] = $event => ($options.toggleRow($event))),
-          onRadioChange: _cache[36] || (_cache[36] = $event => ($options.toggleRowWithRadio($event))),
-          onCheckboxChange: _cache[37] || (_cache[37] = $event => ($options.toggleRowWithCheckbox($event))),
-          onCellEditInit: _cache[38] || (_cache[38] = $event => ($options.onCellEditInit($event))),
-          onCellEditComplete: _cache[39] || (_cache[39] = $event => ($options.onCellEditComplete($event))),
-          onCellEditCancel: _cache[40] || (_cache[40] = $event => ($options.onCellEditCancel($event))),
-          onRowEditInit: _cache[41] || (_cache[41] = $event => ($options.onRowEditInit($event))),
-          onRowEditSave: _cache[42] || (_cache[42] = $event => ($options.onRowEditSave($event))),
-          onRowEditCancel: _cache[43] || (_cache[43] = $event => ($options.onRowEditCancel($event))),
-          editingMeta: $data.d_editingMeta,
-          onEditingMetaChange: $options.onEditingMetaChange
-        }, null, 8, ["value", "columns", "empty", "dataKey", "selection", "selectionKeys", "selectionMode", "contextMenu", "contextMenuSelection", "rowGroupMode", "groupRowsBy", "expandableRowGroups", "rowClass", "rowStyle", "editMode", "compareSelectionBy", "scrollable", "expandedRowIcon", "collapsedRowIcon", "expandedRows", "expandedRowKeys", "expandedRowGroups", "editingRows", "editingRowKeys", "templates", "loading", "responsiveLayout", "onRowgroupToggle", "onRowTouchend", "onRowKeydown", "onRowMousedown", "editingMeta", "onEditingMetaChange"]),
-        createVNode(_component_DTTableFooter, {
-          columnGroup: $options.footerColumnGroup,
-          columns: $options.columns
-        }, null, 8, ["columnGroup", "columns"])
-      ], 6)
+              onEditingMetaChange: $options.onEditingMetaChange,
+              virtualScrollerContentProps: slotProps,
+              isVirtualScrollerDisabled: $options.virtualScrollerDisabled
+            }, null, 8, ["value", "class", "columns", "empty", "dataKey", "selection", "selectionKeys", "selectionMode", "contextMenu", "contextMenuSelection", "rowGroupMode", "groupRowsBy", "expandableRowGroups", "rowClass", "rowStyle", "editMode", "compareSelectionBy", "scrollable", "expandedRowIcon", "collapsedRowIcon", "expandedRows", "expandedRowKeys", "expandedRowGroups", "editingRows", "editingRowKeys", "templates", "loading", "responsiveLayout", "onRowgroupToggle", "onRowTouchend", "onRowKeydown", "onRowMousedown", "editingMeta", "onEditingMetaChange", "virtualScrollerContentProps", "isVirtualScrollerDisabled"]),
+            createVNode(_component_DTTableFooter, {
+              columnGroup: $options.footerColumnGroup,
+              columns: slotProps.columns
+            }, null, 8, ["columnGroup", "columns"])
+          ], 6)
+        ]),
+        _: 1
+      }, 16, ["items", "columns", "style", "disabled"])
     ], 4),
     ($options.paginatorBottom)
       ? (openBlock(), createBlock(_component_DTPaginator, {
           key: 3,
           rows: $data.d_rows,
-          first: $props.lazy ? 0 : $data.d_first,
+          first: $data.d_first,
           totalRecords: $options.totalRecordsLength,
           pageLinkSize: $props.pageLinkSize,
           template: $props.paginatorTemplate,
@@ -4825,7 +4953,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-datatable {\n    position: relative;\n}\n.p-datatable table {\n    border-collapse: collapse;\n    min-width: 100%;\n    table-layout: fixed;\n}\n.p-datatable .p-sortable-column {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-datatable .p-sortable-column .p-column-title,\n.p-datatable .p-sortable-column .p-sortable-column-icon,\n.p-datatable .p-sortable-column .p-sortable-column-badge {\n    vertical-align: middle;\n}\n.p-datatable .p-sortable-column .p-sortable-column-badge {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-datatable-responsive-scroll > .p-datatable-wrapper {\n    overflow-x: auto;\n}\n.p-datatable-responsive-scroll > .p-datatable-wrapper > table,\n.p-datatable-auto-layout > .p-datatable-wrapper > table {\n    table-layout: auto;\n}\n.p-datatable-hoverable-rows .p-selectable-row {\n    cursor: pointer;\n}\n\n/* Scrollable */\n.p-datatable-scrollable .p-datatable-wrapper {\n    position: relative;\n    overflow: auto;\n}\n.p-datatable-scrollable .p-datatable-thead,\n.p-datatable-scrollable .p-datatable-tbody,\n.p-datatable-scrollable .p-datatable-tfoot {\n    display: block;\n}\n.p-datatable-scrollable .p-datatable-thead > tr,\n.p-datatable-scrollable .p-datatable-tbody > tr,\n.p-datatable-scrollable .p-datatable-tfoot > tr {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n    width: 100%;\n}\n.p-datatable-scrollable .p-datatable-thead > tr > th,\n.p-datatable-scrollable .p-datatable-tbody > tr > td,\n.p-datatable-scrollable .p-datatable-tfoot > tr > td {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 0px;\n            flex: 1 1 0;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-datatable-scrollable .p-datatable-thead {\n    position: sticky;\n    top: 0;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-datatable-frozen-tbody {\n    position: sticky;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-datatable-tfoot {\n    position: sticky;\n    bottom: 0;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-frozen-column {\n    position: sticky;\n    background: inherit;\n}\n.p-datatable-scrollable th.p-frozen-column {\n    z-index: 1;\n}\n.p-datatable-scrollable-both .p-datatable-thead > tr > th,\n.p-datatable-scrollable-both .p-datatable-tbody > tr > td,\n.p-datatable-scrollable-both .p-datatable-tfoot > tr > td,\n.p-datatable-scrollable-horizontal .p-datatable-thead > tr > th\n.p-datatable-scrollable-horizontal .p-datatable-tbody > tr > td,\n.p-datatable-scrollable-horizontal .p-datatable-tfoot > tr > td {\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-datatable-flex-scrollable {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    height: 100%;\n}\n.p-datatable-flex-scrollable .p-datatable-wrapper {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    height: 100%;\n}\n.p-datatable-scrollable .p-rowgroup-header {\n    position: sticky;\n    z-index: 1;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot {\n    display: table;\n    border-collapse: collapse;\n    width: 100%;\n    table-layout: fixed;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead > tr,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot > tr {\n    display: table-row;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead > tr > th,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot > tr > td {\n    display: table-cell;\n}\n\n/* Resizable */\n.p-datatable-resizable > .p-datatable-wrapper {\n    overflow-x: auto;\n}\n.p-datatable-resizable .p-datatable-thead > tr > th,\n.p-datatable-resizable .p-datatable-tfoot > tr > td,\n.p-datatable-resizable .p-datatable-tbody > tr > td {\n    overflow: hidden;\n    white-space: nowrap;\n}\n.p-datatable-resizable .p-resizable-column {\n    background-clip: padding-box;\n    position: relative;\n}\n.p-datatable-resizable-fit .p-resizable-column:last-child .p-column-resizer {\n    display: none;\n}\n.p-datatable .p-column-resizer {\n    display: block;\n    position: absolute !important;\n    top: 0;\n    right: 0;\n    margin: 0;\n    width: .5rem;\n    height: 100%;\n    padding: 0px;\n    cursor:col-resize;\n    border: 1px solid transparent;\n}\n.p-datatable .p-column-header-content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-datatable .p-column-resizer-helper {\n    width: 1px;\n    position: absolute;\n    z-index: 10;\n    display: none;\n}\n.p-datatable .p-row-editor-init,\n.p-datatable .p-row-editor-save,\n.p-datatable .p-row-editor-cancel {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Expand */\n.p-datatable .p-row-toggler {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Reorder */\n.p-datatable-reorder-indicator-up,\n.p-datatable-reorder-indicator-down {\n    position: absolute;\n    display: none;\n}\n\n/* Loader */\n.p-datatable .p-datatable-loading-overlay {\n    position: absolute;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    z-index: 2;\n}\n\n/* Filter */\n.p-column-filter-row {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    width: 100%;\n}\n.p-column-filter-menu {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    margin-left: auto;\n}\n.p-column-filter-row .p-column-filter-element {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-column-filter-menu-button,\n.p-column-filter-clear-button {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    cursor: pointer;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-column-filter-overlay {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-column-filter-row-items {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-column-filter-row-item {\n    cursor: pointer;\n}\n.p-column-filter-add-button,\n.p-column-filter-remove-button {\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-column-filter-add-button .p-button-label,\n.p-column-filter-remove-button .p-button-label {\n    -webkit-box-flex: 0;\n        -ms-flex-positive: 0;\n            flex-grow: 0;\n}\n.p-column-filter-buttonbar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n.p-column-filter-buttonbar .p-button:not(.p-button-icon-only) {\n    width: auto;\n}\n\n/* Responsive */\n.p-datatable .p-datatable-tbody > tr > td > .p-column-title {\n    display: none;\n}\n";
+var css_248z = "\n.p-datatable {\n    position: relative;\n}\n.p-datatable table {\n    border-collapse: collapse;\n    min-width: 100%;\n    table-layout: fixed;\n}\n.p-datatable .p-sortable-column {\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n.p-datatable .p-sortable-column .p-column-title,\n.p-datatable .p-sortable-column .p-sortable-column-icon,\n.p-datatable .p-sortable-column .p-sortable-column-badge {\n    vertical-align: middle;\n}\n.p-datatable .p-sortable-column .p-sortable-column-badge {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-datatable-responsive-scroll > .p-datatable-wrapper {\n    overflow-x: auto;\n}\n.p-datatable-responsive-scroll > .p-datatable-wrapper > table,\n.p-datatable-auto-layout > .p-datatable-wrapper > table {\n    table-layout: auto;\n}\n.p-datatable-hoverable-rows .p-selectable-row {\n    cursor: pointer;\n}\n\n/* Scrollable */\n.p-datatable-scrollable .p-datatable-wrapper {\n    position: relative;\n    overflow: auto;\n}\n.p-datatable-scrollable .p-datatable-thead,\n.p-datatable-scrollable .p-datatable-tbody,\n.p-datatable-scrollable .p-datatable-tfoot {\n    display: block;\n}\n.p-datatable-scrollable .p-datatable-thead > tr,\n.p-datatable-scrollable .p-datatable-tbody > tr,\n.p-datatable-scrollable .p-datatable-tfoot > tr {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-wrap: nowrap;\n        flex-wrap: nowrap;\n    width: 100%;\n}\n.p-datatable-scrollable .p-datatable-thead > tr > th,\n.p-datatable-scrollable .p-datatable-tbody > tr > td,\n.p-datatable-scrollable .p-datatable-tfoot > tr > td {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 0px;\n            flex: 1 1 0;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-datatable-scrollable .p-datatable-thead {\n    position: sticky;\n    top: 0;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-datatable-frozen-tbody {\n    position: sticky;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-datatable-tfoot {\n    position: sticky;\n    bottom: 0;\n    z-index: 1;\n}\n.p-datatable-scrollable .p-frozen-column {\n    position: sticky;\n    background: inherit;\n}\n.p-datatable-scrollable th.p-frozen-column {\n    z-index: 1;\n}\n.p-datatable-scrollable-both .p-datatable-thead > tr > th,\n.p-datatable-scrollable-both .p-datatable-tbody > tr > td,\n.p-datatable-scrollable-both .p-datatable-tfoot > tr > td,\n.p-datatable-scrollable-horizontal .p-datatable-thead > tr > th\n.p-datatable-scrollable-horizontal .p-datatable-tbody > tr > td,\n.p-datatable-scrollable-horizontal .p-datatable-tfoot > tr > td {\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-datatable-flex-scrollable {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    height: 100%;\n}\n.p-datatable-flex-scrollable .p-datatable-wrapper {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    height: 100%;\n}\n.p-datatable-scrollable .p-rowgroup-header {\n    position: sticky;\n    z-index: 1;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot {\n    display: table;\n    border-collapse: collapse;\n    width: 100%;\n    table-layout: fixed;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead > tr,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot > tr {\n    display: table-row;\n}\n.p-datatable-scrollable.p-datatable-grouped-header .p-datatable-thead > tr > th,\n.p-datatable-scrollable.p-datatable-grouped-footer .p-datatable-tfoot > tr > td {\n    display: table-cell;\n}\n\n/* Resizable */\n.p-datatable-resizable > .p-datatable-wrapper {\n    overflow-x: auto;\n}\n.p-datatable-resizable .p-datatable-thead > tr > th,\n.p-datatable-resizable .p-datatable-tfoot > tr > td,\n.p-datatable-resizable .p-datatable-tbody > tr > td {\n    overflow: hidden;\n    white-space: nowrap;\n}\n.p-datatable-resizable .p-resizable-column:not(.p-frozen-column) {\n    background-clip: padding-box;\n    position: relative;\n}\n.p-datatable-resizable-fit .p-resizable-column:last-child .p-column-resizer {\n    display: none;\n}\n.p-datatable .p-column-resizer {\n    display: block;\n    position: absolute !important;\n    top: 0;\n    right: 0;\n    margin: 0;\n    width: .5rem;\n    height: 100%;\n    padding: 0px;\n    cursor:col-resize;\n    border: 1px solid transparent;\n}\n.p-datatable .p-column-header-content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-datatable .p-column-resizer-helper {\n    width: 1px;\n    position: absolute;\n    z-index: 10;\n    display: none;\n}\n.p-datatable .p-row-editor-init,\n.p-datatable .p-row-editor-save,\n.p-datatable .p-row-editor-cancel {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Expand */\n.p-datatable .p-row-toggler {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    overflow: hidden;\n    position: relative;\n}\n\n/* Reorder */\n.p-datatable-reorder-indicator-up,\n.p-datatable-reorder-indicator-down {\n    position: absolute;\n    display: none;\n}\n\n/* Loader */\n.p-datatable .p-datatable-loading-overlay {\n    position: absolute;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    z-index: 2;\n}\n\n/* Filter */\n.p-column-filter-row {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    width: 100%;\n}\n.p-column-filter-menu {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    margin-left: auto;\n}\n.p-column-filter-row .p-column-filter-element {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 1%;\n}\n.p-column-filter-menu-button,\n.p-column-filter-clear-button {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    cursor: pointer;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-column-filter-overlay {\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-column-filter-row-items {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-column-filter-row-item {\n    cursor: pointer;\n}\n.p-column-filter-add-button,\n.p-column-filter-remove-button {\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.p-column-filter-add-button .p-button-label,\n.p-column-filter-remove-button .p-button-label {\n    -webkit-box-flex: 0;\n        -ms-flex-positive: 0;\n            flex-grow: 0;\n}\n.p-column-filter-buttonbar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: justify;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n.p-column-filter-buttonbar .p-button:not(.p-button-icon-only) {\n    width: auto;\n}\n\n/* Responsive */\n.p-datatable .p-datatable-tbody > tr > td > .p-column-title {\n    display: none;\n}\n\n/* VirtualScroller */\n.p-datatable .p-virtualscroller-loading {\n    -webkit-transform: none !important;\n            transform: none !important;\n    min-height: 0;\n    position: sticky;\n    top: 0;\n    left: 0;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

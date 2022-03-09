@@ -340,10 +340,11 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
             items: $options.visibleOptions,
             disabled: $options.virtualScrollerDisabled
           }), vue.createSlots({
-            content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+            content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
               vue.createVNode("ul", {
                 ref: contentRef,
                 class: ['p-listbox-list', styleClass],
+                style: contentStyle,
                 role: "listbox",
                 "aria-multiselectable": "multiple"
               }, [
@@ -419,7 +420,7 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
                         ])
                       ]))
                     : vue.createCommentVNode("", true)
-              ], 2)
+              ], 6)
             ]),
             _: 2
           }, [

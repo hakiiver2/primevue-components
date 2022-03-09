@@ -344,10 +344,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         items: $options.visibleOptions,
         disabled: $options.virtualScrollerDisabled
       }), vue.createSlots({
-        content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions }) => [
+        content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
           vue.createVNode("ul", {
             ref: contentRef,
             class: ['p-listbox-list', styleClass],
+            style: contentStyle,
             role: "listbox",
             "aria-multiselectable": "multiple"
           }, [
@@ -423,7 +424,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     ])
                   ]))
                 : vue.createCommentVNode("", true)
-          ], 2)
+          ], 6)
         ]),
         _: 2
       }, [

@@ -10,7 +10,7 @@ this.primevue.column = (function () {
                 default: null
             },
             field: {
-                type: String,
+                type: [String, Function],
                 default: null
             },
             sortField: {
@@ -18,7 +18,7 @@ this.primevue.column = (function () {
                 default: null
             },
             filterField: {
-                type: String,
+                type: [String, Function],
                 default: null
             },
             dataType: {
@@ -164,6 +164,10 @@ this.primevue.column = (function () {
             exportable: {
                 type: Boolean,
                 default: true
+            },
+            exportHeader: {
+                type: String,
+                default: null
             },
             filterMatchMode: {
                 type: String,
