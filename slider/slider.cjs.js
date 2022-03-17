@@ -123,10 +123,18 @@ var script = {
             if (this.disabled) {
                 return;
             }
+
             utils.DomHandler.addClass(this.$el, 'p-slider-sliding');
             this.dragging = true;
             this.updateDomData();
-            this.handleIndex = index;
+
+            if (this.range && this.modelValue[0] === this.max) {
+                this.handleIndex = 0;
+            }
+            else {
+                this.handleIndex = index;
+            }
+
             event.preventDefault();
         },
         onDrag(event) {

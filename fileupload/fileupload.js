@@ -154,6 +154,7 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
                     }
 
                     this.$emit('uploader', {files: this.files});
+                    this.clear();
                 }
                 else {
                     let xhr = new XMLHttpRequest();

@@ -5,7 +5,7 @@ var script = {
     emits: ['load'],
     data() {
         return {
-           loaded: false
+            loaded: false
         }
     },
     mounted() {
@@ -48,7 +48,7 @@ var script = {
                 return (winHeight >= rect.top);
             }
         },
-        load() {
+        load(event) {
             this.loaded = true;
             this.$emit('load', event);
         }

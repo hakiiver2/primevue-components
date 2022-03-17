@@ -7,7 +7,7 @@ this.primevue.deferredcontent = (function (vue) {
         emits: ['load'],
         data() {
             return {
-               loaded: false
+                loaded: false
             }
         },
         mounted() {
@@ -50,7 +50,7 @@ this.primevue.deferredcontent = (function (vue) {
                     return (winHeight >= rect.top);
                 }
             },
-            load() {
+            load(event) {
                 this.loaded = true;
                 this.$emit('load', event);
             }

@@ -146,6 +146,10 @@ this.primevue.tooltip = (function (utils) {
             alignTop(el);
             if (isOutOfBounds(el)) {
                 alignBottom(el);
+
+                if (isOutOfBounds(el)) {
+                    alignTop(el);
+                }
             }
         }
         else if (modifiers.left) {
@@ -158,6 +162,10 @@ this.primevue.tooltip = (function (utils) {
 
                     if (isOutOfBounds(el)) {
                         alignBottom(el);
+
+                        if (isOutOfBounds(el)) {
+                            alignLeft(el);
+                        }
                     }
                 }
             }
@@ -166,6 +174,10 @@ this.primevue.tooltip = (function (utils) {
             alignBottom(el);
             if (isOutOfBounds(el)) {
                 alignTop(el);
+
+                if (isOutOfBounds(el)) {
+                    alignBottom(el);
+                }
             }
         }
         else {
@@ -178,6 +190,10 @@ this.primevue.tooltip = (function (utils) {
 
                     if (isOutOfBounds(el)) {
                         alignBottom(el);
+
+                        if (isOutOfBounds(el)) {
+                            alignRight(el);
+                        }
                     }
                 }
             }

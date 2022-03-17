@@ -1432,7 +1432,7 @@ var script$5 = {
 function render$5(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
     class: ['p-checkbox p-component', {'p-checkbox-focused': $data.focused}],
-    onClick: _cache[4] || (_cache[4] = (...args) => ($options.onClick && $options.onClick(...args)))
+    onClick: _cache[4] || (_cache[4] = withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["stop","prevent"]))
   }, [
     createVNode("div", {
       ref: "box",
@@ -1738,6 +1738,15 @@ var script$4 = {
         onRowEditCancel(event) {
             this.$emit('row-edit-cancel', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
         },
+        editorInitCallback(event) {
+            this.$emit('row-edit-init', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+        },
+        editorSaveCallback(event) {
+            this.$emit('row-edit-save', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+        },
+        editorCancelCallback(event) {
+            this.$emit('row-edit-cancel', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+        },
         updateStickyPosition() {
             if (this.columnProp('frozen')) {
                 let align = this.columnProp('alignFrozen');
@@ -1855,8 +1864,9 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
               column: $props.column,
               field: $options.field,
               index: $props.rowIndex,
-              frozenRow: $props.frozenRow
-            }, null, 8, ["data", "column", "field", "index", "frozenRow"]))
+              frozenRow: $props.frozenRow,
+              editorInitCallback: $options.editorInitCallback
+            }, null, 8, ["data", "column", "field", "index", "frozenRow", "editorInitCallback"]))
           : ($props.column.children && $props.column.children.editor && $data.d_editing)
             ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.editor), {
                 key: 2,
@@ -1864,8 +1874,10 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
                 column: $props.column,
                 field: $options.field,
                 index: $props.rowIndex,
-                frozenRow: $props.frozenRow
-              }, null, 8, ["data", "column", "field", "index", "frozenRow"]))
+                frozenRow: $props.frozenRow,
+                editorSaveCallback: $options.editorSaveCallback,
+                editorCancelCallback: $options.editorCancelCallback
+              }, null, 8, ["data", "column", "field", "index", "frozenRow", "editorSaveCallback", "editorCancelCallback"]))
             : ($props.column.children && $props.column.children.body && !$props.column.children.editor && $data.d_editing)
               ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.body), {
                   key: 3,
@@ -2413,7 +2425,13 @@ var script$3 = {
     },
     computed: {
         columnsLength() {
-            return this.columns ? this.columns.length : 0;
+            let hiddenColLength = 0;
+
+            this.columns.forEach(column => {
+                if(this.columnProp(column, 'hidden')) hiddenColLength++;
+            });
+
+            return this.columns ? this.columns.length - hiddenColLength : 0;
         },
         rowGroupHeaderStyle() {
             if (this.scrollable) {

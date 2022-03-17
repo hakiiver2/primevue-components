@@ -164,7 +164,7 @@ var script = {
                 this.resizeListener = null;
             }
         },
-        isTargetClicked() {
+        isTargetClicked(event) {
             return this.target && (this.target === event.target || this.target.contains(event.target));
         },
         containerRef(el) {

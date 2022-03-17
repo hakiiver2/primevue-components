@@ -449,7 +449,11 @@ var script = {
                 else if (this.visibleOptions) {
                     if (this.optionGroupLabel) {
                         value = [];
-                        this.visibleOptions.forEach(optionGroup => value = [...value, ...this.getOptionGroupChildren(optionGroup)]);
+                        this.visibleOptions.forEach(optionGroup => {
+                            for (let option of this.getOptionGroupChildren(optionGroup)) {
+                                value.push(this.getOptionValue(option));
+                            }
+                        });
                     }
                     else  {
                         value = this.visibleOptions.map(option => this.getOptionValue(option));
@@ -486,7 +490,7 @@ var script = {
         }
     },
     computed: {
-         visibleOptions() {
+        visibleOptions() {
             if (this.filterValue) {
                 if (this.optionGroupLabel) {
                     let filteredGroups = [];
@@ -499,7 +503,7 @@ var script = {
                     return filteredGroups
                 }
                 else {
-                    return FilterService.filter(this.options, this.searchFields, this.filterValue, 'contains', this.filterLocale);
+                    return FilterService.filter(this.options, this.searchFields, this.filterValue, this.filterMatchMode, this.filterLocale);
                 }
             }
             else {

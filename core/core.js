@@ -1815,6 +1815,10 @@ this.primevue.tooltip = (function (utils) {
             alignTop(el);
             if (isOutOfBounds(el)) {
                 alignBottom(el);
+
+                if (isOutOfBounds(el)) {
+                    alignTop(el);
+                }
             }
         }
         else if (modifiers.left) {
@@ -1827,6 +1831,10 @@ this.primevue.tooltip = (function (utils) {
 
                     if (isOutOfBounds(el)) {
                         alignBottom(el);
+
+                        if (isOutOfBounds(el)) {
+                            alignLeft(el);
+                        }
                     }
                 }
             }
@@ -1835,6 +1843,10 @@ this.primevue.tooltip = (function (utils) {
             alignBottom(el);
             if (isOutOfBounds(el)) {
                 alignTop(el);
+
+                if (isOutOfBounds(el)) {
+                    alignBottom(el);
+                }
             }
         }
         else {
@@ -1847,6 +1859,10 @@ this.primevue.tooltip = (function (utils) {
 
                     if (isOutOfBounds(el)) {
                         alignBottom(el);
+
+                        if (isOutOfBounds(el)) {
+                            alignRight(el);
+                        }
                     }
                 }
             }
@@ -7407,7 +7423,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
                     this.resizeListener = null;
                 }
             },
-            isTargetClicked() {
+            isTargetClicked(event) {
                 return this.target && (this.target === event.target || this.target.contains(event.target));
             },
             visible(item) {
@@ -8052,7 +8068,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                     this.resizeListener = null;
                 }
             },
-            isTargetClicked() {
+            isTargetClicked(event) {
                 return this.target && (this.target === event.target || this.target.contains(event.target));
             },
             onLeafClick() {
