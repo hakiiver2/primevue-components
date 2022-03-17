@@ -3752,6 +3752,9 @@ var script = {
 
             this.$emit('update:selection', _selection);
         },
+        getProcessedData() {
+            return this.processedData;
+        },
         exportCSV(options, data) {
             let csv = '\ufeff';
 

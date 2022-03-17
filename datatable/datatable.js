@@ -3744,6 +3744,9 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
 
                 this.$emit('update:selection', _selection);
             },
+            getProcessedData() {
+                return this.processedData;
+            },
             exportCSV(options, data) {
                 let csv = '\ufeff';
 
