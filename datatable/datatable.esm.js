@@ -2813,7 +2813,8 @@ var script = {
         'update:selection', 'row-select', 'row-unselect', 'update:contextMenuSelection', 'row-contextmenu', 'row-unselect-all', 'row-select-all', 'select-all-change',
         'column-resize-end', 'column-reorder', 'row-reorder', 'update:expandedRows', 'row-collapse', 'row-expand',
         'update:expandedRowGroups', 'rowgroup-collapse', 'rowgroup-expand', 'update:filters', 'state-restore', 'state-save',
-        'cell-edit-init', 'cell-edit-complete', 'cell-edit-cancel', 'update:editingRows', 'row-edit-init', 'row-edit-save', 'row-edit-cancel'],
+        'cell-edit-init', 'cell-edit-complete', 'cell-edit-cancel', 'update:editingRows', 'row-edit-init', 'row-edit-save', 'row-edit-cancel',
+        "mousedown", "touchstart", "touchmove", "touchend" ],
     props: {
         value: {
             type: Array,
@@ -3187,6 +3188,18 @@ var script = {
     methods: {
         columnProp(col, prop) {
             return ObjectUtils.getVNodeProp(col, prop);
+        },
+        mousedown(event) {
+            this.$emit('mousedown', event);
+        },
+        touchstart(event) {
+            this.$emit('touchstart', event);
+        },
+        touchmove(event) {
+            this.$emit('touchmove', event);
+        },
+        touchend(event) {
+            this.$emit('touchend', event);
         },
         onPage(event) {
             this.clearEditingMetaData();
@@ -4909,6 +4922,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           pageLinkSize: $props.pageLinkSize,
           template: $props.paginatorTemplate,
           rowsPerPageOptions: $props.rowsPerPageOptions,
+          onMousedown: $options.mousedown,
+          onTouchstart: $options.touchstart,
+          onTouchmove: $options.touchmove,
+          onTouchend: $options.touchend,
           currentPageReportTemplate: $props.currentPageReportTemplate,
           class: "p-paginator-bottom",
           onPage: _cache[44] || (_cache[44] = $event => ($options.onPage($event))),
@@ -4930,7 +4947,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ])
               }
             : undefined
-        ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "currentPageReportTemplate", "alwaysShow"]))
+        ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "alwaysShow"]))
       : createCommentVNode("", true),
     (_ctx.$slots.footer)
       ? (openBlock(), createBlock("div", _hoisted_3, [

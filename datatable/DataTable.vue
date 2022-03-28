@@ -52,7 +52,11 @@
                 </template>
             </DTVirtualScroller>
         </div>
-        <DTPaginator v-if="paginatorBottom" :rows="d_rows" :first="d_first" :totalRecords="totalRecordsLength" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions"
+        <DTPaginator v-if="paginatorBottom" :rows="d_rows" :first="d_first" :totalRecords="totalRecordsLength" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions" 
+                @mousedown="mousedown"
+                @touchstart="touchstart"
+                @touchmove="touchmove"
+                @touchend="touchend"
                 :currentPageReportTemplate="currentPageReportTemplate" class="p-paginator-bottom" @page="onPage($event)" :alwaysShow="alwaysShowPaginator">
             <template #start v-if="$slots.paginatorstart">
                 <slot name="paginatorstart"></slot>
@@ -85,7 +89,8 @@ export default {
         'update:selection', 'row-select', 'row-unselect', 'update:contextMenuSelection', 'row-contextmenu', 'row-unselect-all', 'row-select-all', 'select-all-change',
         'column-resize-end', 'column-reorder', 'row-reorder', 'update:expandedRows', 'row-collapse', 'row-expand',
         'update:expandedRowGroups', 'rowgroup-collapse', 'rowgroup-expand', 'update:filters', 'state-restore', 'state-save',
-        'cell-edit-init', 'cell-edit-complete', 'cell-edit-cancel', 'update:editingRows', 'row-edit-init', 'row-edit-save', 'row-edit-cancel'],
+        'cell-edit-init', 'cell-edit-complete', 'cell-edit-cancel', 'update:editingRows', 'row-edit-init', 'row-edit-save', 'row-edit-cancel',
+        "mousedown", "touchstart", "touchmove", "touchend" ],
     props: {
         value: {
             type: Array,
@@ -459,6 +464,18 @@ export default {
     methods: {
         columnProp(col, prop) {
             return ObjectUtils.getVNodeProp(col, prop);
+        },
+        mousedown(event) {
+            this.$emit('mousedown', event)
+        },
+        touchstart(event) {
+            this.$emit('touchstart', event)
+        },
+        touchmove(event) {
+            this.$emit('touchmove', event)
+        },
+        touchend(event) {
+            this.$emit('touchend', event)
         },
         onPage(event) {
             this.clearEditingMetaData();

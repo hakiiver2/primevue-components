@@ -26,6 +26,10 @@
 			</div>
 		</div>
 		<DVPaginator v-if="paginatorBottom" :rows="d_rows" :first="d_first" :totalRecords="getTotalRecords" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions"
+                @mousedown="mousedown"
+                @touchstart="touchstart"
+                @touchmove="touchmove"
+                @touchend="touchend"
 					:currentPageReportTemplate="currentPageReportTemplate" :class="{'p-paginator-bottom': paginatorBottom}" :alwaysShow="alwaysShowPaginator" @page="onPage($event)">
 			<template #start v-if="$slots.paginatorstart">
 				<slot name="paginatorstart"></slot>
@@ -129,6 +133,18 @@ export default {
         }
     },
     methods: {
+        mousedown(event) {
+            this.$emit('mousedown', event)
+        },
+        touchstart(event) {
+            this.$emit('touchstart', event)
+        },
+        touchmove(event) {
+            this.$emit('touchmove', event)
+        },
+        touchend(event) {
+            this.$emit('touchend', event)
+        },
         onPage(event) {
             this.d_first = event.first;
             this.d_rows = event.rows;

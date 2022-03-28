@@ -22,7 +22,7 @@ var script = {
         stateStorage: {
             type: String,
             default: 'session'
-        }
+        },
     },
     dragging: false,
     mouseMoveListener: null,
@@ -251,6 +251,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: 0,
               class: "p-splitter-gutter",
               style: $options.gutterStyle,
+              ref: "splitterGutter",
               onMousedown: $event => ($options.onGutterMouseDown($event, i)),
               onTouchstart: $event => ($options.onGutterTouchStart($event, i)),
               onTouchmove: $event => ($options.onGutterTouchMove($event, i)),

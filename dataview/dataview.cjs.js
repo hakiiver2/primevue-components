@@ -94,6 +94,18 @@ var script = {
         }
     },
     methods: {
+        mousedown(event) {
+            this.$emit('mousedown', event);
+        },
+        touchstart(event) {
+            this.$emit('touchstart', event);
+        },
+        touchmove(event) {
+            this.$emit('touchmove', event);
+        },
+        touchend(event) {
+            this.$emit('touchend', event);
+        },
         onPage(event) {
             this.d_first = event.first;
             this.d_rows = event.rows;
@@ -281,6 +293,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           pageLinkSize: $props.pageLinkSize,
           template: $props.paginatorTemplate,
           rowsPerPageOptions: $props.rowsPerPageOptions,
+          onMousedown: $options.mousedown,
+          onTouchstart: $options.touchstart,
+          onTouchmove: $options.touchmove,
+          onTouchend: $options.touchend,
           currentPageReportTemplate: $props.currentPageReportTemplate,
           class: {'p-paginator-bottom': $options.paginatorBottom},
           alwaysShow: $props.alwaysShowPaginator,
@@ -302,7 +318,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ])
               }
             : undefined
-        ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "currentPageReportTemplate", "class", "alwaysShow"]))
+        ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "class", "alwaysShow"]))
       : vue.createCommentVNode("", true),
     (_ctx.$slots.footer)
       ? (vue.openBlock(), vue.createBlock("div", _hoisted_6, [

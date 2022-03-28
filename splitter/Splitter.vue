@@ -2,7 +2,7 @@
     <div :class="containerClass">
         <template v-for="(panel,i) of panels" :key="i" class="p-splitter-panel">
             <component :is="panel"></component>
-            <div class="p-splitter-gutter" v-if="i !== (panels.length -1)" :style="gutterStyle"
+            <div class="p-splitter-gutter" v-if="i !== (panels.length -1)" :style="gutterStyle" ref="splitterGutter"
                 @mousedown="onGutterMouseDown($event, i)"
                 @touchstart="onGutterTouchStart($event, i)"
                 @touchmove="onGutterTouchMove($event, i)"
@@ -35,7 +35,7 @@ export default {
         stateStorage: {
             type: String,
             default: 'session'
-        }
+        },
     },
     dragging: false,
     mouseMoveListener: null,
