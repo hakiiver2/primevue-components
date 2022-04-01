@@ -7144,13 +7144,14 @@ this.primevue.tree = (function (utils, Ripple, vue) {
 }(primevue.utils, primevue.ripple, Vue));
 
 this.primevue = this.primevue || {};
-this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
+this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+    var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
 
     var script$1 = {
         name: 'Menuitem',
@@ -7192,15 +7193,29 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default['default'],
+            'tooltip': Tooltip__default['default']
         }
     };
 
     const _hoisted_1$1 = { class: "p-menuitem-text" };
-    const _hoisted_2$1 = { class: "p-menuitem-text" };
+    const _hoisted_2$1 = /*#__PURE__*/vue.createTextVNode("    ");
+    const _hoisted_3 = {
+      key: 0,
+      class: "pi pi-info-circle",
+      style: {}
+    };
+    const _hoisted_4 = { class: "p-menuitem-text" };
+    const _hoisted_5 = /*#__PURE__*/vue.createTextVNode("    ");
+    const _hoisted_6 = {
+      key: 0,
+      class: "pi pi-info-circle",
+      style: {}
+    };
 
     function render$1(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_router_link = vue.resolveComponent("router-link");
+      const _directive_tooltip = vue.resolveDirective("tooltip");
       const _directive_ripple = vue.resolveDirective("ripple");
 
       return ($options.visible())
@@ -7228,7 +7243,13 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
                             vue.createVNode("span", {
                               class: ['p-menuitem-icon', $props.item.icon]
                             }, null, 2),
-                            vue.createVNode("span", _hoisted_1$1, vue.toDisplayString($options.label()), 1)
+                            vue.createVNode("span", _hoisted_1$1, vue.toDisplayString($options.label()), 1),
+                            _hoisted_2$1,
+                            ($props.item.info)
+                              ? vue.withDirectives((vue.openBlock(), vue.createBlock("i", _hoisted_3, null, 512)), [
+                                  [_directive_tooltip, $props.item.info]
+                                ])
+                              : vue.createCommentVNode("", true)
                           ], 10, ["href", "onClick"]), [
                             [_directive_ripple]
                           ])
@@ -7247,7 +7268,13 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
                         vue.createVNode("span", {
                           class: ['p-menuitem-icon', $props.item.icon]
                         }, null, 2),
-                        vue.createVNode("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1)
+                        vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.label()), 1),
+                        _hoisted_5,
+                        ($props.item.info)
+                          ? vue.withDirectives((vue.openBlock(), vue.createBlock("i", _hoisted_6, null, 512)), [
+                              [_directive_tooltip, $props.item.info]
+                            ])
+                          : vue.createCommentVNode("", true)
                       ], 10, ["href", "target", "tabindex"])), [
                         [_directive_ripple]
                       ])
@@ -7583,7 +7610,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue));
+}(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue));
 
 this.primevue = this.primevue || {};
 this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {

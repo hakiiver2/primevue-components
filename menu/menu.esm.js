@@ -1,7 +1,8 @@
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, Fragment, withCtx, withDirectives, createVNode, toDisplayString, resolveDynamicComponent, createCommentVNode, Teleport, Transition, mergeProps, renderList, renderSlot, createTextVNode } from 'vue';
+import Tooltip from 'primevue/tooltip';
+import { resolveComponent, resolveDirective, openBlock, createBlock, Fragment, withCtx, withDirectives, createVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, createTextVNode, Teleport, Transition, mergeProps, renderList, renderSlot } from 'vue';
 
 var script$1 = {
     name: 'Menuitem',
@@ -43,15 +44,29 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple
+        'ripple': Ripple,
+        'tooltip': Tooltip
     }
 };
 
 const _hoisted_1$1 = { class: "p-menuitem-text" };
-const _hoisted_2$1 = { class: "p-menuitem-text" };
+const _hoisted_2$1 = /*#__PURE__*/createTextVNode("    ");
+const _hoisted_3 = {
+  key: 0,
+  class: "pi pi-info-circle",
+  style: {}
+};
+const _hoisted_4 = { class: "p-menuitem-text" };
+const _hoisted_5 = /*#__PURE__*/createTextVNode("    ");
+const _hoisted_6 = {
+  key: 0,
+  class: "pi pi-info-circle",
+  style: {}
+};
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = resolveComponent("router-link");
+  const _directive_tooltip = resolveDirective("tooltip");
   const _directive_ripple = resolveDirective("ripple");
 
   return ($options.visible())
@@ -79,7 +94,13 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                         createVNode("span", {
                           class: ['p-menuitem-icon', $props.item.icon]
                         }, null, 2),
-                        createVNode("span", _hoisted_1$1, toDisplayString($options.label()), 1)
+                        createVNode("span", _hoisted_1$1, toDisplayString($options.label()), 1),
+                        _hoisted_2$1,
+                        ($props.item.info)
+                          ? withDirectives((openBlock(), createBlock("i", _hoisted_3, null, 512)), [
+                              [_directive_tooltip, $props.item.info]
+                            ])
+                          : createCommentVNode("", true)
                       ], 10, ["href", "onClick"]), [
                         [_directive_ripple]
                       ])
@@ -98,7 +119,13 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     createVNode("span", {
                       class: ['p-menuitem-icon', $props.item.icon]
                     }, null, 2),
-                    createVNode("span", _hoisted_2$1, toDisplayString($options.label()), 1)
+                    createVNode("span", _hoisted_4, toDisplayString($options.label()), 1),
+                    _hoisted_5,
+                    ($props.item.info)
+                      ? withDirectives((openBlock(), createBlock("i", _hoisted_6, null, 512)), [
+                          [_directive_tooltip, $props.item.info]
+                        ])
+                      : createCommentVNode("", true)
                   ], 10, ["href", "target", "tabindex"])), [
                     [_directive_ripple]
                   ])

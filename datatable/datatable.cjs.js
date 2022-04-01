@@ -2825,7 +2825,7 @@ var script = {
         'column-resize-end', 'column-reorder', 'row-reorder', 'update:expandedRows', 'row-collapse', 'row-expand',
         'update:expandedRowGroups', 'rowgroup-collapse', 'rowgroup-expand', 'update:filters', 'state-restore', 'state-save',
         'cell-edit-init', 'cell-edit-complete', 'cell-edit-cancel', 'update:editingRows', 'row-edit-init', 'row-edit-save', 'row-edit-cancel',
-        "mousedown", "touchstart", "touchmove", "touchend" ],
+        "mouseover", "mousedown", "touchstart", "touchmove", "touchend" ],
     props: {
         value: {
             type: Array,
@@ -3199,6 +3199,9 @@ var script = {
     methods: {
         columnProp(col, prop) {
             return utils.ObjectUtils.getVNodeProp(col, prop);
+        },
+        mouseover(event) {
+            this.$emit('mouseover', event);
         },
         mousedown(event) {
             this.$emit('mousedown', event);
@@ -4933,6 +4936,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           pageLinkSize: $props.pageLinkSize,
           template: $props.paginatorTemplate,
           rowsPerPageOptions: $props.rowsPerPageOptions,
+          onMouseover: $options.mouseover,
           onMousedown: $options.mousedown,
           onTouchstart: $options.touchstart,
           onTouchmove: $options.touchmove,
@@ -4958,7 +4962,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ])
               }
             : undefined
-        ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "alwaysShow"]))
+        ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMouseover", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "alwaysShow"]))
       : vue.createCommentVNode("", true),
     (_ctx.$slots.footer)
       ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [

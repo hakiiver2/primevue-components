@@ -5,11 +5,15 @@
                 <a :href="href" @click="onClick($event, navigate)" :class="linkClass(item, {isActive, isExactActive})" v-ripple role="menuitem">
                     <span :class="['p-menuitem-icon', item.icon]"></span>
                     <span class="p-menuitem-text">{{label()}}</span>
+                     &nbsp;&nbsp;
+                     <i v-if="item.info" v-tooltip="item.info" class="pi pi-info-circle" style=""></i>
                 </a>
             </router-link>
             <a v-else :href="item.url" :class="linkClass(item)" @click="onClick" :target="item.target" role="menuitem" :tabindex="disabled(item) ? null : '0'" v-ripple>
                 <span :class="['p-menuitem-icon', item.icon]"></span>
                 <span class="p-menuitem-text">{{label()}}</span>
+                &nbsp;&nbsp;
+                <i v-if="item.info" v-tooltip="item.info" class="pi pi-info-circle" style=""></i>
             </a>
         </template>
         <component v-else :is="template" :item="item"></component>
@@ -18,6 +22,7 @@
 
 <script>
 import Ripple from 'primevue/ripple';
+import Tooltip from 'primevue/tooltip';
 
 export default {
     name: 'Menuitem',
@@ -59,7 +64,8 @@ export default {
         }
     },
     directives: {
-        'ripple': Ripple
+        'ripple': Ripple,
+        'tooltip': Tooltip
     }
 }
 </script>
