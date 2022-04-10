@@ -528,23 +528,22 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
       key: 0,
       class: "p-fluid p-column-filter-element"
     };
-    const _hoisted_2$5 = /*#__PURE__*/vue.createVNode("span", { class: "pi pi-filter-icon pi-filter" }, null, -1);
-    const _hoisted_3$4 = /*#__PURE__*/vue.createVNode("span", { class: "pi pi-filter-slash" }, null, -1);
-    const _hoisted_4$2 = {
+    const _hoisted_2$5 = /*#__PURE__*/vue.createVNode("span", { class: "pi pi-filter-slash" }, null, -1);
+    const _hoisted_3$4 = {
       key: 0,
       class: "p-column-filter-row-items"
     };
-    const _hoisted_5$1 = /*#__PURE__*/vue.createVNode("li", { class: "p-column-filter-separator" }, null, -1);
-    const _hoisted_6$1 = {
+    const _hoisted_4$2 = /*#__PURE__*/vue.createVNode("li", { class: "p-column-filter-separator" }, null, -1);
+    const _hoisted_5$1 = {
       key: 0,
       class: "p-column-filter-operator"
     };
-    const _hoisted_7 = { class: "p-column-filter-constraints" };
-    const _hoisted_8 = {
+    const _hoisted_6$1 = { class: "p-column-filter-constraints" };
+    const _hoisted_7 = {
       key: 1,
       class: "p-column-filter-add-rule"
     };
-    const _hoisted_9 = { class: "p-column-filter-buttonbar" };
+    const _hoisted_8 = { class: "p-column-filter-buttonbar" };
 
     function render$9(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_CFDropdown = vue.resolveComponent("CFDropdown");
@@ -571,7 +570,9 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
               onClick: _cache[1] || (_cache[1] = $event => ($options.toggleMenu())),
               onKeydown: _cache[2] || (_cache[2] = $event => ($options.onToggleButtonKeyDown($event)))
             }, [
-              _hoisted_2$5
+              vue.createVNode("span", {
+                class: ["pi pi-filter-icon", {'pi-filter': !$options.hasFilter(), 'pi-filter-fill': $options.hasFilter()}]
+              }, null, 2)
             ], 42, ["aria-expanded"]))
           : vue.createCommentVNode("", true),
         ($props.showClearButton && $props.display === 'row')
@@ -581,7 +582,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
               type: "button",
               onClick: _cache[3] || (_cache[3] = $event => ($options.clearFilter()))
             }, [
-              _hoisted_3$4
+              _hoisted_2$5
             ], 2))
           : vue.createCommentVNode("", true),
         (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
@@ -607,7 +608,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                       filterCallback: $options.filterCallback
                     }, null, 8, ["field", "filterModel", "filterCallback"])),
                     ($props.display === 'row')
-                      ? (vue.openBlock(), vue.createBlock("ul", _hoisted_4$2, [
+                      ? (vue.openBlock(), vue.createBlock("ul", _hoisted_3$4, [
                           (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.matchModes, (matchMode, i) => {
                             return (vue.openBlock(), vue.createBlock("li", {
                               class: ["p-column-filter-row-item", {'p-highlight': $options.isRowMatchModeSelected(matchMode.value)}],
@@ -620,7 +621,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                               tabindex: i === 0 ? '0' : null
                             }, vue.toDisplayString(matchMode.label), 43, ["onClick", "onKeydown", "tabindex"]))
                           }), 128)),
-                          _hoisted_5$1,
+                          _hoisted_4$2,
                           vue.createVNode("li", {
                             class: "p-column-filter-row-item",
                             onClick: _cache[5] || (_cache[5] = $event => ($options.clearFilter())),
@@ -632,7 +633,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                         ]))
                       : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
                           ($options.isShowOperator)
-                            ? (vue.openBlock(), vue.createBlock("div", _hoisted_6$1, [
+                            ? (vue.openBlock(), vue.createBlock("div", _hoisted_5$1, [
                                 vue.createVNode(_component_CFDropdown, {
                                   options: $options.operatorOptions,
                                   modelValue: $options.operator,
@@ -643,7 +644,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                                 }, null, 8, ["options", "modelValue"])
                               ]))
                             : vue.createCommentVNode("", true),
-                          vue.createVNode("div", _hoisted_7, [
+                          vue.createVNode("div", _hoisted_6$1, [
                             (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.fieldConstraints, (fieldConstraint, i) => {
                               return (vue.openBlock(), vue.createBlock("div", {
                                 key: i,
@@ -684,7 +685,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                             }), 128))
                           ]),
                           ($options.isShowAddConstraint)
-                            ? (vue.openBlock(), vue.createBlock("div", _hoisted_8, [
+                            ? (vue.openBlock(), vue.createBlock("div", _hoisted_7, [
                                 vue.createVNode(_component_CFButton, {
                                   type: "button",
                                   label: $options.addRuleButtonLabel,
@@ -694,7 +695,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                                 }, null, 8, ["label"])
                               ]))
                             : vue.createCommentVNode("", true),
-                          vue.createVNode("div", _hoisted_9, [
+                          vue.createVNode("div", _hoisted_8, [
                             (!$props.filterClearTemplate && $props.showClearButton)
                               ? (vue.openBlock(), vue.createBlock(_component_CFButton, {
                                   key: 0,
