@@ -1763,18 +1763,6 @@ this.primevue.tooltip = (function (utils) {
         return document.getElementById(el.$_ptooltipId);
     }
 
-    function escapeHtml(str) {
-        if(str !== undefined && str !== null) {
-            str = String(str);
-            str = str.replace(/&/g, '&amp;');
-            str = str.replace(/</g, '&lt;');
-            str = str.replace(/>/g, '&gt;');
-            str = str.replace(/"/g, '&quot;');
-            str = str.replace(/'/g, '&#39;');
-        }
-        return str;
-    }
-
     function create(el) {
         const id = utils.UniqueComponentId() + '_tooltip';
         el.$_ptooltipId = id;
@@ -1788,7 +1776,16 @@ this.primevue.tooltip = (function (utils) {
 
         let tooltipText = document.createElement('div');
         tooltipText.className = 'p-tooltip-text';
-        tooltipText.innerHTML = escapeHtml(el.$_ptooltipValue);
+        // tooltipText.innerHTML = escapeHtml(el.$_ptooltipValue);
+
+
+        if (el.$_ptooltipEscape) {
+            tooltipText.innerHTML = el.$_ptooltipValue;
+        }
+        else {
+            tooltipText.innerHTML = '';
+            tooltipText.appendChild(document.createTextNode(el.$_ptooltipValue));
+        }
 
         container.appendChild(tooltipText);
         document.body.appendChild(container);
@@ -1966,14 +1963,13 @@ this.primevue.tooltip = (function (utils) {
             else if (typeof options.value === 'string') {
                 target.$_ptooltipValue = options.value;
                 target.$_ptooltipDisabled = false;
+                target.$_ptooltipEscape = false;
                 target.$_ptooltipClass = null;
             }
             else {
-                // target.$_ptooltipValue = options.value.value;
-                target.$_ptooltipValue = options.value;
-                // target.$_ptooltipDisabled = options.value.disabled || false;
-                target.$_ptooltipDisabled = options.disabled || false;
-
+                target.$_ptooltipValue = options.value.value;
+                target.$_ptooltipDisabled = options.value.disabled || false;
+                target.$_ptooltipEscape = options.value.escape || false;
                 target.$_ptooltipClass = options.value.class;
             }
 
@@ -2000,13 +1996,13 @@ this.primevue.tooltip = (function (utils) {
             if (typeof options.value === 'string') {
                 target.$_ptooltipValue = options.value;
                 target.$_ptooltipDisabled = false;
+                target.$_ptooltipEscape = false;
                 target.$_ptooltipClass = null;
             }
             else {
-                // target.$_ptooltipValue = options.value.value;
-                target.$_ptooltipValue = options.value;
-                // target.$_ptooltipDisabled = options.value.disabled || false;
-                target.$_ptooltipDisabled = options.disabled || false;
+                target.$_ptooltipValue = options.value.value;
+                target.$_ptooltipDisabled = options.value.disabled || false;
+                target.$_ptooltipEscape = options.value.escape || false;
                 target.$_ptooltipClass = options.value.class;
             }
         }
@@ -3018,6 +3014,10 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 type: Boolean,
                 default: true
             },
+            readonly: {
+                type: Boolean,
+                default: false
+            },
             style: null,
             class: null,
             inputStyle: null,
@@ -3207,6 +3207,10 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 return null;
             },
             repeat(event, interval, dir) {
+                if (this.readonly) {
+                    return;
+                }
+
                 let i = interval || 500;
 
                 this.clearTimer();
@@ -3289,6 +3293,10 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 this.isSpecialChar = false;
             },
             onInputKeyDown(event) {
+                if (this.readonly) {
+                    return;
+                }
+
                 this.lastValue = event.target.value;
                 if (event.shiftKey || event.altKey) {
                     this.isSpecialChar = true;
@@ -3435,6 +3443,10 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 }
             },
             onInputKeyPress(event) {
+                if (this.readonly) {
+                    return;
+                }
+
                 event.preventDefault();
                 let code = event.which || event.keyCode;
                 let char = String.fromCharCode(code);
@@ -3641,7 +3653,9 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 return index || 0;
             },
             onInputClick() {
-                this.initCursor();
+                if (!this.readonly) {
+                    this.initCursor();
+                }
             },
             isNumeralChar(char) {
                 if (char.length === 1 && (this._numeral.test(char) || this._decimal.test(char) || this._group.test(char) || this._minusSign.test(char))) {
@@ -3910,6 +3924,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
         }, _ctx.$attrs, {
           "aria-valumin": $props.min,
           "aria-valuemax": $props.max,
+          readonly: $props.readonly,
           onInput: $options.onUserInput,
           onKeydown: $options.onInputKeyDown,
           onKeypress: $options.onInputKeyPress,
@@ -3917,7 +3932,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
           onClick: $options.onInputClick,
           onFocus: $options.onInputFocus,
           onBlur: $options.onInputBlur
-        }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
+        }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
         ($props.showButtons && $props.buttonLayout === 'stacked')
           ? (vue.openBlock(), vue.createBlock("span", _hoisted_1, [
               vue.createVNode(_component_INButton, vue.mergeProps({
@@ -6677,10 +6692,7 @@ this.primevue.tree = (function (utils, Ripple, vue) {
                 return ['p-treenode-icon', this.node.icon];
             },
             toggleIcon() {
-                return ['p-tree-toggler-icon pi pi-fw', {
-                    'pi-chevron-down': this.expanded,
-                    'pi-chevron-right': !this.expanded
-                }];
+                return ['p-tree-toggler-icon pi pi-fw', this.expanded ? this.node.expandedIcon || 'pi-chevron-down' : this.node.collapsedIcon || 'pi-chevron-right'];
             },
             checkboxClass() {
                 return ['p-checkbox-box', {'p-highlight': this.checked, 'p-indeterminate': this.partialChecked}];
@@ -7347,7 +7359,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
         methods: {
             itemClick(event) {
                 const item = event.item;
-                if (item.disabled) {
+                if (this.disabled(item)) {
                     return;
                 }
 
@@ -7455,6 +7467,9 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
             },
             visible(item) {
                 return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+            },
+            disabled(item) {
+                return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
             },
             label(item) {
                 return (typeof item.label === 'function' ? item.label() : item.label);

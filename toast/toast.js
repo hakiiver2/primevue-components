@@ -203,7 +203,7 @@ this.primevue.toast = (function (ToastEventBus, Ripple, vue, utils) {
                 }
             },
             onLeave() {
-                if (this.$refs.container && this.autoZIndex) {
+                if (this.$refs.container && this.autoZIndex && utils.ObjectUtils.isEmpty(this.messages)) {
                     utils.ZIndexUtils.clear(this.$refs.container);
                 }
             },

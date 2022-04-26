@@ -16,6 +16,14 @@ var script = {
         lazy: {
             type: Boolean,
             default: false
+        },
+        expandIcon: {
+            type: String,
+            default: 'pi-chevron-right'
+        },
+        collapseIcon: {
+            type: String,
+            default: 'pi-chevron-down'
         }
     },
     data() {
@@ -83,12 +91,14 @@ var script = {
         getTabAriaId(i) {
             return this.ariaId + '_' + i;
         },
-        getHeaderIcon(i) {
-            const active = this.isTabActive(i);
-            return ['p-accordion-toggle-icon pi', {'pi-chevron-right': !active, 'pi-chevron-down': active}];
+        getHeaderCollapseIcon() {
+            return ['p-accordion-toggle-icon pi', this.collapseIcon];
+        },
+        getHeaderExpandIcon() {
+            return ['p-accordion-toggle-icon pi', this.expandIcon];
         },
         isAccordionTab(child) {
-            return child.type.name === 'AccordionTab'
+            return child.type.name === 'AccordionTab';
         }
     },
     computed: {
@@ -143,7 +153,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "aria-controls": $options.getTabAriaId(i) + '_content'
           }, [
             createVNode("span", {
-              class: $options.getHeaderIcon(i)
+              class: $options.isTabActive(i) ? $options.getHeaderCollapseIcon() : $options.getHeaderExpandIcon()
             }, null, 2),
             (tab.props && tab.props.header)
               ? (openBlock(), createBlock("span", _hoisted_2, toDisplayString(tab.props.header), 1))

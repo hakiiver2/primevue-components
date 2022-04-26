@@ -98,6 +98,18 @@ var script = {
             type: Boolean,
             default: true
         },
+        chooseIcon: {
+            type: String,
+            default: 'pi pi-plus'
+        },
+        uploadIcon: {
+            type: String,
+            default: 'pi pi-upload'
+        },
+        cancelIcon: {
+            type: String,
+            default: 'pi pi-times'
+        },
         style: null,
         class: null
     },
@@ -392,11 +404,13 @@ var script = {
                 'p-focus': this.focused
             }];
         },
+        advancedChooseIconClass() {
+            return ['p-button-icon p-button-icon-left pi-fw', this.chooseIcon];
+        },
         basicChooseButtonIconClass() {
-            return ['p-button-icon p-button-icon-left pi', {
-                'pi-plus': !this.hasFiles || this.auto,
-                'pi-upload': this.hasFiles && !this.auto
-            }];
+            return ['p-button-icon p-button-icon-left',
+                !this.hasFiles || this.auto ? this.uploadIcon : this.chooseIcon
+            ];
         },
         basicChooseButtonLabel() {
             return this.auto ? this.chooseButtonLabel : (this.hasFiles ? this.files.map(f => f.name).join(', ') : this.chooseButtonLabel);
@@ -438,22 +452,21 @@ const _hoisted_1 = {
   class: "p-fileupload p-fileupload-advanced p-component"
 };
 const _hoisted_2 = { class: "p-fileupload-buttonbar" };
-const _hoisted_3 = /*#__PURE__*/vue.createVNode("span", { class: "p-button-icon p-button-icon-left pi pi-fw pi-plus" }, null, -1);
-const _hoisted_4 = { class: "p-button-label" };
-const _hoisted_5 = {
+const _hoisted_3 = { class: "p-button-label" };
+const _hoisted_4 = {
   key: 1,
   class: "p-fileupload-files"
 };
-const _hoisted_6 = { class: "p-fileupload-filename" };
-const _hoisted_7 = {
+const _hoisted_5 = { class: "p-fileupload-filename" };
+const _hoisted_6 = {
   key: 2,
   class: "p-fileupload-empty"
 };
-const _hoisted_8 = {
+const _hoisted_7 = {
   key: 1,
   class: "p-fileupload p-fileupload-basic p-component"
 };
-const _hoisted_9 = { class: "p-button-label" };
+const _hoisted_8 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_FileUploadButton = vue.resolveComponent("FileUploadButton");
@@ -481,8 +494,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               accept: $props.accept,
               disabled: $options.chooseDisabled
             }, null, 40, ["multiple", "accept", "disabled"]),
-            _hoisted_3,
-            vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.chooseButtonLabel), 1)
+            vue.createVNode("span", { class: $options.advancedChooseIconClass }, null, 2),
+            vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.chooseButtonLabel), 1)
           ], 38), [
             [_directive_ripple]
           ]),
@@ -490,19 +503,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             ? (vue.openBlock(), vue.createBlock(_component_FileUploadButton, {
                 key: 0,
                 label: $options.uploadButtonLabel,
-                icon: "pi pi-upload",
+                icon: $props.uploadIcon,
                 onClick: $options.upload,
                 disabled: $options.uploadDisabled
-              }, null, 8, ["label", "onClick", "disabled"]))
+              }, null, 8, ["label", "icon", "onClick", "disabled"]))
             : vue.createCommentVNode("", true),
           ($props.showCancelButton)
             ? (vue.openBlock(), vue.createBlock(_component_FileUploadButton, {
                 key: 1,
                 label: $options.cancelButtonLabel,
-                icon: "pi pi-times",
+                icon: $props.cancelIcon,
                 onClick: $options.clear,
                 disabled: $options.cancelDisabled
-              }, null, 8, ["label", "onClick", "disabled"]))
+              }, null, 8, ["label", "icon", "onClick", "disabled"]))
             : vue.createCommentVNode("", true)
         ]),
         vue.createVNode("div", {
@@ -532,7 +545,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, 1032, ["onClose"]))
           }), 128)),
           ($options.hasFiles)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_5, [
+            ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
                 (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($data.files, (file, index) => {
                   return (vue.openBlock(), vue.createBlock("div", {
                     class: "p-fileupload-row",
@@ -549,7 +562,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           }, null, 8, ["alt", "src", "width"]))
                         : vue.createCommentVNode("", true)
                     ]),
-                    vue.createVNode("div", _hoisted_6, vue.toDisplayString(file.name), 1),
+                    vue.createVNode("div", _hoisted_5, vue.toDisplayString(file.name), 1),
                     vue.createVNode("div", null, vue.toDisplayString($options.formatSize(file.size)), 1),
                     vue.createVNode("div", null, [
                       vue.createVNode(_component_FileUploadButton, {
@@ -563,14 +576,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ]))
             : vue.createCommentVNode("", true),
           (_ctx.$slots.empty && !$options.hasFiles)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_7, [
+            ? (vue.openBlock(), vue.createBlock("div", _hoisted_6, [
                 vue.renderSlot(_ctx.$slots, "empty")
               ]))
             : vue.createCommentVNode("", true)
         ], 544)
       ]))
     : ($options.isBasic)
-      ? (vue.openBlock(), vue.createBlock("div", _hoisted_8, [
+      ? (vue.openBlock(), vue.createBlock("div", _hoisted_7, [
           (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($data.messages, (msg) => {
             return (vue.openBlock(), vue.createBlock(_component_FileUploadMessage, {
               severity: "error",
@@ -593,7 +606,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             tabindex: "0"
           }, [
             vue.createVNode("span", { class: $options.basicChooseButtonIconClass }, null, 2),
-            vue.createVNode("span", _hoisted_9, vue.toDisplayString($options.basicChooseButtonLabel), 1),
+            vue.createVNode("span", _hoisted_8, vue.toDisplayString($options.basicChooseButtonLabel), 1),
             (!$options.hasFiles)
               ? (vue.openBlock(), vue.createBlock("input", {
                   key: 0,

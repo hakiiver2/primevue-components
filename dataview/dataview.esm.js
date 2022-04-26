@@ -65,6 +65,10 @@ var script = {
         lazy: {
             type: Boolean,
             default: false
+        },
+        dataKey: {
+            type: String,
+            default: null
         }
     },
     data() {
@@ -99,6 +103,9 @@ var script = {
         },
         touchend(event) {
             this.$emit('touchend', event);
+        },
+        getKey(item, index) {
+            return this.dataKey ? ObjectUtils.resolveFieldData(item, this.dataKey) : index;
         },
         onPage(event) {
             this.d_first = event.first;
@@ -252,7 +259,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     createVNode("div", _hoisted_2, [
       createVNode("div", _hoisted_3, [
         (openBlock(true), createBlock(Fragment, null, renderList($options.items, (item, index) => {
-          return (openBlock(), createBlock(Fragment, null, [
+          return (openBlock(), createBlock(Fragment, {
+            key: $options.getKey(item, index)
+          }, [
             (_ctx.$slots.list && $props.layout === 'list')
               ? renderSlot(_ctx.$slots, "list", {
                   key: 0,
@@ -268,7 +277,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 })
               : createCommentVNode("", true)
           ], 64))
-        }), 256)),
+        }), 128)),
         ($options.empty)
           ? (openBlock(), createBlock("div", _hoisted_4, [
               createVNode("div", _hoisted_5, [

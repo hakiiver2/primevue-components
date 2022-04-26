@@ -11,6 +11,14 @@
     "description": "When enabled, hidden tabs are not rendered at all. Defaults to false that hides tabs with css.",
     "type": "boolean"
   },
+  "accordion/expandIcon": {
+    "description": "Icon of a collapsed tab.",
+    "type": "string"
+  },
+  "accordion/collapseIcon": {
+    "description": "Icon of a expanded tab.",
+    "type": "string"
+  },
   "accordiontab/header": {
     "description": "Orientation of tab headers.",
     "type": "string"
@@ -1123,6 +1131,10 @@
     "description": "Defines if data is loaded and interacted with in lazy manner.",
     "type": "boolean"
   },
+  "dataview/dataKey": {
+    "description": "Name of the data that uniquely identifies the a record in the data.",
+    "type": "string"
+  },
   "dialog/header": {
     "description": "Title content of the dialog.",
     "type": "any"
@@ -1192,7 +1204,7 @@
     "type": "object"
   },
   "dialog/draggable": {
-    "description": "Whether the dialog can be displayed full screen.",
+    "description": "Whether the dialog can be relocated by dragging.",
     "type": "boolean"
   },
   "dialog/minX": {
@@ -1463,6 +1475,18 @@
     "description": "Whether to cancel the upload button.",
     "type": "boolean"
   },
+  "fileupload/chooseIcon": {
+    "description": "Icon of the choose button.",
+    "type": "string"
+  },
+  "fileupload/uploadIcon": {
+    "description": "Icon of the upload button.",
+    "type": "string"
+  },
+  "fileupload/cancelIcon": {
+    "description": "Icon of the cancel button.",
+    "type": "string"
+  },
   "fileupload/style": {
     "description": "Inline style of the component.",
     "type": "any"
@@ -1701,6 +1725,10 @@
   },
   "inputnumber/allowEmpty": {
     "description": "Determines whether the input field is empty.",
+    "type": "boolean"
+  },
+  "inputnumber/readonly": {
+    "description": "When present, it specifies that an input field is read-only.",
     "type": "boolean"
   },
   "inputnumber/inputStyle": {
@@ -2249,7 +2277,7 @@
   },
   "password/inputClass": {
     "description": "Style class of the input field.",
-    "type": "string"
+    "type": "any"
   },
   "password/class": {
     "description": "Style class of the component.",
@@ -2732,7 +2760,7 @@
     "type": "array"
   },
   "timeline/align": {
-    "description": "Position of the timeline bar relative to the content. Valid values are \"left\", \"right\" for vertical layout and \"top\", \"bottom\" for horizontal layout.",
+    "description": "Position of the timeline bar relative to the content. Valid values are \"left\", \"right\" and \"alternate\" for vertical layout and \"top\", \"bottom\" for horizontal layout.",
     "type": "string"
   },
   "timeline/layout": {

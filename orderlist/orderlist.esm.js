@@ -69,7 +69,7 @@ var script = {
         isSelected(item) {
             return ObjectUtils.findIndexInList(item, this.d_selection) != -1;
         },
-        moveUp() {
+        moveUp(event) {
             if (this.d_selection) {
                 let value = [...this.modelValue];
 
@@ -97,7 +97,7 @@ var script = {
                 });
             }
         },
-        moveTop() {
+        moveTop(event) {
             if(this.d_selection) {
                 let value = [...this.modelValue];
 
@@ -123,7 +123,7 @@ var script = {
                 });
             }
         },
-        moveDown() {
+        moveDown(event) {
             if(this.d_selection) {
                 let value = [...this.modelValue];
 
@@ -151,7 +151,7 @@ var script = {
                 });
             }
         },
-        moveBottom() {
+        moveBottom(event) {
             if (this.d_selection) {
                 let value = [...this.modelValue];
 

@@ -1,7 +1,7 @@
 import ToastEventBus from 'primevue/toasteventbus';
 import Ripple from 'primevue/ripple';
 import { resolveDirective, openBlock, createBlock, createVNode, Fragment, toDisplayString, resolveDynamicComponent, withDirectives, createCommentVNode, resolveComponent, Teleport, mergeProps, TransitionGroup, withCtx, renderList } from 'vue';
-import { ZIndexUtils, UniqueComponentId } from 'primevue/utils';
+import { ZIndexUtils, ObjectUtils, UniqueComponentId } from 'primevue/utils';
 
 var script$1 = {
     name: 'ToastMessage',
@@ -199,7 +199,7 @@ var script = {
             }
         },
         onLeave() {
-            if (this.$refs.container && this.autoZIndex) {
+            if (this.$refs.container && this.autoZIndex && ObjectUtils.isEmpty(this.messages)) {
                 ZIndexUtils.clear(this.$refs.container);
             }
         },

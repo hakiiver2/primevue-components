@@ -272,6 +272,9 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, vue)
             responsiveOptions() {
                 this.destroyResponsiveStyleElement();
                 this.createResponsiveStyle();
+            },
+            currentView() {
+                Promise.resolve(null).then(() => this.alignOverlay());
             }
         },
         methods: {

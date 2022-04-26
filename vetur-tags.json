@@ -4,7 +4,9 @@
     "attributes": [
       "multiple",
       "activeIndex",
-      "lazy"
+      "lazy",
+      "expandIcon",
+      "collapseIcon"
     ]
   },
   "AccordionTab": {
@@ -387,7 +389,8 @@
       "currentPageReportTemplate",
       "sortField",
       "sortOrder",
-      "lazy"
+      "lazy",
+      "dataKey"
     ]
   },
   "Dialog": {
@@ -508,6 +511,9 @@
       "customUpload",
       "showUploadButton",
       "showCancelButton",
+      "chooseIcon",
+      "uploadIcon",
+      "cancelIcon",
       "style",
       "class"
     ]
@@ -603,6 +609,7 @@
       "max",
       "step",
       "allowEmpty",
+      "readonly",
       "inputStyle",
       "inputClass",
       "class",

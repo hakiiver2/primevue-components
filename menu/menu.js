@@ -202,7 +202,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
         methods: {
             itemClick(event) {
                 const item = event.item;
-                if (item.disabled) {
+                if (this.disabled(item)) {
                     return;
                 }
 
@@ -310,6 +310,9 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
             },
             visible(item) {
                 return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+            },
+            disabled(item) {
+                return (typeof item.disabled === 'function' ? item.disabled() : item.disabled);
             },
             label(item) {
                 return (typeof item.label === 'function' ? item.label() : item.label);

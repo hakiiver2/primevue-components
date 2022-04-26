@@ -276,6 +276,9 @@ var script = {
         responsiveOptions() {
             this.destroyResponsiveStyleElement();
             this.createResponsiveStyle();
+        },
+        currentView() {
+            Promise.resolve(null).then(() => this.alignOverlay());
         }
     },
     methods: {

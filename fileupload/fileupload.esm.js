@@ -89,6 +89,18 @@ var script = {
             type: Boolean,
             default: true
         },
+        chooseIcon: {
+            type: String,
+            default: 'pi pi-plus'
+        },
+        uploadIcon: {
+            type: String,
+            default: 'pi pi-upload'
+        },
+        cancelIcon: {
+            type: String,
+            default: 'pi pi-times'
+        },
         style: null,
         class: null
     },
@@ -383,11 +395,13 @@ var script = {
                 'p-focus': this.focused
             }];
         },
+        advancedChooseIconClass() {
+            return ['p-button-icon p-button-icon-left pi-fw', this.chooseIcon];
+        },
         basicChooseButtonIconClass() {
-            return ['p-button-icon p-button-icon-left pi', {
-                'pi-plus': !this.hasFiles || this.auto,
-                'pi-upload': this.hasFiles && !this.auto
-            }];
+            return ['p-button-icon p-button-icon-left',
+                !this.hasFiles || this.auto ? this.uploadIcon : this.chooseIcon
+            ];
         },
         basicChooseButtonLabel() {
             return this.auto ? this.chooseButtonLabel : (this.hasFiles ? this.files.map(f => f.name).join(', ') : this.chooseButtonLabel);
@@ -429,22 +443,21 @@ const _hoisted_1 = {
   class: "p-fileupload p-fileupload-advanced p-component"
 };
 const _hoisted_2 = { class: "p-fileupload-buttonbar" };
-const _hoisted_3 = /*#__PURE__*/createVNode("span", { class: "p-button-icon p-button-icon-left pi pi-fw pi-plus" }, null, -1);
-const _hoisted_4 = { class: "p-button-label" };
-const _hoisted_5 = {
+const _hoisted_3 = { class: "p-button-label" };
+const _hoisted_4 = {
   key: 1,
   class: "p-fileupload-files"
 };
-const _hoisted_6 = { class: "p-fileupload-filename" };
-const _hoisted_7 = {
+const _hoisted_5 = { class: "p-fileupload-filename" };
+const _hoisted_6 = {
   key: 2,
   class: "p-fileupload-empty"
 };
-const _hoisted_8 = {
+const _hoisted_7 = {
   key: 1,
   class: "p-fileupload p-fileupload-basic p-component"
 };
-const _hoisted_9 = { class: "p-button-label" };
+const _hoisted_8 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_FileUploadButton = resolveComponent("FileUploadButton");
@@ -472,8 +485,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               accept: $props.accept,
               disabled: $options.chooseDisabled
             }, null, 40, ["multiple", "accept", "disabled"]),
-            _hoisted_3,
-            createVNode("span", _hoisted_4, toDisplayString($options.chooseButtonLabel), 1)
+            createVNode("span", { class: $options.advancedChooseIconClass }, null, 2),
+            createVNode("span", _hoisted_3, toDisplayString($options.chooseButtonLabel), 1)
           ], 38), [
             [_directive_ripple]
           ]),
@@ -481,19 +494,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             ? (openBlock(), createBlock(_component_FileUploadButton, {
                 key: 0,
                 label: $options.uploadButtonLabel,
-                icon: "pi pi-upload",
+                icon: $props.uploadIcon,
                 onClick: $options.upload,
                 disabled: $options.uploadDisabled
-              }, null, 8, ["label", "onClick", "disabled"]))
+              }, null, 8, ["label", "icon", "onClick", "disabled"]))
             : createCommentVNode("", true),
           ($props.showCancelButton)
             ? (openBlock(), createBlock(_component_FileUploadButton, {
                 key: 1,
                 label: $options.cancelButtonLabel,
-                icon: "pi pi-times",
+                icon: $props.cancelIcon,
                 onClick: $options.clear,
                 disabled: $options.cancelDisabled
-              }, null, 8, ["label", "onClick", "disabled"]))
+              }, null, 8, ["label", "icon", "onClick", "disabled"]))
             : createCommentVNode("", true)
         ]),
         createVNode("div", {
@@ -523,7 +536,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, 1032, ["onClose"]))
           }), 128)),
           ($options.hasFiles)
-            ? (openBlock(), createBlock("div", _hoisted_5, [
+            ? (openBlock(), createBlock("div", _hoisted_4, [
                 (openBlock(true), createBlock(Fragment, null, renderList($data.files, (file, index) => {
                   return (openBlock(), createBlock("div", {
                     class: "p-fileupload-row",
@@ -540,7 +553,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           }, null, 8, ["alt", "src", "width"]))
                         : createCommentVNode("", true)
                     ]),
-                    createVNode("div", _hoisted_6, toDisplayString(file.name), 1),
+                    createVNode("div", _hoisted_5, toDisplayString(file.name), 1),
                     createVNode("div", null, toDisplayString($options.formatSize(file.size)), 1),
                     createVNode("div", null, [
                       createVNode(_component_FileUploadButton, {
@@ -554,14 +567,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ]))
             : createCommentVNode("", true),
           (_ctx.$slots.empty && !$options.hasFiles)
-            ? (openBlock(), createBlock("div", _hoisted_7, [
+            ? (openBlock(), createBlock("div", _hoisted_6, [
                 renderSlot(_ctx.$slots, "empty")
               ]))
             : createCommentVNode("", true)
         ], 544)
       ]))
     : ($options.isBasic)
-      ? (openBlock(), createBlock("div", _hoisted_8, [
+      ? (openBlock(), createBlock("div", _hoisted_7, [
           (openBlock(true), createBlock(Fragment, null, renderList($data.messages, (msg) => {
             return (openBlock(), createBlock(_component_FileUploadMessage, {
               severity: "error",
@@ -584,7 +597,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             tabindex: "0"
           }, [
             createVNode("span", { class: $options.basicChooseButtonIconClass }, null, 2),
-            createVNode("span", _hoisted_9, toDisplayString($options.basicChooseButtonLabel), 1),
+            createVNode("span", _hoisted_8, toDisplayString($options.basicChooseButtonLabel), 1),
             (!$options.hasFiles)
               ? (openBlock(), createBlock("input", {
                   key: 0,

@@ -49,7 +49,7 @@ this.primevue.scrolltop = (function (utils, vue) {
         methods: {
             onClick() {
                 let scrollElement = this.target === 'window' ? window : this.$el.parentElement;
-                 scrollElement.scroll({
+                scrollElement.scroll({
                     top: 0,
                     behavior: this.behavior
                 });

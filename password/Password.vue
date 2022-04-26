@@ -74,7 +74,7 @@ export default {
             type: String,
             default: 'pi pi-eye'
         },
-        inputClass: String,
+        inputClass: null,
         inputStyle: null,
         style: null,
         class: String,
@@ -148,7 +148,7 @@ export default {
             return level;
         },
         onInput(event)  {
-             this.$emit('update:modelValue', event.target.value)
+            this.$emit('update:modelValue', event.target.value)
         },
         onFocus() {
             this.focused = true;

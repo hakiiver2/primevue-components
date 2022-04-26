@@ -81,7 +81,6 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
                 this.visible = false;
             },
             onEnter(el) {
-                this.alignOverlay();
                 this.bindOutsideClickListener();
                 this.bindScrollListener();
                 this.bindResizeListener();
@@ -117,6 +116,8 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
                     this.outsideClickListener = (event) => {
                         if (this.visible && this.container && !this.container.contains(event.target) && !this.isTargetClicked(event)) {
                             this.visible = false;
+                        } else {
+                            this.alignOverlay();
                         }
                     };
                     document.addEventListener('click', this.outsideClickListener);

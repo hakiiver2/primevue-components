@@ -267,10 +267,6 @@ button {
     position: relative;
     z-index: 1;
 }
-
-.p-button-label {
-    transition: all .2s;
-}
 .p-checkbox {
     display: inline-flex;
     cursor: pointer;

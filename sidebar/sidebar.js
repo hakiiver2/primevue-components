@@ -152,8 +152,12 @@ this.primevue.sidebar = (function (utils, Ripple, vue) {
     };
 
     const _hoisted_1 = { class: "p-sidebar-header" };
-    const _hoisted_2 = /*#__PURE__*/vue.createVNode("span", { class: "p-sidebar-close-icon pi pi-times" }, null, -1);
-    const _hoisted_3 = { class: "p-sidebar-content" };
+    const _hoisted_2 = {
+      key: 0,
+      class: "p-sidebar-header-content"
+    };
+    const _hoisted_3 = /*#__PURE__*/vue.createVNode("span", { class: "p-sidebar-close-icon pi pi-times" }, null, -1);
+    const _hoisted_4 = { class: "p-sidebar-content" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
@@ -176,21 +180,26 @@ this.primevue.sidebar = (function (utils, Ripple, vue) {
                   "aria-modal": $props.modal
                 }, _ctx.$attrs), [
                   vue.createVNode("div", _hoisted_1, [
+                    (_ctx.$slots.header)
+                      ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
+                          vue.renderSlot(_ctx.$slots, "header")
+                        ]))
+                      : vue.createCommentVNode("", true),
                     ($props.showCloseIcon)
                       ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
-                          key: 0,
+                          key: 1,
                           class: "p-sidebar-close p-sidebar-icon p-link",
                           onClick: _cache[1] || (_cache[1] = (...args) => ($options.hide && $options.hide(...args))),
                           "aria-label": $props.ariaCloseLabel,
                           type: "button"
                         }, [
-                          _hoisted_2
+                          _hoisted_3
                         ], 8, ["aria-label"])), [
                           [_directive_ripple]
                         ])
                       : vue.createCommentVNode("", true)
                   ]),
-                  vue.createVNode("div", _hoisted_3, [
+                  vue.createVNode("div", _hoisted_4, [
                     vue.renderSlot(_ctx.$slots, "default")
                   ])
                 ], 16, ["aria-modal"]))

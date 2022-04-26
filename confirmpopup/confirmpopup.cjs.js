@@ -85,7 +85,6 @@ var script = {
             this.visible = false;
         },
         onEnter(el) {
-            this.alignOverlay();
             this.bindOutsideClickListener();
             this.bindScrollListener();
             this.bindResizeListener();
@@ -121,6 +120,8 @@ var script = {
                 this.outsideClickListener = (event) => {
                     if (this.visible && this.container && !this.container.contains(event.target) && !this.isTargetClicked(event)) {
                         this.visible = false;
+                    } else {
+                        this.alignOverlay();
                     }
                 };
                 document.addEventListener('click', this.outsideClickListener);

@@ -139,10 +139,11 @@ this.primevue.styleclass = (function (utils) {
     function bindDocumentListener(target, el, binding) {
         if (!target.$p_styleclass_documentlistener) {
             target.$p_styleclass_documentlistener = (event) => {
-                if (getComputedStyle(target).getPropertyValue('position') === 'static') {
+                if (!isVisible(target) || getComputedStyle(target).getPropertyValue('position') === 'static') {
                     unbindDocumentListener(target);
                 }
-                else if (!el.isSameNode(event.target) && !el.contains(event.target) && !target.contains(event.target)) {
+
+                else if (isOutsideClick(event, target, el)) {
                     leave(target, binding);
                 }
             };
@@ -156,6 +157,14 @@ this.primevue.styleclass = (function (utils) {
             target.ownerDocument.removeEventListener('click', target.$p_styleclass_documentlistener);
             target.$p_styleclass_documentlistener = null;
         }
+    }
+
+    function isVisible(target) {
+        return target.offsetParent !== null;
+    }
+
+    function isOutsideClick(event, target, el) {
+        return !el.isSameNode(event.target) && !el.contains(event.target) && !target.contains(event.target);
     }
 
     const StyleClass = {

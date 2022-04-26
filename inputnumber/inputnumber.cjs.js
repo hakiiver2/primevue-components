@@ -102,6 +102,10 @@ var script = {
             type: Boolean,
             default: true
         },
+        readonly: {
+            type: Boolean,
+            default: false
+        },
         style: null,
         class: null,
         inputStyle: null,
@@ -291,6 +295,10 @@ var script = {
             return null;
         },
         repeat(event, interval, dir) {
+            if (this.readonly) {
+                return;
+            }
+
             let i = interval || 500;
 
             this.clearTimer();
@@ -373,6 +381,10 @@ var script = {
             this.isSpecialChar = false;
         },
         onInputKeyDown(event) {
+            if (this.readonly) {
+                return;
+            }
+
             this.lastValue = event.target.value;
             if (event.shiftKey || event.altKey) {
                 this.isSpecialChar = true;
@@ -519,6 +531,10 @@ var script = {
             }
         },
         onInputKeyPress(event) {
+            if (this.readonly) {
+                return;
+            }
+
             event.preventDefault();
             let code = event.which || event.keyCode;
             let char = String.fromCharCode(code);
@@ -725,7 +741,9 @@ var script = {
             return index || 0;
         },
         onInputClick() {
-            this.initCursor();
+            if (!this.readonly) {
+                this.initCursor();
+            }
         },
         isNumeralChar(char) {
             if (char.length === 1 && (this._numeral.test(char) || this._decimal.test(char) || this._group.test(char) || this._minusSign.test(char))) {
@@ -994,6 +1012,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, _ctx.$attrs, {
       "aria-valumin": $props.min,
       "aria-valuemax": $props.max,
+      readonly: $props.readonly,
       onInput: $options.onUserInput,
       onKeydown: $options.onInputKeyDown,
       onKeypress: $options.onInputKeyPress,
@@ -1001,7 +1020,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: $options.onInputClick,
       onFocus: $options.onInputFocus,
       onBlur: $options.onInputBlur
-    }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
+    }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
     ($props.showButtons && $props.buttonLayout === 'stacked')
       ? (vue.openBlock(), vue.createBlock("span", _hoisted_1, [
           vue.createVNode(_component_INButton, vue.mergeProps({

@@ -17,6 +17,14 @@ this.primevue.accordion = (function (utils, vue) {
             lazy: {
                 type: Boolean,
                 default: false
+            },
+            expandIcon: {
+                type: String,
+                default: 'pi-chevron-right'
+            },
+            collapseIcon: {
+                type: String,
+                default: 'pi-chevron-down'
             }
         },
         data() {
@@ -84,12 +92,14 @@ this.primevue.accordion = (function (utils, vue) {
             getTabAriaId(i) {
                 return this.ariaId + '_' + i;
             },
-            getHeaderIcon(i) {
-                const active = this.isTabActive(i);
-                return ['p-accordion-toggle-icon pi', {'pi-chevron-right': !active, 'pi-chevron-down': active}];
+            getHeaderCollapseIcon() {
+                return ['p-accordion-toggle-icon pi', this.collapseIcon];
+            },
+            getHeaderExpandIcon() {
+                return ['p-accordion-toggle-icon pi', this.expandIcon];
             },
             isAccordionTab(child) {
-                return child.type.name === 'AccordionTab'
+                return child.type.name === 'AccordionTab';
             }
         },
         computed: {
@@ -144,7 +154,7 @@ this.primevue.accordion = (function (utils, vue) {
                 "aria-controls": $options.getTabAriaId(i) + '_content'
               }, [
                 vue.createVNode("span", {
-                  class: $options.getHeaderIcon(i)
+                  class: $options.isTabActive(i) ? $options.getHeaderCollapseIcon() : $options.getHeaderExpandIcon()
                 }, null, 2),
                 (tab.props && tab.props.header)
                   ? (vue.openBlock(), vue.createBlock("span", _hoisted_2, vue.toDisplayString(tab.props.header), 1))

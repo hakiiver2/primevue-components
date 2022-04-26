@@ -71,6 +71,10 @@ var script = {
         lazy: {
             type: Boolean,
             default: false
+        },
+        dataKey: {
+            type: String,
+            default: null
         }
     },
     data() {
@@ -105,6 +109,9 @@ var script = {
         },
         touchend(event) {
             this.$emit('touchend', event);
+        },
+        getKey(item, index) {
+            return this.dataKey ? utils.ObjectUtils.resolveFieldData(item, this.dataKey) : index;
         },
         onPage(event) {
             this.d_first = event.first;
@@ -258,7 +265,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     vue.createVNode("div", _hoisted_2, [
       vue.createVNode("div", _hoisted_3, [
         (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.items, (item, index) => {
-          return (vue.openBlock(), vue.createBlock(vue.Fragment, null, [
+          return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+            key: $options.getKey(item, index)
+          }, [
             (_ctx.$slots.list && $props.layout === 'list')
               ? vue.renderSlot(_ctx.$slots, "list", {
                   key: 0,
@@ -274,7 +283,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 })
               : vue.createCommentVNode("", true)
           ], 64))
-        }), 256)),
+        }), 128)),
         ($options.empty)
           ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
               vue.createVNode("div", _hoisted_5, [

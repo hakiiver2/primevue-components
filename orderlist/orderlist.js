@@ -73,7 +73,7 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
             isSelected(item) {
                 return utils.ObjectUtils.findIndexInList(item, this.d_selection) != -1;
             },
-            moveUp() {
+            moveUp(event) {
                 if (this.d_selection) {
                     let value = [...this.modelValue];
 
@@ -101,7 +101,7 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
                     });
                 }
             },
-            moveTop() {
+            moveTop(event) {
                 if(this.d_selection) {
                     let value = [...this.modelValue];
 
@@ -127,7 +127,7 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
                     });
                 }
             },
-            moveDown() {
+            moveDown(event) {
                 if(this.d_selection) {
                     let value = [...this.modelValue];
 
@@ -155,7 +155,7 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
                     });
                 }
             },
-            moveBottom() {
+            moveBottom(event) {
                 if (this.d_selection) {
                     let value = [...this.modelValue];
 
