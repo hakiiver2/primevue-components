@@ -41,12 +41,12 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
                 this.visible = false;
                 this.confirmation = null;
             };
-            ConfirmationEventBus__default['default'].on('confirm', this.confirmListener);
-            ConfirmationEventBus__default['default'].on('close', this.closeListener);
+            ConfirmationEventBus__default["default"].on('confirm', this.confirmListener);
+            ConfirmationEventBus__default["default"].on('close', this.closeListener);
         },
         beforeUnmount() {
-            ConfirmationEventBus__default['default'].off('confirm', this.confirmListener);
-            ConfirmationEventBus__default['default'].off('close', this.closeListener);
+            ConfirmationEventBus__default["default"].off('confirm', this.confirmListener);
+            ConfirmationEventBus__default["default"].off('close', this.closeListener);
         },
         methods: {
             accept() {
@@ -115,8 +115,8 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
             }
         },
         components: {
-            'CDialog': Dialog__default['default'],
-            'CDButton': Button__default['default']
+            'CDialog': Dialog__default["default"],
+            'CDButton': Button__default["default"]
         }
     };
 
@@ -128,7 +128,7 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
 
       return (vue.openBlock(), vue.createBlock(_component_CDialog, {
         visible: $data.visible,
-        "onUpdate:visible": _cache[3] || (_cache[3] = $event => ($data.visible = $event)),
+        "onUpdate:visible": _cache[2] || (_cache[2] = $event => (($data.visible) = $event)),
         modal: true,
         header: $options.header,
         blockScroll: $options.blockScroll,
@@ -142,8 +142,8 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
                 key: 0,
                 label: $options.rejectLabel,
                 icon: $options.rejectIcon,
-                class: $options.rejectClass,
-                onClick: _cache[1] || (_cache[1] = $event => ($options.reject())),
+                class: vue.normalizeClass($options.rejectClass),
+                onClick: _cache[0] || (_cache[0] = $event => ($options.reject())),
                 autofocus: $options.autoFocusReject
               }, null, 8, ["label", "icon", "class", "autofocus"]))
             : vue.createCommentVNode("", true),
@@ -152,15 +152,17 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
                 key: 1,
                 label: $options.acceptLabel,
                 icon: $options.acceptIcon,
-                class: $options.acceptClass,
-                onClick: _cache[2] || (_cache[2] = $event => ($options.accept())),
+                class: vue.normalizeClass($options.acceptClass),
+                onClick: _cache[1] || (_cache[1] = $event => ($options.accept())),
                 autofocus: $options.autoFocusAccept
               }, null, 8, ["label", "icon", "class", "autofocus"]))
             : vue.createCommentVNode("", true)
         ]),
         default: vue.withCtx(() => [
-          vue.createVNode("i", { class: $options.iconClass }, null, 2),
-          vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.message), 1)
+          vue.createElementVNode("i", {
+            class: vue.normalizeClass($options.iconClass)
+          }, null, 2),
+          vue.createElementVNode("span", _hoisted_1, vue.toDisplayString($options.message), 1)
         ]),
         _: 1
       }, 8, ["visible", "header", "blockScroll", "position", "breakpoints"]))
@@ -170,4 +172,4 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
 
     return script;
 
-}(primevue.confirmationeventbus, primevue.dialog, primevue.button, Vue));
+})(primevue.confirmationeventbus, primevue.dialog, primevue.button, Vue);

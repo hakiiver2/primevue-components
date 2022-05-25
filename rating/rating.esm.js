@@ -1,4 +1,4 @@
-import { openBlock, createBlock, createCommentVNode, Fragment, renderList, withKeys, withModifiers } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, createCommentVNode, Fragment, renderList, withKeys, withModifiers } from 'vue';
 
 var script = {
     name: 'Rating',
@@ -60,24 +60,29 @@ var script = {
     }
 };
 
+const _hoisted_1 = ["tabindex"];
+const _hoisted_2 = ["onClick", "tabindex", "onKeydown"];
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
     ($props.cancel)
-      ? (openBlock(), createBlock("span", {
+      ? (openBlock(), createElementBlock("span", {
           key: 0,
           class: "p-rating-icon p-rating-cancel pi pi-ban",
           tabindex: $options.focusIndex,
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onCancelClick && $options.onCancelClick(...args)))
-        }, null, 8, ["tabindex"]))
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.onCancelClick && $options.onCancelClick(...args)))
+        }, null, 8, _hoisted_1))
       : createCommentVNode("", true),
-    (openBlock(true), createBlock(Fragment, null, renderList($props.stars, (i) => {
-      return (openBlock(), createBlock("span", {
+    (openBlock(true), createElementBlock(Fragment, null, renderList($props.stars, (i) => {
+      return (openBlock(), createElementBlock("span", {
         key: i,
         onClick: $event => ($options.onStarClick($event,i)),
         tabindex: $options.focusIndex,
         onKeydown: withKeys(withModifiers($event => ($options.onStarClick($event,i)), ["prevent"]), ["enter"]),
-        class: ['p-rating-icon', {'pi pi-star': (i > $props.modelValue), 'pi pi-star-fill': (i <= $props.modelValue)}]
-      }, null, 42, ["onClick", "tabindex", "onKeydown"]))
+        class: normalizeClass(['p-rating-icon', {'pi pi-star': (i > $props.modelValue), 'pi pi-star-fill': (i <= $props.modelValue)}])
+      }, null, 42, _hoisted_2))
     }), 128))
   ], 2))
 }

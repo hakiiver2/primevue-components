@@ -1,7 +1,7 @@
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler, UniqueComponentId } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, mergeProps, renderSlot, withDirectives, createCommentVNode } from 'vue';
+import { resolveDirective, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, createElementBlock, mergeProps, createElementVNode, renderSlot, withDirectives, createCommentVNode } from 'vue';
 
 var script = {
     name: 'OverlayPanel',
@@ -255,7 +255,11 @@ var script = {
     }
 };
 
-const _hoisted_1 = /*#__PURE__*/createVNode("span", { class: "p-overlaypanel-close-icon pi pi-times" }, null, -1);
+const _hoisted_1 = ["aria-label"];
+const _hoisted_2 = /*#__PURE__*/createElementVNode("span", { class: "p-overlaypanel-close-icon pi pi-times" }, null, -1);
+const _hoisted_3 = [
+  _hoisted_2
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
@@ -269,30 +273,28 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, {
       default: withCtx(() => [
         ($data.visible)
-          ? (openBlock(), createBlock("div", mergeProps({
+          ? (openBlock(), createElementBlock("div", mergeProps({
               key: 0,
               class: $options.containerClass,
               ref: $options.containerRef
             }, _ctx.$attrs, {
-              onClick: _cache[4] || (_cache[4] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
             }), [
-              createVNode("div", {
+              createElementVNode("div", {
                 class: "p-overlaypanel-content",
-                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
-                onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
+                onClick: _cache[0] || (_cache[0] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
+                onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
               }, [
                 renderSlot(_ctx.$slots, "default")
               ], 32),
               ($props.showCloseIcon)
-                ? withDirectives((openBlock(), createBlock("button", {
+                ? withDirectives((openBlock(), createElementBlock("button", {
                     key: 0,
                     class: "p-overlaypanel-close p-link",
-                    onClick: _cache[3] || (_cache[3] = (...args) => ($options.hide && $options.hide(...args))),
+                    onClick: _cache[2] || (_cache[2] = (...args) => ($options.hide && $options.hide(...args))),
                     "aria-label": $props.ariaCloseLabel,
                     type: "button"
-                  }, [
-                    _hoisted_1
-                  ], 8, ["aria-label"])), [
+                  }, _hoisted_3, 8, _hoisted_1)), [
                     [_directive_ripple]
                   ])
                 : createCommentVNode("", true)

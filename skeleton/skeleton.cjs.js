@@ -47,9 +47,9 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
-    style: $options.containerStyle,
-    class: $options.containerClass
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    style: vue.normalizeStyle($options.containerStyle),
+    class: vue.normalizeClass($options.containerClass)
   }, null, 6))
 }
 

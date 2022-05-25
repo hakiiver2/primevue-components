@@ -1,4 +1,4 @@
-import { openBlock, createBlock, toDisplayString, resolveDirective, withDirectives, createVNode, Fragment, renderList, createTextVNode, resolveComponent, renderSlot, createCommentVNode } from 'vue';
+import { openBlock, createElementBlock, toDisplayString, resolveDirective, withDirectives, normalizeClass, createElementVNode, Fragment, renderList, createTextVNode, resolveComponent, createBlock, renderSlot, createCommentVNode } from 'vue';
 import Ripple from 'primevue/ripple';
 import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
@@ -54,7 +54,7 @@ var script$9 = {
 const _hoisted_1$6 = { class: "p-paginator-current" };
 
 function render$9(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", _hoisted_1$6, toDisplayString($options.text), 1))
+  return (openBlock(), createElementBlock("span", _hoisted_1$6, toDisplayString($options.text), 1))
 }
 
 script$9.render = render$9;
@@ -73,17 +73,18 @@ var script$8 = {
     }
 };
 
-const _hoisted_1$5 = /*#__PURE__*/createVNode("span", { class: "p-paginator-icon pi pi-angle-double-left" }, null, -1);
+const _hoisted_1$5 = /*#__PURE__*/createElementVNode("span", { class: "p-paginator-icon pi pi-angle-double-left" }, null, -1);
+const _hoisted_2$5 = [
+  _hoisted_1$5
+];
 
 function render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return withDirectives((openBlock(), createBlock("button", {
-    class: $options.containerClass,
+  return withDirectives((openBlock(), createElementBlock("button", {
+    class: normalizeClass($options.containerClass),
     type: "button"
-  }, [
-    _hoisted_1$5
-  ], 2)), [
+  }, _hoisted_2$5, 2)), [
     [_directive_ripple]
   ])
 }
@@ -104,17 +105,18 @@ var script$7 = {
     }
 };
 
-const _hoisted_1$4 = /*#__PURE__*/createVNode("span", { class: "p-paginator-icon pi pi-angle-double-right" }, null, -1);
+const _hoisted_1$4 = /*#__PURE__*/createElementVNode("span", { class: "p-paginator-icon pi pi-angle-double-right" }, null, -1);
+const _hoisted_2$4 = [
+  _hoisted_1$4
+];
 
 function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return withDirectives((openBlock(), createBlock("button", {
-    class: $options.containerClass,
+  return withDirectives((openBlock(), createElementBlock("button", {
+    class: normalizeClass($options.containerClass),
     type: "button"
-  }, [
-    _hoisted_1$4
-  ], 2)), [
+  }, _hoisted_2$4, 2)), [
     [_directive_ripple]
   ])
 }
@@ -135,17 +137,18 @@ var script$6 = {
     }
 };
 
-const _hoisted_1$3 = /*#__PURE__*/createVNode("span", { class: "p-paginator-icon pi pi-angle-right" }, null, -1);
+const _hoisted_1$3 = /*#__PURE__*/createElementVNode("span", { class: "p-paginator-icon pi pi-angle-right" }, null, -1);
+const _hoisted_2$3 = [
+  _hoisted_1$3
+];
 
 function render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return withDirectives((openBlock(), createBlock("button", {
-    class: $options.containerClass,
+  return withDirectives((openBlock(), createElementBlock("button", {
+    class: normalizeClass($options.containerClass),
     type: "button"
-  }, [
-    _hoisted_1$3
-  ], 2)), [
+  }, _hoisted_2$3, 2)), [
     [_directive_ripple]
   ])
 }
@@ -174,20 +177,21 @@ var script$5 = {
 };
 
 const _hoisted_1$2 = { class: "p-paginator-pages" };
+const _hoisted_2$2 = ["onClick"];
 
 function render$5(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("span", _hoisted_1$2, [
-    (openBlock(true), createBlock(Fragment, null, renderList($props.value, (pageLink) => {
-      return withDirectives((openBlock(), createBlock("button", {
+  return (openBlock(), createElementBlock("span", _hoisted_1$2, [
+    (openBlock(true), createElementBlock(Fragment, null, renderList($props.value, (pageLink) => {
+      return withDirectives((openBlock(), createElementBlock("button", {
         key: pageLink,
-        class: ['p-paginator-page p-paginator-element p-link', {'p-highlight': ((pageLink - 1) === $props.page)}],
+        class: normalizeClass(['p-paginator-page p-paginator-element p-link', {'p-highlight': ((pageLink - 1) === $props.page)}]),
         type: "button",
         onClick: $event => ($options.onPageLinkClick($event, pageLink))
       }, [
         createTextVNode(toDisplayString(pageLink), 1)
-      ], 10, ["onClick"])), [
+      ], 10, _hoisted_2$2)), [
         [_directive_ripple]
       ])
     }), 128))
@@ -210,17 +214,18 @@ var script$4 = {
     }
 };
 
-const _hoisted_1$1 = /*#__PURE__*/createVNode("span", { class: "p-paginator-icon pi pi-angle-left" }, null, -1);
+const _hoisted_1$1 = /*#__PURE__*/createElementVNode("span", { class: "p-paginator-icon pi pi-angle-left" }, null, -1);
+const _hoisted_2$1 = [
+  _hoisted_1$1
+];
 
 function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return withDirectives((openBlock(), createBlock("button", {
-    class: $options.containerClass,
+  return withDirectives((openBlock(), createElementBlock("button", {
+    class: normalizeClass($options.containerClass),
     type: "button"
-  }, [
-    _hoisted_1$1
-  ], 2)), [
+  }, _hoisted_2$1, 2)), [
     [_directive_ripple]
   ])
 }
@@ -265,7 +270,7 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
     options: $options.rowsOptions,
     optionLabel: "label",
     optionValue: "value",
-    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ($options.onChange($event))),
     class: "p-paginator-rpp-options",
     disabled: $props.disabled
   }, null, 8, ["modelValue", "options", "disabled"]))
@@ -309,7 +314,7 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
     options: $options.pageOptions,
     optionLabel: "label",
     optionValue: "value",
-    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ($options.onChange($event))),
     class: "p-paginator-page-options",
     disabled: $props.disabled
   }, null, 8, ["modelValue", "options", "disabled"]))
@@ -341,7 +346,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (openBlock(), createBlock(_component_JTPInput, {
     modelValue: $props.page,
-    "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ($options.onChange($event))),
     class: "p-paginator-page-input",
     disabled: $props.disabled
   }, null, 8, ["modelValue", "disabled"]))
@@ -552,36 +557,36 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_JumpToPageInput = resolveComponent("JumpToPageInput");
 
   return ($props.alwaysShow ? true : ($options.pageLinks && $options.pageLinks.length > 1))
-    ? (openBlock(), createBlock("div", _hoisted_1, [
+    ? (openBlock(), createElementBlock("div", _hoisted_1, [
         (_ctx.$slots.start)
-          ? (openBlock(), createBlock("div", _hoisted_2, [
+          ? (openBlock(), createElementBlock("div", _hoisted_2, [
               renderSlot(_ctx.$slots, "start", { state: $options.currentState })
             ]))
           : createCommentVNode("", true),
-        (openBlock(true), createBlock(Fragment, null, renderList($options.templateItems, (item) => {
-          return (openBlock(), createBlock(Fragment, { key: item }, [
+        (openBlock(true), createElementBlock(Fragment, null, renderList($options.templateItems, (item) => {
+          return (openBlock(), createElementBlock(Fragment, { key: item }, [
             (item === 'FirstPageLink')
               ? (openBlock(), createBlock(_component_FirstPageLink, {
                   key: 0,
-                  onClick: _cache[1] || (_cache[1] = $event => ($options.changePageToFirst($event))),
+                  onClick: _cache[0] || (_cache[0] = $event => ($options.changePageToFirst($event))),
                   disabled: $options.isFirstPage || $options.empty
                 }, null, 8, ["disabled"]))
               : (item === 'PrevPageLink')
                 ? (openBlock(), createBlock(_component_PrevPageLink, {
                     key: 1,
-                    onClick: _cache[2] || (_cache[2] = $event => ($options.changePageToPrev($event))),
+                    onClick: _cache[1] || (_cache[1] = $event => ($options.changePageToPrev($event))),
                     disabled: $options.isFirstPage || $options.empty
                   }, null, 8, ["disabled"]))
                 : (item === 'NextPageLink')
                   ? (openBlock(), createBlock(_component_NextPageLink, {
                       key: 2,
-                      onClick: _cache[3] || (_cache[3] = $event => ($options.changePageToNext($event))),
+                      onClick: _cache[2] || (_cache[2] = $event => ($options.changePageToNext($event))),
                       disabled: $options.isLastPage || $options.empty
                     }, null, 8, ["disabled"]))
                   : (item === 'LastPageLink')
                     ? (openBlock(), createBlock(_component_LastPageLink, {
                         key: 3,
-                        onClick: _cache[4] || (_cache[4] = $event => ($options.changePageToLast($event))),
+                        onClick: _cache[3] || (_cache[3] = $event => ($options.changePageToLast($event))),
                         disabled: $options.isLastPage || $options.empty
                       }, null, 8, ["disabled"]))
                     : (item === 'PageLinks')
@@ -589,7 +594,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           key: 4,
                           value: $options.pageLinks,
                           page: $options.page,
-                          onClick: _cache[5] || (_cache[5] = $event => ($options.changePageLink($event)))
+                          onClick: _cache[4] || (_cache[4] = $event => ($options.changePageLink($event)))
                         }, null, 8, ["value", "page"]))
                       : (item === 'CurrentPageReport')
                         ? (openBlock(), createBlock(_component_CurrentPageReport, {
@@ -607,7 +612,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               key: 6,
                               rows: $data.d_rows,
                               options: $props.rowsPerPageOptions,
-                              onRowsChange: _cache[6] || (_cache[6] = $event => ($options.onRowChange($event))),
+                              onRowsChange: _cache[5] || (_cache[5] = $event => ($options.onRowChange($event))),
                               disabled: $options.empty
                             }, null, 8, ["rows", "options", "disabled"]))
                           : (item === 'JumpToPageDropdown')
@@ -615,21 +620,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 key: 7,
                                 page: $options.page,
                                 pageCount: $options.pageCount,
-                                onPageChange: _cache[7] || (_cache[7] = $event => ($options.changePage($event))),
+                                onPageChange: _cache[6] || (_cache[6] = $event => ($options.changePage($event))),
                                 disabled: $options.empty
                               }, null, 8, ["page", "pageCount", "disabled"]))
                             : (item === 'JumpToPageInput')
                               ? (openBlock(), createBlock(_component_JumpToPageInput, {
                                   key: 8,
                                   page: $options.currentPage,
-                                  onPageChange: _cache[8] || (_cache[8] = $event => ($options.changePage($event))),
+                                  onPageChange: _cache[7] || (_cache[7] = $event => ($options.changePage($event))),
                                   disabled: $options.empty
                                 }, null, 8, ["page", "disabled"]))
                               : createCommentVNode("", true)
           ], 64))
         }), 128)),
         (_ctx.$slots.end)
-          ? (openBlock(), createBlock("div", _hoisted_3, [
+          ? (openBlock(), createElementBlock("div", _hoisted_3, [
               renderSlot(_ctx.$slots, "end", { state: $options.currentState })
             ]))
           : createCommentVNode("", true)

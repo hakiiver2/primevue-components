@@ -337,10 +337,10 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
             }
         },
         components: {
-            'OLButton': Button__default['default']
+            'OLButton': Button__default["default"]
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -350,13 +350,16 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
       key: 0,
       class: "p-orderlist-header"
     };
+    const _hoisted_4 = ["onClick", "onKeydown", "aria-selected"];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_OLButton = vue.resolveComponent("OLButton");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
-        vue.createVNode("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
+        vue.createElementVNode("div", _hoisted_1, [
           vue.renderSlot(_ctx.$slots, "controlsstart"),
           vue.createVNode(_component_OLButton, {
             type: "button",
@@ -380,9 +383,9 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
           }, null, 8, ["onClick"]),
           vue.renderSlot(_ctx.$slots, "controlsend")
         ]),
-        vue.createVNode("div", _hoisted_2, [
+        vue.createElementVNode("div", _hoisted_2, [
           (_ctx.$slots.header)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
                 vue.renderSlot(_ctx.$slots, "header")
               ]))
             : vue.createCommentVNode("", true),
@@ -391,19 +394,19 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
             name: "p-orderlist-flip",
             tag: "ul",
             class: "p-orderlist-list",
-            style: $props.listStyle,
+            style: vue.normalizeStyle($props.listStyle),
             role: "listbox",
             "aria-multiselectable": "multiple"
           }, {
             default: vue.withCtx(() => [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.modelValue, (item, i) => {
-                return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.modelValue, (item, i) => {
+                return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
                   key: $options.getItemKey(item, i),
                   tabindex: "0",
-                  class: ['p-orderlist-item', {'p-highlight': $options.isSelected(item)}],
+                  class: vue.normalizeClass(['p-orderlist-item', {'p-highlight': $options.isSelected(item)}]),
                   onClick: $event => ($options.onItemClick($event, item, i)),
                   onKeydown: $event => ($options.onItemKeyDown($event, item, i)),
-                  onTouchend: _cache[1] || (_cache[1] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
+                  onTouchend: _cache[0] || (_cache[0] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
                   role: "option",
                   "aria-selected": $options.isSelected(item)
                 }, [
@@ -411,7 +414,7 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
                     item: item,
                     index: i
                   })
-                ], 42, ["onClick", "onKeydown", "aria-selected"])), [
+                ], 42, _hoisted_4)), [
                   [_directive_ripple]
                 ])
               }), 128))
@@ -456,4 +459,4 @@ this.primevue.orderlist = (function (Button, utils, Ripple, vue) {
 
     return script;
 
-}(primevue.button, primevue.utils, primevue.ripple, Vue));
+})(primevue.button, primevue.utils, primevue.ripple, Vue);

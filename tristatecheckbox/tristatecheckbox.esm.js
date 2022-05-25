@@ -1,4 +1,4 @@
-import { openBlock, createBlock, createVNode, mergeProps } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, normalizeStyle, createElementVNode, mergeProps } from 'vue';
 
 var script = {
     name: 'TriStateCheckbox',
@@ -72,33 +72,35 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
+const _hoisted_2 = ["checked"];
+const _hoisted_3 = ["aria-checked"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
-    onClick: _cache[3] || (_cache[3] = $event => ($options.onClick($event))),
-    style: $props.style
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
+    onClick: _cache[2] || (_cache[2] = $event => ($options.onClick($event))),
+    style: normalizeStyle($props.style)
   }, [
-    createVNode("div", _hoisted_1, [
-      createVNode("input", mergeProps({
+    createElementVNode("div", _hoisted_1, [
+      createElementVNode("input", mergeProps({
         ref: "input",
         type: "checkbox",
         checked: $props.modelValue === true
       }, _ctx.$attrs, {
-        onFocus: _cache[1] || (_cache[1] = $event => ($options.onFocus())),
-        onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur()))
-      }), null, 16, ["checked"])
+        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus())),
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur()))
+      }), null, 16, _hoisted_2)
     ]),
-    createVNode("div", {
+    createElementVNode("div", {
       ref: "box",
-      class: ['p-checkbox-box', {'p-highlight': ($props.modelValue != null), 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}],
+      class: normalizeClass(['p-checkbox-box', {'p-highlight': ($props.modelValue != null), 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
       role: "checkbox",
       "aria-checked": $props.modelValue === true
     }, [
-      createVNode("span", {
-        class: ['p-checkbox-icon', $options.icon]
+      createElementVNode("span", {
+        class: normalizeClass(['p-checkbox-icon', $options.icon])
       }, null, 2)
-    ], 10, ["aria-checked"])
+    ], 10, _hoisted_3)
   ], 6))
 }
 

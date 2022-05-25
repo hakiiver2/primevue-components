@@ -1,6 +1,6 @@
 import { ObjectUtils } from 'primevue/utils';
 import Paginator from 'primevue/paginator';
-import { resolveComponent, openBlock, createBlock, renderSlot, createCommentVNode, createSlots, withCtx, createVNode, Fragment, renderList } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, renderSlot, createCommentVNode, createBlock, createSlots, withCtx, createElementVNode, Fragment, renderList } from 'vue';
 
 var script = {
     name: 'DataView',
@@ -218,9 +218,11 @@ const _hoisted_6 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DVPaginator = resolveComponent("DVPaginator");
 
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
     (_ctx.$slots.header)
-      ? (openBlock(), createBlock("div", _hoisted_1, [
+      ? (openBlock(), createElementBlock("div", _hoisted_1, [
           renderSlot(_ctx.$slots, "header")
         ]))
       : createCommentVNode("", true),
@@ -234,9 +236,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           template: $props.paginatorTemplate,
           rowsPerPageOptions: $props.rowsPerPageOptions,
           currentPageReportTemplate: $props.currentPageReportTemplate,
-          class: {'p-paginator-top': $options.paginatorTop},
+          class: normalizeClass({'p-paginator-top': $options.paginatorTop}),
           alwaysShow: $props.alwaysShowPaginator,
-          onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event)))
+          onPage: _cache[0] || (_cache[0] = $event => ($options.onPage($event)))
         }, createSlots({ _: 2 }, [
           (_ctx.$slots.paginatorstart)
             ? {
@@ -256,10 +258,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             : undefined
         ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "currentPageReportTemplate", "class", "alwaysShow"]))
       : createCommentVNode("", true),
-    createVNode("div", _hoisted_2, [
-      createVNode("div", _hoisted_3, [
-        (openBlock(true), createBlock(Fragment, null, renderList($options.items, (item, index) => {
-          return (openBlock(), createBlock(Fragment, {
+    createElementVNode("div", _hoisted_2, [
+      createElementVNode("div", _hoisted_3, [
+        (openBlock(true), createElementBlock(Fragment, null, renderList($options.items, (item, index) => {
+          return (openBlock(), createElementBlock(Fragment, {
             key: $options.getKey(item, index)
           }, [
             (_ctx.$slots.list && $props.layout === 'list')
@@ -279,8 +281,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 64))
         }), 128)),
         ($options.empty)
-          ? (openBlock(), createBlock("div", _hoisted_4, [
-              createVNode("div", _hoisted_5, [
+          ? (openBlock(), createElementBlock("div", _hoisted_4, [
+              createElementVNode("div", _hoisted_5, [
                 renderSlot(_ctx.$slots, "empty")
               ])
             ]))
@@ -301,9 +303,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onTouchmove: $options.touchmove,
           onTouchend: $options.touchend,
           currentPageReportTemplate: $props.currentPageReportTemplate,
-          class: {'p-paginator-bottom': $options.paginatorBottom},
+          class: normalizeClass({'p-paginator-bottom': $options.paginatorBottom}),
           alwaysShow: $props.alwaysShowPaginator,
-          onPage: _cache[2] || (_cache[2] = $event => ($options.onPage($event)))
+          onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event)))
         }, createSlots({ _: 2 }, [
           (_ctx.$slots.paginatorstart)
             ? {
@@ -324,7 +326,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "class", "alwaysShow"]))
       : createCommentVNode("", true),
     (_ctx.$slots.footer)
-      ? (openBlock(), createBlock("div", _hoisted_6, [
+      ? (openBlock(), createElementBlock("div", _hoisted_6, [
           renderSlot(_ctx.$slots, "footer")
         ]))
       : createCommentVNode("", true)

@@ -70,42 +70,43 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
-const _hoisted_1 = { class: "p-button-label" };
+const _hoisted_1 = ["disabled"];
+const _hoisted_2 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
-    class: $options.buttonClass,
+  return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+    class: vue.normalizeClass($options.buttonClass),
     type: "button",
     disabled: $options.disabled
   }, [
     vue.renderSlot(_ctx.$slots, "default", {}, () => [
       ($props.loading && !$props.icon)
-        ? (vue.openBlock(), vue.createBlock("span", {
+        ? (vue.openBlock(), vue.createElementBlock("span", {
             key: 0,
-            class: $options.iconClass
+            class: vue.normalizeClass($options.iconClass)
           }, null, 2))
         : vue.createCommentVNode("", true),
       ($props.icon)
-        ? (vue.openBlock(), vue.createBlock("span", {
+        ? (vue.openBlock(), vue.createElementBlock("span", {
             key: 1,
-            class: $options.iconClass
+            class: vue.normalizeClass($options.iconClass)
           }, null, 2))
         : vue.createCommentVNode("", true),
-      vue.createVNode("span", _hoisted_1, vue.toDisplayString($props.label||' '), 1),
+      vue.createElementVNode("span", _hoisted_2, vue.toDisplayString($props.label||' '), 1),
       ($props.badge)
-        ? (vue.openBlock(), vue.createBlock("span", {
+        ? (vue.openBlock(), vue.createElementBlock("span", {
             key: 2,
-            class: $options.badgeStyleClass
+            class: vue.normalizeClass($options.badgeStyleClass)
           }, vue.toDisplayString($props.badge), 3))
         : vue.createCommentVNode("", true)
     ])
-  ], 10, ["disabled"])), [
+  ], 10, _hoisted_1)), [
     [_directive_ripple]
   ])
 }

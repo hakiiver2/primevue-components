@@ -1,5 +1,5 @@
 import Button from 'primevue/button';
-import { resolveComponent, openBlock, createBlock, withKeys, renderSlot, createCommentVNode } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, withKeys, renderSlot, createBlock, createCommentVNode } from 'vue';
 
 var script = {
     name: 'Inplace',
@@ -57,7 +57,8 @@ var script = {
     }
 };
 
-const _hoisted_1 = {
+const _hoisted_1 = ["tabindex"];
+const _hoisted_2 = {
   key: 1,
   class: "p-inplace-content"
 };
@@ -65,18 +66,20 @@ const _hoisted_1 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_IPButton = resolveComponent("IPButton");
 
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
     (!$data.d_active)
-      ? (openBlock(), createBlock("div", {
+      ? (openBlock(), createElementBlock("div", {
           key: 0,
-          class: $options.displayClass,
+          class: normalizeClass($options.displayClass),
           tabindex: _ctx.$attrs.tabindex||'0',
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.open && $options.open(...args))),
-          onKeydown: _cache[2] || (_cache[2] = withKeys((...args) => ($options.open && $options.open(...args)), ["enter"]))
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.open && $options.open(...args))),
+          onKeydown: _cache[1] || (_cache[1] = withKeys((...args) => ($options.open && $options.open(...args)), ["enter"]))
         }, [
           renderSlot(_ctx.$slots, "display")
-        ], 42, ["tabindex"]))
-      : (openBlock(), createBlock("div", _hoisted_1, [
+        ], 42, _hoisted_1))
+      : (openBlock(), createElementBlock("div", _hoisted_2, [
           renderSlot(_ctx.$slots, "content"),
           ($props.closable)
             ? (openBlock(), createBlock(_component_IPButton, {

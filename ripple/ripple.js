@@ -77,4 +77,4 @@ this.primevue.ripple = (function (utils) {
 
     return Ripple;
 
-}(primevue.utils));
+})(primevue.utils);

@@ -1,5 +1,5 @@
 import { DomHandler } from 'primevue/utils';
-import { resolveComponent, openBlock, createBlock, createVNode, resolveDynamicComponent, withKeys, createCommentVNode, Fragment, renderList } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, createElementVNode, normalizeClass, createBlock, resolveDynamicComponent, withKeys, createCommentVNode, normalizeStyle, Fragment, renderList, createVNode } from 'vue';
 
 var script$1 = {
     name: 'OrganizationChartNode',
@@ -82,80 +82,85 @@ var script$1 = {
 
 const _hoisted_1$1 = { class: "p-organizationchart-table" };
 const _hoisted_2 = { key: 0 };
-const _hoisted_3 = /*#__PURE__*/createVNode("div", { class: "p-organizationchart-line-down" }, null, -1);
-const _hoisted_4 = /*#__PURE__*/createVNode("div", { class: "p-organizationchart-line-down" }, null, -1);
+const _hoisted_3 = ["colspan"];
+const _hoisted_4 = ["colspan"];
+const _hoisted_5 = /*#__PURE__*/createElementVNode("div", { class: "p-organizationchart-line-down" }, null, -1);
+const _hoisted_6 = [
+  _hoisted_5
+];
+const _hoisted_7 = ["colspan"];
+const _hoisted_8 = /*#__PURE__*/createElementVNode("div", { class: "p-organizationchart-line-down" }, null, -1);
+const _hoisted_9 = [
+  _hoisted_8
+];
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_OrganizationChartNode = resolveComponent("OrganizationChartNode", true);
 
-  return (openBlock(), createBlock("table", _hoisted_1$1, [
-    createVNode("tbody", null, [
+  return (openBlock(), createElementBlock("table", _hoisted_1$1, [
+    createElementVNode("tbody", null, [
       ($props.node)
-        ? (openBlock(), createBlock("tr", _hoisted_2, [
-            createVNode("td", { colspan: $options.colspan }, [
-              createVNode("div", {
-                class: $options.nodeContentClass,
-                onClick: _cache[3] || (_cache[3] = (...args) => ($options.onNodeClick && $options.onNodeClick(...args)))
+        ? (openBlock(), createElementBlock("tr", _hoisted_2, [
+            createElementVNode("td", { colspan: $options.colspan }, [
+              createElementVNode("div", {
+                class: normalizeClass($options.nodeContentClass),
+                onClick: _cache[2] || (_cache[2] = (...args) => ($options.onNodeClick && $options.onNodeClick(...args)))
               }, [
                 (openBlock(), createBlock(resolveDynamicComponent($props.templates[$props.node.type]||$props.templates['default']), { node: $props.node }, null, 8, ["node"])),
                 ($options.toggleable)
-                  ? (openBlock(), createBlock("a", {
+                  ? (openBlock(), createElementBlock("a", {
                       key: 0,
                       tabindex: "0",
                       class: "p-node-toggler",
-                      onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggleNode && $options.toggleNode(...args))),
-                      onKeydown: _cache[2] || (_cache[2] = withKeys((...args) => ($options.toggleNode && $options.toggleNode(...args)), ["enter"]))
+                      onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggleNode && $options.toggleNode(...args))),
+                      onKeydown: _cache[1] || (_cache[1] = withKeys((...args) => ($options.toggleNode && $options.toggleNode(...args)), ["enter"]))
                     }, [
-                      createVNode("i", {
-                        class: ["p-node-toggler-icon pi", {'pi-chevron-down': $options.expanded, 'pi-chevron-up': !$options.expanded}]
+                      createElementVNode("i", {
+                        class: normalizeClass(["p-node-toggler-icon pi", {'pi-chevron-down': $options.expanded, 'pi-chevron-up': !$options.expanded}])
                       }, null, 2)
                     ], 32))
                   : createCommentVNode("", true)
               ], 2)
-            ], 8, ["colspan"])
+            ], 8, _hoisted_3)
           ]))
         : createCommentVNode("", true),
-      createVNode("tr", {
-        style: $options.childStyle,
+      createElementVNode("tr", {
+        style: normalizeStyle($options.childStyle),
         class: "p-organizationchart-lines"
       }, [
-        createVNode("td", { colspan: $options.colspan }, [
-          _hoisted_3
-        ], 8, ["colspan"])
+        createElementVNode("td", { colspan: $options.colspan }, _hoisted_6, 8, _hoisted_4)
       ], 4),
-      createVNode("tr", {
-        style: $options.childStyle,
+      createElementVNode("tr", {
+        style: normalizeStyle($options.childStyle),
         class: "p-organizationchart-lines"
       }, [
         ($props.node.children && $props.node.children.length === 1)
-          ? (openBlock(), createBlock("td", {
+          ? (openBlock(), createElementBlock("td", {
               key: 0,
               colspan: $options.colspan
-            }, [
-              _hoisted_4
-            ], 8, ["colspan"]))
+            }, _hoisted_9, 8, _hoisted_7))
           : createCommentVNode("", true),
         ($props.node.children && $props.node.children.length > 1)
-          ? (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($props.node.children, (child, i) => {
-              return (openBlock(), createBlock(Fragment, {
+          ? (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList($props.node.children, (child, i) => {
+              return (openBlock(), createElementBlock(Fragment, {
                 key: child.key
               }, [
-                createVNode("td", {
-                  class: ["p-organizationchart-line-left", {'p-organizationchart-line-top': !(i === 0)}]
+                createElementVNode("td", {
+                  class: normalizeClass(["p-organizationchart-line-left", {'p-organizationchart-line-top': !(i === 0)}])
                 }, " ", 2),
-                createVNode("td", {
-                  class: ["p-organizationchart-line-right", {'p-organizationchart-line-top': !(i === ($props.node.children.length - 1))}]
+                createElementVNode("td", {
+                  class: normalizeClass(["p-organizationchart-line-right", {'p-organizationchart-line-top': !(i === ($props.node.children.length - 1))}])
                 }, " ", 2)
               ], 64))
             }), 128))
           : createCommentVNode("", true)
       ], 4),
-      createVNode("tr", {
-        style: $options.childStyle,
+      createElementVNode("tr", {
+        style: normalizeStyle($options.childStyle),
         class: "p-organizationchart-nodes"
       }, [
-        (openBlock(true), createBlock(Fragment, null, renderList($props.node.children, (child) => {
-          return (openBlock(), createBlock("td", {
+        (openBlock(true), createElementBlock(Fragment, null, renderList($props.node.children, (child) => {
+          return (openBlock(), createElementBlock("td", {
             key: child.key,
             colspan: "2"
           }, [
@@ -262,7 +267,7 @@ const _hoisted_1 = { class: "p-organizationchart p-component" };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_OrganizationChartNode = resolveComponent("OrganizationChartNode");
 
-  return (openBlock(), createBlock("div", _hoisted_1, [
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
     createVNode(_component_OrganizationChartNode, {
       node: $props.value,
       templates: _ctx.$slots,

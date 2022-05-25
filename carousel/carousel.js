@@ -445,15 +445,19 @@ this.primevue.carousel = (function (utils, Ripple, vue) {
 			},
 	    },
 	    directives: {
-	        'ripple': Ripple__default['default']
+	        'ripple': Ripple__default["default"]
 	    }
 	};
 
-	const _hoisted_1 = {
+	const _hoisted_1 = ["id"];
+	const _hoisted_2 = {
 	  key: 0,
 	  class: "p-carousel-header"
 	};
-	const _hoisted_2 = {
+	const _hoisted_3 = ["disabled"];
+	const _hoisted_4 = ["disabled"];
+	const _hoisted_5 = ["onClick"];
+	const _hoisted_6 = {
 	  key: 1,
 	  class: "p-carousel-footer"
 	};
@@ -461,49 +465,53 @@ this.primevue.carousel = (function (utils, Ripple, vue) {
 	function render(_ctx, _cache, $props, $setup, $data, $options) {
 	  const _directive_ripple = vue.resolveDirective("ripple");
 
-	  return (vue.openBlock(), vue.createBlock("div", {
+	  return (vue.openBlock(), vue.createElementBlock("div", {
 	    id: $data.id,
-	    class: ['p-carousel p-component', {'p-carousel-vertical': $options.isVertical(), 'p-carousel-horizontal': !$options.isVertical()}]
+	    class: vue.normalizeClass(['p-carousel p-component', {'p-carousel-vertical': $options.isVertical(), 'p-carousel-horizontal': !$options.isVertical()}])
 	  }, [
 	    (_ctx.$slots.header)
-	      ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+	      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
 	          vue.renderSlot(_ctx.$slots, "header")
 	        ]))
 	      : vue.createCommentVNode("", true),
-	    vue.createVNode("div", { class: $options.contentClasses }, [
-	      vue.createVNode("div", { class: $options.containerClasses }, [
-	        vue.withDirectives(vue.createVNode("button", {
-	          class: ['p-carousel-prev p-link', {'p-disabled': $options.backwardIsDisabled}],
+	    vue.createElementVNode("div", {
+	      class: vue.normalizeClass($options.contentClasses)
+	    }, [
+	      vue.createElementVNode("div", {
+	        class: vue.normalizeClass($options.containerClasses)
+	      }, [
+	        vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+	          class: vue.normalizeClass(['p-carousel-prev p-link', {'p-disabled': $options.backwardIsDisabled}]),
 	          disabled: $options.backwardIsDisabled,
-	          onClick: _cache[1] || (_cache[1] = (...args) => ($options.navBackward && $options.navBackward(...args))),
+	          onClick: _cache[0] || (_cache[0] = (...args) => ($options.navBackward && $options.navBackward(...args))),
 	          type: "button"
 	        }, [
-	          vue.createVNode("span", {
-	            class: ['p-carousel-prev-icon pi', {'pi-chevron-left': !$options.isVertical(),'pi-chevron-up': $options.isVertical()}]
+	          vue.createElementVNode("span", {
+	            class: vue.normalizeClass(['p-carousel-prev-icon pi', {'pi-chevron-left': !$options.isVertical(),'pi-chevron-up': $options.isVertical()}])
 	          }, null, 2)
-	        ], 10, ["disabled"]), [
+	        ], 10, _hoisted_3)), [
 	          [_directive_ripple]
 	        ]),
-	        vue.createVNode("div", {
+	        vue.createElementVNode("div", {
 	          class: "p-carousel-items-content",
-	          style: [{'height': $options.isVertical() ? $props.verticalViewPortHeight : 'auto'}],
-	          onTouchend: _cache[3] || (_cache[3] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
-	          onTouchstart: _cache[4] || (_cache[4] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
-	          onTouchmove: _cache[5] || (_cache[5] = (...args) => ($options.onTouchMove && $options.onTouchMove(...args)))
+	          style: vue.normalizeStyle([{'height': $options.isVertical() ? $props.verticalViewPortHeight : 'auto'}]),
+	          onTouchend: _cache[2] || (_cache[2] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
+	          onTouchstart: _cache[3] || (_cache[3] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
+	          onTouchmove: _cache[4] || (_cache[4] = (...args) => ($options.onTouchMove && $options.onTouchMove(...args)))
 	        }, [
-	          vue.createVNode("div", {
+	          vue.createElementVNode("div", {
 	            ref: "itemsContainer",
 	            class: "p-carousel-items-container",
-	            onTransitionend: _cache[2] || (_cache[2] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args)))
+	            onTransitionend: _cache[1] || (_cache[1] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args)))
 	          }, [
 	            ($options.isCircular())
-	              ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList($props.value.slice(-1 * $data.d_numVisible), (item, index) => {
-	                  return (vue.openBlock(), vue.createBlock("div", {
+	              ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList($props.value.slice(-1 * $data.d_numVisible), (item, index) => {
+	                  return (vue.openBlock(), vue.createElementBlock("div", {
 	                    key: index + '_scloned',
-	                    class: ['p-carousel-item p-carousel-item-cloned',
+	                    class: vue.normalizeClass(['p-carousel-item p-carousel-item-cloned',
 									{'p-carousel-item-active': ($data.totalShiftedItems * -1) === ($props.value.length + $data.d_numVisible),
 									'p-carousel-item-start': 0 === index,
-									'p-carousel-item-end': $props.value.slice(-1 * $data.d_numVisible).length - 1 === index}]
+									'p-carousel-item-end': $props.value.slice(-1 * $data.d_numVisible).length - 1 === index}])
 	                  }, [
 	                    vue.renderSlot(_ctx.$slots, "item", {
 	                      data: item,
@@ -512,13 +520,13 @@ this.primevue.carousel = (function (utils, Ripple, vue) {
 	                  ], 2))
 	                }), 128))
 	              : vue.createCommentVNode("", true),
-	            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.value, (item, index) => {
-	              return (vue.openBlock(), vue.createBlock("div", {
+	            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.value, (item, index) => {
+	              return (vue.openBlock(), vue.createElementBlock("div", {
 	                key: index,
-	                class: ['p-carousel-item',
+	                class: vue.normalizeClass(['p-carousel-item',
 								{'p-carousel-item-active': $options.firstIndex() <= index && $options.lastIndex() >= index,
 								'p-carousel-item-start': $options.firstIndex() === index,
-								'p-carousel-item-end': $options.lastIndex() === index}]
+								'p-carousel-item-end': $options.lastIndex() === index}])
 	              }, [
 	                vue.renderSlot(_ctx.$slots, "item", {
 	                  data: item,
@@ -527,13 +535,13 @@ this.primevue.carousel = (function (utils, Ripple, vue) {
 	              ], 2))
 	            }), 128)),
 	            ($options.isCircular())
-	              ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList($props.value.slice(0, $data.d_numVisible), (item, index) => {
-	                  return (vue.openBlock(), vue.createBlock("div", {
+	              ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList($props.value.slice(0, $data.d_numVisible), (item, index) => {
+	                  return (vue.openBlock(), vue.createElementBlock("div", {
 	                    key: index + '_fcloned',
-	                    class: ['p-carousel-item p-carousel-item-cloned',
+	                    class: vue.normalizeClass(['p-carousel-item p-carousel-item-cloned',
 									{'p-carousel-item-active': $data.totalShiftedItems === 0,
 									'p-carousel-item-start': 0 === index,
-									'p-carousel-item-end': $props.value.slice(0, $data.d_numVisible).length - 1 === index}]
+									'p-carousel-item-end': $props.value.slice(0, $data.d_numVisible).length - 1 === index}])
 	                  }, [
 	                    vue.renderSlot(_ctx.$slots, "item", {
 	                      data: item,
@@ -544,45 +552,45 @@ this.primevue.carousel = (function (utils, Ripple, vue) {
 	              : vue.createCommentVNode("", true)
 	          ], 544)
 	        ], 36),
-	        vue.withDirectives(vue.createVNode("button", {
-	          class: ['p-carousel-next p-link', {'p-disabled': $options.forwardIsDisabled}],
+	        vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+	          class: vue.normalizeClass(['p-carousel-next p-link', {'p-disabled': $options.forwardIsDisabled}]),
 	          disabled: $options.forwardIsDisabled,
-	          onClick: _cache[6] || (_cache[6] = (...args) => ($options.navForward && $options.navForward(...args))),
+	          onClick: _cache[5] || (_cache[5] = (...args) => ($options.navForward && $options.navForward(...args))),
 	          type: "button"
 	        }, [
-	          vue.createVNode("span", {
-	            class: ['p-carousel-prev-icon pi', {'pi-chevron-right': !$options.isVertical(),'pi-chevron-down': $options.isVertical()}]
+	          vue.createElementVNode("span", {
+	            class: vue.normalizeClass(['p-carousel-prev-icon pi', {'pi-chevron-right': !$options.isVertical(),'pi-chevron-down': $options.isVertical()}])
 	          }, null, 2)
-	        ], 10, ["disabled"]), [
+	        ], 10, _hoisted_4)), [
 	          [_directive_ripple]
 	        ])
 	      ], 2),
 	      ($options.totalIndicators >= 0)
-	        ? (vue.openBlock(), vue.createBlock("ul", {
+	        ? (vue.openBlock(), vue.createElementBlock("ul", {
 	            key: 0,
-	            class: $options.indicatorsContentClasses
+	            class: vue.normalizeClass($options.indicatorsContentClasses)
 	          }, [
-	            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.totalIndicators, (indicator, i) => {
-	              return (vue.openBlock(), vue.createBlock("li", {
+	            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.totalIndicators, (indicator, i) => {
+	              return (vue.openBlock(), vue.createElementBlock("li", {
 	                key: 'p-carousel-indicator-' + i.toString(),
-	                class: ['p-carousel-indicator', {'p-highlight': $data.d_page === i}]
+	                class: vue.normalizeClass(['p-carousel-indicator', {'p-highlight': $data.d_page === i}])
 	              }, [
-	                vue.createVNode("button", {
+	                vue.createElementVNode("button", {
 	                  class: "p-link",
 	                  onClick: $event => ($options.onIndicatorClick($event, i)),
 	                  type: "button"
-	                }, null, 8, ["onClick"])
+	                }, null, 8, _hoisted_5)
 	              ], 2))
 	            }), 128))
 	          ], 2))
 	        : vue.createCommentVNode("", true)
 	    ], 2),
 	    (_ctx.$slots.footer)
-	      ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
+	      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_6, [
 	          vue.renderSlot(_ctx.$slots, "footer")
 	        ]))
 	      : vue.createCommentVNode("", true)
-	  ], 10, ["id"]))
+	  ], 10, _hoisted_1))
 	}
 
 	function styleInject(css, ref) {
@@ -619,4 +627,4 @@ this.primevue.carousel = (function (utils, Ripple, vue) {
 
 	return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);

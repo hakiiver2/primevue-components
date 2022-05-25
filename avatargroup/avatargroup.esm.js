@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot } from 'vue';
+import { openBlock, createElementBlock, renderSlot } from 'vue';
 
 var script = {
     name: 'AvatarGroup'
@@ -7,7 +7,7 @@ var script = {
 const _hoisted_1 = { class: "p-avatar-group p-component" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1, [
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
     renderSlot(_ctx.$slots, "default")
   ]))
 }

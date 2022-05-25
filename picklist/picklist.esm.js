@@ -1,7 +1,7 @@
 import Button from 'primevue/button';
 import { ObjectUtils, DomHandler, UniqueComponentId } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, renderSlot, createCommentVNode, TransitionGroup, withCtx, Fragment, renderList, withDirectives } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, createVNode, createCommentVNode, TransitionGroup, normalizeStyle, withCtx, Fragment, renderList, withDirectives } from 'vue';
 
 var script = {
     name: 'PickList',
@@ -522,46 +522,50 @@ const _hoisted_3 = {
   key: 0,
   class: "p-picklist-header"
 };
-const _hoisted_4 = { class: "p-picklist-buttons p-picklist-transfer-buttons" };
-const _hoisted_5 = { class: "p-picklist-list-wrapper p-picklist-target-wrapper" };
-const _hoisted_6 = {
+const _hoisted_4 = ["onClick", "onDblclick", "onKeydown", "aria-selected"];
+const _hoisted_5 = { class: "p-picklist-buttons p-picklist-transfer-buttons" };
+const _hoisted_6 = { class: "p-picklist-list-wrapper p-picklist-target-wrapper" };
+const _hoisted_7 = {
   key: 0,
   class: "p-picklist-header"
 };
-const _hoisted_7 = { class: "p-picklist-buttons p-picklist-target-controls" };
+const _hoisted_8 = ["onClick", "onDblclick", "onKeydown", "aria-selected"];
+const _hoisted_9 = { class: "p-picklist-buttons p-picklist-target-controls" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PLButton = resolveComponent("PLButton");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
-    createVNode("div", _hoisted_1, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
+    createElementVNode("div", _hoisted_1, [
       renderSlot(_ctx.$slots, "sourcecontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-up",
-        onClick: _cache[1] || (_cache[1] = $event => ($options.moveUp($event, 0)))
+        onClick: _cache[0] || (_cache[0] = $event => ($options.moveUp($event, 0)))
       }),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-double-up",
-        onClick: _cache[2] || (_cache[2] = $event => ($options.moveTop($event, 0)))
+        onClick: _cache[1] || (_cache[1] = $event => ($options.moveTop($event, 0)))
       }),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-down",
-        onClick: _cache[3] || (_cache[3] = $event => ($options.moveDown($event, 0)))
+        onClick: _cache[2] || (_cache[2] = $event => ($options.moveDown($event, 0)))
       }),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-double-down",
-        onClick: _cache[4] || (_cache[4] = $event => ($options.moveBottom($event, 0)))
+        onClick: _cache[3] || (_cache[3] = $event => ($options.moveBottom($event, 0)))
       }),
       renderSlot(_ctx.$slots, "sourcecontrolsend")
     ]),
-    createVNode("div", _hoisted_2, [
+    createElementVNode("div", _hoisted_2, [
       (_ctx.$slots.sourceheader)
-        ? (openBlock(), createBlock("div", _hoisted_3, [
+        ? (openBlock(), createElementBlock("div", _hoisted_3, [
             renderSlot(_ctx.$slots, "sourceheader")
           ]))
         : createCommentVNode("", true),
@@ -570,20 +574,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         name: "p-picklist-flip",
         tag: "ul",
         class: "p-picklist-list p-picklist-source",
-        style: $props.listStyle,
+        style: normalizeStyle($props.listStyle),
         role: "listbox",
         "aria-multiselectable": "multiple"
       }, {
         default: withCtx(() => [
-          (openBlock(true), createBlock(Fragment, null, renderList($options.sourceList, (item, i) => {
-            return withDirectives((openBlock(), createBlock("li", {
+          (openBlock(true), createElementBlock(Fragment, null, renderList($options.sourceList, (item, i) => {
+            return withDirectives((openBlock(), createElementBlock("li", {
               key: $options.getItemKey(item, i),
               tabindex: "0",
-              class: ['p-picklist-item', {'p-highlight': $options.isSelected(item, 0)}],
+              class: normalizeClass(['p-picklist-item', {'p-highlight': $options.isSelected(item, 0)}]),
               onClick: $event => ($options.onItemClick($event, item, 0)),
               onDblclick: $event => ($options.onItemDblClick($event, item, 0)),
               onKeydown: $event => ($options.onItemKeyDown($event, item, 0)),
-              onTouchend: _cache[5] || (_cache[5] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
+              onTouchend: _cache[4] || (_cache[4] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
               role: "option",
               "aria-selected": $options.isSelected(item, 0)
             }, [
@@ -591,7 +595,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 item: item,
                 index: i
               })
-            ], 42, ["onClick", "onDblclick", "onKeydown", "aria-selected"])), [
+            ], 42, _hoisted_4)), [
               [_directive_ripple]
             ])
           }), 128))
@@ -599,7 +603,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 3
       }, 8, ["style"])
     ]),
-    createVNode("div", _hoisted_4, [
+    createElementVNode("div", _hoisted_5, [
       renderSlot(_ctx.$slots, "movecontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
@@ -623,9 +627,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8, ["onClick"]),
       renderSlot(_ctx.$slots, "movecontrolsend")
     ]),
-    createVNode("div", _hoisted_5, [
+    createElementVNode("div", _hoisted_6, [
       (_ctx.$slots.targetheader)
-        ? (openBlock(), createBlock("div", _hoisted_6, [
+        ? (openBlock(), createElementBlock("div", _hoisted_7, [
             renderSlot(_ctx.$slots, "targetheader")
           ]))
         : createCommentVNode("", true),
@@ -634,20 +638,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         name: "p-picklist-flip",
         tag: "ul",
         class: "p-picklist-list p-picklist-target",
-        style: $props.listStyle,
+        style: normalizeStyle($props.listStyle),
         role: "listbox",
         "aria-multiselectable": "multiple"
       }, {
         default: withCtx(() => [
-          (openBlock(true), createBlock(Fragment, null, renderList($options.targetList, (item, i) => {
-            return withDirectives((openBlock(), createBlock("li", {
+          (openBlock(true), createElementBlock(Fragment, null, renderList($options.targetList, (item, i) => {
+            return withDirectives((openBlock(), createElementBlock("li", {
               key: $options.getItemKey(item, i),
               tabindex: "0",
-              class: ['p-picklist-item', {'p-highlight': $options.isSelected(item, 1)}],
+              class: normalizeClass(['p-picklist-item', {'p-highlight': $options.isSelected(item, 1)}]),
               onClick: $event => ($options.onItemClick($event, item, 1)),
               onDblclick: $event => ($options.onItemDblClick($event, item, 1)),
               onKeydown: $event => ($options.onItemKeyDown($event, item, 1)),
-              onTouchend: _cache[6] || (_cache[6] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
+              onTouchend: _cache[5] || (_cache[5] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
               role: "option",
               "aria-selected": $options.isSelected(item, 1)
             }, [
@@ -655,7 +659,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 item: item,
                 index: i
               })
-            ], 42, ["onClick", "onDblclick", "onKeydown", "aria-selected"])), [
+            ], 42, _hoisted_8)), [
               [_directive_ripple]
             ])
           }), 128))
@@ -663,27 +667,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 3
       }, 8, ["style"])
     ]),
-    createVNode("div", _hoisted_7, [
+    createElementVNode("div", _hoisted_9, [
       renderSlot(_ctx.$slots, "targetcontrolsstart"),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-up",
-        onClick: _cache[7] || (_cache[7] = $event => ($options.moveUp($event, 1)))
+        onClick: _cache[6] || (_cache[6] = $event => ($options.moveUp($event, 1)))
       }),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-double-up",
-        onClick: _cache[8] || (_cache[8] = $event => ($options.moveTop($event, 1)))
+        onClick: _cache[7] || (_cache[7] = $event => ($options.moveTop($event, 1)))
       }),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-down",
-        onClick: _cache[9] || (_cache[9] = $event => ($options.moveDown($event, 1)))
+        onClick: _cache[8] || (_cache[8] = $event => ($options.moveDown($event, 1)))
       }),
       createVNode(_component_PLButton, {
         type: "button",
         icon: "pi pi-angle-double-down",
-        onClick: _cache[10] || (_cache[10] = $event => ($options.moveBottom($event, 1)))
+        onClick: _cache[9] || (_cache[9] = $event => ($options.moveBottom($event, 1)))
       }),
       renderSlot(_ctx.$slots, "targetcontrolsend")
     ])

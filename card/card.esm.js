@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, createCommentVNode, createVNode } from 'vue';
+import { openBlock, createElementBlock, renderSlot, createCommentVNode, createElementVNode } from 'vue';
 
 var script = {
     name: 'Card'
@@ -25,28 +25,28 @@ const _hoisted_7 = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1, [
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
     (_ctx.$slots.header)
-      ? (openBlock(), createBlock("div", _hoisted_2, [
+      ? (openBlock(), createElementBlock("div", _hoisted_2, [
           renderSlot(_ctx.$slots, "header")
         ]))
       : createCommentVNode("", true),
-    createVNode("div", _hoisted_3, [
+    createElementVNode("div", _hoisted_3, [
       (_ctx.$slots.title)
-        ? (openBlock(), createBlock("div", _hoisted_4, [
+        ? (openBlock(), createElementBlock("div", _hoisted_4, [
             renderSlot(_ctx.$slots, "title")
           ]))
         : createCommentVNode("", true),
       (_ctx.$slots.subtitle)
-        ? (openBlock(), createBlock("div", _hoisted_5, [
+        ? (openBlock(), createElementBlock("div", _hoisted_5, [
             renderSlot(_ctx.$slots, "subtitle")
           ]))
         : createCommentVNode("", true),
-      createVNode("div", _hoisted_6, [
+      createElementVNode("div", _hoisted_6, [
         renderSlot(_ctx.$slots, "content")
       ]),
       (_ctx.$slots.footer)
-        ? (openBlock(), createBlock("div", _hoisted_7, [
+        ? (openBlock(), createElementBlock("div", _hoisted_7, [
             renderSlot(_ctx.$slots, "footer")
           ]))
         : createCommentVNode("", true)

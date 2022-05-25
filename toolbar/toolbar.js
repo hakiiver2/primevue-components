@@ -14,11 +14,11 @@ this.primevue.toolbar = (function (vue) {
     const _hoisted_3 = { class: "p-toolbar-group-right" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-        vue.createVNode("div", _hoisted_2, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+        vue.createElementVNode("div", _hoisted_2, [
           vue.renderSlot(_ctx.$slots, "start")
         ]),
-        vue.createVNode("div", _hoisted_3, [
+        vue.createElementVNode("div", _hoisted_3, [
           vue.renderSlot(_ctx.$slots, "end")
         ])
       ]))
@@ -58,4 +58,4 @@ this.primevue.toolbar = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

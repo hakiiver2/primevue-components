@@ -1,5 +1,5 @@
 import { ObjectUtils } from 'primevue/utils';
-import { openBlock, createBlock, Fragment, renderList, createVNode, renderSlot, createCommentVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, Fragment, renderList, createElementVNode, renderSlot, createCommentVNode } from 'vue';
 
 var script = {
     name: 'Timeline',
@@ -33,24 +33,26 @@ var script = {
 
 const _hoisted_1 = { class: "p-timeline-event-opposite" };
 const _hoisted_2 = { class: "p-timeline-event-separator" };
-const _hoisted_3 = /*#__PURE__*/createVNode("div", { class: "p-timeline-event-marker" }, null, -1);
-const _hoisted_4 = /*#__PURE__*/createVNode("div", { class: "p-timeline-event-connector" }, null, -1);
+const _hoisted_3 = /*#__PURE__*/createElementVNode("div", { class: "p-timeline-event-marker" }, null, -1);
+const _hoisted_4 = /*#__PURE__*/createElementVNode("div", { class: "p-timeline-event-connector" }, null, -1);
 const _hoisted_5 = { class: "p-timeline-event-content" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
-    (openBlock(true), createBlock(Fragment, null, renderList($props.value, (item, index) => {
-      return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
+    (openBlock(true), createElementBlock(Fragment, null, renderList($props.value, (item, index) => {
+      return (openBlock(), createElementBlock("div", {
         key: $options.getKey(item, index),
         class: "p-timeline-event"
       }, [
-        createVNode("div", _hoisted_1, [
+        createElementVNode("div", _hoisted_1, [
           renderSlot(_ctx.$slots, "opposite", {
             item: item,
             index: index
           })
         ]),
-        createVNode("div", _hoisted_2, [
+        createElementVNode("div", _hoisted_2, [
           renderSlot(_ctx.$slots, "marker", {
             item: item,
             index: index
@@ -63,7 +65,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ])
             : createCommentVNode("", true)
         ]),
-        createVNode("div", _hoisted_5, [
+        createElementVNode("div", _hoisted_5, [
           renderSlot(_ctx.$slots, "content", {
             item: item,
             index: index

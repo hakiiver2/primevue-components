@@ -1,6 +1,6 @@
 import { DomHandler, ObjectUtils } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, withDirectives, createCommentVNode, resolveDynamicComponent, Fragment, createTextVNode, toDisplayString, renderList, vModelText } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, normalizeStyle, withDirectives, createCommentVNode, createBlock, resolveDynamicComponent, Fragment, createTextVNode, toDisplayString, renderList, vModelText } from 'vue';
 
 var script$1 = {
     name: 'TreeNode',
@@ -265,12 +265,14 @@ var script$1 = {
     }
 };
 
-const _hoisted_1$1 = {
+const _hoisted_1$1 = ["aria-expanded"];
+const _hoisted_2$1 = {
   key: 0,
   class: "p-checkbox p-component"
 };
-const _hoisted_2$1 = { class: "p-treenode-label" };
-const _hoisted_3$1 = {
+const _hoisted_3$1 = ["aria-checked"];
+const _hoisted_4$1 = { class: "p-treenode-label" };
+const _hoisted_5$1 = {
   key: 0,
   class: "p-treenode-children",
   role: "group"
@@ -280,53 +282,61 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TreeNode = resolveComponent("TreeNode", true);
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("li", { class: $options.containerClass }, [
-    createVNode("div", {
-      class: $options.contentClass,
+  return (openBlock(), createElementBlock("li", {
+    class: normalizeClass($options.containerClass)
+  }, [
+    createElementVNode("div", {
+      class: normalizeClass($options.contentClass),
       tabindex: "0",
       role: "treeitem",
       "aria-expanded": $options.expanded,
-      onClick: _cache[2] || (_cache[2] = (...args) => ($options.onClick && $options.onClick(...args))),
-      onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-      onTouchend: _cache[4] || (_cache[4] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
-      style: $props.node.style
+      onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+      onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+      onTouchend: _cache[3] || (_cache[3] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
+      style: normalizeStyle($props.node.style)
     }, [
-      withDirectives(createVNode("button", {
+      withDirectives((openBlock(), createElementBlock("button", {
         type: "button",
         class: "p-tree-toggler p-link",
-        onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggle && $options.toggle(...args))),
+        onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggle && $options.toggle(...args))),
         tabindex: "-1"
       }, [
-        createVNode("span", { class: $options.toggleIcon }, null, 2)
-      ], 512), [
+        createElementVNode("span", {
+          class: normalizeClass($options.toggleIcon)
+        }, null, 2)
+      ])), [
         [_directive_ripple]
       ]),
       ($options.checkboxMode)
-        ? (openBlock(), createBlock("div", _hoisted_1$1, [
-            createVNode("div", {
-              class: $options.checkboxClass,
+        ? (openBlock(), createElementBlock("div", _hoisted_2$1, [
+            createElementVNode("div", {
+              class: normalizeClass($options.checkboxClass),
               role: "checkbox",
               "aria-checked": $options.checked
             }, [
-              createVNode("span", { class: $options.checkboxIcon }, null, 2)
-            ], 10, ["aria-checked"])
+              createElementVNode("span", {
+                class: normalizeClass($options.checkboxIcon)
+              }, null, 2)
+            ], 10, _hoisted_3$1)
           ]))
         : createCommentVNode("", true),
-      createVNode("span", { class: $options.icon }, null, 2),
-      createVNode("span", _hoisted_2$1, [
+      createElementVNode("span", {
+        class: normalizeClass($options.icon)
+      }, null, 2),
+      createElementVNode("span", _hoisted_4$1, [
         ($props.templates[$props.node.type]||$props.templates['default'])
           ? (openBlock(), createBlock(resolveDynamicComponent($props.templates[$props.node.type]||$props.templates['default']), {
               key: 0,
               node: $props.node
             }, null, 8, ["node"]))
-          : (openBlock(), createBlock(Fragment, { key: 1 }, [
+          : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
               createTextVNode(toDisplayString($options.label($props.node)), 1)
             ], 64))
       ])
-    ], 46, ["aria-expanded"]),
+    ], 46, _hoisted_1$1),
     ($options.hasChildren && $options.expanded)
-      ? (openBlock(), createBlock("ul", _hoisted_3$1, [
-          (openBlock(true), createBlock(Fragment, null, renderList($props.node.children, (childNode) => {
+      ? (openBlock(), createElementBlock("ul", _hoisted_5$1, [
+          (openBlock(true), createElementBlock(Fragment, null, renderList($props.node.children, (childNode) => {
             return (openBlock(), createBlock(_component_TreeNode, {
               key: childNode.key,
               node: childNode,
@@ -616,8 +626,9 @@ const _hoisted_2 = {
   key: 1,
   class: "p-tree-filter-container"
 };
-const _hoisted_3 = /*#__PURE__*/createVNode("span", { class: "p-tree-filter-icon pi pi-search" }, null, -1);
-const _hoisted_4 = {
+const _hoisted_3 = ["placeholder"];
+const _hoisted_4 = /*#__PURE__*/createElementVNode("span", { class: "p-tree-filter-icon pi pi-search" }, null, -1);
+const _hoisted_5 = {
   class: "p-tree-container",
   role: "tree"
 };
@@ -625,33 +636,37 @@ const _hoisted_4 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TreeNode = resolveComponent("TreeNode");
 
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
     ($props.loading)
-      ? (openBlock(), createBlock("div", _hoisted_1, [
-          createVNode("i", { class: $options.loadingIconClass }, null, 2)
+      ? (openBlock(), createElementBlock("div", _hoisted_1, [
+          createElementVNode("i", {
+            class: normalizeClass($options.loadingIconClass)
+          }, null, 2)
         ]))
       : createCommentVNode("", true),
     ($props.filter)
-      ? (openBlock(), createBlock("div", _hoisted_2, [
-          withDirectives(createVNode("input", {
+      ? (openBlock(), createElementBlock("div", _hoisted_2, [
+          withDirectives(createElementVNode("input", {
             type: "text",
             autocomplete: "off",
             class: "p-tree-filter p-inputtext p-component",
             placeholder: $props.filterPlaceholder,
-            onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onFilterKeydown && $options.onFilterKeydown(...args))),
-            "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => ($data.filterValue = $event))
-          }, null, 40, ["placeholder"]), [
+            onKeydown: _cache[0] || (_cache[0] = (...args) => ($options.onFilterKeydown && $options.onFilterKeydown(...args))),
+            "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (($data.filterValue) = $event))
+          }, null, 40, _hoisted_3), [
             [vModelText, $data.filterValue]
           ]),
-          _hoisted_3
+          _hoisted_4
         ]))
       : createCommentVNode("", true),
-    createVNode("div", {
+    createElementVNode("div", {
       class: "p-tree-wrapper",
-      style: {maxHeight: $props.scrollHeight}
+      style: normalizeStyle({maxHeight: $props.scrollHeight})
     }, [
-      createVNode("ul", _hoisted_4, [
-        (openBlock(true), createBlock(Fragment, null, renderList($options.valueToRender, (node) => {
+      createElementVNode("ul", _hoisted_5, [
+        (openBlock(true), createElementBlock(Fragment, null, renderList($options.valueToRender, (node) => {
           return (openBlock(), createBlock(_component_TreeNode, {
             key: node.key,
             node: node,

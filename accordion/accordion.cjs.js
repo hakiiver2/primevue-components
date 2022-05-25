@@ -128,23 +128,25 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-accordion p-component" };
-const _hoisted_2 = {
+const _hoisted_2 = ["onClick", "onKeydown", "tabindex", "aria-expanded", "id", "aria-controls"];
+const _hoisted_3 = {
   key: 0,
   class: "p-accordion-header-text"
 };
-const _hoisted_3 = { class: "p-accordion-content" };
+const _hoisted_4 = ["id", "aria-labelledby"];
+const _hoisted_5 = { class: "p-accordion-content" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.tabs, (tab, i) => {
-      return (vue.openBlock(), vue.createBlock("div", {
+  return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.tabs, (tab, i) => {
+      return (vue.openBlock(), vue.createElementBlock("div", {
         key: $options.getKey(tab,i),
-        class: $options.getTabClass(i)
+        class: vue.normalizeClass($options.getTabClass(i))
       }, [
-        vue.createVNode("div", {
-          class: $options.getTabHeaderClass(tab, i)
+        vue.createElementVNode("div", {
+          class: vue.normalizeClass($options.getTabHeaderClass(tab, i))
         }, [
-          vue.createVNode("a", {
+          vue.createElementVNode("a", {
             role: "tab",
             class: "p-accordion-header-link",
             onClick: $event => ($options.onTabClick($event, tab, i)),
@@ -154,31 +156,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             id: $options.getTabAriaId(i) + '_header',
             "aria-controls": $options.getTabAriaId(i) + '_content'
           }, [
-            vue.createVNode("span", {
-              class: $options.isTabActive(i) ? $options.getHeaderCollapseIcon() : $options.getHeaderExpandIcon()
+            vue.createElementVNode("span", {
+              class: vue.normalizeClass($options.isTabActive(i) ? $options.getHeaderCollapseIcon() : $options.getHeaderExpandIcon())
             }, null, 2),
             (tab.props && tab.props.header)
-              ? (vue.openBlock(), vue.createBlock("span", _hoisted_2, vue.toDisplayString(tab.props.header), 1))
+              ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_3, vue.toDisplayString(tab.props.header), 1))
               : vue.createCommentVNode("", true),
             (tab.children && tab.children.header)
               ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(tab.children.header), { key: 1 }))
               : vue.createCommentVNode("", true)
-          ], 40, ["onClick", "onKeydown", "tabindex", "aria-expanded", "id", "aria-controls"])
+          ], 40, _hoisted_2)
         ], 2),
         vue.createVNode(vue.Transition, { name: "p-toggleable-content" }, {
           default: vue.withCtx(() => [
             ($props.lazy ? $options.isTabActive(i) : true)
-              ? vue.withDirectives((vue.openBlock(), vue.createBlock("div", {
+              ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", {
                   key: 0,
                   class: "p-toggleable-content",
                   role: "region",
                   id: $options.getTabAriaId(i) + '_content',
                   "aria-labelledby": $options.getTabAriaId(i) + '_header'
                 }, [
-                  vue.createVNode("div", _hoisted_3, [
+                  vue.createElementVNode("div", _hoisted_5, [
                     (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(tab)))
                   ])
-                ], 8, ["id", "aria-labelledby"])), [
+                ], 8, _hoisted_4)), [
                   [vue.vShow, $props.lazy ? true: $options.isTabActive(i)]
                 ])
               : vue.createCommentVNode("", true)

@@ -18,4 +18,4 @@ this.primevue.accordiontab = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

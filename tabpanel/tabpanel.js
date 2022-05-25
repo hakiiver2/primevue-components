@@ -18,4 +18,4 @@ this.primevue.tabpanel = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

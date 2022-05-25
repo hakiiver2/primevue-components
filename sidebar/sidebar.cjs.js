@@ -149,17 +149,22 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
-const _hoisted_1 = { class: "p-sidebar-header" };
-const _hoisted_2 = {
+const _hoisted_1 = ["aria-modal"];
+const _hoisted_2 = { class: "p-sidebar-header" };
+const _hoisted_3 = {
   key: 0,
   class: "p-sidebar-header-content"
 };
-const _hoisted_3 = /*#__PURE__*/vue.createVNode("span", { class: "p-sidebar-close-icon pi pi-times" }, null, -1);
-const _hoisted_4 = { class: "p-sidebar-content" };
+const _hoisted_4 = ["aria-label"];
+const _hoisted_5 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-sidebar-close-icon pi pi-times" }, null, -1);
+const _hoisted_6 = [
+  _hoisted_5
+];
+const _hoisted_7 = { class: "p-sidebar-content" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
@@ -174,37 +179,35 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, {
       default: vue.withCtx(() => [
         ($props.visible)
-          ? (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+          ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
               key: 0,
               class: $options.containerClass,
               ref: $options.containerRef,
               role: "complementary",
               "aria-modal": $props.modal
             }, _ctx.$attrs), [
-              vue.createVNode("div", _hoisted_1, [
+              vue.createElementVNode("div", _hoisted_2, [
                 (_ctx.$slots.header)
-                  ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
+                  ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
                       vue.renderSlot(_ctx.$slots, "header")
                     ]))
                   : vue.createCommentVNode("", true),
                 ($props.showCloseIcon)
-                  ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                  ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                       key: 1,
                       class: "p-sidebar-close p-sidebar-icon p-link",
-                      onClick: _cache[1] || (_cache[1] = (...args) => ($options.hide && $options.hide(...args))),
+                      onClick: _cache[0] || (_cache[0] = (...args) => ($options.hide && $options.hide(...args))),
                       "aria-label": $props.ariaCloseLabel,
                       type: "button"
-                    }, [
-                      _hoisted_3
-                    ], 8, ["aria-label"])), [
+                    }, _hoisted_6, 8, _hoisted_4)), [
                       [_directive_ripple]
                     ])
                   : vue.createCommentVNode("", true)
               ]),
-              vue.createVNode("div", _hoisted_4, [
+              vue.createElementVNode("div", _hoisted_7, [
                 vue.renderSlot(_ctx.$slots, "default")
               ])
-            ], 16, ["aria-modal"]))
+            ], 16, _hoisted_1))
           : vue.createCommentVNode("", true)
       ]),
       _: 3

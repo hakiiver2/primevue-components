@@ -341,4 +341,4 @@ this.primevue.tooltip = (function (utils) {
 
     return Tooltip;
 
-}(primevue.utils));
+})(primevue.utils);

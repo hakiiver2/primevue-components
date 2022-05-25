@@ -76,7 +76,7 @@ var script = {
         }
 
         if (this.overlayEventListener) {
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         }
 
@@ -125,14 +125,14 @@ var script = {
                 }
             };
 
-            OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
             this.$emit('show');
         },
         onLeave() {
             this.unbindOutsideClickListener();
             this.unbindScrollListener();
             this.unbindResizeListener();
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
             this.$emit('hide');
         },
@@ -240,7 +240,7 @@ var script = {
             }
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.target
             });
@@ -258,11 +258,15 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
-const _hoisted_1 = /*#__PURE__*/vue.createVNode("span", { class: "p-overlaypanel-close-icon pi pi-times" }, null, -1);
+const _hoisted_1 = ["aria-label"];
+const _hoisted_2 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-overlaypanel-close-icon pi pi-times" }, null, -1);
+const _hoisted_3 = [
+  _hoisted_2
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
@@ -276,30 +280,28 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, {
       default: vue.withCtx(() => [
         ($data.visible)
-          ? (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+          ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
               key: 0,
               class: $options.containerClass,
               ref: $options.containerRef
             }, _ctx.$attrs, {
-              onClick: _cache[4] || (_cache[4] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
             }), [
-              vue.createVNode("div", {
+              vue.createElementVNode("div", {
                 class: "p-overlaypanel-content",
-                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
-                onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
+                onClick: _cache[0] || (_cache[0] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
+                onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
               }, [
                 vue.renderSlot(_ctx.$slots, "default")
               ], 32),
               ($props.showCloseIcon)
-                ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                     key: 0,
                     class: "p-overlaypanel-close p-link",
-                    onClick: _cache[3] || (_cache[3] = (...args) => ($options.hide && $options.hide(...args))),
+                    onClick: _cache[2] || (_cache[2] = (...args) => ($options.hide && $options.hide(...args))),
                     "aria-label": $props.ariaCloseLabel,
                     type: "button"
-                  }, [
-                    _hoisted_1
-                  ], 8, ["aria-label"])), [
+                  }, _hoisted_3, 8, _hoisted_1)), [
                     [_directive_ripple]
                   ])
                 : vue.createCommentVNode("", true)

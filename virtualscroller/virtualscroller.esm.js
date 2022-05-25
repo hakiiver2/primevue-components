@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, createVNode, Fragment, renderList, createCommentVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, normalizeStyle, renderSlot, createElementVNode, Fragment, renderList, createCommentVNode } from 'vue';
 
 var script = {
     name: 'VirtualScroller',
@@ -548,13 +548,13 @@ const _hoisted_1 = {
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (!$props.disabled)
-    ? (openBlock(), createBlock("div", {
+    ? (openBlock(), createElementBlock("div", {
         key: 0,
         ref: $options.elementRef,
-        class: $options.containerClass,
+        class: normalizeClass($options.containerClass),
         tabindex: 0,
-        style: $props.style,
-        onScroll: _cache[1] || (_cache[1] = (...args) => ($options.onScroll && $options.onScroll(...args)))
+        style: normalizeStyle($props.style),
+        onScroll: _cache[0] || (_cache[0] = (...args) => ($options.onScroll && $options.onScroll(...args)))
       }, [
         renderSlot(_ctx.$slots, "content", {
           styleClass: $options.contentClass,
@@ -572,12 +572,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           horizontal: $options.isHorizontal(),
           both: $options.isBoth()
         }, () => [
-          createVNode("div", {
+          createElementVNode("div", {
             ref: $options.contentRef,
-            class: $options.contentClass,
-            style: $data.contentStyle
+            class: normalizeClass($options.contentClass),
+            style: normalizeStyle($data.contentStyle)
           }, [
-            (openBlock(true), createBlock(Fragment, null, renderList($options.loadedItems, (item, index) => {
+            (openBlock(true), createElementBlock(Fragment, null, renderList($options.loadedItems, (item, index) => {
               return renderSlot(_ctx.$slots, "item", {
                 key: index,
                 item: item,
@@ -587,29 +587,29 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 6)
         ]),
         ($props.showSpacer)
-          ? (openBlock(), createBlock("div", {
+          ? (openBlock(), createElementBlock("div", {
               key: 0,
               class: "p-virtualscroller-spacer",
-              style: $data.spacerStyle
+              style: normalizeStyle($data.spacerStyle)
             }, null, 4))
           : createCommentVNode("", true),
         (!$props.loaderDisabled && $props.showLoader && $data.d_loading)
-          ? (openBlock(), createBlock("div", {
+          ? (openBlock(), createElementBlock("div", {
               key: 1,
-              class: $options.loaderClass
+              class: normalizeClass($options.loaderClass)
             }, [
               (_ctx.$slots && _ctx.$slots.loader)
-                ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($data.loaderArr, (_, index) => {
+                ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList($data.loaderArr, (_, index) => {
                     return renderSlot(_ctx.$slots, "loader", {
                       key: index,
                       options: $options.getLoaderOptions(index, $options.isBoth() && { numCols: _ctx.d_numItemsInViewport.cols })
                     })
                   }), 128))
-                : (openBlock(), createBlock("i", _hoisted_1))
+                : (openBlock(), createElementBlock("i", _hoisted_1))
             ], 2))
           : createCommentVNode("", true)
       ], 38))
-    : (openBlock(), createBlock(Fragment, { key: 1 }, [
+    : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
         renderSlot(_ctx.$slots, "default"),
         renderSlot(_ctx.$slots, "content", {
           items: $props.items,

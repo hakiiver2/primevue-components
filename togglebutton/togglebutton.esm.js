@@ -1,5 +1,5 @@
 import Ripple from 'primevue/ripple';
-import { resolveDirective, withDirectives, openBlock, createBlock, createCommentVNode, createVNode, toDisplayString } from 'vue';
+import { resolveDirective, withDirectives, openBlock, createElementBlock, normalizeClass, createCommentVNode, createElementVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'ToggleButton',
@@ -57,26 +57,27 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-button-label" };
+const _hoisted_1 = ["aria-checked", "tabindex"];
+const _hoisted_2 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return withDirectives((openBlock(), createBlock("div", {
-    class: $options.buttonClass,
-    onClick: _cache[1] || (_cache[1] = $event => ($options.onClick($event))),
+  return withDirectives((openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.buttonClass),
+    onClick: _cache[0] || (_cache[0] = $event => ($options.onClick($event))),
     role: "checkbox",
     "aria-checked": $props.modelValue,
     tabindex: _ctx.$attrs.disabled ? null : '0'
   }, [
     ($options.hasIcon)
-      ? (openBlock(), createBlock("span", {
+      ? (openBlock(), createElementBlock("span", {
           key: 0,
-          class: $options.iconClass
+          class: normalizeClass($options.iconClass)
         }, null, 2))
       : createCommentVNode("", true),
-    createVNode("span", _hoisted_1, toDisplayString($options.label), 1)
-  ], 10, ["aria-checked", "tabindex"])), [
+    createElementVNode("span", _hoisted_2, toDisplayString($options.label), 1)
+  ], 10, _hoisted_1)), [
     [_directive_ripple]
   ])
 }

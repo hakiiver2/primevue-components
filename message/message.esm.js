@@ -1,5 +1,5 @@
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, Transition, withCtx, withDirectives, createVNode, renderSlot, createCommentVNode, vShow } from 'vue';
+import { resolveDirective, openBlock, createBlock, Transition, withCtx, withDirectives, createElementVNode, normalizeClass, renderSlot, createElementBlock, createCommentVNode, vShow } from 'vue';
 
 var script = {
     name: 'Message',
@@ -65,7 +65,10 @@ var script = {
 
 const _hoisted_1 = { class: "p-message-wrapper" };
 const _hoisted_2 = { class: "p-message-text" };
-const _hoisted_3 = /*#__PURE__*/createVNode("i", { class: "p-message-close-icon pi pi-times" }, null, -1);
+const _hoisted_3 = /*#__PURE__*/createElementVNode("i", { class: "p-message-close-icon pi pi-times" }, null, -1);
+const _hoisted_4 = [
+  _hoisted_3
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
@@ -75,24 +78,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     appear: ""
   }, {
     default: withCtx(() => [
-      withDirectives(createVNode("div", {
-        class: $options.containerClass,
+      withDirectives(createElementVNode("div", {
+        class: normalizeClass($options.containerClass),
         role: "alert"
       }, [
-        createVNode("div", _hoisted_1, [
-          createVNode("span", { class: $options.iconClass }, null, 2),
-          createVNode("div", _hoisted_2, [
+        createElementVNode("div", _hoisted_1, [
+          createElementVNode("span", {
+            class: normalizeClass($options.iconClass)
+          }, null, 2),
+          createElementVNode("div", _hoisted_2, [
             renderSlot(_ctx.$slots, "default")
           ]),
           ($props.closable)
-            ? withDirectives((openBlock(), createBlock("button", {
+            ? withDirectives((openBlock(), createElementBlock("button", {
                 key: 0,
                 class: "p-message-close p-link",
-                onClick: _cache[1] || (_cache[1] = $event => ($options.close($event))),
+                onClick: _cache[0] || (_cache[0] = $event => ($options.close($event))),
                 type: "button"
-              }, [
-                _hoisted_3
-              ], 512)), [
+              }, _hoisted_4)), [
                 [_directive_ripple]
               ])
             : createCommentVNode("", true)

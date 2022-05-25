@@ -83,80 +83,85 @@ this.primevue.organizationchart = (function (utils, vue) {
 
     const _hoisted_1$1 = { class: "p-organizationchart-table" };
     const _hoisted_2 = { key: 0 };
-    const _hoisted_3 = /*#__PURE__*/vue.createVNode("div", { class: "p-organizationchart-line-down" }, null, -1);
-    const _hoisted_4 = /*#__PURE__*/vue.createVNode("div", { class: "p-organizationchart-line-down" }, null, -1);
+    const _hoisted_3 = ["colspan"];
+    const _hoisted_4 = ["colspan"];
+    const _hoisted_5 = /*#__PURE__*/vue.createElementVNode("div", { class: "p-organizationchart-line-down" }, null, -1);
+    const _hoisted_6 = [
+      _hoisted_5
+    ];
+    const _hoisted_7 = ["colspan"];
+    const _hoisted_8 = /*#__PURE__*/vue.createElementVNode("div", { class: "p-organizationchart-line-down" }, null, -1);
+    const _hoisted_9 = [
+      _hoisted_8
+    ];
 
     function render$1(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_OrganizationChartNode = vue.resolveComponent("OrganizationChartNode", true);
 
-      return (vue.openBlock(), vue.createBlock("table", _hoisted_1$1, [
-        vue.createVNode("tbody", null, [
+      return (vue.openBlock(), vue.createElementBlock("table", _hoisted_1$1, [
+        vue.createElementVNode("tbody", null, [
           ($props.node)
-            ? (vue.openBlock(), vue.createBlock("tr", _hoisted_2, [
-                vue.createVNode("td", { colspan: $options.colspan }, [
-                  vue.createVNode("div", {
-                    class: $options.nodeContentClass,
-                    onClick: _cache[3] || (_cache[3] = (...args) => ($options.onNodeClick && $options.onNodeClick(...args)))
+            ? (vue.openBlock(), vue.createElementBlock("tr", _hoisted_2, [
+                vue.createElementVNode("td", { colspan: $options.colspan }, [
+                  vue.createElementVNode("div", {
+                    class: vue.normalizeClass($options.nodeContentClass),
+                    onClick: _cache[2] || (_cache[2] = (...args) => ($options.onNodeClick && $options.onNodeClick(...args)))
                   }, [
                     (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates[$props.node.type]||$props.templates['default']), { node: $props.node }, null, 8, ["node"])),
                     ($options.toggleable)
-                      ? (vue.openBlock(), vue.createBlock("a", {
+                      ? (vue.openBlock(), vue.createElementBlock("a", {
                           key: 0,
                           tabindex: "0",
                           class: "p-node-toggler",
-                          onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggleNode && $options.toggleNode(...args))),
-                          onKeydown: _cache[2] || (_cache[2] = vue.withKeys((...args) => ($options.toggleNode && $options.toggleNode(...args)), ["enter"]))
+                          onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggleNode && $options.toggleNode(...args))),
+                          onKeydown: _cache[1] || (_cache[1] = vue.withKeys((...args) => ($options.toggleNode && $options.toggleNode(...args)), ["enter"]))
                         }, [
-                          vue.createVNode("i", {
-                            class: ["p-node-toggler-icon pi", {'pi-chevron-down': $options.expanded, 'pi-chevron-up': !$options.expanded}]
+                          vue.createElementVNode("i", {
+                            class: vue.normalizeClass(["p-node-toggler-icon pi", {'pi-chevron-down': $options.expanded, 'pi-chevron-up': !$options.expanded}])
                           }, null, 2)
                         ], 32))
                       : vue.createCommentVNode("", true)
                   ], 2)
-                ], 8, ["colspan"])
+                ], 8, _hoisted_3)
               ]))
             : vue.createCommentVNode("", true),
-          vue.createVNode("tr", {
-            style: $options.childStyle,
+          vue.createElementVNode("tr", {
+            style: vue.normalizeStyle($options.childStyle),
             class: "p-organizationchart-lines"
           }, [
-            vue.createVNode("td", { colspan: $options.colspan }, [
-              _hoisted_3
-            ], 8, ["colspan"])
+            vue.createElementVNode("td", { colspan: $options.colspan }, _hoisted_6, 8, _hoisted_4)
           ], 4),
-          vue.createVNode("tr", {
-            style: $options.childStyle,
+          vue.createElementVNode("tr", {
+            style: vue.normalizeStyle($options.childStyle),
             class: "p-organizationchart-lines"
           }, [
             ($props.node.children && $props.node.children.length === 1)
-              ? (vue.openBlock(), vue.createBlock("td", {
+              ? (vue.openBlock(), vue.createElementBlock("td", {
                   key: 0,
                   colspan: $options.colspan
-                }, [
-                  _hoisted_4
-                ], 8, ["colspan"]))
+                }, _hoisted_9, 8, _hoisted_7))
               : vue.createCommentVNode("", true),
             ($props.node.children && $props.node.children.length > 1)
-              ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList($props.node.children, (child, i) => {
-                  return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+              ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList($props.node.children, (child, i) => {
+                  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                     key: child.key
                   }, [
-                    vue.createVNode("td", {
-                      class: ["p-organizationchart-line-left", {'p-organizationchart-line-top': !(i === 0)}]
+                    vue.createElementVNode("td", {
+                      class: vue.normalizeClass(["p-organizationchart-line-left", {'p-organizationchart-line-top': !(i === 0)}])
                     }, " ", 2),
-                    vue.createVNode("td", {
-                      class: ["p-organizationchart-line-right", {'p-organizationchart-line-top': !(i === ($props.node.children.length - 1))}]
+                    vue.createElementVNode("td", {
+                      class: vue.normalizeClass(["p-organizationchart-line-right", {'p-organizationchart-line-top': !(i === ($props.node.children.length - 1))}])
                     }, " ", 2)
                   ], 64))
                 }), 128))
               : vue.createCommentVNode("", true)
           ], 4),
-          vue.createVNode("tr", {
-            style: $options.childStyle,
+          vue.createElementVNode("tr", {
+            style: vue.normalizeStyle($options.childStyle),
             class: "p-organizationchart-nodes"
           }, [
-            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.node.children, (child) => {
-              return (vue.openBlock(), vue.createBlock("td", {
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.node.children, (child) => {
+              return (vue.openBlock(), vue.createElementBlock("td", {
                 key: child.key,
                 colspan: "2"
               }, [
@@ -263,7 +268,7 @@ this.primevue.organizationchart = (function (utils, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_OrganizationChartNode = vue.resolveComponent("OrganizationChartNode");
 
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
         vue.createVNode(_component_OrganizationChartNode, {
           node: $props.value,
           templates: _ctx.$slots,
@@ -311,4 +316,4 @@ this.primevue.organizationchart = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

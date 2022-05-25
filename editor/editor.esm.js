@@ -1,5 +1,9 @@
 import Quill from 'quill';
-import { openBlock, createBlock, createVNode, renderSlot, createStaticVNode } from 'vue';
+import QuillImageDropAndPaste from 'quill-image-drop-and-paste';
+import { openBlock, createElementBlock, createElementVNode, renderSlot, normalizeStyle, createStaticVNode } from 'vue';
+
+Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste);
+
 
 var script = {
     name: 'Editor',
@@ -9,7 +13,19 @@ var script = {
         placeholder: String,
         readonly: Boolean,
         formats: Array,
-        editorStyle: null
+        editorStyle: null,
+        quillHandlers: {
+            type: Object,
+            default: function() {
+                return {}
+            }
+        },
+        quillImageHandler: {
+            type: Function,
+        },
+        quillImageDropAndPaste: {
+            type: Function,
+        },
     },
     quill: null,
     watch: {
@@ -20,10 +36,32 @@ var script = {
         }
     },
     mounted() {
+        let handlers = {};
+        console.log(this.quillImageHandler);
+        console.log(this.quillImageDropAndPaste);
+        if(this.quillImageHandler) {
+            handlers = {
+                image: this.quillImageHandler
+            };
+        }
+
+        let toolbar = {
+            container: this.$refs.toolbarElement,
+        };
+        if(Object.keys(handlers).length) {
+            toolbar.handlers = handlers;
+        }
+
+        let modules = {
+            toolbar: toolbar,
+        };
+        if(this.quillImageDropAndPaste) {
+            modules.imageDropAndPaste = {
+                handler: this.quillImageDropAndPaste
+            };
+        }
         this.quill = new Quill(this.$refs.editorElement, {
-            modules: {
-                toolbar: this.$refs.toolbarElement
-            },
+            modules: modules,
             readOnly: this.readonly,
             theme: 'snow',
             formats: this.formats,
@@ -52,6 +90,15 @@ var script = {
         });
     },
     methods: {
+        imageHandler() {
+            var range = this.quill.getSelection();
+            var value = prompt('please copy paste the image url here.');
+            if(value){
+                this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+            }
+
+        },
+
         renderValue(value) {
             if (this.quill) {
                 if (value)
@@ -71,45 +118,45 @@ const _hoisted_2 = {
   ref: "toolbarElement",
   class: "p-editor-toolbar"
 };
-const _hoisted_3 = /*#__PURE__*/createVNode("span", { class: "ql-formats" }, [
-  /*#__PURE__*/createVNode("select", {
+const _hoisted_3 = /*#__PURE__*/createElementVNode("span", { class: "ql-formats" }, [
+  /*#__PURE__*/createElementVNode("select", {
     class: "ql-header",
     defaultValue: "0"
   }, [
-    /*#__PURE__*/createVNode("option", { value: "1" }, "Heading"),
-    /*#__PURE__*/createVNode("option", { value: "2" }, "Subheading"),
-    /*#__PURE__*/createVNode("option", { value: "0" }, "Normal")
+    /*#__PURE__*/createElementVNode("option", { value: "1" }, "Heading"),
+    /*#__PURE__*/createElementVNode("option", { value: "2" }, "Subheading"),
+    /*#__PURE__*/createElementVNode("option", { value: "0" }, "Normal")
   ]),
-  /*#__PURE__*/createVNode("select", { class: "ql-font" }, [
-    /*#__PURE__*/createVNode("option"),
-    /*#__PURE__*/createVNode("option", { value: "serif" }),
-    /*#__PURE__*/createVNode("option", { value: "monospace" })
+  /*#__PURE__*/createElementVNode("select", { class: "ql-font" }, [
+    /*#__PURE__*/createElementVNode("option"),
+    /*#__PURE__*/createElementVNode("option", { value: "serif" }),
+    /*#__PURE__*/createElementVNode("option", { value: "monospace" })
   ])
 ], -1);
 const _hoisted_4 = /*#__PURE__*/createStaticVNode("<span class=\"ql-formats\"><button class=\"ql-bold\" type=\"button\"></button><button class=\"ql-italic\" type=\"button\"></button><button class=\"ql-underline\" type=\"button\"></button></span><span class=\"ql-formats\"><select class=\"ql-color\"></select><select class=\"ql-background\"></select></span>", 2);
-const _hoisted_6 = /*#__PURE__*/createVNode("span", { class: "ql-formats" }, [
-  /*#__PURE__*/createVNode("button", {
+const _hoisted_6 = /*#__PURE__*/createElementVNode("span", { class: "ql-formats" }, [
+  /*#__PURE__*/createElementVNode("button", {
     class: "ql-list",
     value: "ordered",
     type: "button"
   }),
-  /*#__PURE__*/createVNode("button", {
+  /*#__PURE__*/createElementVNode("button", {
     class: "ql-list",
     value: "bullet",
     type: "button"
   }),
-  /*#__PURE__*/createVNode("select", { class: "ql-align" }, [
-    /*#__PURE__*/createVNode("option", { defaultValue: "" }),
-    /*#__PURE__*/createVNode("option", { value: "center" }),
-    /*#__PURE__*/createVNode("option", { value: "right" }),
-    /*#__PURE__*/createVNode("option", { value: "justify" })
+  /*#__PURE__*/createElementVNode("select", { class: "ql-align" }, [
+    /*#__PURE__*/createElementVNode("option", { defaultValue: "" }),
+    /*#__PURE__*/createElementVNode("option", { value: "center" }),
+    /*#__PURE__*/createElementVNode("option", { value: "right" }),
+    /*#__PURE__*/createElementVNode("option", { value: "justify" })
   ])
 ], -1);
 const _hoisted_7 = /*#__PURE__*/createStaticVNode("<span class=\"ql-formats\"><button class=\"ql-link\" type=\"button\"></button><button class=\"ql-image\" type=\"button\"></button><button class=\"ql-code-block\" type=\"button\"></button></span><span class=\"ql-formats\"><button class=\"ql-clean\" type=\"button\"></button></span>", 2);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    createVNode("div", _hoisted_2, [
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
+    createElementVNode("div", _hoisted_2, [
       renderSlot(_ctx.$slots, "toolbar", {}, () => [
         _hoisted_3,
         _hoisted_4,
@@ -117,10 +164,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _hoisted_7
       ])
     ], 512),
-    createVNode("div", {
+    createElementVNode("div", {
       ref: "editorElement",
       class: "p-editor-content",
-      style: $props.editorStyle
+      style: normalizeStyle($props.editorStyle)
     }, null, 4)
   ]))
 }

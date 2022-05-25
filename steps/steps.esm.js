@@ -1,5 +1,5 @@
 import { UniqueComponentId } from 'primevue/utils';
-import { resolveComponent, openBlock, createBlock, createVNode, Fragment, renderList, withCtx, toDisplayString, resolveDynamicComponent, createCommentVNode } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, createElementVNode, Fragment, renderList, normalizeStyle, createBlock, withCtx, toDisplayString, resolveDynamicComponent, createCommentVNode } from 'vue';
 
 var script = {
     name: 'Steps',
@@ -77,35 +77,38 @@ var script = {
     }
 };
 
-const _hoisted_1 = { role: "tablist" };
-const _hoisted_2 = { class: "p-steps-number" };
-const _hoisted_3 = { class: "p-steps-title" };
-const _hoisted_4 = { class: "p-steps-number" };
-const _hoisted_5 = { class: "p-steps-title" };
+const _hoisted_1 = ["id"];
+const _hoisted_2 = { role: "tablist" };
+const _hoisted_3 = ["aria-selected", "aria-expanded"];
+const _hoisted_4 = ["href", "onClick"];
+const _hoisted_5 = { class: "p-steps-number" };
+const _hoisted_6 = { class: "p-steps-title" };
+const _hoisted_7 = { class: "p-steps-number" };
+const _hoisted_8 = { class: "p-steps-title" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = resolveComponent("router-link");
 
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     id: $props.id,
-    class: $options.containerClass
+    class: normalizeClass($options.containerClass)
   }, [
-    createVNode("ul", _hoisted_1, [
-      (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item, index) => {
-        return (openBlock(), createBlock(Fragment, {
+    createElementVNode("ul", _hoisted_2, [
+      (openBlock(true), createElementBlock(Fragment, null, renderList($props.model, (item, index) => {
+        return (openBlock(), createElementBlock(Fragment, {
           key: item.to
         }, [
           ($options.visible(item))
-            ? (openBlock(), createBlock("li", {
+            ? (openBlock(), createElementBlock("li", {
                 key: 0,
-                class: $options.getItemClass(item),
-                style: item.style,
+                class: normalizeClass($options.getItemClass(item)),
+                style: normalizeStyle(item.style),
                 role: "tab",
                 "aria-selected": $options.isActive(item),
                 "aria-expanded": $options.isActive(item)
               }, [
                 (!_ctx.$slots.item)
-                  ? (openBlock(), createBlock(Fragment, { key: 0 }, [
+                  ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                       (!$options.isItemDisabled(item))
                         ? (openBlock(), createBlock(_component_router_link, {
                             key: 0,
@@ -113,37 +116,37 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             custom: ""
                           }, {
                             default: withCtx(({navigate, href, isActive, isExactActive}) => [
-                              createVNode("a", {
+                              createElementVNode("a", {
                                 href: href,
-                                class: $options.linkClass({isActive, isExactActive}),
+                                class: normalizeClass($options.linkClass({isActive, isExactActive})),
                                 onClick: $event => ($options.onItemClick($event, item, navigate)),
                                 role: "presentation"
                               }, [
-                                createVNode("span", _hoisted_2, toDisplayString(index + 1), 1),
-                                createVNode("span", _hoisted_3, toDisplayString($options.label(item)), 1)
-                              ], 10, ["href", "onClick"])
+                                createElementVNode("span", _hoisted_5, toDisplayString(index + 1), 1),
+                                createElementVNode("span", _hoisted_6, toDisplayString($options.label(item)), 1)
+                              ], 10, _hoisted_4)
                             ]),
                             _: 2
                           }, 1032, ["to"]))
-                        : (openBlock(), createBlock("span", {
+                        : (openBlock(), createElementBlock("span", {
                             key: 1,
-                            class: $options.linkClass(),
+                            class: normalizeClass($options.linkClass()),
                             role: "presentation"
                           }, [
-                            createVNode("span", _hoisted_4, toDisplayString(index + 1), 1),
-                            createVNode("span", _hoisted_5, toDisplayString($options.label(item)), 1)
+                            createElementVNode("span", _hoisted_7, toDisplayString(index + 1), 1),
+                            createElementVNode("span", _hoisted_8, toDisplayString($options.label(item)), 1)
                           ], 2))
                     ], 64))
                   : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.item), {
                       key: 1,
                       item: item
                     }, null, 8, ["item"]))
-              ], 14, ["aria-selected", "aria-expanded"]))
+              ], 14, _hoisted_3))
             : createCommentVNode("", true)
         ], 64))
       }), 128))
     ])
-  ], 10, ["id"]))
+  ], 10, _hoisted_1))
 }
 
 function styleInject(css, ref) {

@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, createTextVNode, toDisplayString, createCommentVNode, createVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, normalizeStyle, renderSlot, createTextVNode, toDisplayString, createCommentVNode, createElementVNode } from 'vue';
 
 var script = {
     name: 'ProgressBar',
@@ -41,32 +41,36 @@ var script = {
     }
 };
 
-const _hoisted_1 = {
+const _hoisted_1 = ["aria-valuenow"];
+const _hoisted_2 = {
   key: 0,
   class: "p-progressbar-label"
 };
-const _hoisted_2 = {
+const _hoisted_3 = {
   key: 1,
   class: "p-progressbar-indeterminate-container"
 };
-const _hoisted_3 = /*#__PURE__*/createVNode("div", { class: "p-progressbar-value p-progressbar-value-animate" }, null, -1);
+const _hoisted_4 = /*#__PURE__*/createElementVNode("div", { class: "p-progressbar-value p-progressbar-value-animate" }, null, -1);
+const _hoisted_5 = [
+  _hoisted_4
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     role: "progressbar",
-    class: $options.containerClass,
+    class: normalizeClass($options.containerClass),
     "aria-valuemin": "0",
     "aria-valuenow": $props.value,
     "aria-valuemax": "100"
   }, [
     ($options.determinate)
-      ? (openBlock(), createBlock("div", {
+      ? (openBlock(), createElementBlock("div", {
           key: 0,
           class: "p-progressbar-value p-progressbar-value-animate",
-          style: $options.progressStyle
+          style: normalizeStyle($options.progressStyle)
         }, [
           (($props.value != null && $props.value !== 0) && $props.showValue)
-            ? (openBlock(), createBlock("div", _hoisted_1, [
+            ? (openBlock(), createElementBlock("div", _hoisted_2, [
                 renderSlot(_ctx.$slots, "default", {}, () => [
                   createTextVNode(toDisplayString($props.value + '%'), 1)
                 ])
@@ -75,11 +79,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ], 4))
       : createCommentVNode("", true),
     ($options.indeterminate)
-      ? (openBlock(), createBlock("div", _hoisted_2, [
-          _hoisted_3
-        ]))
+      ? (openBlock(), createElementBlock("div", _hoisted_3, _hoisted_5))
       : createCommentVNode("", true)
-  ], 10, ["aria-valuenow"]))
+  ], 10, _hoisted_1))
 }
 
 function styleInject(css, ref) {

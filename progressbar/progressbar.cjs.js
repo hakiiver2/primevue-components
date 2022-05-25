@@ -43,32 +43,36 @@ var script = {
     }
 };
 
-const _hoisted_1 = {
+const _hoisted_1 = ["aria-valuenow"];
+const _hoisted_2 = {
   key: 0,
   class: "p-progressbar-label"
 };
-const _hoisted_2 = {
+const _hoisted_3 = {
   key: 1,
   class: "p-progressbar-indeterminate-container"
 };
-const _hoisted_3 = /*#__PURE__*/vue.createVNode("div", { class: "p-progressbar-value p-progressbar-value-animate" }, null, -1);
+const _hoisted_4 = /*#__PURE__*/vue.createElementVNode("div", { class: "p-progressbar-value p-progressbar-value-animate" }, null, -1);
+const _hoisted_5 = [
+  _hoisted_4
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
+  return (vue.openBlock(), vue.createElementBlock("div", {
     role: "progressbar",
-    class: $options.containerClass,
+    class: vue.normalizeClass($options.containerClass),
     "aria-valuemin": "0",
     "aria-valuenow": $props.value,
     "aria-valuemax": "100"
   }, [
     ($options.determinate)
-      ? (vue.openBlock(), vue.createBlock("div", {
+      ? (vue.openBlock(), vue.createElementBlock("div", {
           key: 0,
           class: "p-progressbar-value p-progressbar-value-animate",
-          style: $options.progressStyle
+          style: vue.normalizeStyle($options.progressStyle)
         }, [
           (($props.value != null && $props.value !== 0) && $props.showValue)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
                 vue.renderSlot(_ctx.$slots, "default", {}, () => [
                   vue.createTextVNode(vue.toDisplayString($props.value + '%'), 1)
                 ])
@@ -77,11 +81,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ], 4))
       : vue.createCommentVNode("", true),
     ($options.indeterminate)
-      ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
-          _hoisted_3
-        ]))
+      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, _hoisted_5))
       : vue.createCommentVNode("", true)
-  ], 10, ["aria-valuenow"]))
+  ], 10, _hoisted_1))
 }
 
 function styleInject(css, ref) {

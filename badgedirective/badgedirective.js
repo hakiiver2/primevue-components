@@ -57,4 +57,4 @@ this.primevue.badgedirective = (function (utils) {
 
     return BadgeDirective;
 
-}(primevue.utils));
+})(primevue.utils);

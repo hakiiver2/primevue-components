@@ -26,14 +26,14 @@ var script = {
         }
     },
     mounted() {
-        TerminalService__default['default'].on('response', this.responseListener);
+        TerminalService__default["default"].on('response', this.responseListener);
         this.$refs.input.focus();
     },
     updated() {
         this.$el.scrollTop = this.$el.scrollHeight;
     },
     beforeUnmount() {
-        TerminalService__default['default'].off('response', this.responseListener);
+        TerminalService__default["default"].off('response', this.responseListener);
     },
     methods: {
         onClick() {
@@ -42,7 +42,7 @@ var script = {
         onKeydown(event) {
             if (event.keyCode === 13 && this.commandText) {
                 this.commands.push({text: this.commandText});
-                TerminalService__default['default'].emit('command', this.commandText);
+                TerminalService__default["default"].emit('command', this.commandText);
                 this.commandText = '';
             }
         },
@@ -61,33 +61,33 @@ const _hoisted_6 = { class: "p-terminal-prompt-container" };
 const _hoisted_7 = { class: "p-terminal-prompt" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
+  return (vue.openBlock(), vue.createElementBlock("div", {
     class: "p-terminal p-component",
-    onClick: _cache[3] || (_cache[3] = (...args) => ($options.onClick && $options.onClick(...args)))
+    onClick: _cache[2] || (_cache[2] = (...args) => ($options.onClick && $options.onClick(...args)))
   }, [
     ($props.welcomeMessage)
-      ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, vue.toDisplayString($props.welcomeMessage), 1))
+      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, vue.toDisplayString($props.welcomeMessage), 1))
       : vue.createCommentVNode("", true),
-    vue.createVNode("div", _hoisted_2, [
-      (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($data.commands, (command, i) => {
-        return (vue.openBlock(), vue.createBlock("div", {
+    vue.createElementVNode("div", _hoisted_2, [
+      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($data.commands, (command, i) => {
+        return (vue.openBlock(), vue.createElementBlock("div", {
           key: command.text + i.toString()
         }, [
-          vue.createVNode("span", _hoisted_3, vue.toDisplayString($props.prompt), 1),
-          vue.createVNode("span", _hoisted_4, vue.toDisplayString(command.text), 1),
-          vue.createVNode("div", _hoisted_5, vue.toDisplayString(command.response), 1)
+          vue.createElementVNode("span", _hoisted_3, vue.toDisplayString($props.prompt), 1),
+          vue.createElementVNode("span", _hoisted_4, vue.toDisplayString(command.text), 1),
+          vue.createElementVNode("div", _hoisted_5, vue.toDisplayString(command.response), 1)
         ]))
       }), 128))
     ]),
-    vue.createVNode("div", _hoisted_6, [
-      vue.createVNode("span", _hoisted_7, vue.toDisplayString($props.prompt), 1),
-      vue.withDirectives(vue.createVNode("input", {
+    vue.createElementVNode("div", _hoisted_6, [
+      vue.createElementVNode("span", _hoisted_7, vue.toDisplayString($props.prompt), 1),
+      vue.withDirectives(vue.createElementVNode("input", {
         ref: "input",
         type: "text",
-        "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($data.commandText = $event)),
+        "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($data.commandText) = $event)),
         class: "p-terminal-input",
         autocomplete: "off",
-        onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeydown && $options.onKeydown(...args)))
+        onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onKeydown && $options.onKeydown(...args)))
       }, null, 544), [
         [vue.vModelText, $data.commandText]
       ])

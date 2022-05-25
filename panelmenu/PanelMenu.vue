@@ -8,6 +8,7 @@
                             <a :href="href" :class="getHeaderLinkClass(item, {isActive, isExactActive})" @click="onItemClick($event, item, navigate)" role="treeitem">
                                 <span v-if="item.icon" :class="getPanelIcon(item)"></span>
                                 <span class="p-menuitem-text">{{label(item)}}</span>
+                                <i v-if="item.info" v-tooltip="item.info" class="pi pi-info-circle p-panelmenu-info-icon" style=""></i>
                             </a>
                         </router-link>
                         <a v-else :href="item.url" :class="getHeaderLinkClass(item)" @click="onItemClick($event, item)" @keydown="onItemKeydown($event, item)" :tabindex="disabled(item) ? null : '0'"
@@ -15,6 +16,7 @@
                             <span v-if="item.items" :class="getPanelToggleIcon(item)"></span>
                             <span v-if="item.icon" :class="getPanelIcon(item)"></span>
                             <span class="p-menuitem-text">{{label(item)}}</span>
+                            <i v-if="item.info" v-tooltip="item.info" class="pi pi-info-circle p-panelmenu-info-icon" style=""></i>
                         </a>
                     </template>
                     <component v-else :is="$slots.item" :item="item"></component>
@@ -36,6 +38,8 @@
 <script>
 import PanelMenuSub from './PanelMenuSub.vue';
 import {UniqueComponentId} from 'primevue/utils';
+import Tooltip from 'primevue/tooltip';
+
 
 export default {
     name: 'PanelMenu',
@@ -119,7 +123,8 @@ export default {
         getHeaderLinkClass(item, routerProps) {
             return ['p-panelmenu-header-link', {
                 'router-link-active': routerProps && routerProps.isActive,
-                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive,
+                // item.headerLinkClass: item.headerLinkClass != undefined
             }];
         },
         isActive(item) {
@@ -145,6 +150,9 @@ export default {
         ariaId() {
             return UniqueComponentId();
         }
+    },
+    directives: {
+        "tooltip": Tooltip                                                                                                                                                                            
     }
 }
 </script>

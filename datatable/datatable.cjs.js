@@ -50,25 +50,27 @@ var script$a = {
     }
 };
 
+const _hoisted_1$a = ["aria-checked", "tabindex"];
+
 function render$a(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
-    class: ['p-checkbox p-component', {'p-checkbox-focused': $data.focused}],
-    onClick: _cache[3] || (_cache[3] = (...args) => ($options.onClick && $options.onClick(...args))),
-    onKeydown: _cache[4] || (_cache[4] = vue.withKeys(vue.withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["prevent"]), ["space"]))
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass(['p-checkbox p-component', {'p-checkbox-focused': $data.focused}]),
+    onClick: _cache[2] || (_cache[2] = (...args) => ($options.onClick && $options.onClick(...args))),
+    onKeydown: _cache[3] || (_cache[3] = vue.withKeys(vue.withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["prevent"]), ["space"]))
   }, [
-    vue.createVNode("div", {
+    vue.createElementVNode("div", {
       ref: "box",
-      class: ['p-checkbox-box p-component', {'p-highlight': $props.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}],
+      class: vue.normalizeClass(['p-checkbox-box p-component', {'p-highlight': $props.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
       role: "checkbox",
       "aria-checked": $props.checked,
       tabindex: _ctx.$attrs.disabled ? null : '0',
-      onFocus: _cache[1] || (_cache[1] = $event => ($options.onFocus($event))),
-      onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur($event)))
+      onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
+      onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event)))
     }, [
-      vue.createVNode("span", {
-        class: ['p-checkbox-icon', {'pi pi-check': $props.checked}]
+      vue.createElementVNode("span", {
+        class: vue.normalizeClass(['p-checkbox-icon', {'pi pi-check': $props.checked}])
       }, null, 2)
-    ], 42, ["aria-checked", "tabindex"])
+    ], 42, _hoisted_1$a)
   ], 34))
 }
 
@@ -160,7 +162,7 @@ var script$9 = {
     overlayEventListener: null,
     beforeUnmount() {
         if (this.overlayEventListener) {
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         }
 
@@ -363,7 +365,7 @@ var script$9 = {
         onContentClick(event) {
             this.selfClick = true;
 
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.overlay
             });
@@ -386,7 +388,7 @@ var script$9 = {
                     this.selfClick = true;
                 }
             };
-            OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
         },
         onOverlayLeave() {
             this.onOverlayHide();
@@ -399,7 +401,7 @@ var script$9 = {
             this.unbindResizeListener();
             this.unbindScrollListener();
             this.overlay = null;
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         },
         overlayRef(el) {
@@ -527,39 +529,46 @@ var script$9 = {
         }
     },
     components: {
-        'CFDropdown': Dropdown__default['default'],
-        'CFButton': Button__default['default']
+        'CFDropdown': Dropdown__default["default"],
+        'CFButton': Button__default["default"]
     }
 };
 
-const _hoisted_1$7 = {
+const _hoisted_1$9 = {
   key: 0,
   class: "p-fluid p-column-filter-element"
 };
-const _hoisted_2$5 = /*#__PURE__*/vue.createVNode("span", { class: "pi pi-filter-slash" }, null, -1);
-const _hoisted_3$4 = {
+const _hoisted_2$7 = ["aria-expanded"];
+const _hoisted_3$6 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-filter-slash" }, null, -1);
+const _hoisted_4$4 = [
+  _hoisted_3$6
+];
+const _hoisted_5$3 = {
   key: 0,
   class: "p-column-filter-row-items"
 };
-const _hoisted_4$2 = /*#__PURE__*/vue.createVNode("li", { class: "p-column-filter-separator" }, null, -1);
-const _hoisted_5$1 = {
+const _hoisted_6$3 = ["onClick", "onKeydown", "tabindex"];
+const _hoisted_7$1 = /*#__PURE__*/vue.createElementVNode("li", { class: "p-column-filter-separator" }, null, -1);
+const _hoisted_8 = {
   key: 0,
   class: "p-column-filter-operator"
 };
-const _hoisted_6$1 = { class: "p-column-filter-constraints" };
-const _hoisted_7 = {
+const _hoisted_9 = { class: "p-column-filter-constraints" };
+const _hoisted_10 = {
   key: 1,
   class: "p-column-filter-add-rule"
 };
-const _hoisted_8 = { class: "p-column-filter-buttonbar" };
+const _hoisted_11 = { class: "p-column-filter-buttonbar" };
 
 function render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CFDropdown = vue.resolveComponent("CFDropdown");
   const _component_CFButton = vue.resolveComponent("CFButton");
 
-  return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass($options.containerClass)
+  }, [
     ($props.display === 'row')
-      ? (vue.openBlock(), vue.createBlock("div", _hoisted_1$7, [
+      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1$9, [
           (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.filterElement), {
             field: $props.field,
             filterModel: $props.filters[$props.field],
@@ -568,30 +577,28 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
         ]))
       : vue.createCommentVNode("", true),
     ($options.showMenuButton)
-      ? (vue.openBlock(), vue.createBlock("button", {
+      ? (vue.openBlock(), vue.createElementBlock("button", {
           key: 1,
           ref: "icon",
           type: "button",
-          class: ["p-column-filter-menu-button p-link", {'p-column-filter-menu-button-open': $data.overlayVisible, 'p-column-filter-menu-button-active': $options.hasFilter()}],
+          class: vue.normalizeClass(["p-column-filter-menu-button p-link", {'p-column-filter-menu-button-open': $data.overlayVisible, 'p-column-filter-menu-button-active': $options.hasFilter()}]),
           "aria-haspopup": "true",
           "aria-expanded": $data.overlayVisible,
-          onClick: _cache[1] || (_cache[1] = $event => ($options.toggleMenu())),
-          onKeydown: _cache[2] || (_cache[2] = $event => ($options.onToggleButtonKeyDown($event)))
+          onClick: _cache[0] || (_cache[0] = $event => ($options.toggleMenu())),
+          onKeydown: _cache[1] || (_cache[1] = $event => ($options.onToggleButtonKeyDown($event)))
         }, [
-          vue.createVNode("span", {
-            class: ["pi pi-filter-icon", {'pi-filter': !$options.hasFilter(), 'pi-filter-fill': $options.hasFilter()}]
+          vue.createElementVNode("span", {
+            class: vue.normalizeClass(["pi pi-filter-icon", {'pi-filter': !$options.hasFilter(), 'pi-filter-fill': $options.hasFilter()}])
           }, null, 2)
-        ], 42, ["aria-expanded"]))
+        ], 42, _hoisted_2$7))
       : vue.createCommentVNode("", true),
     ($props.showClearButton && $props.display === 'row')
-      ? (vue.openBlock(), vue.createBlock("button", {
+      ? (vue.openBlock(), vue.createElementBlock("button", {
           key: 2,
-          class: [{'p-hidden-space': !$options.hasRowFilter()}, "p-column-filter-clear-button p-link"],
+          class: vue.normalizeClass([{'p-hidden-space': !$options.hasRowFilter()}, "p-column-filter-clear-button p-link"]),
           type: "button",
-          onClick: _cache[3] || (_cache[3] = $event => ($options.clearFilter()))
-        }, [
-          _hoisted_2$5
-        ], 2))
+          onClick: _cache[2] || (_cache[2] = $event => ($options.clearFilter()))
+        }, _hoisted_4$4, 2))
       : vue.createCommentVNode("", true),
     (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
       vue.createVNode(vue.Transition, {
@@ -602,13 +609,13 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: vue.withCtx(() => [
           ($data.overlayVisible)
-            ? (vue.openBlock(), vue.createBlock("div", {
+            ? (vue.openBlock(), vue.createElementBlock("div", {
                 key: 0,
                 ref: $options.overlayRef,
-                class: $options.overlayClass,
-                onKeydown: _cache[12] || (_cache[12] = vue.withKeys((...args) => ($options.onEscape && $options.onEscape(...args)), ["escape"])),
-                onClick: _cache[13] || (_cache[13] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
-                onMousedown: _cache[14] || (_cache[14] = (...args) => ($options.onContentMouseDown && $options.onContentMouseDown(...args)))
+                class: vue.normalizeClass($options.overlayClass),
+                onKeydown: _cache[11] || (_cache[11] = vue.withKeys((...args) => ($options.onEscape && $options.onEscape(...args)), ["escape"])),
+                onClick: _cache[12] || (_cache[12] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
+                onMousedown: _cache[13] || (_cache[13] = (...args) => ($options.onContentMouseDown && $options.onContentMouseDown(...args)))
               }, [
                 (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.filterHeaderTemplate), {
                   field: $props.field,
@@ -616,45 +623,45 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
                   filterCallback: $options.filterCallback
                 }, null, 8, ["field", "filterModel", "filterCallback"])),
                 ($props.display === 'row')
-                  ? (vue.openBlock(), vue.createBlock("ul", _hoisted_3$4, [
-                      (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.matchModes, (matchMode, i) => {
-                        return (vue.openBlock(), vue.createBlock("li", {
-                          class: ["p-column-filter-row-item", {'p-highlight': $options.isRowMatchModeSelected(matchMode.value)}],
+                  ? (vue.openBlock(), vue.createElementBlock("ul", _hoisted_5$3, [
+                      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.matchModes, (matchMode, i) => {
+                        return (vue.openBlock(), vue.createElementBlock("li", {
+                          class: vue.normalizeClass(["p-column-filter-row-item", {'p-highlight': $options.isRowMatchModeSelected(matchMode.value)}]),
                           key: matchMode.label,
                           onClick: $event => ($options.onRowMatchModeChange(matchMode.value)),
                           onKeydown: [
-                            _cache[4] || (_cache[4] = $event => ($options.onRowMatchModeKeyDown($event))),
+                            _cache[3] || (_cache[3] = $event => ($options.onRowMatchModeKeyDown($event))),
                             vue.withKeys(vue.withModifiers($event => ($options.onRowMatchModeChange(matchMode.value)), ["prevent"]), ["enter"])
                           ],
                           tabindex: i === 0 ? '0' : null
-                        }, vue.toDisplayString(matchMode.label), 43, ["onClick", "onKeydown", "tabindex"]))
+                        }, vue.toDisplayString(matchMode.label), 43, _hoisted_6$3))
                       }), 128)),
-                      _hoisted_4$2,
-                      vue.createVNode("li", {
+                      _hoisted_7$1,
+                      vue.createElementVNode("li", {
                         class: "p-column-filter-row-item",
-                        onClick: _cache[5] || (_cache[5] = $event => ($options.clearFilter())),
+                        onClick: _cache[4] || (_cache[4] = $event => ($options.clearFilter())),
                         onKeydown: [
-                          _cache[6] || (_cache[6] = $event => ($options.onRowMatchModeKeyDown($event))),
-                          _cache[7] || (_cache[7] = vue.withKeys($event => (_ctx.onRowClearItemClick()), ["enter"]))
+                          _cache[5] || (_cache[5] = $event => ($options.onRowMatchModeKeyDown($event))),
+                          _cache[6] || (_cache[6] = vue.withKeys($event => (_ctx.onRowClearItemClick()), ["enter"]))
                         ]
                       }, vue.toDisplayString($options.noFilterLabel), 33)
                     ]))
-                  : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
+                  : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
                       ($options.isShowOperator)
-                        ? (vue.openBlock(), vue.createBlock("div", _hoisted_5$1, [
+                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_8, [
                             vue.createVNode(_component_CFDropdown, {
                               options: $options.operatorOptions,
                               modelValue: $options.operator,
-                              "onUpdate:modelValue": _cache[8] || (_cache[8] = $event => ($options.onOperatorChange($event))),
+                              "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => ($options.onOperatorChange($event))),
                               class: "p-column-filter-operator-dropdown",
                               optionLabel: "label",
                               optionValue: "value"
                             }, null, 8, ["options", "modelValue"])
                           ]))
                         : vue.createCommentVNode("", true),
-                      vue.createVNode("div", _hoisted_6$1, [
-                        (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.fieldConstraints, (fieldConstraint, i) => {
-                          return (vue.openBlock(), vue.createBlock("div", {
+                      vue.createElementVNode("div", _hoisted_9, [
+                        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.fieldConstraints, (fieldConstraint, i) => {
+                          return (vue.openBlock(), vue.createElementBlock("div", {
                             key: i,
                             class: "p-column-filter-constraint"
                           }, [
@@ -677,7 +684,7 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
                                   filterCallback: $options.filterCallback
                                 }, null, 8, ["field", "filterModel", "filterCallback"]))
                               : vue.createCommentVNode("", true),
-                            vue.createVNode("div", null, [
+                            vue.createElementVNode("div", null, [
                               ($options.showRemoveIcon)
                                 ? (vue.openBlock(), vue.createBlock(_component_CFButton, {
                                     key: 0,
@@ -693,23 +700,23 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
                         }), 128))
                       ]),
                       ($options.isShowAddConstraint)
-                        ? (vue.openBlock(), vue.createBlock("div", _hoisted_7, [
+                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_10, [
                             vue.createVNode(_component_CFButton, {
                               type: "button",
                               label: $options.addRuleButtonLabel,
                               icon: "pi pi-plus",
                               class: "p-column-filter-add-button p-button-text p-button-sm",
-                              onClick: _cache[9] || (_cache[9] = $event => ($options.addConstraint()))
+                              onClick: _cache[8] || (_cache[8] = $event => ($options.addConstraint()))
                             }, null, 8, ["label"])
                           ]))
                         : vue.createCommentVNode("", true),
-                      vue.createVNode("div", _hoisted_8, [
+                      vue.createElementVNode("div", _hoisted_11, [
                         (!$props.filterClearTemplate && $props.showClearButton)
                           ? (vue.openBlock(), vue.createBlock(_component_CFButton, {
                               key: 0,
                               type: "button",
                               class: "p-button-outlined p-button-sm",
-                              onClick: _cache[10] || (_cache[10] = $event => ($options.clearFilter())),
+                              onClick: _cache[9] || (_cache[9] = $event => ($options.clearFilter())),
                               label: $options.clearButtonLabel
                             }, null, 8, ["label"]))
                           : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.filterClearTemplate), {
@@ -719,13 +726,13 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
                               filterCallback: $options.clearFilter
                             }, null, 8, ["field", "filterModel", "filterCallback"])),
                         ($props.showApplyButton)
-                          ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 2 }, [
+                          ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 2 }, [
                               (!$props.filterApplyTemplate)
                                 ? (vue.openBlock(), vue.createBlock(_component_CFButton, {
                                     key: 0,
                                     type: "button",
                                     class: "p-button-sm",
-                                    onClick: _cache[11] || (_cache[11] = $event => ($options.applyFilter())),
+                                    onClick: _cache[10] || (_cache[10] = $event => ($options.applyFilter())),
                                     label: $options.applyButtonLabel
                                   }, null, 8, ["label"]))
                                 : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.filterApplyTemplate), {
@@ -969,12 +976,13 @@ var script$8 = {
     }
 };
 
-const _hoisted_1$6 = { class: "p-column-header-content" };
-const _hoisted_2$4 = {
+const _hoisted_1$8 = ["tabindex", "colspan", "rowspan", "aria-sort"];
+const _hoisted_2$6 = { class: "p-column-header-content" };
+const _hoisted_3$5 = {
   key: 1,
   class: "p-column-title"
 };
-const _hoisted_3$3 = {
+const _hoisted_4$3 = {
   key: 3,
   class: "p-sortable-column-badge"
 };
@@ -983,30 +991,30 @@ function render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTHeaderCheckbox = vue.resolveComponent("DTHeaderCheckbox");
   const _component_DTColumnFilter = vue.resolveComponent("DTColumnFilter");
 
-  return (vue.openBlock(), vue.createBlock("th", {
-    style: $options.containerStyle,
-    class: $options.containerClass,
+  return (vue.openBlock(), vue.createElementBlock("th", {
+    style: vue.normalizeStyle($options.containerStyle),
+    class: vue.normalizeClass($options.containerClass),
     tabindex: $options.columnProp('sortable') ? '0' : null,
     role: "cell",
-    onClick: _cache[9] || (_cache[9] = (...args) => ($options.onClick && $options.onClick(...args))),
-    onKeydown: _cache[10] || (_cache[10] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-    onMousedown: _cache[11] || (_cache[11] = (...args) => ($options.onMouseDown && $options.onMouseDown(...args))),
-    onDragstart: _cache[12] || (_cache[12] = (...args) => ($options.onDragStart && $options.onDragStart(...args))),
-    onDragover: _cache[13] || (_cache[13] = (...args) => ($options.onDragOver && $options.onDragOver(...args))),
-    onDragleave: _cache[14] || (_cache[14] = (...args) => ($options.onDragLeave && $options.onDragLeave(...args))),
-    onDrop: _cache[15] || (_cache[15] = (...args) => ($options.onDrop && $options.onDrop(...args))),
+    onClick: _cache[8] || (_cache[8] = (...args) => ($options.onClick && $options.onClick(...args))),
+    onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+    onMousedown: _cache[10] || (_cache[10] = (...args) => ($options.onMouseDown && $options.onMouseDown(...args))),
+    onDragstart: _cache[11] || (_cache[11] = (...args) => ($options.onDragStart && $options.onDragStart(...args))),
+    onDragover: _cache[12] || (_cache[12] = (...args) => ($options.onDragOver && $options.onDragOver(...args))),
+    onDragleave: _cache[13] || (_cache[13] = (...args) => ($options.onDragLeave && $options.onDragLeave(...args))),
+    onDrop: _cache[14] || (_cache[14] = (...args) => ($options.onDrop && $options.onDrop(...args))),
     colspan: $options.columnProp('colspan'),
     rowspan: $options.columnProp('rowspan'),
     "aria-sort": $options.ariaSort
   }, [
     ($props.resizableColumns && !$options.columnProp('frozen'))
-      ? (vue.openBlock(), vue.createBlock("span", {
+      ? (vue.openBlock(), vue.createElementBlock("span", {
           key: 0,
           class: "p-column-resizer",
-          onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onResizeStart && $options.onResizeStart(...args)))
+          onMousedown: _cache[0] || (_cache[0] = (...args) => ($options.onResizeStart && $options.onResizeStart(...args)))
         }, null, 32))
       : vue.createCommentVNode("", true),
-    vue.createVNode("div", _hoisted_1$6, [
+    vue.createElementVNode("div", _hoisted_2$6, [
       ($props.column.children && $props.column.children.header)
         ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.column.children.header), {
             key: 0,
@@ -1014,16 +1022,16 @@ function render$8(_ctx, _cache, $props, $setup, $data, $options) {
           }, null, 8, ["column"]))
         : vue.createCommentVNode("", true),
       ($options.columnProp('header'))
-        ? (vue.openBlock(), vue.createBlock("span", _hoisted_2$4, vue.toDisplayString($options.columnProp('header')), 1))
+        ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_3$5, vue.toDisplayString($options.columnProp('header')), 1))
         : vue.createCommentVNode("", true),
       ($options.columnProp('sortable'))
-        ? (vue.openBlock(), vue.createBlock("span", {
+        ? (vue.openBlock(), vue.createElementBlock("span", {
             key: 2,
-            class: $options.sortableColumnIcon
+            class: vue.normalizeClass($options.sortableColumnIcon)
           }, null, 2))
         : vue.createCommentVNode("", true),
       ($options.isMultiSorted())
-        ? (vue.openBlock(), vue.createBlock("span", _hoisted_3$3, vue.toDisplayString($options.getBadgeValue()), 1))
+        ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_4$3, vue.toDisplayString($options.getBadgeValue()), 1))
         : vue.createCommentVNode("", true),
       ($options.columnProp('selectionMode') ==='multiple' && $props.filterDisplay !== 'row')
         ? (vue.openBlock(), vue.createBlock(_component_DTHeaderCheckbox, {
@@ -1047,8 +1055,8 @@ function render$8(_ctx, _cache, $props, $setup, $data, $options) {
             filterApplyTemplate: $props.column.children && $props.column.children.filterapply,
             filters: $props.filters,
             filtersStore: $props.filtersStore,
-            onFilterChange: _cache[2] || (_cache[2] = $event => (_ctx.$emit('filter-change', $event))),
-            onFilterApply: _cache[3] || (_cache[3] = $event => (_ctx.$emit('filter-apply'))),
+            onFilterChange: _cache[1] || (_cache[1] = $event => (_ctx.$emit('filter-change', $event))),
+            onFilterApply: _cache[2] || (_cache[2] = $event => (_ctx.$emit('filter-apply'))),
             filterMenuStyle: $options.columnProp('filterMenuStyle'),
             filterMenuClass: $options.columnProp('filterMenuClass'),
             showOperator: $options.columnProp('showFilterOperator'),
@@ -1058,15 +1066,15 @@ function render$8(_ctx, _cache, $props, $setup, $data, $options) {
             showAddButton: $options.columnProp('showAddButton'),
             matchModeOptions: $options.columnProp('filterMatchModeOptions'),
             maxConstraints: $options.columnProp('maxConstraints'),
-            onOperatorChange: _cache[4] || (_cache[4] = $event => (_ctx.$emit('operator-change',$event))),
-            onMatchmodeChange: _cache[5] || (_cache[5] = $event => (_ctx.$emit('matchmode-change', $event))),
-            onConstraintAdd: _cache[6] || (_cache[6] = $event => (_ctx.$emit('constraint-add', $event))),
-            onConstraintRemove: _cache[7] || (_cache[7] = $event => (_ctx.$emit('constraint-remove', $event))),
-            onApplyClick: _cache[8] || (_cache[8] = $event => (_ctx.$emit('apply-click',$event)))
+            onOperatorChange: _cache[3] || (_cache[3] = $event => (_ctx.$emit('operator-change',$event))),
+            onMatchmodeChange: _cache[4] || (_cache[4] = $event => (_ctx.$emit('matchmode-change', $event))),
+            onConstraintAdd: _cache[5] || (_cache[5] = $event => (_ctx.$emit('constraint-add', $event))),
+            onConstraintRemove: _cache[6] || (_cache[6] = $event => (_ctx.$emit('constraint-remove', $event))),
+            onApplyClick: _cache[7] || (_cache[7] = $event => (_ctx.$emit('apply-click',$event)))
           }, null, 8, ["field", "type", "showMenu", "filterElement", "filterHeaderTemplate", "filterFooterTemplate", "filterClearTemplate", "filterApplyTemplate", "filters", "filtersStore", "filterMenuStyle", "filterMenuClass", "showOperator", "showClearButton", "showApplyButton", "showMatchModes", "showAddButton", "matchModeOptions", "maxConstraints"]))
         : vue.createCommentVNode("", true)
     ])
-  ], 46, ["tabindex", "colspan", "rowspan", "aria-sort"]))
+  ], 46, _hoisted_1$8))
 }
 
 script$8.render = render$8;
@@ -1189,12 +1197,12 @@ var script$7 = {
     }
 };
 
-const _hoisted_1$5 = {
+const _hoisted_1$7 = {
   class: "p-datatable-thead",
   role: "rowgroup"
 };
-const _hoisted_2$3 = { role: "row" };
-const _hoisted_3$2 = {
+const _hoisted_2$5 = { role: "row" };
+const _hoisted_3$4 = {
   key: 0,
   role: "row"
 };
@@ -1204,67 +1212,67 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTHeaderCheckbox = vue.resolveComponent("DTHeaderCheckbox");
   const _component_DTColumnFilter = vue.resolveComponent("DTColumnFilter");
 
-  return (vue.openBlock(), vue.createBlock("thead", _hoisted_1$5, [
+  return (vue.openBlock(), vue.createElementBlock("thead", _hoisted_1$7, [
     (!$props.columnGroup)
-      ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
-          vue.createVNode("tr", _hoisted_2$3, [
-            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.columns, (col, i) => {
-              return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+      ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
+          vue.createElementVNode("tr", _hoisted_2$5, [
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.columns, (col, i) => {
+              return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                 key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||i
               }, [
                 (!$options.columnProp(col, 'hidden') && ($props.rowGroupMode !== 'subheader' || ($props.groupRowsBy !== $options.columnProp(col, 'field'))))
                   ? (vue.openBlock(), vue.createBlock(_component_DTHeaderCell, {
                       key: 0,
                       column: col,
-                      onColumnClick: _cache[1] || (_cache[1] = $event => (_ctx.$emit('column-click', $event))),
-                      onColumnMousedown: _cache[2] || (_cache[2] = $event => (_ctx.$emit('column-mousedown', $event))),
-                      onColumnDragstart: _cache[3] || (_cache[3] = $event => (_ctx.$emit('column-dragstart', $event))),
-                      onColumnDragover: _cache[4] || (_cache[4] = $event => (_ctx.$emit('column-dragover', $event))),
-                      onColumnDragleave: _cache[5] || (_cache[5] = $event => (_ctx.$emit('column-dragleave', $event))),
-                      onColumnDrop: _cache[6] || (_cache[6] = $event => (_ctx.$emit('column-drop', $event))),
+                      onColumnClick: _cache[0] || (_cache[0] = $event => (_ctx.$emit('column-click', $event))),
+                      onColumnMousedown: _cache[1] || (_cache[1] = $event => (_ctx.$emit('column-mousedown', $event))),
+                      onColumnDragstart: _cache[2] || (_cache[2] = $event => (_ctx.$emit('column-dragstart', $event))),
+                      onColumnDragover: _cache[3] || (_cache[3] = $event => (_ctx.$emit('column-dragover', $event))),
+                      onColumnDragleave: _cache[4] || (_cache[4] = $event => (_ctx.$emit('column-dragleave', $event))),
+                      onColumnDrop: _cache[5] || (_cache[5] = $event => (_ctx.$emit('column-drop', $event))),
                       groupRowsBy: $props.groupRowsBy,
                       groupRowSortField: $props.groupRowSortField,
                       resizableColumns: $props.resizableColumns,
-                      onColumnResizestart: _cache[7] || (_cache[7] = $event => (_ctx.$emit('column-resizestart', $event))),
+                      onColumnResizestart: _cache[6] || (_cache[6] = $event => (_ctx.$emit('column-resizestart', $event))),
                       sortMode: $props.sortMode,
                       sortField: $props.sortField,
                       sortOrder: $props.sortOrder,
                       multiSortMeta: $props.multiSortMeta,
                       allRowsSelected: $props.allRowsSelected,
                       empty: $props.empty,
-                      onCheckboxChange: _cache[8] || (_cache[8] = $event => (_ctx.$emit('checkbox-change', $event))),
+                      onCheckboxChange: _cache[7] || (_cache[7] = $event => (_ctx.$emit('checkbox-change', $event))),
                       filters: $props.filters,
                       filterDisplay: $props.filterDisplay,
                       filtersStore: $props.filtersStore,
-                      onFilterChange: _cache[9] || (_cache[9] = $event => (_ctx.$emit('filter-change', $event))),
-                      onFilterApply: _cache[10] || (_cache[10] = $event => (_ctx.$emit('filter-apply'))),
-                      onOperatorChange: _cache[11] || (_cache[11] = $event => (_ctx.$emit('operator-change',$event))),
-                      onMatchmodeChange: _cache[12] || (_cache[12] = $event => (_ctx.$emit('matchmode-change', $event))),
-                      onConstraintAdd: _cache[13] || (_cache[13] = $event => (_ctx.$emit('constraint-add', $event))),
-                      onConstraintRemove: _cache[14] || (_cache[14] = $event => (_ctx.$emit('constraint-remove', $event))),
-                      onApplyClick: _cache[15] || (_cache[15] = $event => (_ctx.$emit('apply-click',$event)))
+                      onFilterChange: _cache[8] || (_cache[8] = $event => (_ctx.$emit('filter-change', $event))),
+                      onFilterApply: _cache[9] || (_cache[9] = $event => (_ctx.$emit('filter-apply'))),
+                      onOperatorChange: _cache[10] || (_cache[10] = $event => (_ctx.$emit('operator-change',$event))),
+                      onMatchmodeChange: _cache[11] || (_cache[11] = $event => (_ctx.$emit('matchmode-change', $event))),
+                      onConstraintAdd: _cache[12] || (_cache[12] = $event => (_ctx.$emit('constraint-add', $event))),
+                      onConstraintRemove: _cache[13] || (_cache[13] = $event => (_ctx.$emit('constraint-remove', $event))),
+                      onApplyClick: _cache[14] || (_cache[14] = $event => (_ctx.$emit('apply-click',$event)))
                     }, null, 8, ["column", "groupRowsBy", "groupRowSortField", "resizableColumns", "sortMode", "sortField", "sortOrder", "multiSortMeta", "allRowsSelected", "empty", "filters", "filterDisplay", "filtersStore"]))
                   : vue.createCommentVNode("", true)
               ], 64))
             }), 128))
           ]),
           ($props.filterDisplay === 'row')
-            ? (vue.openBlock(), vue.createBlock("tr", _hoisted_3$2, [
-                (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.columns, (col, i) => {
-                  return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+            ? (vue.openBlock(), vue.createElementBlock("tr", _hoisted_3$4, [
+                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.columns, (col, i) => {
+                  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                     key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||i
                   }, [
                     (!$options.columnProp(col, 'hidden') && ($props.rowGroupMode !== 'subheader' || ($props.groupRowsBy !== $options.columnProp(col, 'field'))))
-                      ? (vue.openBlock(), vue.createBlock("th", {
+                      ? (vue.openBlock(), vue.createElementBlock("th", {
                           key: 0,
-                          style: $options.getFilterColumnHeaderStyle(col),
-                          class: $options.getFilterColumnHeaderClass(col)
+                          style: vue.normalizeStyle($options.getFilterColumnHeaderStyle(col)),
+                          class: vue.normalizeClass($options.getFilterColumnHeaderClass(col))
                         }, [
                           ($options.columnProp(col, 'selectionMode') ==='multiple')
                             ? (vue.openBlock(), vue.createBlock(_component_DTHeaderCheckbox, {
                                 key: 0,
                                 checked: $props.allRowsSelected,
-                                onChange: _cache[16] || (_cache[16] = $event => (_ctx.$emit('checkbox-change', $event))),
+                                onChange: _cache[15] || (_cache[15] = $event => (_ctx.$emit('checkbox-change', $event))),
                                 disabled: $props.empty
                               }, null, 8, ["checked", "disabled"]))
                             : vue.createCommentVNode("", true),
@@ -1282,8 +1290,8 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
                                 filterApplyTemplate: col.children && col.children.filterapply,
                                 filters: $props.filters,
                                 filtersStore: $props.filtersStore,
-                                onFilterChange: _cache[17] || (_cache[17] = $event => (_ctx.$emit('filter-change', $event))),
-                                onFilterApply: _cache[18] || (_cache[18] = $event => (_ctx.$emit('filter-apply'))),
+                                onFilterChange: _cache[16] || (_cache[16] = $event => (_ctx.$emit('filter-change', $event))),
+                                onFilterApply: _cache[17] || (_cache[17] = $event => (_ctx.$emit('filter-apply'))),
                                 filterMenuStyle: $options.columnProp(col,'filterMenuStyle'),
                                 filterMenuClass: $options.columnProp(col,'filterMenuClass'),
                                 showOperator: $options.columnProp(col,'showFilterOperator'),
@@ -1293,11 +1301,11 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
                                 showAddButton: $options.columnProp(col,'showAddButton'),
                                 matchModeOptions: $options.columnProp(col,'filterMatchModeOptions'),
                                 maxConstraints: $options.columnProp(col,'maxConstraints'),
-                                onOperatorChange: _cache[19] || (_cache[19] = $event => (_ctx.$emit('operator-change',$event))),
-                                onMatchmodeChange: _cache[20] || (_cache[20] = $event => (_ctx.$emit('matchmode-change', $event))),
-                                onConstraintAdd: _cache[21] || (_cache[21] = $event => (_ctx.$emit('constraint-add', $event))),
-                                onConstraintRemove: _cache[22] || (_cache[22] = $event => (_ctx.$emit('constraint-remove', $event))),
-                                onApplyClick: _cache[23] || (_cache[23] = $event => (_ctx.$emit('apply-click',$event)))
+                                onOperatorChange: _cache[18] || (_cache[18] = $event => (_ctx.$emit('operator-change',$event))),
+                                onMatchmodeChange: _cache[19] || (_cache[19] = $event => (_ctx.$emit('matchmode-change', $event))),
+                                onConstraintAdd: _cache[20] || (_cache[20] = $event => (_ctx.$emit('constraint-add', $event))),
+                                onConstraintRemove: _cache[21] || (_cache[21] = $event => (_ctx.$emit('constraint-remove', $event))),
+                                onApplyClick: _cache[22] || (_cache[22] = $event => (_ctx.$emit('apply-click',$event)))
                               }, null, 8, ["field", "type", "showMenu", "filterElement", "filterHeaderTemplate", "filterFooterTemplate", "filterClearTemplate", "filterApplyTemplate", "filters", "filtersStore", "filterMenuStyle", "filterMenuClass", "showOperator", "showClearButton", "showApplyButton", "showMatchModes", "showAddButton", "matchModeOptions", "maxConstraints"]))
                             : vue.createCommentVNode("", true)
                         ], 6))
@@ -1307,21 +1315,21 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
               ]))
             : vue.createCommentVNode("", true)
         ], 64))
-      : (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList($options.getHeaderRows(), (row, i) => {
-          return (vue.openBlock(), vue.createBlock("tr", {
+      : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList($options.getHeaderRows(), (row, i) => {
+          return (vue.openBlock(), vue.createElementBlock("tr", {
             key: i,
             role: "row"
           }, [
-            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.getHeaderColumns(row), (col, j) => {
-              return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getHeaderColumns(row), (col, j) => {
+              return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                 key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||j
               }, [
                 (!$options.columnProp(col, 'hidden') && ($props.rowGroupMode !== 'subheader' || ($props.groupRowsBy !== $options.columnProp(col, 'field'))) && (typeof col.children !== 'string'))
                   ? (vue.openBlock(), vue.createBlock(_component_DTHeaderCell, {
                       key: 0,
                       column: col,
-                      onColumnClick: _cache[24] || (_cache[24] = $event => (_ctx.$emit('column-click', $event))),
-                      onColumnMousedown: _cache[25] || (_cache[25] = $event => (_ctx.$emit('column-mousedown', $event))),
+                      onColumnClick: _cache[23] || (_cache[23] = $event => (_ctx.$emit('column-click', $event))),
+                      onColumnMousedown: _cache[24] || (_cache[24] = $event => (_ctx.$emit('column-mousedown', $event))),
                       groupRowsBy: $props.groupRowsBy,
                       groupRowSortField: $props.groupRowSortField,
                       sortMode: $props.sortMode,
@@ -1330,17 +1338,17 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
                       multiSortMeta: $props.multiSortMeta,
                       allRowsSelected: $props.allRowsSelected,
                       empty: $props.empty,
-                      onCheckboxChange: _cache[26] || (_cache[26] = $event => (_ctx.$emit('checkbox-change', $event))),
+                      onCheckboxChange: _cache[25] || (_cache[25] = $event => (_ctx.$emit('checkbox-change', $event))),
                       filters: $props.filters,
                       filterDisplay: $props.filterDisplay,
                       filtersStore: $props.filtersStore,
-                      onFilterChange: _cache[27] || (_cache[27] = $event => (_ctx.$emit('filter-change', $event))),
-                      onFilterApply: _cache[28] || (_cache[28] = $event => (_ctx.$emit('filter-apply'))),
-                      onOperatorChange: _cache[29] || (_cache[29] = $event => (_ctx.$emit('operator-change',$event))),
-                      onMatchmodeChange: _cache[30] || (_cache[30] = $event => (_ctx.$emit('matchmode-change', $event))),
-                      onConstraintAdd: _cache[31] || (_cache[31] = $event => (_ctx.$emit('constraint-add', $event))),
-                      onConstraintRemove: _cache[32] || (_cache[32] = $event => (_ctx.$emit('constraint-remove', $event))),
-                      onApplyClick: _cache[33] || (_cache[33] = $event => (_ctx.$emit('apply-click',$event)))
+                      onFilterChange: _cache[26] || (_cache[26] = $event => (_ctx.$emit('filter-change', $event))),
+                      onFilterApply: _cache[27] || (_cache[27] = $event => (_ctx.$emit('filter-apply'))),
+                      onOperatorChange: _cache[28] || (_cache[28] = $event => (_ctx.$emit('operator-change',$event))),
+                      onMatchmodeChange: _cache[29] || (_cache[29] = $event => (_ctx.$emit('matchmode-change', $event))),
+                      onConstraintAdd: _cache[30] || (_cache[30] = $event => (_ctx.$emit('constraint-add', $event))),
+                      onConstraintRemove: _cache[31] || (_cache[31] = $event => (_ctx.$emit('constraint-remove', $event))),
+                      onApplyClick: _cache[32] || (_cache[32] = $event => (_ctx.$emit('apply-click',$event)))
                     }, null, 8, ["column", "groupRowsBy", "groupRowSortField", "sortMode", "sortField", "sortOrder", "multiSortMeta", "allRowsSelected", "empty", "filters", "filterDisplay", "filtersStore"]))
                   : vue.createCommentVNode("", true)
               ], 64))
@@ -1385,25 +1393,27 @@ var script$6 = {
     }
 };
 
-const _hoisted_1$4 = /*#__PURE__*/vue.createVNode("div", { class: "p-radiobutton-icon" }, null, -1);
+const _hoisted_1$6 = ["aria-checked"];
+const _hoisted_2$4 = /*#__PURE__*/vue.createElementVNode("div", { class: "p-radiobutton-icon" }, null, -1);
+const _hoisted_3$3 = [
+  _hoisted_2$4
+];
 
 function render$6(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
-    class: ['p-radiobutton p-component', {'p-radiobutton-focused': $data.focused}],
-    onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass(['p-radiobutton p-component', {'p-radiobutton-focused': $data.focused}]),
+    onClick: _cache[0] || (_cache[0] = (...args) => ($options.onClick && $options.onClick(...args))),
     tabindex: "0",
-    onFocus: _cache[2] || (_cache[2] = $event => ($options.onFocus($event))),
-    onBlur: _cache[3] || (_cache[3] = $event => ($options.onBlur($event))),
-    onKeydown: _cache[4] || (_cache[4] = vue.withKeys(vue.withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["prevent"]), ["space"]))
+    onFocus: _cache[1] || (_cache[1] = $event => ($options.onFocus($event))),
+    onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur($event))),
+    onKeydown: _cache[3] || (_cache[3] = vue.withKeys(vue.withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["prevent"]), ["space"]))
   }, [
-    vue.createVNode("div", {
+    vue.createElementVNode("div", {
       ref: "box",
-      class: ['p-radiobutton-box p-component', {'p-highlight': $props.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}],
+      class: vue.normalizeClass(['p-radiobutton-box p-component', {'p-highlight': $props.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
       role: "radio",
       "aria-checked": $props.checked
-    }, [
-      _hoisted_1$4
-    ], 10, ["aria-checked"])
+    }, _hoisted_3$3, 10, _hoisted_1$6)
   ], 34))
 }
 
@@ -1441,25 +1451,27 @@ var script$5 = {
     }
 };
 
+const _hoisted_1$5 = ["aria-checked", "tabindex"];
+
 function render$5(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
-    class: ['p-checkbox p-component', {'p-checkbox-focused': $data.focused}],
-    onClick: _cache[4] || (_cache[4] = vue.withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["stop","prevent"]))
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass(['p-checkbox p-component', {'p-checkbox-focused': $data.focused}]),
+    onClick: _cache[3] || (_cache[3] = vue.withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["stop","prevent"]))
   }, [
-    vue.createVNode("div", {
+    vue.createElementVNode("div", {
       ref: "box",
-      class: ['p-checkbox-box p-component', {'p-highlight': $props.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}],
+      class: vue.normalizeClass(['p-checkbox-box p-component', {'p-highlight': $props.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
       role: "checkbox",
       "aria-checked": $props.checked,
       tabindex: _ctx.$attrs.disabled ? null : '0',
-      onKeydown: _cache[1] || (_cache[1] = vue.withKeys(vue.withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["prevent"]), ["space"])),
-      onFocus: _cache[2] || (_cache[2] = $event => ($options.onFocus($event))),
-      onBlur: _cache[3] || (_cache[3] = $event => ($options.onBlur($event)))
+      onKeydown: _cache[0] || (_cache[0] = vue.withKeys(vue.withModifiers((...args) => ($options.onClick && $options.onClick(...args)), ["prevent"]), ["space"])),
+      onFocus: _cache[1] || (_cache[1] = $event => ($options.onFocus($event))),
+      onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur($event)))
     }, [
-      vue.createVNode("span", {
-        class: ['p-checkbox-icon', {'pi pi-check': $props.checked}]
+      vue.createElementVNode("span", {
+        class: vue.normalizeClass(['p-checkbox-icon', {'pi pi-check': $props.checked}])
       }, null, 2)
-    ], 42, ["aria-checked", "tabindex"])
+    ], 42, _hoisted_1$5)
   ], 2))
 }
 
@@ -1553,7 +1565,7 @@ var script$4 = {
     },
     beforeUnmount() {
         if (this.overlayEventListener) {
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         }
     },
@@ -1601,7 +1613,7 @@ var script$4 = {
         switchCellToViewMode() {
             this.d_editing = false;
             this.unbindDocumentEditListener();
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         },
         onClick(event) {
@@ -1618,7 +1630,7 @@ var script$4 = {
                             this.selfClick = true;
                         }
                     };
-                    OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+                    OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
                 }
             }
         },
@@ -1826,17 +1838,26 @@ var script$4 = {
         'DTCheckbox': script$5
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
-const _hoisted_1$3 = {
+const _hoisted_1$4 = {
   key: 0,
   class: "p-column-title"
 };
-const _hoisted_2$2 = /*#__PURE__*/vue.createVNode("span", { class: "p-row-editor-init-icon pi pi-fw pi-pencil" }, null, -1);
-const _hoisted_3$1 = /*#__PURE__*/vue.createVNode("span", { class: "p-row-editor-save-icon pi pi-fw pi-check" }, null, -1);
-const _hoisted_4$1 = /*#__PURE__*/vue.createVNode("span", { class: "p-row-editor-cancel-icon pi pi-fw pi-times" }, null, -1);
+const _hoisted_2$3 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-row-editor-init-icon pi pi-fw pi-pencil" }, null, -1);
+const _hoisted_3$2 = [
+  _hoisted_2$3
+];
+const _hoisted_4$2 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-row-editor-save-icon pi pi-fw pi-check" }, null, -1);
+const _hoisted_5$2 = [
+  _hoisted_4$2
+];
+const _hoisted_6$2 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-row-editor-cancel-icon pi pi-fw pi-times" }, null, -1);
+const _hoisted_7 = [
+  _hoisted_6$2
+];
 
 function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTRadioButton = vue.resolveComponent("DTRadioButton");
@@ -1844,10 +1865,10 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
 
   return ($options.loading)
-    ? (vue.openBlock(), vue.createBlock("td", {
+    ? (vue.openBlock(), vue.createElementBlock("td", {
         key: 0,
-        style: $options.containerStyle,
-        class: $options.containerClass
+        style: vue.normalizeStyle($options.containerStyle),
+        class: vue.normalizeClass($options.containerClass)
       }, [
         (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.column.children.loading), {
           data: $props.rowData,
@@ -1858,16 +1879,16 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
           loadingOptions: $options.loadingOptions
         }, null, 8, ["data", "column", "field", "index", "frozenRow", "loadingOptions"]))
       ], 6))
-    : (vue.openBlock(), vue.createBlock("td", {
+    : (vue.openBlock(), vue.createElementBlock("td", {
         key: 1,
-        style: $options.containerStyle,
-        class: $options.containerClass,
-        onClick: _cache[7] || (_cache[7] = (...args) => ($options.onClick && $options.onClick(...args))),
-        onKeydown: _cache[8] || (_cache[8] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+        style: vue.normalizeStyle($options.containerStyle),
+        class: vue.normalizeClass($options.containerClass),
+        onClick: _cache[6] || (_cache[6] = (...args) => ($options.onClick && $options.onClick(...args))),
+        onKeydown: _cache[7] || (_cache[7] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
         role: "cell"
       }, [
         ($props.responsiveLayout === 'stack')
-          ? (vue.openBlock(), vue.createBlock("span", _hoisted_1$3, vue.toDisplayString($options.columnProp('header')), 1))
+          ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_1$4, vue.toDisplayString($options.columnProp('header')), 1))
           : vue.createCommentVNode("", true),
         ($props.column.children && $props.column.children.body && !$data.d_editing)
           ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.column.children.body), {
@@ -1900,79 +1921,75 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
                   frozenRow: $props.frozenRow
                 }, null, 8, ["data", "column", "field", "index", "frozenRow"]))
               : ($options.columnProp('selectionMode'))
-                ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 4 }, [
+                ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 4 }, [
                     ($options.columnProp('selectionMode') === 'single')
                       ? (vue.openBlock(), vue.createBlock(_component_DTRadioButton, {
                           key: 0,
                           value: $props.rowData,
                           checked: $props.selected,
-                          onChange: _cache[1] || (_cache[1] = $event => ($options.toggleRowWithRadio($event, $props.rowIndex)))
+                          onChange: _cache[0] || (_cache[0] = $event => ($options.toggleRowWithRadio($event, $props.rowIndex)))
                         }, null, 8, ["value", "checked"]))
                       : ($options.columnProp('selectionMode') ==='multiple')
                         ? (vue.openBlock(), vue.createBlock(_component_DTCheckbox, {
                             key: 1,
                             value: $props.rowData,
                             checked: $props.selected,
-                            onChange: _cache[2] || (_cache[2] = $event => ($options.toggleRowWithCheckbox($event, $props.rowIndex)))
+                            onChange: _cache[1] || (_cache[1] = $event => ($options.toggleRowWithCheckbox($event, $props.rowIndex)))
                           }, null, 8, ["value", "checked"]))
                         : vue.createCommentVNode("", true)
                   ], 64))
                 : ($options.columnProp('rowReorder'))
-                  ? (vue.openBlock(), vue.createBlock("i", {
+                  ? (vue.openBlock(), vue.createElementBlock("i", {
                       key: 5,
-                      class: ['p-datatable-reorderablerow-handle', ($options.columnProp('rowReorderIcon') || 'pi pi-bars')]
+                      class: vue.normalizeClass(['p-datatable-reorderablerow-handle', ($options.columnProp('rowReorderIcon') || 'pi pi-bars')])
                     }, null, 2))
                   : ($options.columnProp('expander'))
-                    ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                    ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                         key: 6,
                         class: "p-row-toggler p-link",
-                        onClick: _cache[3] || (_cache[3] = (...args) => ($options.toggleRow && $options.toggleRow(...args))),
+                        onClick: _cache[2] || (_cache[2] = (...args) => ($options.toggleRow && $options.toggleRow(...args))),
                         type: "button"
                       }, [
-                        vue.createVNode("span", { class: $props.rowTogglerIcon }, null, 2)
-                      ], 512)), [
+                        vue.createElementVNode("span", {
+                          class: vue.normalizeClass($props.rowTogglerIcon)
+                        }, null, 2)
+                      ])), [
                         [_directive_ripple]
                       ])
                     : ($props.editMode === 'row' && $options.columnProp('rowEditor'))
-                      ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 7 }, [
+                      ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 7 }, [
                           (!$data.d_editing)
-                            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                 key: 0,
                                 class: "p-row-editor-init p-link",
-                                onClick: _cache[4] || (_cache[4] = (...args) => ($options.onRowEditInit && $options.onRowEditInit(...args))),
+                                onClick: _cache[3] || (_cache[3] = (...args) => ($options.onRowEditInit && $options.onRowEditInit(...args))),
                                 type: "button"
-                              }, [
-                                _hoisted_2$2
-                              ], 512)), [
+                              }, _hoisted_3$2)), [
                                 [_directive_ripple]
                               ])
                             : vue.createCommentVNode("", true),
                           ($data.d_editing)
-                            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                 key: 1,
                                 class: "p-row-editor-save p-link",
-                                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onRowEditSave && $options.onRowEditSave(...args))),
+                                onClick: _cache[4] || (_cache[4] = (...args) => ($options.onRowEditSave && $options.onRowEditSave(...args))),
                                 type: "button"
-                              }, [
-                                _hoisted_3$1
-                              ], 512)), [
+                              }, _hoisted_5$2)), [
                                 [_directive_ripple]
                               ])
                             : vue.createCommentVNode("", true),
                           ($data.d_editing)
-                            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                 key: 2,
                                 class: "p-row-editor-cancel p-link",
-                                onClick: _cache[6] || (_cache[6] = (...args) => ($options.onRowEditCancel && $options.onRowEditCancel(...args))),
+                                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onRowEditCancel && $options.onRowEditCancel(...args))),
                                 type: "button"
-                              }, [
-                                _hoisted_4$1
-                              ], 512)), [
+                              }, _hoisted_7)), [
                                 [_directive_ripple]
                               ])
                             : vue.createCommentVNode("", true)
                         ], 64))
-                      : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 8 }, [
+                      : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 8 }, [
                           vue.createTextVNode(vue.toDisplayString($options.resolveFieldData()), 1)
                         ], 64))
       ], 38))
@@ -2461,76 +2478,81 @@ var script$3 = {
     }
 };
 
-const _hoisted_1$2 = {
+const _hoisted_1$3 = ["colspan"];
+const _hoisted_2$2 = ["onClick"];
+const _hoisted_3$1 = ["onClick", "onDblclick", "onContextmenu", "onKeydown", "tabindex", "onDragstart", "onDragover"];
+const _hoisted_4$1 = ["colspan"];
+const _hoisted_5$1 = {
   key: 1,
   class: "p-datatable-emptymessage",
   role: "row"
 };
+const _hoisted_6$1 = ["colspan"];
 
 function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTBodyCell = vue.resolveComponent("DTBodyCell");
 
-  return (vue.openBlock(), vue.createBlock("tbody", {
+  return (vue.openBlock(), vue.createElementBlock("tbody", {
     ref: $options.bodyRef,
     class: "p-datatable-tbody",
     role: "rowgroup",
-    style: $options.bodyStyle
+    style: vue.normalizeStyle($options.bodyStyle)
   }, [
     (!$props.empty)
-      ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList($props.value, (rowData, index) => {
-          return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+      ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList($props.value, (rowData, index) => {
+          return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
             key: $options.getRowKey(rowData, $options.getRowIndex(index)) + '_subheader'
           }, [
             ($props.templates['groupheader'] && $props.rowGroupMode === 'subheader' && $options.shouldRenderRowGroupHeader($props.value, rowData, $options.getRowIndex(index)))
-              ? (vue.openBlock(), vue.createBlock("tr", {
+              ? (vue.openBlock(), vue.createElementBlock("tr", {
                   key: 0,
                   class: "p-rowgroup-header",
-                  style: $options.rowGroupHeaderStyle,
+                  style: vue.normalizeStyle($options.rowGroupHeaderStyle),
                   role: "row"
                 }, [
-                  vue.createVNode("td", {
+                  vue.createElementVNode("td", {
                     colspan: $options.columnsLength - 1
                   }, [
                     ($props.expandableRowGroups)
-                      ? (vue.openBlock(), vue.createBlock("button", {
+                      ? (vue.openBlock(), vue.createElementBlock("button", {
                           key: 0,
                           class: "p-row-toggler p-link",
                           onClick: $event => ($options.onRowGroupToggle($event, rowData)),
                           type: "button"
                         }, [
-                          vue.createVNode("span", {
-                            class: $options.rowGroupTogglerIcon(rowData)
+                          vue.createElementVNode("span", {
+                            class: vue.normalizeClass($options.rowGroupTogglerIcon(rowData))
                           }, null, 2)
-                        ], 8, ["onClick"]))
+                        ], 8, _hoisted_2$2))
                       : vue.createCommentVNode("", true),
                     (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates['groupheader']), {
                       data: rowData,
                       index: $options.getRowIndex(index)
                     }, null, 8, ["data", "index"]))
-                  ], 8, ["colspan"])
+                  ], 8, _hoisted_1$3)
                 ], 4))
               : vue.createCommentVNode("", true),
             ($props.expandableRowGroups ? $options.isRowGroupExpanded(rowData): true)
-              ? (vue.openBlock(), vue.createBlock("tr", {
-                  class: $options.getRowClass(rowData),
-                  style: $props.rowStyle,
+              ? (vue.openBlock(), vue.createElementBlock("tr", {
+                  class: vue.normalizeClass($options.getRowClass(rowData)),
+                  style: vue.normalizeStyle($props.rowStyle),
                   key: $options.getRowKey(rowData, $options.getRowIndex(index)),
                   onClick: $event => ($options.onRowClick($event, rowData, $options.getRowIndex(index))),
                   onDblclick: $event => ($options.onRowDblClick($event, rowData, $options.getRowIndex(index))),
                   onContextmenu: $event => ($options.onRowRightClick($event, rowData, $options.getRowIndex(index))),
-                  onTouchend: _cache[10] || (_cache[10] = $event => ($options.onRowTouchEnd($event))),
+                  onTouchend: _cache[9] || (_cache[9] = $event => ($options.onRowTouchEnd($event))),
                   onKeydown: $event => ($options.onRowKeyDown($event, rowData, $options.getRowIndex(index))),
                   tabindex: $props.selectionMode || $props.contextMenu ? '0' : null,
-                  onMousedown: _cache[11] || (_cache[11] = $event => ($options.onRowMouseDown($event))),
+                  onMousedown: _cache[10] || (_cache[10] = $event => ($options.onRowMouseDown($event))),
                   onDragstart: $event => ($options.onRowDragStart($event, $options.getRowIndex(index))),
                   onDragover: $event => ($options.onRowDragOver($event, $options.getRowIndex(index))),
-                  onDragleave: _cache[12] || (_cache[12] = $event => ($options.onRowDragLeave($event))),
-                  onDragend: _cache[13] || (_cache[13] = $event => ($options.onRowDragEnd($event))),
-                  onDrop: _cache[14] || (_cache[14] = $event => ($options.onRowDrop($event))),
+                  onDragleave: _cache[11] || (_cache[11] = $event => ($options.onRowDragLeave($event))),
+                  onDragend: _cache[12] || (_cache[12] = $event => ($options.onRowDragEnd($event))),
+                  onDrop: _cache[13] || (_cache[13] = $event => ($options.onRowDrop($event))),
                   role: "row"
                 }, [
-                  (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.columns, (col, i) => {
-                    return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.columns, (col, i) => {
+                    return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                       key: $options.columnProp(col,'columnKey')||$options.columnProp(col,'field')||i
                     }, [
                       ($options.shouldRenderBodyCell($props.value, col, $options.getRowIndex(index)))
@@ -2547,15 +2569,15 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
                             editMode: $props.editMode,
                             editing: $props.editMode === 'row' && $options.isRowEditing(rowData),
                             responsiveLayout: $props.responsiveLayout,
-                            onRadioChange: _cache[1] || (_cache[1] = $event => ($options.onRadioChange($event))),
-                            onCheckboxChange: _cache[2] || (_cache[2] = $event => ($options.onCheckboxChange($event))),
-                            onRowToggle: _cache[3] || (_cache[3] = $event => ($options.onRowToggle($event))),
-                            onCellEditInit: _cache[4] || (_cache[4] = $event => ($options.onCellEditInit($event))),
-                            onCellEditComplete: _cache[5] || (_cache[5] = $event => ($options.onCellEditComplete($event))),
-                            onCellEditCancel: _cache[6] || (_cache[6] = $event => ($options.onCellEditCancel($event))),
-                            onRowEditInit: _cache[7] || (_cache[7] = $event => ($options.onRowEditInit($event))),
-                            onRowEditSave: _cache[8] || (_cache[8] = $event => ($options.onRowEditSave($event))),
-                            onRowEditCancel: _cache[9] || (_cache[9] = $event => ($options.onRowEditCancel($event))),
+                            onRadioChange: _cache[0] || (_cache[0] = $event => ($options.onRadioChange($event))),
+                            onCheckboxChange: _cache[1] || (_cache[1] = $event => ($options.onCheckboxChange($event))),
+                            onRowToggle: _cache[2] || (_cache[2] = $event => ($options.onRowToggle($event))),
+                            onCellEditInit: _cache[3] || (_cache[3] = $event => ($options.onCellEditInit($event))),
+                            onCellEditComplete: _cache[4] || (_cache[4] = $event => ($options.onCellEditComplete($event))),
+                            onCellEditCancel: _cache[5] || (_cache[5] = $event => ($options.onCellEditCancel($event))),
+                            onRowEditInit: _cache[6] || (_cache[6] = $event => ($options.onRowEditInit($event))),
+                            onRowEditSave: _cache[7] || (_cache[7] = $event => ($options.onRowEditSave($event))),
+                            onRowEditCancel: _cache[8] || (_cache[8] = $event => ($options.onRowEditCancel($event))),
                             editingMeta: $props.editingMeta,
                             onEditingMetaChange: $options.onEditingMetaChange,
                             virtualScrollerContentProps: $props.virtualScrollerContentProps
@@ -2563,24 +2585,24 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
                         : vue.createCommentVNode("", true)
                     ], 64))
                   }), 128))
-                ], 46, ["onClick", "onDblclick", "onContextmenu", "onKeydown", "tabindex", "onDragstart", "onDragover"]))
+                ], 46, _hoisted_3$1))
               : vue.createCommentVNode("", true),
             ($props.templates['expansion'] && $props.expandedRows && $options.isRowExpanded(rowData))
-              ? (vue.openBlock(), vue.createBlock("tr", {
+              ? (vue.openBlock(), vue.createElementBlock("tr", {
                   class: "p-datatable-row-expansion",
                   key: $options.getRowKey(rowData, $options.getRowIndex(index)) + '_expansion',
                   role: "row"
                 }, [
-                  vue.createVNode("td", { colspan: $options.columnsLength }, [
+                  vue.createElementVNode("td", { colspan: $options.columnsLength }, [
                     (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates['expansion']), {
                       data: rowData,
                       index: $options.getRowIndex(index)
                     }, null, 8, ["data", "index"]))
-                  ], 8, ["colspan"])
+                  ], 8, _hoisted_4$1)
                 ]))
               : vue.createCommentVNode("", true),
             ($props.templates['groupfooter'] && $props.rowGroupMode === 'subheader' && $options.shouldRenderRowGroupFooter($props.value, rowData, $options.getRowIndex(index)))
-              ? (vue.openBlock(), vue.createBlock("tr", {
+              ? (vue.openBlock(), vue.createElementBlock("tr", {
                   class: "p-rowgroup-footer",
                   key: $options.getRowKey(rowData, $options.getRowIndex(index)) + '_subfooter',
                   role: "row"
@@ -2593,15 +2615,15 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
               : vue.createCommentVNode("", true)
           ], 64))
         }), 128))
-      : (vue.openBlock(), vue.createBlock("tr", _hoisted_1$2, [
-          vue.createVNode("td", { colspan: $options.columnsLength }, [
+      : (vue.openBlock(), vue.createElementBlock("tr", _hoisted_5$1, [
+          vue.createElementVNode("td", { colspan: $options.columnsLength }, [
             ($props.templates.empty && !$props.loading)
               ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates.empty), { key: 0 }))
               : vue.createCommentVNode("", true),
             ($props.templates.loading && $props.loading)
               ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates.loading), { key: 1 }))
               : vue.createCommentVNode("", true)
-          ], 8, ["colspan"])
+          ], 8, _hoisted_6$1)
         ]))
   ], 4))
 }
@@ -2672,10 +2694,12 @@ var script$2 = {
     }
 };
 
+const _hoisted_1$2 = ["colspan", "rowspan"];
+
 function render$2(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("td", {
-    style: $options.containerStyle,
-    class: $options.containerClass,
+  return (vue.openBlock(), vue.createElementBlock("td", {
+    style: vue.normalizeStyle($options.containerStyle),
+    class: vue.normalizeClass($options.containerClass),
     role: "cell",
     colspan: $options.columnProp('colspan'),
     rowspan: $options.columnProp('rowspan')
@@ -2687,7 +2711,7 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 8, ["column"]))
       : vue.createCommentVNode("", true),
     vue.createTextVNode(" " + vue.toDisplayString($options.columnProp('footer')), 1)
-  ], 14, ["colspan", "rowspan"]))
+  ], 14, _hoisted_1$2))
 }
 
 script$2.render = render$2;
@@ -2778,11 +2802,11 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTFooterCell = vue.resolveComponent("DTFooterCell");
 
   return ($options.hasFooter)
-    ? (vue.openBlock(), vue.createBlock("tfoot", _hoisted_1$1, [
+    ? (vue.openBlock(), vue.createElementBlock("tfoot", _hoisted_1$1, [
         (!$props.columnGroup)
-          ? (vue.openBlock(), vue.createBlock("tr", _hoisted_2$1, [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.columns, (col, i) => {
-                return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+          ? (vue.openBlock(), vue.createElementBlock("tr", _hoisted_2$1, [
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.columns, (col, i) => {
+                return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                   key: $options.columnProp(col,'columnKey')||$options.columnProp(col,'field')||i
                 }, [
                   (!$options.columnProp(col,'hidden'))
@@ -2794,13 +2818,13 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                 ], 64))
               }), 128))
             ]))
-          : (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList($options.getFooterRows(), (row, i) => {
-              return (vue.openBlock(), vue.createBlock("tr", {
+          : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList($options.getFooterRows(), (row, i) => {
+              return (vue.openBlock(), vue.createElementBlock("tr", {
                 key: i,
                 role: "row"
               }, [
-                (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.getFooterColumns(row), (col, j) => {
-                  return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getFooterColumns(row), (col, j) => {
+                  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                     key: $options.columnProp(col,'columnKey')||$options.columnProp(col,'field')||j
                   }, [
                     (!$options.columnProp(col,'hidden'))
@@ -4669,11 +4693,11 @@ var script = {
         }
     },
     components: {
-        'DTPaginator': Paginator__default['default'],
+        'DTPaginator': Paginator__default["default"],
         'DTTableHeader': script$7,
         'DTTableBody': script$3,
         'DTTableFooter': script$1,
-        'DTVirtualScroller': VirtualScroller__default['default']
+        'DTVirtualScroller': VirtualScroller__default["default"]
     }
 };
 
@@ -4714,18 +4738,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DTTableFooter = vue.resolveComponent("DTTableFooter");
   const _component_DTVirtualScroller = vue.resolveComponent("DTVirtualScroller");
 
-  return (vue.openBlock(), vue.createBlock("div", {
-    class: $options.containerClass,
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass($options.containerClass),
     "data-scrollselectors": ".p-datatable-wrapper"
   }, [
     vue.renderSlot(_ctx.$slots, "default"),
     ($props.loading)
-      ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-          vue.createVNode("i", { class: $options.loadingIconClass }, null, 2)
+      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+          vue.createElementVNode("i", {
+            class: vue.normalizeClass($options.loadingIconClass)
+          }, null, 2)
         ]))
       : vue.createCommentVNode("", true),
     (_ctx.$slots.header)
-      ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
+      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
           vue.renderSlot(_ctx.$slots, "header")
         ]))
       : vue.createCommentVNode("", true),
@@ -4740,7 +4766,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           rowsPerPageOptions: $props.rowsPerPageOptions,
           currentPageReportTemplate: $props.currentPageReportTemplate,
           class: "p-paginator-top",
-          onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event))),
+          onPage: _cache[0] || (_cache[0] = $event => ($options.onPage($event))),
           alwaysShow: $props.alwaysShowPaginator
         }, vue.createSlots({ _: 2 }, [
           (_ctx.$slots.paginatorstart)
@@ -4761,9 +4787,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             : undefined
         ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "currentPageReportTemplate", "alwaysShow"]))
       : vue.createCommentVNode("", true),
-    vue.createVNode("div", {
+    vue.createElementVNode("div", {
       class: "p-datatable-wrapper",
-      style: { maxHeight: $options.virtualScrollerDisabled ? $props.scrollHeight : '' }
+      style: vue.normalizeStyle({ maxHeight: $options.virtualScrollerDisabled ? $props.scrollHeight : '' })
     }, [
       vue.createVNode(_component_DTVirtualScroller, vue.mergeProps($props.virtualScrollerOptions, {
         items: $options.processedData,
@@ -4774,11 +4800,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         showSpacer: false
       }), {
         content: vue.withCtx((slotProps) => [
-          vue.createVNode("table", {
+          vue.createElementVNode("table", {
             ref: "table",
             role: "table",
-            class: [$props.tableClass, 'p-datatable-table'],
-            style: [$props.tableStyle, slotProps.spacerStyle]
+            class: vue.normalizeClass([$props.tableClass, 'p-datatable-table']),
+            style: vue.normalizeStyle([$props.tableStyle, slotProps.spacerStyle])
           }, [
             vue.createVNode(_component_DTTableHeader, {
               columnGroup: $options.headerColumnGroup,
@@ -4796,16 +4822,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               filters: $data.d_filters,
               filtersStore: $props.filters,
               filterDisplay: $props.filterDisplay,
-              onColumnClick: _cache[2] || (_cache[2] = $event => ($options.onColumnHeaderClick($event))),
-              onColumnMousedown: _cache[3] || (_cache[3] = $event => ($options.onColumnHeaderMouseDown($event))),
+              onColumnClick: _cache[1] || (_cache[1] = $event => ($options.onColumnHeaderClick($event))),
+              onColumnMousedown: _cache[2] || (_cache[2] = $event => ($options.onColumnHeaderMouseDown($event))),
               onFilterChange: $options.onFilterChange,
               onFilterApply: $options.onFilterApply,
-              onColumnDragstart: _cache[4] || (_cache[4] = $event => ($options.onColumnHeaderDragStart($event))),
-              onColumnDragover: _cache[5] || (_cache[5] = $event => ($options.onColumnHeaderDragOver($event))),
-              onColumnDragleave: _cache[6] || (_cache[6] = $event => ($options.onColumnHeaderDragLeave($event))),
-              onColumnDrop: _cache[7] || (_cache[7] = $event => ($options.onColumnHeaderDrop($event))),
-              onColumnResizestart: _cache[8] || (_cache[8] = $event => ($options.onColumnResizeStart($event))),
-              onCheckboxChange: _cache[9] || (_cache[9] = $event => ($options.toggleRowsWithCheckbox($event)))
+              onColumnDragstart: _cache[3] || (_cache[3] = $event => ($options.onColumnHeaderDragStart($event))),
+              onColumnDragover: _cache[4] || (_cache[4] = $event => ($options.onColumnHeaderDragOver($event))),
+              onColumnDragleave: _cache[5] || (_cache[5] = $event => ($options.onColumnHeaderDragLeave($event))),
+              onColumnDrop: _cache[6] || (_cache[6] = $event => ($options.onColumnHeaderDrop($event))),
+              onColumnResizestart: _cache[7] || (_cache[7] = $event => ($options.onColumnResizeStart($event))),
+              onCheckboxChange: _cache[8] || (_cache[8] = $event => ($options.toggleRowsWithCheckbox($event)))
             }, null, 8, ["columnGroup", "columns", "rowGroupMode", "groupRowsBy", "groupRowSortField", "resizableColumns", "allRowsSelected", "empty", "sortMode", "sortField", "sortOrder", "multiSortMeta", "filters", "filtersStore", "filterDisplay", "onFilterChange", "onFilterApply"]),
             ($props.frozenValue)
               ? (vue.openBlock(), vue.createBlock(_component_DTTableBody, {
@@ -4839,26 +4865,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   loading: $props.loading,
                   responsiveLayout: $props.responsiveLayout,
                   onRowgroupToggle: $options.toggleRowGroup,
-                  onRowClick: _cache[10] || (_cache[10] = $event => ($options.onRowClick($event))),
-                  onRowDblclick: _cache[11] || (_cache[11] = $event => ($options.onRowDblClick($event))),
-                  onRowRightclick: _cache[12] || (_cache[12] = $event => ($options.onRowRightClick($event))),
+                  onRowClick: _cache[9] || (_cache[9] = $event => ($options.onRowClick($event))),
+                  onRowDblclick: _cache[10] || (_cache[10] = $event => ($options.onRowDblClick($event))),
+                  onRowRightclick: _cache[11] || (_cache[11] = $event => ($options.onRowRightClick($event))),
                   onRowTouchend: $options.onRowTouchEnd,
                   onRowKeydown: $options.onRowKeyDown,
                   onRowMousedown: $options.onRowMouseDown,
-                  onRowDragstart: _cache[13] || (_cache[13] = $event => ($options.onRowDragStart($event))),
-                  onRowDragover: _cache[14] || (_cache[14] = $event => ($options.onRowDragOver($event))),
-                  onRowDragleave: _cache[15] || (_cache[15] = $event => ($options.onRowDragLeave($event))),
-                  onRowDragend: _cache[16] || (_cache[16] = $event => ($options.onRowDragEnd($event))),
-                  onRowDrop: _cache[17] || (_cache[17] = $event => ($options.onRowDrop($event))),
-                  onRowToggle: _cache[18] || (_cache[18] = $event => ($options.toggleRow($event))),
-                  onRadioChange: _cache[19] || (_cache[19] = $event => ($options.toggleRowWithRadio($event))),
-                  onCheckboxChange: _cache[20] || (_cache[20] = $event => ($options.toggleRowWithCheckbox($event))),
-                  onCellEditInit: _cache[21] || (_cache[21] = $event => ($options.onCellEditInit($event))),
-                  onCellEditComplete: _cache[22] || (_cache[22] = $event => ($options.onCellEditComplete($event))),
-                  onCellEditCancel: _cache[23] || (_cache[23] = $event => ($options.onCellEditCancel($event))),
-                  onRowEditInit: _cache[24] || (_cache[24] = $event => ($options.onRowEditInit($event))),
-                  onRowEditSave: _cache[25] || (_cache[25] = $event => ($options.onRowEditSave($event))),
-                  onRowEditCancel: _cache[26] || (_cache[26] = $event => ($options.onRowEditCancel($event))),
+                  onRowDragstart: _cache[12] || (_cache[12] = $event => ($options.onRowDragStart($event))),
+                  onRowDragover: _cache[13] || (_cache[13] = $event => ($options.onRowDragOver($event))),
+                  onRowDragleave: _cache[14] || (_cache[14] = $event => ($options.onRowDragLeave($event))),
+                  onRowDragend: _cache[15] || (_cache[15] = $event => ($options.onRowDragEnd($event))),
+                  onRowDrop: _cache[16] || (_cache[16] = $event => ($options.onRowDrop($event))),
+                  onRowToggle: _cache[17] || (_cache[17] = $event => ($options.toggleRow($event))),
+                  onRadioChange: _cache[18] || (_cache[18] = $event => ($options.toggleRowWithRadio($event))),
+                  onCheckboxChange: _cache[19] || (_cache[19] = $event => ($options.toggleRowWithCheckbox($event))),
+                  onCellEditInit: _cache[20] || (_cache[20] = $event => ($options.onCellEditInit($event))),
+                  onCellEditComplete: _cache[21] || (_cache[21] = $event => ($options.onCellEditComplete($event))),
+                  onCellEditCancel: _cache[22] || (_cache[22] = $event => ($options.onCellEditCancel($event))),
+                  onRowEditInit: _cache[23] || (_cache[23] = $event => ($options.onRowEditInit($event))),
+                  onRowEditSave: _cache[24] || (_cache[24] = $event => ($options.onRowEditSave($event))),
+                  onRowEditCancel: _cache[25] || (_cache[25] = $event => ($options.onRowEditCancel($event))),
                   editingMeta: $data.d_editingMeta,
                   onEditingMetaChange: $options.onEditingMetaChange,
                   isVirtualScrollerDisabled: true
@@ -4866,7 +4892,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               : vue.createCommentVNode("", true),
             vue.createVNode(_component_DTTableBody, {
               value: $options.dataToRender(slotProps.rows),
-              class: slotProps.styleClass,
+              class: vue.normalizeClass(slotProps.styleClass),
               columns: slotProps.columns,
               empty: $options.empty,
               dataKey: $props.dataKey,
@@ -4894,26 +4920,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               loading: $props.loading,
               responsiveLayout: $props.responsiveLayout,
               onRowgroupToggle: $options.toggleRowGroup,
-              onRowClick: _cache[27] || (_cache[27] = $event => ($options.onRowClick($event))),
-              onRowDblclick: _cache[28] || (_cache[28] = $event => ($options.onRowDblClick($event))),
-              onRowRightclick: _cache[29] || (_cache[29] = $event => ($options.onRowRightClick($event))),
+              onRowClick: _cache[26] || (_cache[26] = $event => ($options.onRowClick($event))),
+              onRowDblclick: _cache[27] || (_cache[27] = $event => ($options.onRowDblClick($event))),
+              onRowRightclick: _cache[28] || (_cache[28] = $event => ($options.onRowRightClick($event))),
               onRowTouchend: $options.onRowTouchEnd,
               onRowKeydown: $options.onRowKeyDown,
               onRowMousedown: $options.onRowMouseDown,
-              onRowDragstart: _cache[30] || (_cache[30] = $event => ($options.onRowDragStart($event))),
-              onRowDragover: _cache[31] || (_cache[31] = $event => ($options.onRowDragOver($event))),
-              onRowDragleave: _cache[32] || (_cache[32] = $event => ($options.onRowDragLeave($event))),
-              onRowDragend: _cache[33] || (_cache[33] = $event => ($options.onRowDragEnd($event))),
-              onRowDrop: _cache[34] || (_cache[34] = $event => ($options.onRowDrop($event))),
-              onRowToggle: _cache[35] || (_cache[35] = $event => ($options.toggleRow($event))),
-              onRadioChange: _cache[36] || (_cache[36] = $event => ($options.toggleRowWithRadio($event))),
-              onCheckboxChange: _cache[37] || (_cache[37] = $event => ($options.toggleRowWithCheckbox($event))),
-              onCellEditInit: _cache[38] || (_cache[38] = $event => ($options.onCellEditInit($event))),
-              onCellEditComplete: _cache[39] || (_cache[39] = $event => ($options.onCellEditComplete($event))),
-              onCellEditCancel: _cache[40] || (_cache[40] = $event => ($options.onCellEditCancel($event))),
-              onRowEditInit: _cache[41] || (_cache[41] = $event => ($options.onRowEditInit($event))),
-              onRowEditSave: _cache[42] || (_cache[42] = $event => ($options.onRowEditSave($event))),
-              onRowEditCancel: _cache[43] || (_cache[43] = $event => ($options.onRowEditCancel($event))),
+              onRowDragstart: _cache[29] || (_cache[29] = $event => ($options.onRowDragStart($event))),
+              onRowDragover: _cache[30] || (_cache[30] = $event => ($options.onRowDragOver($event))),
+              onRowDragleave: _cache[31] || (_cache[31] = $event => ($options.onRowDragLeave($event))),
+              onRowDragend: _cache[32] || (_cache[32] = $event => ($options.onRowDragEnd($event))),
+              onRowDrop: _cache[33] || (_cache[33] = $event => ($options.onRowDrop($event))),
+              onRowToggle: _cache[34] || (_cache[34] = $event => ($options.toggleRow($event))),
+              onRadioChange: _cache[35] || (_cache[35] = $event => ($options.toggleRowWithRadio($event))),
+              onCheckboxChange: _cache[36] || (_cache[36] = $event => ($options.toggleRowWithCheckbox($event))),
+              onCellEditInit: _cache[37] || (_cache[37] = $event => ($options.onCellEditInit($event))),
+              onCellEditComplete: _cache[38] || (_cache[38] = $event => ($options.onCellEditComplete($event))),
+              onCellEditCancel: _cache[39] || (_cache[39] = $event => ($options.onCellEditCancel($event))),
+              onRowEditInit: _cache[40] || (_cache[40] = $event => ($options.onRowEditInit($event))),
+              onRowEditSave: _cache[41] || (_cache[41] = $event => ($options.onRowEditSave($event))),
+              onRowEditCancel: _cache[42] || (_cache[42] = $event => ($options.onRowEditCancel($event))),
               editingMeta: $data.d_editingMeta,
               onEditingMetaChange: $options.onEditingMetaChange,
               virtualScrollerContentProps: slotProps,
@@ -4944,7 +4970,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onTouchend: $options.touchend,
           currentPageReportTemplate: $props.currentPageReportTemplate,
           class: "p-paginator-bottom",
-          onPage: _cache[44] || (_cache[44] = $event => ($options.onPage($event))),
+          onPage: _cache[43] || (_cache[43] = $event => ($options.onPage($event))),
           alwaysShow: $props.alwaysShowPaginator
         }, vue.createSlots({ _: 2 }, [
           (_ctx.$slots.paginatorstart)
@@ -4966,16 +4992,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMouseover", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "alwaysShow"]))
       : vue.createCommentVNode("", true),
     (_ctx.$slots.footer)
-      ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
+      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
           vue.renderSlot(_ctx.$slots, "footer")
         ]))
       : vue.createCommentVNode("", true),
-    vue.createVNode("div", _hoisted_4, null, 512),
+    vue.createElementVNode("div", _hoisted_4, null, 512),
     ($props.reorderableColumns)
-      ? (vue.openBlock(), vue.createBlock("span", _hoisted_5, null, 512))
+      ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_5, null, 512))
       : vue.createCommentVNode("", true),
     ($props.reorderableColumns)
-      ? (vue.openBlock(), vue.createBlock("span", _hoisted_6, null, 512))
+      ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_6, null, 512))
       : vue.createCommentVNode("", true)
   ], 2))
 }

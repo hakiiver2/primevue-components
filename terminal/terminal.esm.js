@@ -1,5 +1,5 @@
 import TerminalService from 'primevue/terminalservice';
-import { openBlock, createBlock, toDisplayString, createCommentVNode, createVNode, Fragment, renderList, withDirectives, vModelText } from 'vue';
+import { openBlock, createElementBlock, toDisplayString, createCommentVNode, createElementVNode, Fragment, renderList, withDirectives, vModelText } from 'vue';
 
 var script = {
     name: 'Terminal',
@@ -55,33 +55,33 @@ const _hoisted_6 = { class: "p-terminal-prompt-container" };
 const _hoisted_7 = { class: "p-terminal-prompt" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     class: "p-terminal p-component",
-    onClick: _cache[3] || (_cache[3] = (...args) => ($options.onClick && $options.onClick(...args)))
+    onClick: _cache[2] || (_cache[2] = (...args) => ($options.onClick && $options.onClick(...args)))
   }, [
     ($props.welcomeMessage)
-      ? (openBlock(), createBlock("div", _hoisted_1, toDisplayString($props.welcomeMessage), 1))
+      ? (openBlock(), createElementBlock("div", _hoisted_1, toDisplayString($props.welcomeMessage), 1))
       : createCommentVNode("", true),
-    createVNode("div", _hoisted_2, [
-      (openBlock(true), createBlock(Fragment, null, renderList($data.commands, (command, i) => {
-        return (openBlock(), createBlock("div", {
+    createElementVNode("div", _hoisted_2, [
+      (openBlock(true), createElementBlock(Fragment, null, renderList($data.commands, (command, i) => {
+        return (openBlock(), createElementBlock("div", {
           key: command.text + i.toString()
         }, [
-          createVNode("span", _hoisted_3, toDisplayString($props.prompt), 1),
-          createVNode("span", _hoisted_4, toDisplayString(command.text), 1),
-          createVNode("div", _hoisted_5, toDisplayString(command.response), 1)
+          createElementVNode("span", _hoisted_3, toDisplayString($props.prompt), 1),
+          createElementVNode("span", _hoisted_4, toDisplayString(command.text), 1),
+          createElementVNode("div", _hoisted_5, toDisplayString(command.response), 1)
         ]))
       }), 128))
     ]),
-    createVNode("div", _hoisted_6, [
-      createVNode("span", _hoisted_7, toDisplayString($props.prompt), 1),
-      withDirectives(createVNode("input", {
+    createElementVNode("div", _hoisted_6, [
+      createElementVNode("span", _hoisted_7, toDisplayString($props.prompt), 1),
+      withDirectives(createElementVNode("input", {
         ref: "input",
         type: "text",
-        "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($data.commandText = $event)),
+        "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($data.commandText) = $event)),
         class: "p-terminal-input",
         autocomplete: "off",
-        onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeydown && $options.onKeydown(...args)))
+        onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onKeydown && $options.onKeydown(...args)))
       }, null, 544), [
         [vModelText, $data.commandText]
       ])

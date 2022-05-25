@@ -48,60 +48,65 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
 const _hoisted_1 = { class: "p-fieldset-legend" };
-const _hoisted_2 = { class: "p-fieldset-legend-text" };
-const _hoisted_3 = { class: "p-fieldset-content" };
+const _hoisted_2 = ["id"];
+const _hoisted_3 = ["id", "aria-controls", "aria-expanded"];
+const _hoisted_4 = { class: "p-fieldset-legend-text" };
+const _hoisted_5 = ["id", "aria-labelledby"];
+const _hoisted_6 = { class: "p-fieldset-content" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock("fieldset", {
-    class: ['p-fieldset p-component', {'p-fieldset-toggleable': $props.toggleable}]
+  return (vue.openBlock(), vue.createElementBlock("fieldset", {
+    class: vue.normalizeClass(['p-fieldset p-component', {'p-fieldset-toggleable': $props.toggleable}])
   }, [
-    vue.createVNode("legend", _hoisted_1, [
+    vue.createElementVNode("legend", _hoisted_1, [
       (!$props.toggleable)
         ? vue.renderSlot(_ctx.$slots, "legend", { key: 0 }, () => [
-            vue.createVNode("span", {
+            vue.createElementVNode("span", {
               class: "p-fieldset-legend-text",
               id: $options.ariaId + '_header'
-            }, vue.toDisplayString($props.legend), 9, ["id"])
+            }, vue.toDisplayString($props.legend), 9, _hoisted_2)
           ])
         : vue.createCommentVNode("", true),
       ($props.toggleable)
-        ? vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+        ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
             key: 1,
             tabindex: "0",
-            onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggle && $options.toggle(...args))),
-            onKeydown: _cache[2] || (_cache[2] = vue.withKeys((...args) => ($options.toggle && $options.toggle(...args)), ["enter"])),
+            onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggle && $options.toggle(...args))),
+            onKeydown: _cache[1] || (_cache[1] = vue.withKeys((...args) => ($options.toggle && $options.toggle(...args)), ["enter"])),
             id: $options.ariaId +  '_header',
             "aria-controls": $options.ariaId + '_content',
             "aria-expanded": !$data.d_collapsed
           }, [
-            vue.createVNode("span", { class: $options.iconClass }, null, 2),
+            vue.createElementVNode("span", {
+              class: vue.normalizeClass($options.iconClass)
+            }, null, 2),
             vue.renderSlot(_ctx.$slots, "legend", {}, () => [
-              vue.createVNode("span", _hoisted_2, vue.toDisplayString($props.legend), 1)
+              vue.createElementVNode("span", _hoisted_4, vue.toDisplayString($props.legend), 1)
             ])
-          ], 40, ["id", "aria-controls", "aria-expanded"])), [
+          ], 40, _hoisted_3)), [
             [_directive_ripple]
           ])
         : vue.createCommentVNode("", true)
     ]),
     vue.createVNode(vue.Transition, { name: "p-toggleable-content" }, {
       default: vue.withCtx(() => [
-        vue.withDirectives(vue.createVNode("div", {
+        vue.withDirectives(vue.createElementVNode("div", {
           class: "p-toggleable-content",
           role: "region",
           id: $options.ariaId + '_content',
           "aria-labelledby": $options.ariaId + '_header'
         }, [
-          vue.createVNode("div", _hoisted_3, [
+          vue.createElementVNode("div", _hoisted_6, [
             vue.renderSlot(_ctx.$slots, "default")
           ])
-        ], 8, ["id", "aria-labelledby"]), [
+        ], 8, _hoisted_5), [
           [vue.vShow, !$data.d_collapsed]
         ])
       ]),

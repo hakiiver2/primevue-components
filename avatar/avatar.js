@@ -45,22 +45,25 @@ this.primevue.avatar = (function (vue) {
       key: 0,
       class: "p-avatar-text"
     };
+    const _hoisted_2 = ["src"];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
         vue.renderSlot(_ctx.$slots, "default", {}, () => [
           ($props.label)
-            ? (vue.openBlock(), vue.createBlock("span", _hoisted_1, vue.toDisplayString($props.label), 1))
+            ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_1, vue.toDisplayString($props.label), 1))
             : ($props.icon)
-              ? (vue.openBlock(), vue.createBlock("span", {
+              ? (vue.openBlock(), vue.createElementBlock("span", {
                   key: 1,
-                  class: $options.iconClass
+                  class: vue.normalizeClass($options.iconClass)
                 }, null, 2))
               : ($props.image)
-                ? (vue.openBlock(), vue.createBlock("img", {
+                ? (vue.openBlock(), vue.createElementBlock("img", {
                     key: 2,
                     src: $props.image
-                  }, null, 8, ["src"]))
+                  }, null, 8, _hoisted_2))
                 : vue.createCommentVNode("", true)
         ])
       ], 2))
@@ -100,4 +103,4 @@ this.primevue.avatar = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

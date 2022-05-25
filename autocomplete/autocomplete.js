@@ -508,7 +508,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                 this.virtualScroller = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -569,97 +569,104 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
             }
         },
         components: {
-            'Button': Button__default['default'],
-            'VirtualScroller': VirtualScroller__default['default']
+            'Button': Button__default["default"],
+            'VirtualScroller': VirtualScroller__default["default"]
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1 = { class: "p-autocomplete-token-label" };
-    const _hoisted_2 = { class: "p-autocomplete-input-token" };
-    const _hoisted_3 = {
+    const _hoisted_1 = ["aria-owns", "aria-expanded"];
+    const _hoisted_2 = ["value", "aria-controls"];
+    const _hoisted_3 = { class: "p-autocomplete-token-label" };
+    const _hoisted_4 = ["onClick"];
+    const _hoisted_5 = { class: "p-autocomplete-input-token" };
+    const _hoisted_6 = ["aria-controls"];
+    const _hoisted_7 = {
       key: 2,
       class: "p-autocomplete-loader pi pi-spinner pi-spin"
     };
-    const _hoisted_4 = { class: "p-autocomplete-item-group" };
+    const _hoisted_8 = ["id"];
+    const _hoisted_9 = ["onClick", "data-index"];
+    const _hoisted_10 = { class: "p-autocomplete-item-group" };
+    const _hoisted_11 = ["onClick", "data-group", "data-index"];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_Button = vue.resolveComponent("Button");
       const _component_VirtualScroller = vue.resolveComponent("VirtualScroller");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("span", {
+      return (vue.openBlock(), vue.createElementBlock("span", {
         ref: "container",
-        class: $options.containerClass,
+        class: vue.normalizeClass($options.containerClass),
         "aria-haspopup": "listbox",
         "aria-owns": $options.listId,
         "aria-expanded": $data.overlayVisible,
-        style: $props.style
+        style: vue.normalizeStyle($props.style)
       }, [
         (!$props.multiple)
-          ? (vue.openBlock(), vue.createBlock("input", vue.mergeProps({
+          ? (vue.openBlock(), vue.createElementBlock("input", vue.mergeProps({
               key: 0,
               ref: "input",
               class: $options.inputFieldClass,
               style: $props.inputStyle
             }, _ctx.$attrs, {
               value: $options.inputValue,
-              onClick: _cache[1] || (_cache[1] = (...args) => ($options.onInputClicked && $options.onInputClicked(...args))),
-              onInput: _cache[2] || (_cache[2] = (...args) => ($options.onInput && $options.onInput(...args))),
-              onFocus: _cache[3] || (_cache[3] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-              onBlur: _cache[4] || (_cache[4] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-              onKeydown: _cache[5] || (_cache[5] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-              onChange: _cache[6] || (_cache[6] = (...args) => ($options.onChange && $options.onChange(...args))),
+              onClick: _cache[0] || (_cache[0] = (...args) => ($options.onInputClicked && $options.onInputClicked(...args))),
+              onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args))),
+              onFocus: _cache[2] || (_cache[2] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+              onBlur: _cache[3] || (_cache[3] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+              onKeydown: _cache[4] || (_cache[4] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+              onChange: _cache[5] || (_cache[5] = (...args) => ($options.onChange && $options.onChange(...args))),
               type: "text",
               autoComplete: "off",
               role: "searchbox",
               "aria-autocomplete": "list",
               "aria-controls": $options.listId
-            }), null, 16, ["value", "aria-controls"]))
+            }), null, 16, _hoisted_2))
           : vue.createCommentVNode("", true),
         ($props.multiple)
-          ? (vue.openBlock(), vue.createBlock("ul", {
+          ? (vue.openBlock(), vue.createElementBlock("ul", {
               key: 1,
               ref: "multiContainer",
-              class: $options.multiContainerClass,
-              onClick: _cache[12] || (_cache[12] = (...args) => ($options.onMultiContainerClick && $options.onMultiContainerClick(...args)))
+              class: vue.normalizeClass($options.multiContainerClass),
+              onClick: _cache[11] || (_cache[11] = (...args) => ($options.onMultiContainerClick && $options.onMultiContainerClick(...args)))
             }, [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.modelValue, (item, i) => {
-                return (vue.openBlock(), vue.createBlock("li", {
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.modelValue, (item, i) => {
+                return (vue.openBlock(), vue.createElementBlock("li", {
                   key: i,
                   class: "p-autocomplete-token"
                 }, [
                   vue.renderSlot(_ctx.$slots, "chip", { value: item }, () => [
-                    vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.getItemContent(item)), 1)
+                    vue.createElementVNode("span", _hoisted_3, vue.toDisplayString($options.getItemContent(item)), 1)
                   ]),
-                  vue.createVNode("span", {
+                  vue.createElementVNode("span", {
                     class: "p-autocomplete-token-icon pi pi-times-circle",
                     onClick: $event => ($options.removeItem($event, i))
-                  }, null, 8, ["onClick"])
+                  }, null, 8, _hoisted_4)
                 ]))
               }), 128)),
-              vue.createVNode("li", _hoisted_2, [
-                vue.createVNode("input", vue.mergeProps({
+              vue.createElementVNode("li", _hoisted_5, [
+                vue.createElementVNode("input", vue.mergeProps({
                   ref: "input",
                   type: "text",
                   autoComplete: "off"
                 }, _ctx.$attrs, {
-                  onInput: _cache[7] || (_cache[7] = (...args) => ($options.onInput && $options.onInput(...args))),
-                  onFocus: _cache[8] || (_cache[8] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-                  onBlur: _cache[9] || (_cache[9] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-                  onKeydown: _cache[10] || (_cache[10] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-                  onChange: _cache[11] || (_cache[11] = (...args) => ($options.onChange && $options.onChange(...args))),
+                  onInput: _cache[6] || (_cache[6] = (...args) => ($options.onInput && $options.onInput(...args))),
+                  onFocus: _cache[7] || (_cache[7] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+                  onBlur: _cache[8] || (_cache[8] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+                  onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+                  onChange: _cache[10] || (_cache[10] = (...args) => ($options.onChange && $options.onChange(...args))),
                   role: "searchbox",
                   "aria-autocomplete": "list",
                   "aria-controls": $options.listId
-                }), null, 16, ["aria-controls"])
+                }), null, 16, _hoisted_6)
               ])
             ], 2))
           : vue.createCommentVNode("", true),
         ($data.searching)
-          ? (vue.openBlock(), vue.createBlock("i", _hoisted_3))
+          ? (vue.openBlock(), vue.createElementBlock("i", _hoisted_7))
           : vue.createCommentVNode("", true),
         ($props.dropdown)
           ? (vue.openBlock(), vue.createBlock(_component_Button, {
@@ -684,12 +691,12 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
           }, {
             default: vue.withCtx(() => [
               ($data.overlayVisible)
-                ? (vue.openBlock(), vue.createBlock("div", {
+                ? (vue.openBlock(), vue.createElementBlock("div", {
                     key: 0,
                     ref: $options.overlayRef,
-                    class: $options.panelStyleClass,
-                    style: {'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''},
-                    onClick: _cache[13] || (_cache[13] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                    class: vue.normalizeClass($options.panelStyleClass),
+                    style: vue.normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}),
+                    onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                   }, [
                     vue.renderSlot(_ctx.$slots, "header", {
                       value: $props.modelValue,
@@ -701,16 +708,16 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                       disabled: $options.virtualScrollerDisabled
                     }), vue.createSlots({
                       content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
-                        vue.createVNode("ul", {
+                        vue.createElementVNode("ul", {
                           id: $options.listId,
                           ref: (el) => $options.listRef(el, contentRef),
-                          class: ['p-autocomplete-items', styleClass],
-                          style: contentStyle,
+                          class: vue.normalizeClass(['p-autocomplete-items', styleClass]),
+                          style: vue.normalizeStyle(contentStyle),
                           role: "listbox"
                         }, [
                           (!$props.optionGroupLabel)
-                            ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (item, i) => {
-                                return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
+                            ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (item, i) => {
+                                return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
                                   class: "p-autocomplete-item",
                                   key: $options.getOptionRenderKey(item),
                                   onClick: $event => ($options.selectItem($event, item)),
@@ -723,15 +730,15 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                                   }, () => [
                                     vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
                                   ])
-                                ], 8, ["onClick", "data-index"])), [
+                                ], 8, _hoisted_9)), [
                                   [_directive_ripple]
                                 ])
                               }), 128))
-                            : (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
-                                return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                            : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
+                                return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                                   key: $options.getOptionGroupRenderKey(optionGroup)
                                 }, [
-                                  vue.createVNode("li", _hoisted_4, [
+                                  vue.createElementVNode("li", _hoisted_10, [
                                     vue.renderSlot(_ctx.$slots, "optiongroup", {
                                       item: optionGroup,
                                       index: $options.getOptionIndex(i, getItemOptions)
@@ -739,8 +746,8 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                                       vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                     ])
                                   ]),
-                                  (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
-                                    return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
+                                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
+                                    return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
                                       class: "p-autocomplete-item",
                                       key: j,
                                       onClick: $event => ($options.selectItem($event, item)),
@@ -754,13 +761,13 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                                       }, () => [
                                         vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
                                       ])
-                                    ], 8, ["onClick", "data-group", "data-index"])), [
+                                    ], 8, _hoisted_11)), [
                                       [_directive_ripple]
                                     ])
                                   }), 128))
                                 ], 64))
                               }), 128))
-                        ], 14, ["id"])
+                        ], 14, _hoisted_8)
                       ]),
                       _: 2
                     }, [
@@ -783,7 +790,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
             _: 3
           }, 8, ["onEnter", "onLeave", "onAfterLeave"])
         ], 8, ["to", "disabled"]))
-      ], 14, ["aria-owns", "aria-expanded"]))
+      ], 14, _hoisted_1))
     }
 
     function styleInject(css, ref) {
@@ -820,4 +827,4 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.button, primevue.ripple, primevue.virtualscroller, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.button, primevue.ripple, primevue.virtualscroller, Vue);

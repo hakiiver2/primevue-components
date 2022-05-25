@@ -1,7 +1,7 @@
 import ConfirmationEventBus from 'primevue/confirmationeventbus';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
-import { resolveComponent, openBlock, createBlock, withCtx, createCommentVNode, createVNode, toDisplayString } from 'vue';
+import { resolveComponent, openBlock, createBlock, withCtx, normalizeClass, createCommentVNode, createElementVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'ConfirmDialog',
@@ -123,7 +123,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (openBlock(), createBlock(_component_CDialog, {
     visible: $data.visible,
-    "onUpdate:visible": _cache[3] || (_cache[3] = $event => ($data.visible = $event)),
+    "onUpdate:visible": _cache[2] || (_cache[2] = $event => (($data.visible) = $event)),
     modal: true,
     header: $options.header,
     blockScroll: $options.blockScroll,
@@ -137,8 +137,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             key: 0,
             label: $options.rejectLabel,
             icon: $options.rejectIcon,
-            class: $options.rejectClass,
-            onClick: _cache[1] || (_cache[1] = $event => ($options.reject())),
+            class: normalizeClass($options.rejectClass),
+            onClick: _cache[0] || (_cache[0] = $event => ($options.reject())),
             autofocus: $options.autoFocusReject
           }, null, 8, ["label", "icon", "class", "autofocus"]))
         : createCommentVNode("", true),
@@ -147,15 +147,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             key: 1,
             label: $options.acceptLabel,
             icon: $options.acceptIcon,
-            class: $options.acceptClass,
-            onClick: _cache[2] || (_cache[2] = $event => ($options.accept())),
+            class: normalizeClass($options.acceptClass),
+            onClick: _cache[1] || (_cache[1] = $event => ($options.accept())),
             autofocus: $options.autoFocusAccept
           }, null, 8, ["label", "icon", "class", "autofocus"]))
         : createCommentVNode("", true)
     ]),
     default: withCtx(() => [
-      createVNode("i", { class: $options.iconClass }, null, 2),
-      createVNode("span", _hoisted_1, toDisplayString($options.message), 1)
+      createElementVNode("i", {
+        class: normalizeClass($options.iconClass)
+      }, null, 2),
+      createElementVNode("span", _hoisted_1, toDisplayString($options.message), 1)
     ]),
     _: 1
   }, 8, ["visible", "header", "blockScroll", "position", "breakpoints"]))

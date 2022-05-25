@@ -491,7 +491,7 @@ var script = {
             this.$emit('change', {originalEvent: event, value: value});
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -636,36 +636,46 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     },
     components: {
-        'VirtualScroller': VirtualScroller__default['default']
+        'VirtualScroller': VirtualScroller__default["default"]
     }
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = { class: "p-multiselect-label-container" };
-const _hoisted_3 = { class: "p-multiselect-token-label" };
-const _hoisted_4 = { class: "p-multiselect-trigger" };
-const _hoisted_5 = {
+const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"];
+const _hoisted_3 = { class: "p-multiselect-label-container" };
+const _hoisted_4 = { class: "p-multiselect-token-label" };
+const _hoisted_5 = ["onClick"];
+const _hoisted_6 = { class: "p-multiselect-trigger" };
+const _hoisted_7 = {
   key: 0,
   class: "p-multiselect-header"
 };
-const _hoisted_6 = { class: "p-hidden-accessible" };
-const _hoisted_7 = {
+const _hoisted_8 = ["aria-checked"];
+const _hoisted_9 = { class: "p-hidden-accessible" };
+const _hoisted_10 = ["aria-checked"];
+const _hoisted_11 = {
   key: 1,
   class: "p-multiselect-filter-container"
 };
-const _hoisted_8 = /*#__PURE__*/vue.createVNode("span", { class: "p-multiselect-filter-icon pi pi-search" }, null, -1);
-const _hoisted_9 = /*#__PURE__*/vue.createVNode("span", { class: "p-multiselect-close-icon pi pi-times" }, null, -1);
-const _hoisted_10 = { class: "p-checkbox p-component" };
-const _hoisted_11 = { class: "p-multiselect-item-group" };
-const _hoisted_12 = { class: "p-checkbox p-component" };
-const _hoisted_13 = {
+const _hoisted_12 = ["placeholder"];
+const _hoisted_13 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-multiselect-filter-icon pi pi-search" }, null, -1);
+const _hoisted_14 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-multiselect-close-icon pi pi-times" }, null, -1);
+const _hoisted_15 = [
+  _hoisted_14
+];
+const _hoisted_16 = ["aria-selected", "onClick", "onKeydown", "tabindex", "aria-label"];
+const _hoisted_17 = { class: "p-checkbox p-component" };
+const _hoisted_18 = { class: "p-multiselect-item-group" };
+const _hoisted_19 = ["aria-selected", "onClick", "onKeydown", "tabindex", "aria-label"];
+const _hoisted_20 = { class: "p-checkbox p-component" };
+const _hoisted_21 = {
   key: 2,
   class: "p-multiselect-empty-message"
 };
-const _hoisted_14 = {
+const _hoisted_22 = {
   key: 3,
   class: "p-multiselect-empty-message"
 };
@@ -674,59 +684,61 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_VirtualScroller = vue.resolveComponent("VirtualScroller");
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock("div", {
+  return (vue.openBlock(), vue.createElementBlock("div", {
     ref: "container",
-    class: $options.containerClass,
-    onClick: _cache[11] || (_cache[11] = (...args) => ($options.onClick && $options.onClick(...args)))
+    class: vue.normalizeClass($options.containerClass),
+    onClick: _cache[10] || (_cache[10] = (...args) => ($options.onClick && $options.onClick(...args)))
   }, [
-    vue.createVNode("div", _hoisted_1, [
-      vue.createVNode("input", {
+    vue.createElementVNode("div", _hoisted_1, [
+      vue.createElementVNode("input", {
         ref: "focusInput",
         type: "text",
         role: "listbox",
         id: $props.inputId,
         readonly: "",
         disabled: $props.disabled,
-        onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-        onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+        onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+        onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+        onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
         tabindex: $props.tabindex,
         "aria-haspopup": "true",
         "aria-expanded": $data.overlayVisible,
         "aria-labelledby": $props.ariaLabelledBy
-      }, null, 40, ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"])
+      }, null, 40, _hoisted_2)
     ]),
-    vue.createVNode("div", _hoisted_2, [
-      vue.createVNode("div", { class: $options.labelClass }, [
+    vue.createElementVNode("div", _hoisted_3, [
+      vue.createElementVNode("div", {
+        class: vue.normalizeClass($options.labelClass)
+      }, [
         vue.renderSlot(_ctx.$slots, "value", {
           value: $props.modelValue,
           placeholder: $props.placeholder
         }, () => [
           ($props.display === 'comma')
-            ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+            ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                 vue.createTextVNode(vue.toDisplayString($options.label || 'empty'), 1)
               ], 64))
             : ($props.display === 'chip')
-              ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
-                  (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.modelValue, (item) => {
-                    return (vue.openBlock(), vue.createBlock("div", {
+              ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
+                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.modelValue, (item) => {
+                    return (vue.openBlock(), vue.createElementBlock("div", {
                       class: "p-multiselect-token",
                       key: $options.getLabelByValue(item)
                     }, [
                       vue.renderSlot(_ctx.$slots, "chip", { value: item }, () => [
-                        vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.getLabelByValue(item)), 1)
+                        vue.createElementVNode("span", _hoisted_4, vue.toDisplayString($options.getLabelByValue(item)), 1)
                       ]),
                       (!$props.disabled)
-                        ? (vue.openBlock(), vue.createBlock("span", {
+                        ? (vue.openBlock(), vue.createElementBlock("span", {
                             key: 0,
                             class: "p-multiselect-token-icon pi pi-times-circle",
                             onClick: $event => ($options.removeChip(item))
-                          }, null, 8, ["onClick"]))
+                          }, null, 8, _hoisted_5))
                         : vue.createCommentVNode("", true)
                     ]))
                   }), 128)),
                   (!$props.modelValue || $props.modelValue.length === 0)
-                    ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                    ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                         vue.createTextVNode(vue.toDisplayString($props.placeholder || 'empty'), 1)
                       ], 64))
                     : vue.createCommentVNode("", true)
@@ -735,9 +747,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       ], 2)
     ]),
-    vue.createVNode("div", _hoisted_4, [
+    vue.createElementVNode("div", _hoisted_6, [
       vue.renderSlot(_ctx.$slots, "indicator", {}, () => [
-        vue.createVNode("span", { class: $options.dropdownIconClass }, null, 2)
+        vue.createElementVNode("span", {
+          class: vue.normalizeClass($options.dropdownIconClass)
+        }, null, 2)
       ])
     ]),
     (vue.openBlock(), vue.createBlock(vue.Teleport, {
@@ -753,75 +767,73 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: vue.withCtx(() => [
           ($data.overlayVisible)
-            ? (vue.openBlock(), vue.createBlock("div", {
+            ? (vue.openBlock(), vue.createElementBlock("div", {
                 key: 0,
                 ref: $options.overlayRef,
-                class: $options.panelStyleClass,
-                onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                class: vue.normalizeClass($options.panelStyleClass),
+                onClick: _cache[9] || (_cache[9] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
                 vue.renderSlot(_ctx.$slots, "header", {
                   value: $props.modelValue,
                   options: $options.visibleOptions
                 }),
                 (($props.showToggleAll && $props.selectionLimit == null) || $props.filter)
-                  ? (vue.openBlock(), vue.createBlock("div", _hoisted_5, [
+                  ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_7, [
                       ($props.showToggleAll && $props.selectionLimit == null)
-                        ? (vue.openBlock(), vue.createBlock("div", {
+                        ? (vue.openBlock(), vue.createElementBlock("div", {
                             key: 0,
                             class: "p-checkbox p-component",
-                            onClick: _cache[6] || (_cache[6] = (...args) => ($options.onToggleAll && $options.onToggleAll(...args))),
+                            onClick: _cache[5] || (_cache[5] = (...args) => ($options.onToggleAll && $options.onToggleAll(...args))),
                             role: "checkbox",
                             "aria-checked": $options.allSelected
                           }, [
-                            vue.createVNode("div", _hoisted_6, [
-                              vue.createVNode("input", {
+                            vue.createElementVNode("div", _hoisted_9, [
+                              vue.createElementVNode("input", {
                                 type: "checkbox",
                                 readonly: "",
-                                onFocus: _cache[4] || (_cache[4] = (...args) => ($options.onHeaderCheckboxFocus && $options.onHeaderCheckboxFocus(...args))),
-                                onBlur: _cache[5] || (_cache[5] = (...args) => ($options.onHeaderCheckboxBlur && $options.onHeaderCheckboxBlur(...args)))
+                                onFocus: _cache[3] || (_cache[3] = (...args) => ($options.onHeaderCheckboxFocus && $options.onHeaderCheckboxFocus(...args))),
+                                onBlur: _cache[4] || (_cache[4] = (...args) => ($options.onHeaderCheckboxBlur && $options.onHeaderCheckboxBlur(...args)))
                               }, null, 32)
                             ]),
-                            vue.createVNode("div", {
-                              class: ['p-checkbox-box', {'p-highlight': $options.allSelected, 'p-focus': $data.headerCheckboxFocused}],
+                            vue.createElementVNode("div", {
+                              class: vue.normalizeClass(['p-checkbox-box', {'p-highlight': $options.allSelected, 'p-focus': $data.headerCheckboxFocused}]),
                               role: "checkbox",
                               "aria-checked": $options.allSelected
                             }, [
-                              vue.createVNode("span", {
-                                class: ['p-checkbox-icon', {'pi pi-check': $options.allSelected}]
+                              vue.createElementVNode("span", {
+                                class: vue.normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.allSelected}])
                               }, null, 2)
-                            ], 10, ["aria-checked"])
-                          ], 8, ["aria-checked"]))
+                            ], 10, _hoisted_10)
+                          ], 8, _hoisted_8))
                         : vue.createCommentVNode("", true),
                       ($props.filter)
-                        ? (vue.openBlock(), vue.createBlock("div", _hoisted_7, [
-                            vue.withDirectives(vue.createVNode("input", {
+                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_11, [
+                            vue.withDirectives(vue.createElementVNode("input", {
                               type: "text",
                               ref: "filterInput",
-                              "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => ($data.filterValue = $event)),
+                              "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => (($data.filterValue) = $event)),
                               autoComplete: "on",
                               class: "p-multiselect-filter p-inputtext p-component",
                               placeholder: $props.filterPlaceholder,
-                              onInput: _cache[8] || (_cache[8] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
-                            }, null, 40, ["placeholder"]), [
+                              onInput: _cache[7] || (_cache[7] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                            }, null, 40, _hoisted_12), [
                               [vue.vModelText, $data.filterValue]
                             ]),
-                            _hoisted_8
+                            _hoisted_13
                           ]))
                         : vue.createCommentVNode("", true),
-                      vue.withDirectives(vue.createVNode("button", {
+                      vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                         class: "p-multiselect-close p-link",
-                        onClick: _cache[9] || (_cache[9] = (...args) => ($options.onCloseClick && $options.onCloseClick(...args))),
+                        onClick: _cache[8] || (_cache[8] = (...args) => ($options.onCloseClick && $options.onCloseClick(...args))),
                         type: "button"
-                      }, [
-                        _hoisted_9
-                      ], 512), [
+                      }, _hoisted_15)), [
                         [_directive_ripple]
                       ])
                     ]))
                   : vue.createCommentVNode("", true),
-                vue.createVNode("div", {
+                vue.createElementVNode("div", {
                   class: "p-multiselect-items-wrapper",
-                  style: {'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}
+                  style: vue.normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''})
                 }, [
                   vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
                     items: $options.visibleOptions,
@@ -829,17 +841,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     disabled: $options.virtualScrollerDisabled
                   }), vue.createSlots({
                     content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle}) => [
-                      vue.createVNode("ul", {
+                      vue.createElementVNode("ul", {
                         ref: contentRef,
-                        class: ['p-multiselect-items p-component', styleClass],
-                        style: contentStyle,
+                        class: vue.normalizeClass(['p-multiselect-items p-component', styleClass]),
+                        style: vue.normalizeStyle(contentStyle),
                         role: "listbox",
                         "aria-multiselectable": "true"
                       }, [
                         (!$props.optionGroupLabel)
-                          ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (option, i) => {
-                              return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
-                                class: ['p-multiselect-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                          ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (option, i) => {
+                              return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                class: vue.normalizeClass(['p-multiselect-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
                                 role: "option",
                                 "aria-selected": $options.isSelected(option),
                                 key: $options.getOptionRenderKey(option),
@@ -848,12 +860,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 tabindex: $props.tabindex||'0',
                                 "aria-label": $options.getOptionLabel(option)
                               }, [
-                                vue.createVNode("div", _hoisted_10, [
-                                  vue.createVNode("div", {
-                                    class: ['p-checkbox-box', {'p-highlight': $options.isSelected(option)}]
+                                vue.createElementVNode("div", _hoisted_17, [
+                                  vue.createElementVNode("div", {
+                                    class: vue.normalizeClass(['p-checkbox-box', {'p-highlight': $options.isSelected(option)}])
                                   }, [
-                                    vue.createVNode("span", {
-                                      class: ['p-checkbox-icon', {'pi pi-check': $options.isSelected(option)}]
+                                    vue.createElementVNode("span", {
+                                      class: vue.normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.isSelected(option)}])
                                     }, null, 2)
                                   ], 2)
                                 ]),
@@ -861,17 +873,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   option: option,
                                   index: $options.getOptionIndex(i, getItemOptions)
                                 }, () => [
-                                  vue.createVNode("span", null, vue.toDisplayString($options.getOptionLabel(option)), 1)
+                                  vue.createElementVNode("span", null, vue.toDisplayString($options.getOptionLabel(option)), 1)
                                 ])
-                              ], 42, ["aria-selected", "onClick", "onKeydown", "tabindex", "aria-label"])), [
+                              ], 42, _hoisted_16)), [
                                 [_directive_ripple]
                               ])
                             }), 128))
-                          : (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
-                              return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                          : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
+                              return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                                 key: $options.getOptionGroupRenderKey(optionGroup)
                               }, [
-                                vue.createVNode("li", _hoisted_11, [
+                                vue.createElementVNode("li", _hoisted_18, [
                                   vue.renderSlot(_ctx.$slots, "optiongroup", {
                                     option: optionGroup,
                                     index: $options.getOptionIndex(i, getItemOptions)
@@ -879,9 +891,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                   ])
                                 ]),
-                                (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
-                                  return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
-                                    class: ['p-multiselect-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                                  return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                    class: vue.normalizeClass(['p-multiselect-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
                                     role: "option",
                                     "aria-selected": $options.isSelected(option),
                                     key: $options.getOptionRenderKey(option),
@@ -890,12 +902,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     tabindex: $props.tabindex||'0',
                                     "aria-label": $options.getOptionLabel(option)
                                   }, [
-                                    vue.createVNode("div", _hoisted_12, [
-                                      vue.createVNode("div", {
-                                        class: ['p-checkbox-box', {'p-highlight': $options.isSelected(option)}]
+                                    vue.createElementVNode("div", _hoisted_20, [
+                                      vue.createElementVNode("div", {
+                                        class: vue.normalizeClass(['p-checkbox-box', {'p-highlight': $options.isSelected(option)}])
                                       }, [
-                                        vue.createVNode("span", {
-                                          class: ['p-checkbox-icon', {'pi pi-check': $options.isSelected(option)}]
+                                        vue.createElementVNode("span", {
+                                          class: vue.normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.isSelected(option)}])
                                         }, null, 2)
                                       ], 2)
                                     ]),
@@ -903,22 +915,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                       option: option,
                                       index: $options.getOptionIndex(i, getItemOptions)
                                     }, () => [
-                                      vue.createVNode("span", null, vue.toDisplayString($options.getOptionLabel(option)), 1)
+                                      vue.createElementVNode("span", null, vue.toDisplayString($options.getOptionLabel(option)), 1)
                                     ])
-                                  ], 42, ["aria-selected", "onClick", "onKeydown", "tabindex", "aria-label"])), [
+                                  ], 42, _hoisted_19)), [
                                     [_directive_ripple]
                                   ])
                                 }), 128))
                               ], 64))
                             }), 128)),
                         ($data.filterValue && (!items || (items && items.length === 0)))
-                          ? (vue.openBlock(), vue.createBlock("li", _hoisted_13, [
+                          ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_21, [
                               vue.renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
                                 vue.createTextVNode(vue.toDisplayString($options.emptyFilterMessageText), 1)
                               ])
                             ]))
                           : ((!$props.options || ($props.options && $props.options.length === 0)))
-                            ? (vue.openBlock(), vue.createBlock("li", _hoisted_14, [
+                            ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_22, [
                                 vue.renderSlot(_ctx.$slots, "empty", {}, () => [
                                   vue.createTextVNode(vue.toDisplayString($options.emptyMessageText), 1)
                                 ])

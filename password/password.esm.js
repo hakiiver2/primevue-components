@@ -1,7 +1,7 @@
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import InputText from 'primevue/inputtext';
-import { resolveComponent, openBlock, createBlock, createVNode, mergeProps, createCommentVNode, Teleport, Transition, withCtx, renderSlot, toDisplayString } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, normalizeStyle, createVNode, mergeProps, createCommentVNode, createBlock, Teleport, Transition, withCtx, renderSlot, createElementVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'Password',
@@ -292,9 +292,9 @@ const _hoisted_2 = { class: "p-password-info" };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PInputText = resolveComponent("PInputText");
 
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
-    style: $props.style
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
+    style: normalizeStyle($props.style)
   }, [
     createVNode(_component_PInputText, mergeProps({
       ref: "input",
@@ -308,10 +308,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onKeyup: $options.onKeyUp
     }, _ctx.$attrs), null, 16, ["class", "style", "type", "value", "onInput", "onFocus", "onBlur", "onKeyup"]),
     ($props.toggleMask)
-      ? (openBlock(), createBlock("i", {
+      ? (openBlock(), createElementBlock("i", {
           key: 0,
-          class: $options.toggleIconClass,
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onMaskToggle && $options.onMaskToggle(...args)))
+          class: normalizeClass($options.toggleIconClass),
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.onMaskToggle && $options.onMaskToggle(...args)))
         }, null, 2))
       : createCommentVNode("", true),
     (openBlock(), createBlock(Teleport, {
@@ -326,21 +326,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: withCtx(() => [
           ($data.overlayVisible)
-            ? (openBlock(), createBlock("div", {
+            ? (openBlock(), createElementBlock("div", {
                 key: 0,
                 ref: $options.overlayRef,
-                class: $options.panelStyleClass,
-                onClick: _cache[2] || (_cache[2] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                class: normalizeClass($options.panelStyleClass),
+                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
                 renderSlot(_ctx.$slots, "header"),
                 renderSlot(_ctx.$slots, "content", {}, () => [
-                  createVNode("div", _hoisted_1, [
-                    createVNode("div", {
-                      class: $options.strengthClass,
-                      style: {'width': $data.meter ? $data.meter.width : ''}
+                  createElementVNode("div", _hoisted_1, [
+                    createElementVNode("div", {
+                      class: normalizeClass($options.strengthClass),
+                      style: normalizeStyle({'width': $data.meter ? $data.meter.width : ''})
                     }, null, 6)
                   ]),
-                  createVNode("div", _hoisted_2, toDisplayString($data.infoText), 1)
+                  createElementVNode("div", _hoisted_2, toDisplayString($data.infoText), 1)
                 ]),
                 renderSlot(_ctx.$slots, "footer")
               ], 2))

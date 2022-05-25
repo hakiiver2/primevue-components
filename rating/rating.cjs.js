@@ -62,24 +62,29 @@ var script = {
     }
 };
 
+const _hoisted_1 = ["tabindex"];
+const _hoisted_2 = ["onClick", "tabindex", "onKeydown"];
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass($options.containerClass)
+  }, [
     ($props.cancel)
-      ? (vue.openBlock(), vue.createBlock("span", {
+      ? (vue.openBlock(), vue.createElementBlock("span", {
           key: 0,
           class: "p-rating-icon p-rating-cancel pi pi-ban",
           tabindex: $options.focusIndex,
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onCancelClick && $options.onCancelClick(...args)))
-        }, null, 8, ["tabindex"]))
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.onCancelClick && $options.onCancelClick(...args)))
+        }, null, 8, _hoisted_1))
       : vue.createCommentVNode("", true),
-    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.stars, (i) => {
-      return (vue.openBlock(), vue.createBlock("span", {
+    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.stars, (i) => {
+      return (vue.openBlock(), vue.createElementBlock("span", {
         key: i,
         onClick: $event => ($options.onStarClick($event,i)),
         tabindex: $options.focusIndex,
         onKeydown: vue.withKeys(vue.withModifiers($event => ($options.onStarClick($event,i)), ["prevent"]), ["enter"]),
-        class: ['p-rating-icon', {'pi pi-star': (i > $props.modelValue), 'pi pi-star-fill': (i <= $props.modelValue)}]
-      }, null, 42, ["onClick", "tabindex", "onKeydown"]))
+        class: vue.normalizeClass(['p-rating-icon', {'pi pi-star': (i > $props.modelValue), 'pi pi-star-fill': (i <= $props.modelValue)}])
+      }, null, 42, _hoisted_2))
     }), 128))
   ], 2))
 }

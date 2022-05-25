@@ -550,13 +550,13 @@ this.primevue.virtualscroller = (function (vue) {
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       return (!$props.disabled)
-        ? (vue.openBlock(), vue.createBlock("div", {
+        ? (vue.openBlock(), vue.createElementBlock("div", {
             key: 0,
             ref: $options.elementRef,
-            class: $options.containerClass,
+            class: vue.normalizeClass($options.containerClass),
             tabindex: 0,
-            style: $props.style,
-            onScroll: _cache[1] || (_cache[1] = (...args) => ($options.onScroll && $options.onScroll(...args)))
+            style: vue.normalizeStyle($props.style),
+            onScroll: _cache[0] || (_cache[0] = (...args) => ($options.onScroll && $options.onScroll(...args)))
           }, [
             vue.renderSlot(_ctx.$slots, "content", {
               styleClass: $options.contentClass,
@@ -574,12 +574,12 @@ this.primevue.virtualscroller = (function (vue) {
               horizontal: $options.isHorizontal(),
               both: $options.isBoth()
             }, () => [
-              vue.createVNode("div", {
+              vue.createElementVNode("div", {
                 ref: $options.contentRef,
-                class: $options.contentClass,
-                style: $data.contentStyle
+                class: vue.normalizeClass($options.contentClass),
+                style: vue.normalizeStyle($data.contentStyle)
               }, [
-                (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.loadedItems, (item, index) => {
+                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.loadedItems, (item, index) => {
                   return vue.renderSlot(_ctx.$slots, "item", {
                     key: index,
                     item: item,
@@ -589,29 +589,29 @@ this.primevue.virtualscroller = (function (vue) {
               ], 6)
             ]),
             ($props.showSpacer)
-              ? (vue.openBlock(), vue.createBlock("div", {
+              ? (vue.openBlock(), vue.createElementBlock("div", {
                   key: 0,
                   class: "p-virtualscroller-spacer",
-                  style: $data.spacerStyle
+                  style: vue.normalizeStyle($data.spacerStyle)
                 }, null, 4))
               : vue.createCommentVNode("", true),
             (!$props.loaderDisabled && $props.showLoader && $data.d_loading)
-              ? (vue.openBlock(), vue.createBlock("div", {
+              ? (vue.openBlock(), vue.createElementBlock("div", {
                   key: 1,
-                  class: $options.loaderClass
+                  class: vue.normalizeClass($options.loaderClass)
                 }, [
                   (_ctx.$slots && _ctx.$slots.loader)
-                    ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList($data.loaderArr, (_, index) => {
+                    ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList($data.loaderArr, (_, index) => {
                         return vue.renderSlot(_ctx.$slots, "loader", {
                           key: index,
                           options: $options.getLoaderOptions(index, $options.isBoth() && { numCols: _ctx.d_numItemsInViewport.cols })
                         })
                       }), 128))
-                    : (vue.openBlock(), vue.createBlock("i", _hoisted_1))
+                    : (vue.openBlock(), vue.createElementBlock("i", _hoisted_1))
                 ], 2))
               : vue.createCommentVNode("", true)
           ], 38))
-        : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
+        : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
             vue.renderSlot(_ctx.$slots, "default"),
             vue.renderSlot(_ctx.$slots, "content", {
               items: $props.items,
@@ -655,4 +655,4 @@ this.primevue.virtualscroller = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

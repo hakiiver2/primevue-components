@@ -486,13 +486,13 @@ this.primevue.inputmask = (function (utils, vue) {
     };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("input", vue.mergeProps({ class: $options.inputClass }, _ctx.$attrs, {
-        onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args))),
-        onFocus: _cache[2] || (_cache[2] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[3] || (_cache[3] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-        onKeydown: _cache[4] || (_cache[4] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-        onKeypress: _cache[5] || (_cache[5] = (...args) => ($options.onKeyPress && $options.onKeyPress(...args))),
-        onPaste: _cache[6] || (_cache[6] = (...args) => ($options.onPaste && $options.onPaste(...args)))
+      return (vue.openBlock(), vue.createElementBlock("input", vue.mergeProps({ class: $options.inputClass }, _ctx.$attrs, {
+        onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args))),
+        onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+        onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+        onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+        onKeypress: _cache[4] || (_cache[4] = (...args) => ($options.onKeyPress && $options.onKeyPress(...args))),
+        onPaste: _cache[5] || (_cache[5] = (...args) => ($options.onPaste && $options.onPaste(...args)))
       }), null, 16))
     }
 
@@ -500,4 +500,4 @@ this.primevue.inputmask = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

@@ -984,8 +984,8 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
             }
         },
         components: {
-            'INInputText': InputText__default['default'],
-            'INButton': Button__default['default']
+            'INInputText': InputText__default["default"],
+            'INButton': Button__default["default"]
         }
     };
 
@@ -998,9 +998,9 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
       const _component_INInputText = vue.resolveComponent("INInputText");
       const _component_INButton = vue.resolveComponent("INButton");
 
-      return (vue.openBlock(), vue.createBlock("span", {
-        class: $options.containerClass,
-        style: $props.style
+      return (vue.openBlock(), vue.createElementBlock("span", {
+        class: vue.normalizeClass($options.containerClass),
+        style: vue.normalizeStyle($props.style)
       }, [
         vue.createVNode(_component_INInputText, vue.mergeProps({
           ref: "input",
@@ -1020,7 +1020,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
           onBlur: $options.onInputBlur
         }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
         ($props.showButtons && $props.buttonLayout === 'stacked')
-          ? (vue.openBlock(), vue.createBlock("span", _hoisted_1, [
+          ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_1, [
               vue.createVNode(_component_INButton, vue.mergeProps({
                 class: $options.upButtonClass,
                 icon: $props.incrementButtonIcon
@@ -1090,4 +1090,4 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
 
     return script;
 
-}(primevue.inputtext, primevue.button, Vue));
+})(primevue.inputtext, primevue.button, Vue);

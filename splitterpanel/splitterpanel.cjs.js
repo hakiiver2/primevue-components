@@ -27,9 +27,9 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
+  return (vue.openBlock(), vue.createElementBlock("div", {
     ref: "container",
-    class: $options.containerClass
+    class: vue.normalizeClass($options.containerClass)
   }, [
     vue.renderSlot(_ctx.$slots, "default")
   ], 2))

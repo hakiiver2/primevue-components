@@ -1,4 +1,4 @@
-import { openBlock, createBlock, createVNode, renderSlot, createTextVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, createTextVNode } from 'vue';
 
 var script = {
     name: 'InlineMessage',
@@ -40,12 +40,14 @@ const _hoisted_1 = { class: "p-inline-message-text" };
 const _hoisted_2 = /*#__PURE__*/createTextVNode(" ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     "aria-live": "polite",
-    class: $options.containerClass
+    class: normalizeClass($options.containerClass)
   }, [
-    createVNode("span", { class: $options.iconClass }, null, 2),
-    createVNode("span", _hoisted_1, [
+    createElementVNode("span", {
+      class: normalizeClass($options.iconClass)
+    }, null, 2),
+    createElementVNode("span", _hoisted_1, [
       renderSlot(_ctx.$slots, "default", {}, () => [
         _hoisted_2
       ])

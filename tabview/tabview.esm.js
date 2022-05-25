@@ -1,6 +1,6 @@
 import { DomHandler } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, createVNode, withDirectives, createCommentVNode, Fragment, renderList, toDisplayString, resolveDynamicComponent, vShow } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, withDirectives, createCommentVNode, Fragment, renderList, toDisplayString, createBlock, resolveDynamicComponent, vShow } from 'vue';
 
 var script = {
     name: 'TabView',
@@ -148,23 +148,30 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-tabview-nav-container" };
-const _hoisted_2 = /*#__PURE__*/createVNode("span", { class: "pi pi-chevron-left" }, null, -1);
-const _hoisted_3 = {
+const _hoisted_2 = /*#__PURE__*/createElementVNode("span", { class: "pi pi-chevron-left" }, null, -1);
+const _hoisted_3 = [
+  _hoisted_2
+];
+const _hoisted_4 = {
   ref: "nav",
   class: "p-tabview-nav",
   role: "tablist"
 };
-const _hoisted_4 = {
+const _hoisted_5 = ["onClick", "onKeydown", "tabindex", "aria-selected"];
+const _hoisted_6 = {
   key: 0,
   class: "p-tabview-title"
 };
-const _hoisted_5 = {
+const _hoisted_7 = {
   ref: "inkbar",
   class: "p-tabview-ink-bar"
 };
-const _hoisted_6 = /*#__PURE__*/createVNode("span", { class: "pi pi-chevron-right" }, null, -1);
-const _hoisted_7 = { class: "p-tabview-panels" };
-const _hoisted_8 = {
+const _hoisted_8 = /*#__PURE__*/createElementVNode("span", { class: "pi pi-chevron-right" }, null, -1);
+const _hoisted_9 = [
+  _hoisted_8
+];
+const _hoisted_10 = { class: "p-tabview-panels" };
+const _hoisted_11 = {
   key: 0,
   class: "p-tabview-panel",
   role: "tabpanel"
@@ -173,34 +180,34 @@ const _hoisted_8 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", { class: $options.contentClasses }, [
-    createVNode("div", _hoisted_1, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.contentClasses)
+  }, [
+    createElementVNode("div", _hoisted_1, [
       ($props.scrollable && !$data.backwardIsDisabled)
-        ? withDirectives((openBlock(), createBlock("button", {
+        ? withDirectives((openBlock(), createElementBlock("button", {
             key: 0,
             ref: "prevBtn",
-            class: $options.prevButtonClasses,
-            onClick: _cache[1] || (_cache[1] = (...args) => ($options.navBackward && $options.navBackward(...args))),
+            class: normalizeClass($options.prevButtonClasses),
+            onClick: _cache[0] || (_cache[0] = (...args) => ($options.navBackward && $options.navBackward(...args))),
             type: "button"
-          }, [
-            _hoisted_2
-          ], 2)), [
+          }, _hoisted_3, 2)), [
             [_directive_ripple]
           ])
         : createCommentVNode("", true),
-      createVNode("div", {
+      createElementVNode("div", {
         ref: "content",
         class: "p-tabview-nav-content",
-        onScroll: _cache[2] || (_cache[2] = (...args) => ($options.onScroll && $options.onScroll(...args)))
+        onScroll: _cache[1] || (_cache[1] = (...args) => ($options.onScroll && $options.onScroll(...args)))
       }, [
-        createVNode("ul", _hoisted_3, [
-          (openBlock(true), createBlock(Fragment, null, renderList($options.tabs, (tab, i) => {
-            return (openBlock(), createBlock("li", {
+        createElementVNode("ul", _hoisted_4, [
+          (openBlock(true), createElementBlock(Fragment, null, renderList($options.tabs, (tab, i) => {
+            return (openBlock(), createElementBlock("li", {
               role: "presentation",
               key: $options.getKey(tab,i),
-              class: [{'p-highlight': ($data.d_activeIndex === i), 'p-disabled': $options.isTabDisabled(tab)}]
+              class: normalizeClass([{'p-highlight': ($data.d_activeIndex === i), 'p-disabled': $options.isTabDisabled(tab)}])
             }, [
-              withDirectives(createVNode("a", {
+              withDirectives((openBlock(), createElementBlock("a", {
                 role: "tab",
                 class: "p-tabview-nav-link",
                 onClick: $event => ($options.onTabClick($event, i)),
@@ -209,40 +216,38 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 "aria-selected": $data.d_activeIndex === i
               }, [
                 (tab.props && tab.props.header)
-                  ? (openBlock(), createBlock("span", _hoisted_4, toDisplayString(tab.props.header), 1))
+                  ? (openBlock(), createElementBlock("span", _hoisted_6, toDisplayString(tab.props.header), 1))
                   : createCommentVNode("", true),
                 (tab.children && tab.children.header)
                   ? (openBlock(), createBlock(resolveDynamicComponent(tab.children.header), { key: 1 }))
                   : createCommentVNode("", true)
-              ], 40, ["onClick", "onKeydown", "tabindex", "aria-selected"]), [
+              ], 40, _hoisted_5)), [
                 [_directive_ripple]
               ])
             ], 2))
           }), 128)),
-          createVNode("li", _hoisted_5, null, 512)
+          createElementVNode("li", _hoisted_7, null, 512)
         ], 512)
       ], 544),
       ($props.scrollable && !$data.forwardIsDisabled)
-        ? withDirectives((openBlock(), createBlock("button", {
+        ? withDirectives((openBlock(), createElementBlock("button", {
             key: 1,
             ref: "nextBtn",
-            class: $options.nextButtonClasses,
-            onClick: _cache[3] || (_cache[3] = (...args) => ($options.navForward && $options.navForward(...args))),
+            class: normalizeClass($options.nextButtonClasses),
+            onClick: _cache[2] || (_cache[2] = (...args) => ($options.navForward && $options.navForward(...args))),
             type: "button"
-          }, [
-            _hoisted_6
-          ], 2)), [
+          }, _hoisted_9, 2)), [
             [_directive_ripple]
           ])
         : createCommentVNode("", true)
     ]),
-    createVNode("div", _hoisted_7, [
-      (openBlock(true), createBlock(Fragment, null, renderList($options.tabs, (tab, i) => {
-        return (openBlock(), createBlock(Fragment, {
+    createElementVNode("div", _hoisted_10, [
+      (openBlock(true), createElementBlock(Fragment, null, renderList($options.tabs, (tab, i) => {
+        return (openBlock(), createElementBlock(Fragment, {
           key: $options.getKey(tab,i)
         }, [
           ($props.lazy ? ($data.d_activeIndex === i) : true)
-            ? withDirectives((openBlock(), createBlock("div", _hoisted_8, [
+            ? withDirectives((openBlock(), createElementBlock("div", _hoisted_11, [
                 (openBlock(), createBlock(resolveDynamicComponent(tab)))
               ], 512)), [
                 [vShow, $props.lazy ? true: ($data.d_activeIndex === i)]

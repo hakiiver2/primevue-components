@@ -29,15 +29,15 @@ this.primevue.tag = (function (vue) {
     const _hoisted_1 = { class: "p-tag-value" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("span", vue.mergeProps({ class: $options.containerClass }, _ctx.$attrs), [
+      return (vue.openBlock(), vue.createElementBlock("span", vue.mergeProps({ class: $options.containerClass }, _ctx.$attrs), [
         ($props.icon)
-          ? (vue.openBlock(), vue.createBlock("span", {
+          ? (vue.openBlock(), vue.createElementBlock("span", {
               key: 0,
-              class: $options.iconClass
+              class: vue.normalizeClass($options.iconClass)
             }, null, 2))
           : vue.createCommentVNode("", true),
         vue.renderSlot(_ctx.$slots, "default", {}, () => [
-          vue.createVNode("span", _hoisted_1, vue.toDisplayString($props.value), 1)
+          vue.createElementVNode("span", _hoisted_1, vue.toDisplayString($props.value), 1)
         ])
       ], 16))
     }
@@ -76,4 +76,4 @@ this.primevue.tag = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

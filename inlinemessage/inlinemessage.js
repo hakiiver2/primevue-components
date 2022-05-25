@@ -42,12 +42,14 @@ this.primevue.inlinemessage = (function (vue) {
     const _hoisted_2 = /*#__PURE__*/vue.createTextVNode(" ");
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", {
+      return (vue.openBlock(), vue.createElementBlock("div", {
         "aria-live": "polite",
-        class: $options.containerClass
+        class: vue.normalizeClass($options.containerClass)
       }, [
-        vue.createVNode("span", { class: $options.iconClass }, null, 2),
-        vue.createVNode("span", _hoisted_1, [
+        vue.createElementVNode("span", {
+          class: vue.normalizeClass($options.iconClass)
+        }, null, 2),
+        vue.createElementVNode("span", _hoisted_1, [
           vue.renderSlot(_ctx.$slots, "default", {}, () => [
             _hoisted_2
           ])
@@ -89,4 +91,4 @@ this.primevue.inlinemessage = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

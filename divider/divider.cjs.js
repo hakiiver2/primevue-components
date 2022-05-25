@@ -38,12 +38,12 @@ const _hoisted_1 = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
-    class: $options.containerClass,
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass($options.containerClass),
     role: "separator"
   }, [
     (_ctx.$slots.default)
-      ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
           vue.renderSlot(_ctx.$slots, "default")
         ]))
       : vue.createCommentVNode("", true)

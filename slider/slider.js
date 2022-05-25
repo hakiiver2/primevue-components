@@ -319,68 +319,72 @@ this.primevue.slider = (function (utils, vue) {
         }
     };
 
+    const _hoisted_1 = ["aria-valuemin", "aria-valuenow", "aria-valuemax", "aria-labelledby"];
+    const _hoisted_2 = ["aria-valuemin", "aria-valuenow", "aria-valuemax", "aria-labelledby"];
+    const _hoisted_3 = ["aria-valuemin", "aria-valuenow", "aria-valuemax", "aria-labelledby"];
+
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", {
-        class: $options.containerClass,
-        onClick: _cache[16] || (_cache[16] = (...args) => ($options.onBarClick && $options.onBarClick(...args)))
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass),
+        onClick: _cache[15] || (_cache[15] = (...args) => ($options.onBarClick && $options.onBarClick(...args)))
       }, [
-        vue.createVNode("span", {
+        vue.createElementVNode("span", {
           class: "p-slider-range",
-          style: $options.rangeStyle
+          style: vue.normalizeStyle($options.rangeStyle)
         }, null, 4),
         (!$props.range)
-          ? (vue.openBlock(), vue.createBlock("span", {
+          ? (vue.openBlock(), vue.createElementBlock("span", {
               key: 0,
               class: "p-slider-handle",
-              style: $options.handleStyle,
-              onTouchstart: _cache[1] || (_cache[1] = $event => ($options.onDragStart($event))),
-              onTouchmove: _cache[2] || (_cache[2] = $event => ($options.onDrag($event))),
-              onTouchend: _cache[3] || (_cache[3] = $event => ($options.onDragEnd($event))),
-              onMousedown: _cache[4] || (_cache[4] = $event => ($options.onMouseDown($event))),
-              onKeydown: _cache[5] || (_cache[5] = $event => ($options.onKeyDown($event))),
+              style: vue.normalizeStyle($options.handleStyle),
+              onTouchstart: _cache[0] || (_cache[0] = $event => ($options.onDragStart($event))),
+              onTouchmove: _cache[1] || (_cache[1] = $event => ($options.onDrag($event))),
+              onTouchend: _cache[2] || (_cache[2] = $event => ($options.onDragEnd($event))),
+              onMousedown: _cache[3] || (_cache[3] = $event => ($options.onMouseDown($event))),
+              onKeydown: _cache[4] || (_cache[4] = $event => ($options.onKeyDown($event))),
               tabindex: "0",
               role: "slider",
               "aria-valuemin": $props.min,
               "aria-valuenow": $props.modelValue,
               "aria-valuemax": $props.max,
               "aria-labelledby": $props.ariaLabelledBy
-            }, null, 44, ["aria-valuemin", "aria-valuenow", "aria-valuemax", "aria-labelledby"]))
+            }, null, 44, _hoisted_1))
           : vue.createCommentVNode("", true),
         ($props.range)
-          ? (vue.openBlock(), vue.createBlock("span", {
+          ? (vue.openBlock(), vue.createElementBlock("span", {
               key: 1,
               class: "p-slider-handle",
-              style: $options.rangeStartHandleStyle,
-              onTouchstart: _cache[6] || (_cache[6] = $event => ($options.onDragStart($event, 0))),
-              onTouchmove: _cache[7] || (_cache[7] = $event => ($options.onDrag($event))),
-              onTouchend: _cache[8] || (_cache[8] = $event => ($options.onDragEnd($event))),
-              onMousedown: _cache[9] || (_cache[9] = $event => ($options.onMouseDown($event, 0))),
-              onKeydown: _cache[10] || (_cache[10] = $event => ($options.onKeyDown($event))),
+              style: vue.normalizeStyle($options.rangeStartHandleStyle),
+              onTouchstart: _cache[5] || (_cache[5] = $event => ($options.onDragStart($event, 0))),
+              onTouchmove: _cache[6] || (_cache[6] = $event => ($options.onDrag($event))),
+              onTouchend: _cache[7] || (_cache[7] = $event => ($options.onDragEnd($event))),
+              onMousedown: _cache[8] || (_cache[8] = $event => ($options.onMouseDown($event, 0))),
+              onKeydown: _cache[9] || (_cache[9] = $event => ($options.onKeyDown($event))),
               tabindex: "0",
               role: "slider",
               "aria-valuemin": $props.min,
               "aria-valuenow": $props.modelValue ? $props.modelValue[0] : null,
               "aria-valuemax": $props.max,
               "aria-labelledby": $props.ariaLabelledBy
-            }, null, 44, ["aria-valuemin", "aria-valuenow", "aria-valuemax", "aria-labelledby"]))
+            }, null, 44, _hoisted_2))
           : vue.createCommentVNode("", true),
         ($props.range)
-          ? (vue.openBlock(), vue.createBlock("span", {
+          ? (vue.openBlock(), vue.createElementBlock("span", {
               key: 2,
               class: "p-slider-handle",
-              style: $options.rangeEndHandleStyle,
-              onTouchstart: _cache[11] || (_cache[11] = $event => ($options.onDragStart($event, 1))),
-              onTouchmove: _cache[12] || (_cache[12] = $event => ($options.onDrag($event))),
-              onTouchend: _cache[13] || (_cache[13] = $event => ($options.onDragEnd($event))),
-              onMousedown: _cache[14] || (_cache[14] = $event => ($options.onMouseDown($event, 1))),
-              onKeydown: _cache[15] || (_cache[15] = $event => ($options.onKeyDown($event, 1))),
+              style: vue.normalizeStyle($options.rangeEndHandleStyle),
+              onTouchstart: _cache[10] || (_cache[10] = $event => ($options.onDragStart($event, 1))),
+              onTouchmove: _cache[11] || (_cache[11] = $event => ($options.onDrag($event))),
+              onTouchend: _cache[12] || (_cache[12] = $event => ($options.onDragEnd($event))),
+              onMousedown: _cache[13] || (_cache[13] = $event => ($options.onMouseDown($event, 1))),
+              onKeydown: _cache[14] || (_cache[14] = $event => ($options.onKeyDown($event, 1))),
               tabindex: "0",
               role: "slider",
               "aria-valuemin": $props.min,
               "aria-valuenow": $props.modelValue ? $props.modelValue[1] : null,
               "aria-valuemax": $props.max,
               "aria-labelledby": $props.ariaLabelledBy
-            }, null, 44, ["aria-valuemin", "aria-valuenow", "aria-valuemax", "aria-labelledby"]))
+            }, null, 44, _hoisted_3))
           : vue.createCommentVNode("", true)
       ], 2))
     }
@@ -419,4 +423,4 @@ this.primevue.slider = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

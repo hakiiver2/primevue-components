@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, toDisplayString, createCommentVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, renderSlot, toDisplayString, createCommentVNode } from 'vue';
 
 var script = {
     name: 'Avatar',
@@ -43,22 +43,25 @@ const _hoisted_1 = {
   key: 0,
   class: "p-avatar-text"
 };
+const _hoisted_2 = ["src"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
     renderSlot(_ctx.$slots, "default", {}, () => [
       ($props.label)
-        ? (openBlock(), createBlock("span", _hoisted_1, toDisplayString($props.label), 1))
+        ? (openBlock(), createElementBlock("span", _hoisted_1, toDisplayString($props.label), 1))
         : ($props.icon)
-          ? (openBlock(), createBlock("span", {
+          ? (openBlock(), createElementBlock("span", {
               key: 1,
-              class: $options.iconClass
+              class: normalizeClass($options.iconClass)
             }, null, 2))
           : ($props.image)
-            ? (openBlock(), createBlock("img", {
+            ? (openBlock(), createElementBlock("img", {
                 key: 2,
                 src: $props.image
-              }, null, 8, ["src"]))
+              }, null, 8, _hoisted_2))
             : createCommentVNode("", true)
     ])
   ], 2))

@@ -60,7 +60,7 @@ this.primevue.deferredcontent = (function (vue) {
     const _hoisted_1 = { ref: "container" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
         ($data.loaded)
           ? vue.renderSlot(_ctx.$slots, "default", { key: 0 })
           : vue.createCommentVNode("", true)
@@ -71,4 +71,4 @@ this.primevue.deferredcontent = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

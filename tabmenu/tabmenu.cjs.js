@@ -119,7 +119,7 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
@@ -129,9 +129,11 @@ const _hoisted_2 = {
   class: "p-tabmenu-nav p-reset",
   role: "tablist"
 };
-const _hoisted_3 = { class: "p-menuitem-text" };
+const _hoisted_3 = ["href", "onClick"];
 const _hoisted_4 = { class: "p-menuitem-text" };
-const _hoisted_5 = {
+const _hoisted_5 = ["href", "target", "onClick", "tabindex"];
+const _hoisted_6 = { class: "p-menuitem-text" };
+const _hoisted_7 = {
   ref: "inkbar",
   class: "p-tabmenu-ink-bar"
 };
@@ -140,10 +142,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = vue.resolveComponent("router-link");
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-    vue.createVNode("ul", _hoisted_2, [
-      (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
-        return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+  return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+    vue.createElementVNode("ul", _hoisted_2, [
+      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
+        return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
           key: $options.label(item) + '_' + i.toString()
         }, [
           (item.to && !$options.disabled(item))
@@ -154,14 +156,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }, {
                 default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
                   ($options.visible(item))
-                    ? (vue.openBlock(), vue.createBlock("li", {
+                    ? (vue.openBlock(), vue.createElementBlock("li", {
                         key: 0,
-                        class: $options.getRouteItemClass(item,isActive,isExactActive),
-                        style: item.style,
+                        class: vue.normalizeClass($options.getRouteItemClass(item,isActive,isExactActive)),
+                        style: vue.normalizeStyle(item.style),
                         role: "tab"
                       }, [
                         (!_ctx.$slots.item)
-                          ? vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                          ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                               key: 0,
                               href: href,
                               class: "p-menuitem-link",
@@ -169,13 +171,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               role: "presentation"
                             }, [
                               (item.icon)
-                                ? (vue.openBlock(), vue.createBlock("span", {
+                                ? (vue.openBlock(), vue.createElementBlock("span", {
                                     key: 0,
-                                    class: $options.getItemIcon(item)
+                                    class: vue.normalizeClass($options.getItemIcon(item))
                                   }, null, 2))
                                 : vue.createCommentVNode("", true),
-                              vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
-                            ], 8, ["href", "onClick"])), [
+                              vue.createElementVNode("span", _hoisted_4, vue.toDisplayString($options.label(item)), 1)
+                            ], 8, _hoisted_3)), [
                               [_directive_ripple]
                             ])
                           : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {
@@ -188,13 +190,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 _: 2
               }, 1032, ["to"]))
             : ($options.visible(item))
-              ? (vue.openBlock(), vue.createBlock("li", {
+              ? (vue.openBlock(), vue.createElementBlock("li", {
                   key: 1,
-                  class: $options.getItemClass(item, i),
+                  class: vue.normalizeClass($options.getItemClass(item, i)),
                   role: "tab"
                 }, [
                   (!_ctx.$slots.item)
-                    ? vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                    ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                         key: 0,
                         href: item.url,
                         class: "p-menuitem-link",
@@ -204,13 +206,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         tabindex: $options.disabled(item) ? null : '0'
                       }, [
                         (item.icon)
-                          ? (vue.openBlock(), vue.createBlock("span", {
+                          ? (vue.openBlock(), vue.createElementBlock("span", {
                               key: 0,
-                              class: $options.getItemIcon(item)
+                              class: vue.normalizeClass($options.getItemIcon(item))
                             }, null, 2))
                           : vue.createCommentVNode("", true),
-                        vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.label(item)), 1)
-                      ], 8, ["href", "target", "onClick", "tabindex"])), [
+                        vue.createElementVNode("span", _hoisted_6, vue.toDisplayString($options.label(item)), 1)
+                      ], 8, _hoisted_5)), [
                         [_directive_ripple]
                       ])
                     : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {
@@ -221,7 +223,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               : vue.createCommentVNode("", true)
         ], 64))
       }), 128)),
-      vue.createVNode("li", _hoisted_5, null, 512)
+      vue.createElementVNode("li", _hoisted_7, null, 512)
     ], 512)
   ]))
 }

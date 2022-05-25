@@ -1,6 +1,6 @@
 import { ObjectUtils } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, Fragment, renderList, withDirectives, withKeys, withModifiers, renderSlot, createVNode, toDisplayString } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, normalizeClass, Fragment, renderList, withDirectives, withKeys, withModifiers, renderSlot, createElementVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'SelectButton',
@@ -99,17 +99,18 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-button-label" };
+const _hoisted_1 = ["aria-label", "aria-pressed", "onClick", "onKeydown", "tabindex", "aria-labelledby"];
+const _hoisted_2 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
     role: "group"
   }, [
-    (openBlock(true), createBlock(Fragment, null, renderList($props.options, (option, i) => {
-      return withDirectives((openBlock(), createBlock("div", {
+    (openBlock(true), createElementBlock(Fragment, null, renderList($props.options, (option, i) => {
+      return withDirectives((openBlock(), createElementBlock("div", {
         key: $options.getOptionRenderKey(option),
         "aria-label": $options.getOptionLabel(option),
         role: "button",
@@ -120,18 +121,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           withKeys(withModifiers($event => ($options.onOptionSelect($event, option)), ["prevent"]), ["space"])
         ],
         tabindex: $options.isOptionDisabled(option) ? null : '0',
-        onFocus: _cache[1] || (_cache[1] = $event => ($options.onFocus($event))),
-        onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur($event))),
+        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event))),
         "aria-labelledby": $props.ariaLabelledBy,
-        class: $options.getButtonClass(option)
+        class: normalizeClass($options.getButtonClass(option))
       }, [
         renderSlot(_ctx.$slots, "option", {
           option: option,
           index: i
         }, () => [
-          createVNode("span", _hoisted_1, toDisplayString($options.getOptionLabel(option)), 1)
+          createElementVNode("span", _hoisted_2, toDisplayString($options.getOptionLabel(option)), 1)
         ])
-      ], 42, ["aria-label", "aria-pressed", "onClick", "onKeydown", "tabindex", "aria-labelledby"])), [
+      ], 42, _hoisted_1)), [
         [_directive_ripple]
       ])
     }), 128))

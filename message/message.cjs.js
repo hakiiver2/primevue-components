@@ -65,13 +65,16 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
 const _hoisted_1 = { class: "p-message-wrapper" };
 const _hoisted_2 = { class: "p-message-text" };
-const _hoisted_3 = /*#__PURE__*/vue.createVNode("i", { class: "p-message-close-icon pi pi-times" }, null, -1);
+const _hoisted_3 = /*#__PURE__*/vue.createElementVNode("i", { class: "p-message-close-icon pi pi-times" }, null, -1);
+const _hoisted_4 = [
+  _hoisted_3
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
@@ -81,24 +84,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     appear: ""
   }, {
     default: vue.withCtx(() => [
-      vue.withDirectives(vue.createVNode("div", {
-        class: $options.containerClass,
+      vue.withDirectives(vue.createElementVNode("div", {
+        class: vue.normalizeClass($options.containerClass),
         role: "alert"
       }, [
-        vue.createVNode("div", _hoisted_1, [
-          vue.createVNode("span", { class: $options.iconClass }, null, 2),
-          vue.createVNode("div", _hoisted_2, [
+        vue.createElementVNode("div", _hoisted_1, [
+          vue.createElementVNode("span", {
+            class: vue.normalizeClass($options.iconClass)
+          }, null, 2),
+          vue.createElementVNode("div", _hoisted_2, [
             vue.renderSlot(_ctx.$slots, "default")
           ]),
           ($props.closable)
-            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                 key: 0,
                 class: "p-message-close p-link",
-                onClick: _cache[1] || (_cache[1] = $event => ($options.close($event))),
+                onClick: _cache[0] || (_cache[0] = $event => ($options.close($event))),
                 type: "button"
-              }, [
-                _hoisted_3
-              ], 512)), [
+              }, _hoisted_4)), [
                 [_directive_ripple]
               ])
             : vue.createCommentVNode("", true)

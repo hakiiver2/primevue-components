@@ -43,44 +43,49 @@ this.primevue.panel = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
     const _hoisted_1 = { class: "p-panel-header" };
-    const _hoisted_2 = { class: "p-panel-icons" };
-    const _hoisted_3 = { class: "p-panel-content" };
+    const _hoisted_2 = ["id"];
+    const _hoisted_3 = { class: "p-panel-icons" };
+    const _hoisted_4 = ["id", "aria-controls", "aria-expanded"];
+    const _hoisted_5 = ["id", "aria-labelledby"];
+    const _hoisted_6 = { class: "p-panel-content" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
-        vue.createVNode("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
+        vue.createElementVNode("div", _hoisted_1, [
           vue.renderSlot(_ctx.$slots, "header", {}, () => [
             ($props.header)
-              ? (vue.openBlock(), vue.createBlock("span", {
+              ? (vue.openBlock(), vue.createElementBlock("span", {
                   key: 0,
                   class: "p-panel-title",
                   id: $options.ariaId + '_header'
-                }, vue.toDisplayString($props.header), 9, ["id"]))
+                }, vue.toDisplayString($props.header), 9, _hoisted_2))
               : vue.createCommentVNode("", true)
           ]),
-          vue.createVNode("div", _hoisted_2, [
+          vue.createElementVNode("div", _hoisted_3, [
             vue.renderSlot(_ctx.$slots, "icons"),
             ($props.toggleable)
-              ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+              ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                   key: 0,
                   class: "p-panel-header-icon p-panel-toggler p-link",
-                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggle && $options.toggle(...args))),
+                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggle && $options.toggle(...args))),
                   type: "button",
                   id: $options.ariaId +  '_header',
                   "aria-controls": $options.ariaId + '_content',
                   "aria-expanded": !$data.d_collapsed
                 }, [
-                  vue.createVNode("span", {
-                    class: {'pi pi-minus': !$data.d_collapsed, 'pi pi-plus': $data.d_collapsed}
+                  vue.createElementVNode("span", {
+                    class: vue.normalizeClass({'pi pi-minus': !$data.d_collapsed, 'pi pi-plus': $data.d_collapsed})
                   }, null, 2)
-                ], 8, ["id", "aria-controls", "aria-expanded"])), [
+                ], 8, _hoisted_4)), [
                   [_directive_ripple]
                 ])
               : vue.createCommentVNode("", true)
@@ -88,16 +93,16 @@ this.primevue.panel = (function (utils, Ripple, vue) {
         ]),
         vue.createVNode(vue.Transition, { name: "p-toggleable-content" }, {
           default: vue.withCtx(() => [
-            vue.withDirectives(vue.createVNode("div", {
+            vue.withDirectives(vue.createElementVNode("div", {
               class: "p-toggleable-content",
               role: "region",
               id: $options.ariaId + '_content',
               "aria-labelledby": $options.ariaId + '_header'
             }, [
-              vue.createVNode("div", _hoisted_3, [
+              vue.createElementVNode("div", _hoisted_6, [
                 vue.renderSlot(_ctx.$slots, "default")
               ])
-            ], 8, ["id", "aria-labelledby"]), [
+            ], 8, _hoisted_5), [
               [vue.vShow, !$data.d_collapsed]
             ])
           ]),
@@ -140,4 +145,4 @@ this.primevue.panel = (function (utils, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);

@@ -1,4 +1,4 @@
-import { openBlock, createBlock, createVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeStyle, createElementVNode } from 'vue';
 
 var script = {
     name: 'ProgressSpinner',
@@ -30,15 +30,16 @@ const _hoisted_1 = {
   role: "alert",
   "aria-busy": "true"
 };
+const _hoisted_2 = ["fill", "stroke-width"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    (openBlock(), createBlock("svg", {
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
+    (openBlock(), createElementBlock("svg", {
       class: "p-progress-spinner-svg",
       viewBox: "25 25 50 50",
-      style: $options.svgStyle
+      style: normalizeStyle($options.svgStyle)
     }, [
-      createVNode("circle", {
+      createElementVNode("circle", {
         class: "p-progress-spinner-circle",
         cx: "50",
         cy: "50",
@@ -46,7 +47,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         fill: $props.fill,
         "stroke-width": $props.strokeWidth,
         strokeMiterlimit: "10"
-      }, null, 8, ["fill", "stroke-width"])
+      }, null, 8, _hoisted_2)
     ], 4))
   ]))
 }

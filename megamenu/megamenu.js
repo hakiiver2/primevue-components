@@ -268,7 +268,7 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -280,16 +280,21 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
       class: "p-megamenu-root-list",
       role: "menubar"
     };
-    const _hoisted_3 = { class: "p-menuitem-text" };
-    const _hoisted_4 = { class: "p-menuitem-text" };
-    const _hoisted_5 = {
+    const _hoisted_3 = ["onMouseenter"];
+    const _hoisted_4 = ["href", "onClick", "onKeydown"];
+    const _hoisted_5 = { class: "p-menuitem-text" };
+    const _hoisted_6 = ["href", "target", "onClick", "onKeydown", "aria-haspopup", "aria-expanded", "tabindex"];
+    const _hoisted_7 = { class: "p-menuitem-text" };
+    const _hoisted_8 = {
       key: 2,
       class: "p-megamenu-panel"
     };
-    const _hoisted_6 = { class: "p-megamenu-grid" };
-    const _hoisted_7 = { class: "p-menuitem-text" };
-    const _hoisted_8 = { class: "p-menuitem-text" };
-    const _hoisted_9 = {
+    const _hoisted_9 = { class: "p-megamenu-grid" };
+    const _hoisted_10 = ["href", "onClick"];
+    const _hoisted_11 = { class: "p-menuitem-text" };
+    const _hoisted_12 = ["href", "target", "onClick", "tabindex"];
+    const _hoisted_13 = { class: "p-menuitem-text" };
+    const _hoisted_14 = {
       key: 1,
       class: "p-megamenu-end"
     };
@@ -298,27 +303,29 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
       const _component_router_link = vue.resolveComponent("router-link");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
         (_ctx.$slots.start)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
               vue.renderSlot(_ctx.$slots, "start")
             ]))
           : vue.createCommentVNode("", true),
-        vue.createVNode("ul", _hoisted_2, [
-          (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (category, index) => {
-            return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+        vue.createElementVNode("ul", _hoisted_2, [
+          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (category, index) => {
+            return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
               key: $options.label(category) + '_' + index
             }, [
               ($options.visible(category))
-                ? (vue.openBlock(), vue.createBlock("li", {
+                ? (vue.openBlock(), vue.createElementBlock("li", {
                     key: 0,
-                    class: $options.getCategoryClass(category),
-                    style: category.style,
+                    class: vue.normalizeClass($options.getCategoryClass(category)),
+                    style: vue.normalizeStyle(category.style),
                     onMouseenter: $event => ($options.onCategoryMouseEnter($event, category)),
                     role: "none"
                   }, [
                     (!_ctx.$slots.item)
-                      ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                      ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                           (category.to && !$options.disabled(category))
                             ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                                 key: 0,
@@ -326,30 +333,30 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                 custom: ""
                               }, {
                                 default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                                  vue.withDirectives(vue.createVNode("a", {
+                                  vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                                     href: href,
-                                    class: $options.linkClass(category, {isActive, isExactActive}),
+                                    class: vue.normalizeClass($options.linkClass(category, {isActive, isExactActive})),
                                     onClick: $event => ($options.onCategoryClick($event, category, navigate)),
                                     onKeydown: $event => ($options.onCategoryKeydown($event, category)),
                                     role: "menuitem"
                                   }, [
                                     (category.icon)
-                                      ? (vue.openBlock(), vue.createBlock("span", {
+                                      ? (vue.openBlock(), vue.createElementBlock("span", {
                                           key: 0,
-                                          class: $options.getCategoryIcon(category)
+                                          class: vue.normalizeClass($options.getCategoryIcon(category))
                                         }, null, 2))
                                       : vue.createCommentVNode("", true),
-                                    vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(category)), 1)
-                                  ], 42, ["href", "onClick", "onKeydown"]), [
+                                    vue.createElementVNode("span", _hoisted_5, vue.toDisplayString($options.label(category)), 1)
+                                  ], 42, _hoisted_4)), [
                                     [_directive_ripple]
                                   ])
                                 ]),
                                 _: 2
                               }, 1032, ["to"]))
-                            : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                            : vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                                 key: 1,
                                 href: category.url,
-                                class: $options.linkClass(category),
+                                class: vue.normalizeClass($options.linkClass(category)),
                                 target: category.target,
                                 onClick: $event => ($options.onCategoryClick($event, category)),
                                 onKeydown: $event => ($options.onCategoryKeydown($event, category)),
@@ -359,19 +366,19 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                 tabindex: $options.disabled(category) ? null : '0'
                               }, [
                                 (category.icon)
-                                  ? (vue.openBlock(), vue.createBlock("span", {
+                                  ? (vue.openBlock(), vue.createElementBlock("span", {
                                       key: 0,
-                                      class: $options.getCategoryIcon(category)
+                                      class: vue.normalizeClass($options.getCategoryIcon(category))
                                     }, null, 2))
                                   : vue.createCommentVNode("", true),
-                                vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.label(category)), 1),
+                                vue.createElementVNode("span", _hoisted_7, vue.toDisplayString($options.label(category)), 1),
                                 (category.items)
-                                  ? (vue.openBlock(), vue.createBlock("span", {
+                                  ? (vue.openBlock(), vue.createElementBlock("span", {
                                       key: 1,
-                                      class: $options.getCategorySubMenuIcon()
+                                      class: vue.normalizeClass($options.getCategorySubMenuIcon())
                                     }, null, 2))
                                   : vue.createCommentVNode("", true)
-                              ], 42, ["href", "target", "onClick", "onKeydown", "aria-haspopup", "aria-expanded", "tabindex"])), [
+                              ], 42, _hoisted_6)), [
                                 [_directive_ripple]
                               ])
                         ], 64))
@@ -380,37 +387,37 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                           item: category
                         }, null, 8, ["item"])),
                     (category.items)
-                      ? (vue.openBlock(), vue.createBlock("div", _hoisted_5, [
-                          vue.createVNode("div", _hoisted_6, [
-                            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList(category.items, (column, columnIndex) => {
-                              return (vue.openBlock(), vue.createBlock("div", {
+                      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_8, [
+                          vue.createElementVNode("div", _hoisted_9, [
+                            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(category.items, (column, columnIndex) => {
+                              return (vue.openBlock(), vue.createElementBlock("div", {
                                 key: $options.label(category) + '_column_' + columnIndex,
-                                class: $options.getColumnClassName(category)
+                                class: vue.normalizeClass($options.getColumnClassName(category))
                               }, [
-                                (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList(column, (submenu, submenuIndex) => {
-                                  return (vue.openBlock(), vue.createBlock("ul", {
+                                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(column, (submenu, submenuIndex) => {
+                                  return (vue.openBlock(), vue.createElementBlock("ul", {
                                     class: "p-megamenu-submenu",
                                     key: submenu.label + '_submenu_' + submenuIndex,
                                     role: "menu"
                                   }, [
-                                    vue.createVNode("li", {
-                                      class: $options.getSubmenuHeaderClass(submenu),
-                                      style: submenu.style,
+                                    vue.createElementVNode("li", {
+                                      class: vue.normalizeClass($options.getSubmenuHeaderClass(submenu)),
+                                      style: vue.normalizeStyle(submenu.style),
                                       role: "presentation"
                                     }, vue.toDisplayString(submenu.label), 7),
-                                    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList(submenu.items, (item, i) => {
-                                      return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                                    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(submenu.items, (item, i) => {
+                                      return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                                         key: $options.label(item) + i.toString()
                                       }, [
                                         ($options.visible(item) && !item.separator)
-                                          ? (vue.openBlock(), vue.createBlock("li", {
+                                          ? (vue.openBlock(), vue.createElementBlock("li", {
                                               key: 0,
                                               role: "none",
-                                              class: $options.getSubmenuItemClass(item),
-                                              style: item.style
+                                              class: vue.normalizeClass($options.getSubmenuItemClass(item)),
+                                              style: vue.normalizeStyle(item.style)
                                             }, [
                                               (!_ctx.$slots.item)
-                                                ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                                                ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                                                     (item.to && !$options.disabled(item))
                                                       ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                                                           key: 0,
@@ -418,48 +425,48 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                                           custom: ""
                                                         }, {
                                                           default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                                                            vue.withDirectives(vue.createVNode("a", {
+                                                            vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                                                               href: href,
-                                                              class: $options.linkClass(item, {isActive, isExactActive}),
+                                                              class: vue.normalizeClass($options.linkClass(item, {isActive, isExactActive})),
                                                               onClick: $event => ($options.onLeafClick($event, item, navigate)),
                                                               role: "menuitem"
                                                             }, [
                                                               (item.icon)
-                                                                ? (vue.openBlock(), vue.createBlock("span", {
+                                                                ? (vue.openBlock(), vue.createElementBlock("span", {
                                                                     key: 0,
-                                                                    class: ['p-menuitem-icon', item.icon]
+                                                                    class: vue.normalizeClass(['p-menuitem-icon', item.icon])
                                                                   }, null, 2))
                                                                 : vue.createCommentVNode("", true),
-                                                              vue.createVNode("span", _hoisted_7, vue.toDisplayString($options.label(item)), 1)
-                                                            ], 10, ["href", "onClick"]), [
+                                                              vue.createElementVNode("span", _hoisted_11, vue.toDisplayString($options.label(item)), 1)
+                                                            ], 10, _hoisted_10)), [
                                                               [_directive_ripple]
                                                             ])
                                                           ]),
                                                           _: 2
                                                         }, 1032, ["to"]))
-                                                      : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                                                      : vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                                                           key: 1,
                                                           href: item.url,
-                                                          class: $options.linkClass(item),
+                                                          class: vue.normalizeClass($options.linkClass(item)),
                                                           target: item.target,
                                                           onClick: $event => ($options.onLeafClick($event, item)),
                                                           role: "menuitem",
                                                           tabindex: $options.disabled(item) ? null : '0'
                                                         }, [
                                                           (item.icon)
-                                                            ? (vue.openBlock(), vue.createBlock("span", {
+                                                            ? (vue.openBlock(), vue.createElementBlock("span", {
                                                                 key: 0,
-                                                                class: ['p-menuitem-icon', item.icon]
+                                                                class: vue.normalizeClass(['p-menuitem-icon', item.icon])
                                                               }, null, 2))
                                                             : vue.createCommentVNode("", true),
-                                                          vue.createVNode("span", _hoisted_8, vue.toDisplayString($options.label(item)), 1),
+                                                          vue.createElementVNode("span", _hoisted_13, vue.toDisplayString($options.label(item)), 1),
                                                           (item.items)
-                                                            ? (vue.openBlock(), vue.createBlock("span", {
+                                                            ? (vue.openBlock(), vue.createElementBlock("span", {
                                                                 key: 1,
-                                                                class: _ctx.getSubmenuIcon()
+                                                                class: vue.normalizeClass(_ctx.getSubmenuIcon())
                                                               }, null, 2))
                                                             : vue.createCommentVNode("", true)
-                                                        ], 10, ["href", "target", "onClick", "tabindex"])), [
+                                                        ], 10, _hoisted_12)), [
                                                           [_directive_ripple]
                                                         ])
                                                   ], 64))
@@ -470,9 +477,9 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                                             ], 6))
                                           : vue.createCommentVNode("", true),
                                         ($options.visible(item) && item.separator)
-                                          ? (vue.openBlock(), vue.createBlock("li", {
-                                              class: ['p-menu-separator', item.class],
-                                              style: item.style,
+                                          ? (vue.openBlock(), vue.createElementBlock("li", {
+                                              class: vue.normalizeClass(['p-menu-separator', item.class]),
+                                              style: vue.normalizeStyle(item.style),
                                               key: 'separator' + i.toString(),
                                               role: "separator"
                                             }, null, 6))
@@ -486,13 +493,13 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
                           ])
                         ]))
                       : vue.createCommentVNode("", true)
-                  ], 46, ["onMouseenter"]))
+                  ], 46, _hoisted_3))
                 : vue.createCommentVNode("", true)
             ], 64))
           }), 128))
         ]),
         (_ctx.$slots.end)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_9, [
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_14, [
               vue.renderSlot(_ctx.$slots, "end")
             ]))
           : vue.createCommentVNode("", true)
@@ -533,4 +540,4 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);

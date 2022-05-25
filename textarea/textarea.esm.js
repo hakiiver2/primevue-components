@@ -1,4 +1,4 @@
-import { openBlock, createBlock, mergeProps } from 'vue';
+import { openBlock, createElementBlock, mergeProps } from 'vue';
 
 var script = {
     name: 'Textarea',
@@ -46,13 +46,15 @@ var script = {
     }
 };
 
+const _hoisted_1 = ["value"];
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("textarea", mergeProps({
+  return (openBlock(), createElementBlock("textarea", mergeProps({
     class: ['p-inputtextarea p-inputtext p-component', {'p-filled': $options.filled, 'p-inputtextarea-resizable ': $props.autoResize}]
   }, _ctx.$attrs, {
     value: $props.modelValue,
-    onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args)))
-  }), null, 16, ["value"]))
+    onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args)))
+  }), null, 16, _hoisted_1))
 }
 
 function styleInject(css, ref) {

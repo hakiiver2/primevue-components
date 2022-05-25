@@ -1,5 +1,5 @@
 import { DomHandler, ObjectUtils } from 'primevue/utils';
-import { openBlock, createBlock, Fragment, renderList, resolveDynamicComponent, createCommentVNode, createVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, Fragment, renderList, createBlock, resolveDynamicComponent, normalizeStyle, createCommentVNode, createElementVNode } from 'vue';
 
 var script = {
     name: 'Splitter',
@@ -237,26 +237,31 @@ var script = {
     }
 };
 
-const _hoisted_1 = /*#__PURE__*/createVNode("div", { class: "p-splitter-gutter-handle" }, null, -1);
+const _hoisted_1 = ["onMousedown", "onTouchstart", "onTouchmove", "onTouchend"];
+const _hoisted_2 = /*#__PURE__*/createElementVNode("div", { class: "p-splitter-gutter-handle" }, null, -1);
+const _hoisted_3 = [
+  _hoisted_2
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
-    (openBlock(true), createBlock(Fragment, null, renderList($options.panels, (panel, i) => {
-      return (openBlock(), createBlock(Fragment, { key: i }, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
+    (openBlock(true), createElementBlock(Fragment, null, renderList($options.panels, (panel, i) => {
+      return (openBlock(), createElementBlock(Fragment, { key: i }, [
         (openBlock(), createBlock(resolveDynamicComponent(panel))),
         (i !== ($options.panels.length -1))
-          ? (openBlock(), createBlock("div", {
+          ? (openBlock(), createElementBlock("div", {
               key: 0,
               class: "p-splitter-gutter",
-              style: $options.gutterStyle,
+              style: normalizeStyle($options.gutterStyle),
+              ref_for: true,
               ref: "splitterGutter",
               onMousedown: $event => ($options.onGutterMouseDown($event, i)),
               onTouchstart: $event => ($options.onGutterTouchStart($event, i)),
               onTouchmove: $event => ($options.onGutterTouchMove($event, i)),
               onTouchend: $event => ($options.onGutterTouchEnd($event, i))
-            }, [
-              _hoisted_1
-            ], 44, ["onMousedown", "onTouchstart", "onTouchmove", "onTouchend"]))
+            }, _hoisted_3, 44, _hoisted_1))
           : createCommentVNode("", true)
       ], 64))
     }), 128))

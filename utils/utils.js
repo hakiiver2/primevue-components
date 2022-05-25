@@ -879,4 +879,4 @@ this.primevue.utils = (function (exports) {
 
     return exports;
 
-}({}));
+})({});

@@ -879,7 +879,7 @@ this.primevue.utils = (function (exports) {
 
     return exports;
 
-}({}));
+})({});
 
 this.primevue = this.primevue || {};
 this.primevue.api = (function (exports, utils) {
@@ -1468,7 +1468,7 @@ this.primevue.api = (function (exports, utils) {
 
     return exports;
 
-}({}, primevue.utils));
+})({}, primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.config = (function (exports, vue, api) {
@@ -1577,14 +1577,14 @@ this.primevue.config = (function (exports, vue, api) {
         }
     };
 
-    exports['default'] = PrimeVue;
+    exports["default"] = PrimeVue;
     exports.usePrimeVue = usePrimeVue;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
     return exports;
 
-}({}, Vue, primevue.api));
+})({}, Vue, primevue.api);
 
 this.primevue = this.primevue || {};
 this.primevue.ripple = (function (utils) {
@@ -1665,7 +1665,7 @@ this.primevue.ripple = (function (utils) {
 
     return Ripple;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.tooltip = (function (utils) {
@@ -2010,7 +2010,7 @@ this.primevue.tooltip = (function (utils) {
 
     return Tooltip;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.virtualscroller = (function (vue) {
@@ -2564,13 +2564,13 @@ this.primevue.virtualscroller = (function (vue) {
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       return (!$props.disabled)
-        ? (vue.openBlock(), vue.createBlock("div", {
+        ? (vue.openBlock(), vue.createElementBlock("div", {
             key: 0,
             ref: $options.elementRef,
-            class: $options.containerClass,
+            class: vue.normalizeClass($options.containerClass),
             tabindex: 0,
-            style: $props.style,
-            onScroll: _cache[1] || (_cache[1] = (...args) => ($options.onScroll && $options.onScroll(...args)))
+            style: vue.normalizeStyle($props.style),
+            onScroll: _cache[0] || (_cache[0] = (...args) => ($options.onScroll && $options.onScroll(...args)))
           }, [
             vue.renderSlot(_ctx.$slots, "content", {
               styleClass: $options.contentClass,
@@ -2588,12 +2588,12 @@ this.primevue.virtualscroller = (function (vue) {
               horizontal: $options.isHorizontal(),
               both: $options.isBoth()
             }, () => [
-              vue.createVNode("div", {
+              vue.createElementVNode("div", {
                 ref: $options.contentRef,
-                class: $options.contentClass,
-                style: $data.contentStyle
+                class: vue.normalizeClass($options.contentClass),
+                style: vue.normalizeStyle($data.contentStyle)
               }, [
-                (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.loadedItems, (item, index) => {
+                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.loadedItems, (item, index) => {
                   return vue.renderSlot(_ctx.$slots, "item", {
                     key: index,
                     item: item,
@@ -2603,29 +2603,29 @@ this.primevue.virtualscroller = (function (vue) {
               ], 6)
             ]),
             ($props.showSpacer)
-              ? (vue.openBlock(), vue.createBlock("div", {
+              ? (vue.openBlock(), vue.createElementBlock("div", {
                   key: 0,
                   class: "p-virtualscroller-spacer",
-                  style: $data.spacerStyle
+                  style: vue.normalizeStyle($data.spacerStyle)
                 }, null, 4))
               : vue.createCommentVNode("", true),
             (!$props.loaderDisabled && $props.showLoader && $data.d_loading)
-              ? (vue.openBlock(), vue.createBlock("div", {
+              ? (vue.openBlock(), vue.createElementBlock("div", {
                   key: 1,
-                  class: $options.loaderClass
+                  class: vue.normalizeClass($options.loaderClass)
                 }, [
                   (_ctx.$slots && _ctx.$slots.loader)
-                    ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList($data.loaderArr, (_, index) => {
+                    ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList($data.loaderArr, (_, index) => {
                         return vue.renderSlot(_ctx.$slots, "loader", {
                           key: index,
                           options: $options.getLoaderOptions(index, $options.isBoth() && { numCols: _ctx.d_numItemsInViewport.cols })
                         })
                       }), 128))
-                    : (vue.openBlock(), vue.createBlock("i", _hoisted_1))
+                    : (vue.openBlock(), vue.createElementBlock("i", _hoisted_1))
                 ], 2))
               : vue.createCommentVNode("", true)
           ], 38))
-        : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
+        : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
             vue.renderSlot(_ctx.$slots, "default"),
             vue.renderSlot(_ctx.$slots, "content", {
               items: $props.items,
@@ -2669,7 +2669,7 @@ this.primevue.virtualscroller = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.confirmationeventbus = (function (utils) {
@@ -2679,7 +2679,7 @@ this.primevue.confirmationeventbus = (function (utils) {
 
 	return ConfirmationEventBus;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.toasteventbus = (function (utils) {
@@ -2689,7 +2689,7 @@ this.primevue.toasteventbus = (function (utils) {
 
 	return ToastEventBus;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.overlayeventbus = (function (utils) {
@@ -2699,7 +2699,7 @@ this.primevue.overlayeventbus = (function (utils) {
 
 	return OverlayEventBus;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.terminalservice = (function (utils) {
@@ -2709,7 +2709,7 @@ this.primevue.terminalservice = (function (utils) {
 
 	return TerminalService;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.useconfirm = (function (exports, vue) {
@@ -2733,7 +2733,7 @@ this.primevue.useconfirm = (function (exports, vue) {
 
     return exports;
 
-}({}, Vue));
+})({}, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.usetoast = (function (exports, vue) {
@@ -2757,7 +2757,7 @@ this.primevue.usetoast = (function (exports, vue) {
 
     return exports;
 
-}({}, Vue));
+})({}, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.button = (function (Ripple, vue) {
@@ -2830,42 +2830,43 @@ this.primevue.button = (function (Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1 = { class: "p-button-label" };
+    const _hoisted_1 = ["disabled"];
+    const _hoisted_2 = { class: "p-button-label" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
-        class: $options.buttonClass,
+      return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+        class: vue.normalizeClass($options.buttonClass),
         type: "button",
         disabled: $options.disabled
       }, [
         vue.renderSlot(_ctx.$slots, "default", {}, () => [
           ($props.loading && !$props.icon)
-            ? (vue.openBlock(), vue.createBlock("span", {
+            ? (vue.openBlock(), vue.createElementBlock("span", {
                 key: 0,
-                class: $options.iconClass
+                class: vue.normalizeClass($options.iconClass)
               }, null, 2))
             : vue.createCommentVNode("", true),
           ($props.icon)
-            ? (vue.openBlock(), vue.createBlock("span", {
+            ? (vue.openBlock(), vue.createElementBlock("span", {
                 key: 1,
-                class: $options.iconClass
+                class: vue.normalizeClass($options.iconClass)
               }, null, 2))
             : vue.createCommentVNode("", true),
-          vue.createVNode("span", _hoisted_1, vue.toDisplayString($props.label||' '), 1),
+          vue.createElementVNode("span", _hoisted_2, vue.toDisplayString($props.label||' '), 1),
           ($props.badge)
-            ? (vue.openBlock(), vue.createBlock("span", {
+            ? (vue.openBlock(), vue.createElementBlock("span", {
                 key: 2,
-                class: $options.badgeStyleClass
+                class: vue.normalizeClass($options.badgeStyleClass)
               }, vue.toDisplayString($props.badge), 3))
             : vue.createCommentVNode("", true)
         ])
-      ], 10, ["disabled"])), [
+      ], 10, _hoisted_1)), [
         [_directive_ripple]
       ])
     }
@@ -2874,7 +2875,7 @@ this.primevue.button = (function (Ripple, vue) {
 
     return script;
 
-}(primevue.ripple, Vue));
+})(primevue.ripple, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.inputtext = (function (vue) {
@@ -2898,19 +2899,21 @@ this.primevue.inputtext = (function (vue) {
         }
     };
 
+    const _hoisted_1 = ["value"];
+
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("input", vue.mergeProps({
+      return (vue.openBlock(), vue.createElementBlock("input", vue.mergeProps({
         class: ['p-inputtext p-component', {'p-filled': $options.filled}],
         value: $props.modelValue,
-        onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args)))
-      }, _ctx.$attrs), null, 16, ["value"]))
+        onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args)))
+      }, _ctx.$attrs), null, 16, _hoisted_1))
     }
 
     script.render = render;
 
     return script;
 
-}(Vue));
+})(Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.inputnumber = (function (InputText, Button, vue) {
@@ -3898,8 +3901,8 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
             }
         },
         components: {
-            'INInputText': InputText__default['default'],
-            'INButton': Button__default['default']
+            'INInputText': InputText__default["default"],
+            'INButton': Button__default["default"]
         }
     };
 
@@ -3912,9 +3915,9 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
       const _component_INInputText = vue.resolveComponent("INInputText");
       const _component_INButton = vue.resolveComponent("INButton");
 
-      return (vue.openBlock(), vue.createBlock("span", {
-        class: $options.containerClass,
-        style: $props.style
+      return (vue.openBlock(), vue.createElementBlock("span", {
+        class: vue.normalizeClass($options.containerClass),
+        style: vue.normalizeStyle($props.style)
       }, [
         vue.createVNode(_component_INInputText, vue.mergeProps({
           ref: "input",
@@ -3934,7 +3937,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
           onBlur: $options.onInputBlur
         }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
         ($props.showButtons && $props.buttonLayout === 'stacked')
-          ? (vue.openBlock(), vue.createBlock("span", _hoisted_1, [
+          ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_1, [
               vue.createVNode(_component_INButton, vue.mergeProps({
                 class: $options.upButtonClass,
                 icon: $props.incrementButtonIcon
@@ -4004,7 +4007,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
 
     return script;
 
-}(primevue.inputtext, primevue.button, Vue));
+})(primevue.inputtext, primevue.button, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.message = (function (Ripple, vue) {
@@ -4072,13 +4075,16 @@ this.primevue.message = (function (Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
     const _hoisted_1 = { class: "p-message-wrapper" };
     const _hoisted_2 = { class: "p-message-text" };
-    const _hoisted_3 = /*#__PURE__*/vue.createVNode("i", { class: "p-message-close-icon pi pi-times" }, null, -1);
+    const _hoisted_3 = /*#__PURE__*/vue.createElementVNode("i", { class: "p-message-close-icon pi pi-times" }, null, -1);
+    const _hoisted_4 = [
+      _hoisted_3
+    ];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
@@ -4088,24 +4094,24 @@ this.primevue.message = (function (Ripple, vue) {
         appear: ""
       }, {
         default: vue.withCtx(() => [
-          vue.withDirectives(vue.createVNode("div", {
-            class: $options.containerClass,
+          vue.withDirectives(vue.createElementVNode("div", {
+            class: vue.normalizeClass($options.containerClass),
             role: "alert"
           }, [
-            vue.createVNode("div", _hoisted_1, [
-              vue.createVNode("span", { class: $options.iconClass }, null, 2),
-              vue.createVNode("div", _hoisted_2, [
+            vue.createElementVNode("div", _hoisted_1, [
+              vue.createElementVNode("span", {
+                class: vue.normalizeClass($options.iconClass)
+              }, null, 2),
+              vue.createElementVNode("div", _hoisted_2, [
                 vue.renderSlot(_ctx.$slots, "default")
               ]),
               ($props.closable)
-                ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                     key: 0,
                     class: "p-message-close p-link",
-                    onClick: _cache[1] || (_cache[1] = $event => ($options.close($event))),
+                    onClick: _cache[0] || (_cache[0] = $event => ($options.close($event))),
                     type: "button"
-                  }, [
-                    _hoisted_3
-                  ], 512)), [
+                  }, _hoisted_4)), [
                     [_directive_ripple]
                   ])
                 : vue.createCommentVNode("", true)
@@ -4152,7 +4158,7 @@ this.primevue.message = (function (Ripple, vue) {
 
     return script;
 
-}(primevue.ripple, Vue));
+})(primevue.ripple, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.progressbar = (function (vue) {
@@ -4199,32 +4205,36 @@ this.primevue.progressbar = (function (vue) {
         }
     };
 
-    const _hoisted_1 = {
+    const _hoisted_1 = ["aria-valuenow"];
+    const _hoisted_2 = {
       key: 0,
       class: "p-progressbar-label"
     };
-    const _hoisted_2 = {
+    const _hoisted_3 = {
       key: 1,
       class: "p-progressbar-indeterminate-container"
     };
-    const _hoisted_3 = /*#__PURE__*/vue.createVNode("div", { class: "p-progressbar-value p-progressbar-value-animate" }, null, -1);
+    const _hoisted_4 = /*#__PURE__*/vue.createElementVNode("div", { class: "p-progressbar-value p-progressbar-value-animate" }, null, -1);
+    const _hoisted_5 = [
+      _hoisted_4
+    ];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", {
+      return (vue.openBlock(), vue.createElementBlock("div", {
         role: "progressbar",
-        class: $options.containerClass,
+        class: vue.normalizeClass($options.containerClass),
         "aria-valuemin": "0",
         "aria-valuenow": $props.value,
         "aria-valuemax": "100"
       }, [
         ($options.determinate)
-          ? (vue.openBlock(), vue.createBlock("div", {
+          ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
               class: "p-progressbar-value p-progressbar-value-animate",
-              style: $options.progressStyle
+              style: vue.normalizeStyle($options.progressStyle)
             }, [
               (($props.value != null && $props.value !== 0) && $props.showValue)
-                ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+                ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
                     vue.renderSlot(_ctx.$slots, "default", {}, () => [
                       vue.createTextVNode(vue.toDisplayString($props.value + '%'), 1)
                     ])
@@ -4233,11 +4243,9 @@ this.primevue.progressbar = (function (vue) {
             ], 4))
           : vue.createCommentVNode("", true),
         ($options.indeterminate)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
-              _hoisted_3
-            ]))
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, _hoisted_5))
           : vue.createCommentVNode("", true)
-      ], 10, ["aria-valuenow"]))
+      ], 10, _hoisted_1))
     }
 
     function styleInject(css, ref) {
@@ -4274,7 +4282,7 @@ this.primevue.progressbar = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, VirtualScroller, vue) {
@@ -4848,7 +4856,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 }
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -4944,26 +4952,32 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         },
         components: {
-            'VirtualScroller': VirtualScroller__default['default']
+            'VirtualScroller': VirtualScroller__default["default"]
         }
     };
 
     const _hoisted_1 = { class: "p-hidden-accessible" };
-    const _hoisted_2 = {
+    const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"];
+    const _hoisted_3 = ["disabled", "placeholder", "value", "aria-expanded"];
+    const _hoisted_4 = ["aria-expanded"];
+    const _hoisted_5 = {
       key: 0,
       class: "p-dropdown-header"
     };
-    const _hoisted_3 = { class: "p-dropdown-filter-container" };
-    const _hoisted_4 = /*#__PURE__*/vue.createVNode("span", { class: "p-dropdown-filter-icon pi pi-search" }, null, -1);
-    const _hoisted_5 = { class: "p-dropdown-item-group" };
-    const _hoisted_6 = {
+    const _hoisted_6 = { class: "p-dropdown-filter-container" };
+    const _hoisted_7 = ["value", "placeholder"];
+    const _hoisted_8 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-dropdown-filter-icon pi pi-search" }, null, -1);
+    const _hoisted_9 = ["onClick", "aria-label", "aria-selected"];
+    const _hoisted_10 = { class: "p-dropdown-item-group" };
+    const _hoisted_11 = ["onClick", "aria-label", "aria-selected"];
+    const _hoisted_12 = {
       key: 2,
       class: "p-dropdown-empty-message"
     };
-    const _hoisted_7 = {
+    const _hoisted_13 = {
       key: 3,
       class: "p-dropdown-empty-message"
     };
@@ -4972,46 +4986,46 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
       const _component_VirtualScroller = vue.resolveComponent("VirtualScroller");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", {
+      return (vue.openBlock(), vue.createElementBlock("div", {
         ref: "container",
-        class: $options.containerClass,
-        onClick: _cache[12] || (_cache[12] = $event => ($options.onClick($event)))
+        class: vue.normalizeClass($options.containerClass),
+        onClick: _cache[11] || (_cache[11] = $event => ($options.onClick($event)))
       }, [
-        vue.createVNode("div", _hoisted_1, [
-          vue.createVNode("input", {
+        vue.createElementVNode("div", _hoisted_1, [
+          vue.createElementVNode("input", {
             ref: "focusInput",
             type: "text",
             id: $props.inputId,
             readonly: "",
             disabled: $props.disabled,
-            onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-            onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-            onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+            onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+            onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+            onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
             tabindex: $props.tabindex,
             "aria-haspopup": "true",
             "aria-expanded": $data.overlayVisible,
             "aria-labelledby": $props.ariaLabelledBy
-          }, null, 40, ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"])
+          }, null, 40, _hoisted_2)
         ]),
         ($props.editable)
-          ? (vue.openBlock(), vue.createBlock("input", {
+          ? (vue.openBlock(), vue.createElementBlock("input", {
               key: 0,
               type: "text",
               class: "p-dropdown-label p-inputtext",
               disabled: $props.disabled,
-              onFocus: _cache[4] || (_cache[4] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-              onBlur: _cache[5] || (_cache[5] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+              onFocus: _cache[3] || (_cache[3] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+              onBlur: _cache[4] || (_cache[4] = (...args) => ($options.onBlur && $options.onBlur(...args))),
               placeholder: $props.placeholder,
               value: $options.editableInputValue,
-              onInput: _cache[6] || (_cache[6] = (...args) => ($options.onEditableInput && $options.onEditableInput(...args))),
+              onInput: _cache[5] || (_cache[5] = (...args) => ($options.onEditableInput && $options.onEditableInput(...args))),
               "aria-haspopup": "listbox",
               "aria-expanded": $data.overlayVisible
-            }, null, 40, ["disabled", "placeholder", "value", "aria-expanded"]))
+            }, null, 40, _hoisted_3))
           : vue.createCommentVNode("", true),
         (!$props.editable)
-          ? (vue.openBlock(), vue.createBlock("span", {
+          ? (vue.openBlock(), vue.createElementBlock("span", {
               key: 1,
-              class: $options.labelClass
+              class: vue.normalizeClass($options.labelClass)
             }, [
               vue.renderSlot(_ctx.$slots, "value", {
                 value: $props.modelValue,
@@ -5022,22 +5036,24 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             ], 2))
           : vue.createCommentVNode("", true),
         ($props.showClear && $props.modelValue != null)
-          ? (vue.openBlock(), vue.createBlock("i", {
+          ? (vue.openBlock(), vue.createElementBlock("i", {
               key: 2,
               class: "p-dropdown-clear-icon pi pi-times",
-              onClick: _cache[7] || (_cache[7] = $event => ($options.onClearClick($event)))
+              onClick: _cache[6] || (_cache[6] = $event => ($options.onClearClick($event)))
             }))
           : vue.createCommentVNode("", true),
-        vue.createVNode("div", {
+        vue.createElementVNode("div", {
           class: "p-dropdown-trigger",
           role: "button",
           "aria-haspopup": "listbox",
           "aria-expanded": $data.overlayVisible
         }, [
           vue.renderSlot(_ctx.$slots, "indicator", {}, () => [
-            vue.createVNode("span", { class: $options.dropdownIconClass }, null, 2)
+            vue.createElementVNode("span", {
+              class: vue.normalizeClass($options.dropdownIconClass)
+            }, null, 2)
           ])
-        ], 8, ["aria-expanded"]),
+        ], 8, _hoisted_4),
         (vue.openBlock(), vue.createBlock(vue.Teleport, {
           to: $options.appendTarget,
           disabled: $options.appendDisabled
@@ -5051,38 +5067,38 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
           }, {
             default: vue.withCtx(() => [
               ($data.overlayVisible)
-                ? (vue.openBlock(), vue.createBlock("div", {
+                ? (vue.openBlock(), vue.createElementBlock("div", {
                     key: 0,
                     ref: $options.overlayRef,
-                    class: $options.panelStyleClass,
-                    onClick: _cache[11] || (_cache[11] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                    class: vue.normalizeClass($options.panelStyleClass),
+                    onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                   }, [
                     vue.renderSlot(_ctx.$slots, "header", {
                       value: $props.modelValue,
                       options: $options.visibleOptions
                     }),
                     ($props.filter)
-                      ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
-                          vue.createVNode("div", _hoisted_3, [
-                            vue.createVNode("input", {
+                      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_5, [
+                          vue.createElementVNode("div", _hoisted_6, [
+                            vue.createElementVNode("input", {
                               type: "text",
                               ref: "filterInput",
                               value: $data.filterValue,
-                              onVnodeUpdated: _cache[8] || (_cache[8] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
+                              onVnodeUpdated: _cache[7] || (_cache[7] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
                               autoComplete: "off",
                               class: "p-dropdown-filter p-inputtext p-component",
                               placeholder: $props.filterPlaceholder,
-                              onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
-                              onInput: _cache[10] || (_cache[10] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
-                            }, null, 40, ["value", "placeholder"]),
-                            _hoisted_4
+                              onKeydown: _cache[8] || (_cache[8] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
+                              onInput: _cache[9] || (_cache[9] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                            }, null, 40, _hoisted_7),
+                            _hoisted_8
                           ])
                         ]))
                       : vue.createCommentVNode("", true),
-                    vue.createVNode("div", {
+                    vue.createElementVNode("div", {
                       ref: $options.itemsWrapperRef,
                       class: "p-dropdown-items-wrapper",
-                      style: {'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}
+                      style: vue.normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''})
                     }, [
                       vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
                         items: $options.visibleOptions,
@@ -5090,16 +5106,16 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                         disabled: $options.virtualScrollerDisabled
                       }), vue.createSlots({
                         content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
-                          vue.createVNode("ul", {
+                          vue.createElementVNode("ul", {
                             ref: contentRef,
-                            class: ['p-dropdown-items', styleClass],
-                            style: contentStyle,
+                            class: vue.normalizeClass(['p-dropdown-items', styleClass]),
+                            style: vue.normalizeStyle(contentStyle),
                             role: "listbox"
                           }, [
                             (!$props.optionGroupLabel)
-                              ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (option, i) => {
-                                  return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
-                                    class: ['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                              ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (option, i) => {
+                                  return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                    class: vue.normalizeClass(['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
                                     key: $options.getOptionRenderKey(option),
                                     onClick: $event => ($options.onOptionSelect($event, option)),
                                     role: "option",
@@ -5112,15 +5128,15 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                                     }, () => [
                                       vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
                                     ])
-                                  ], 10, ["onClick", "aria-label", "aria-selected"])), [
+                                  ], 10, _hoisted_9)), [
                                     [_directive_ripple]
                                   ])
                                 }), 128))
-                              : (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
-                                  return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                              : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
+                                  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                                     key: $options.getOptionGroupRenderKey(optionGroup)
                                   }, [
-                                    vue.createVNode("li", _hoisted_5, [
+                                    vue.createElementVNode("li", _hoisted_10, [
                                       vue.renderSlot(_ctx.$slots, "optiongroup", {
                                         option: optionGroup,
                                         index: $options.getOptionIndex(i, getItemOptions)
@@ -5128,9 +5144,9 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                                         vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                       ])
                                     ]),
-                                    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
-                                      return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
-                                        class: ['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                                    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                                      return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                        class: vue.normalizeClass(['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
                                         key: $options.getOptionRenderKey(option),
                                         onClick: $event => ($options.onOptionSelect($event, option)),
                                         role: "option",
@@ -5143,20 +5159,20 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                                         }, () => [
                                           vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
                                         ])
-                                      ], 10, ["onClick", "aria-label", "aria-selected"])), [
+                                      ], 10, _hoisted_11)), [
                                         [_directive_ripple]
                                       ])
                                     }), 128))
                                   ], 64))
                                 }), 128)),
                             ($data.filterValue && (!items || (items && items.length === 0)))
-                              ? (vue.openBlock(), vue.createBlock("li", _hoisted_6, [
+                              ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_12, [
                                   vue.renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
                                     vue.createTextVNode(vue.toDisplayString($options.emptyFilterMessageText), 1)
                                   ])
                                 ]))
                               : ((!$props.options || ($props.options && $props.options.length === 0)))
-                                ? (vue.openBlock(), vue.createBlock("li", _hoisted_7, [
+                                ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_13, [
                                     vue.renderSlot(_ctx.$slots, "empty", {}, () => [
                                       vue.createTextVNode(vue.toDisplayString($options.emptyMessageText), 1)
                                     ])
@@ -5223,7 +5239,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.dialog = (function (utils, Ripple, vue) {
@@ -5615,13 +5631,19 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1 = { class: "p-dialog-header-icons" };
-    const _hoisted_2 = /*#__PURE__*/vue.createVNode("span", { class: "p-dialog-header-close-icon pi pi-times" }, null, -1);
-    const _hoisted_3 = {
+    const _hoisted_1 = ["aria-labelledby", "aria-modal"];
+    const _hoisted_2 = ["id"];
+    const _hoisted_3 = { class: "p-dialog-header-icons" };
+    const _hoisted_4 = ["aria-label"];
+    const _hoisted_5 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-dialog-header-close-icon pi pi-times" }, null, -1);
+    const _hoisted_6 = [
+      _hoisted_5
+    ];
+    const _hoisted_7 = {
       key: 1,
       class: "p-dialog-footer"
     };
@@ -5634,11 +5656,11 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
         disabled: $options.appendDisabled
       }, [
         ($data.containerVisible)
-          ? (vue.openBlock(), vue.createBlock("div", {
+          ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
               ref: $options.maskRef,
-              class: $options.maskClass,
-              onClick: _cache[4] || (_cache[4] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
+              class: vue.normalizeClass($options.maskClass),
+              onClick: _cache[3] || (_cache[3] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
             }, [
               vue.createVNode(vue.Transition, {
                 name: "p-dialog",
@@ -5651,7 +5673,7 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
               }, {
                 default: vue.withCtx(() => [
                   ($props.visible)
-                    ? (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+                    ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
                         key: 0,
                         ref: $options.containerRef,
                         class: $options.dialogClass
@@ -5661,64 +5683,64 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
                         "aria-modal": $props.modal
                       }), [
                         ($props.showHeader)
-                          ? (vue.openBlock(), vue.createBlock("div", {
+                          ? (vue.openBlock(), vue.createElementBlock("div", {
                               key: 0,
                               class: "p-dialog-header",
-                              onMousedown: _cache[3] || (_cache[3] = (...args) => ($options.initDrag && $options.initDrag(...args)))
+                              onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.initDrag && $options.initDrag(...args)))
                             }, [
                               vue.renderSlot(_ctx.$slots, "header", {}, () => [
                                 ($props.header)
-                                  ? (vue.openBlock(), vue.createBlock("span", {
+                                  ? (vue.openBlock(), vue.createElementBlock("span", {
                                       key: 0,
                                       id: $options.ariaLabelledById,
                                       class: "p-dialog-title"
-                                    }, vue.toDisplayString($props.header), 9, ["id"]))
+                                    }, vue.toDisplayString($props.header), 9, _hoisted_2))
                                   : vue.createCommentVNode("", true)
                               ]),
-                              vue.createVNode("div", _hoisted_1, [
+                              vue.createElementVNode("div", _hoisted_3, [
                                 ($props.maximizable)
-                                  ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                                  ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                       key: 0,
                                       class: "p-dialog-header-icon p-dialog-header-maximize p-link",
-                                      onClick: _cache[1] || (_cache[1] = (...args) => ($options.maximize && $options.maximize(...args))),
+                                      onClick: _cache[0] || (_cache[0] = (...args) => ($options.maximize && $options.maximize(...args))),
                                       type: "button",
                                       tabindex: "-1"
                                     }, [
-                                      vue.createVNode("span", { class: $options.maximizeIconClass }, null, 2)
-                                    ], 512)), [
+                                      vue.createElementVNode("span", {
+                                        class: vue.normalizeClass($options.maximizeIconClass)
+                                      }, null, 2)
+                                    ])), [
                                       [_directive_ripple]
                                     ])
                                   : vue.createCommentVNode("", true),
                                 ($props.closable)
-                                  ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+                                  ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                       key: 1,
                                       class: "p-dialog-header-icon p-dialog-header-close p-link",
-                                      onClick: _cache[2] || (_cache[2] = (...args) => ($options.close && $options.close(...args))),
+                                      onClick: _cache[1] || (_cache[1] = (...args) => ($options.close && $options.close(...args))),
                                       "aria-label": $props.ariaCloseLabel,
                                       type: "button"
-                                    }, [
-                                      _hoisted_2
-                                    ], 8, ["aria-label"])), [
+                                    }, _hoisted_6, 8, _hoisted_4)), [
                                       [_directive_ripple]
                                     ])
                                   : vue.createCommentVNode("", true)
                               ])
                             ], 32))
                           : vue.createCommentVNode("", true),
-                        vue.createVNode("div", {
-                          class: $options.contentStyleClass,
-                          style: $props.contentStyle
+                        vue.createElementVNode("div", {
+                          class: vue.normalizeClass($options.contentStyleClass),
+                          style: vue.normalizeStyle($props.contentStyle)
                         }, [
                           vue.renderSlot(_ctx.$slots, "default")
                         ], 6),
                         ($props.footer || _ctx.$slots.footer)
-                          ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
+                          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_7, [
                               vue.renderSlot(_ctx.$slots, "footer", {}, () => [
                                 vue.createTextVNode(vue.toDisplayString($props.footer), 1)
                               ])
                             ]))
                           : vue.createCommentVNode("", true)
-                      ], 16, ["aria-labelledby", "aria-modal"]))
+                      ], 16, _hoisted_1))
                     : vue.createCommentVNode("", true)
                 ]),
                 _: 3
@@ -5762,7 +5784,7 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
@@ -5825,7 +5847,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
         const _hoisted_1$6 = { class: "p-paginator-current" };
 
         function render$9(_ctx, _cache, $props, $setup, $data, $options) {
-          return (vue.openBlock(), vue.createBlock("span", _hoisted_1$6, vue.toDisplayString($options.text), 1))
+          return (vue.openBlock(), vue.createElementBlock("span", _hoisted_1$6, vue.toDisplayString($options.text), 1))
         }
 
         script$9.render = render$9;
@@ -5840,21 +5862,22 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
-        const _hoisted_1$5 = /*#__PURE__*/vue.createVNode("span", { class: "p-paginator-icon pi pi-angle-double-left" }, null, -1);
+        const _hoisted_1$5 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-paginator-icon pi pi-angle-double-left" }, null, -1);
+        const _hoisted_2$5 = [
+          _hoisted_1$5
+        ];
 
         function render$8(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
-          return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
-            class: $options.containerClass,
+          return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+            class: vue.normalizeClass($options.containerClass),
             type: "button"
-          }, [
-            _hoisted_1$5
-          ], 2)), [
+          }, _hoisted_2$5, 2)), [
             [_directive_ripple]
           ])
         }
@@ -5871,21 +5894,22 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
-        const _hoisted_1$4 = /*#__PURE__*/vue.createVNode("span", { class: "p-paginator-icon pi pi-angle-double-right" }, null, -1);
+        const _hoisted_1$4 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-paginator-icon pi pi-angle-double-right" }, null, -1);
+        const _hoisted_2$4 = [
+          _hoisted_1$4
+        ];
 
         function render$7(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
-          return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
-            class: $options.containerClass,
+          return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+            class: vue.normalizeClass($options.containerClass),
             type: "button"
-          }, [
-            _hoisted_1$4
-          ], 2)), [
+          }, _hoisted_2$4, 2)), [
             [_directive_ripple]
           ])
         }
@@ -5902,21 +5926,22 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
-        const _hoisted_1$3 = /*#__PURE__*/vue.createVNode("span", { class: "p-paginator-icon pi pi-angle-right" }, null, -1);
+        const _hoisted_1$3 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-paginator-icon pi pi-angle-right" }, null, -1);
+        const _hoisted_2$3 = [
+          _hoisted_1$3
+        ];
 
         function render$6(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
-          return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
-            class: $options.containerClass,
+          return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+            class: vue.normalizeClass($options.containerClass),
             type: "button"
-          }, [
-            _hoisted_1$3
-          ], 2)), [
+          }, _hoisted_2$3, 2)), [
             [_directive_ripple]
           ])
         }
@@ -5940,25 +5965,26 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
         const _hoisted_1$2 = { class: "p-paginator-pages" };
+        const _hoisted_2$2 = ["onClick"];
 
         function render$5(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
-          return (vue.openBlock(), vue.createBlock("span", _hoisted_1$2, [
-            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.value, (pageLink) => {
-              return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+          return (vue.openBlock(), vue.createElementBlock("span", _hoisted_1$2, [
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.value, (pageLink) => {
+              return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                 key: pageLink,
-                class: ['p-paginator-page p-paginator-element p-link', {'p-highlight': ((pageLink - 1) === $props.page)}],
+                class: vue.normalizeClass(['p-paginator-page p-paginator-element p-link', {'p-highlight': ((pageLink - 1) === $props.page)}]),
                 type: "button",
                 onClick: $event => ($options.onPageLinkClick($event, pageLink))
               }, [
                 vue.createTextVNode(vue.toDisplayString(pageLink), 1)
-              ], 10, ["onClick"])), [
+              ], 10, _hoisted_2$2)), [
                 [_directive_ripple]
               ])
             }), 128))
@@ -5977,21 +6003,22 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
-        const _hoisted_1$1 = /*#__PURE__*/vue.createVNode("span", { class: "p-paginator-icon pi pi-angle-left" }, null, -1);
+        const _hoisted_1$1 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-paginator-icon pi pi-angle-left" }, null, -1);
+        const _hoisted_2$1 = [
+          _hoisted_1$1
+        ];
 
         function render$4(_ctx, _cache, $props, $setup, $data, $options) {
           const _directive_ripple = vue.resolveDirective("ripple");
 
-          return vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
-            class: $options.containerClass,
+          return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+            class: vue.normalizeClass($options.containerClass),
             type: "button"
-          }, [
-            _hoisted_1$1
-          ], 2)), [
+          }, _hoisted_2$1, 2)), [
             [_directive_ripple]
           ])
         }
@@ -6024,7 +6051,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'RPPDropdown': Dropdown__default['default']
+                'RPPDropdown': Dropdown__default["default"]
             }
         };
 
@@ -6036,7 +6063,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
             options: $options.rowsOptions,
             optionLabel: "label",
             optionValue: "value",
-            "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ($options.onChange($event))),
             class: "p-paginator-rpp-options",
             disabled: $props.disabled
           }, null, 8, ["modelValue", "options", "disabled"]))
@@ -6068,7 +6095,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'JTPDropdown': Dropdown__default['default']
+                'JTPDropdown': Dropdown__default["default"]
             }
         };
 
@@ -6080,7 +6107,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
             options: $options.pageOptions,
             optionLabel: "label",
             optionValue: "value",
-            "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ($options.onChange($event))),
             class: "p-paginator-page-options",
             disabled: $props.disabled
           }, null, 8, ["modelValue", "options", "disabled"]))
@@ -6103,7 +6130,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'JTPInput': InputNumber__default['default']
+                'JTPInput': InputNumber__default["default"]
             }
         };
 
@@ -6112,7 +6139,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
 
           return (vue.openBlock(), vue.createBlock(_component_JTPInput, {
             modelValue: $props.page,
-            "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($options.onChange($event))),
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => ($options.onChange($event))),
             class: "p-paginator-page-input",
             disabled: $props.disabled
           }, null, 8, ["modelValue", "disabled"]))
@@ -6323,36 +6350,36 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
           const _component_JumpToPageInput = vue.resolveComponent("JumpToPageInput");
 
           return ($props.alwaysShow ? true : ($options.pageLinks && $options.pageLinks.length > 1))
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
                 (_ctx.$slots.start)
-                  ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
+                  ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
                       vue.renderSlot(_ctx.$slots, "start", { state: $options.currentState })
                     ]))
                   : vue.createCommentVNode("", true),
-                (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.templateItems, (item) => {
-                  return (vue.openBlock(), vue.createBlock(vue.Fragment, { key: item }, [
+                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.templateItems, (item) => {
+                  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: item }, [
                     (item === 'FirstPageLink')
                       ? (vue.openBlock(), vue.createBlock(_component_FirstPageLink, {
                           key: 0,
-                          onClick: _cache[1] || (_cache[1] = $event => ($options.changePageToFirst($event))),
+                          onClick: _cache[0] || (_cache[0] = $event => ($options.changePageToFirst($event))),
                           disabled: $options.isFirstPage || $options.empty
                         }, null, 8, ["disabled"]))
                       : (item === 'PrevPageLink')
                         ? (vue.openBlock(), vue.createBlock(_component_PrevPageLink, {
                             key: 1,
-                            onClick: _cache[2] || (_cache[2] = $event => ($options.changePageToPrev($event))),
+                            onClick: _cache[1] || (_cache[1] = $event => ($options.changePageToPrev($event))),
                             disabled: $options.isFirstPage || $options.empty
                           }, null, 8, ["disabled"]))
                         : (item === 'NextPageLink')
                           ? (vue.openBlock(), vue.createBlock(_component_NextPageLink, {
                               key: 2,
-                              onClick: _cache[3] || (_cache[3] = $event => ($options.changePageToNext($event))),
+                              onClick: _cache[2] || (_cache[2] = $event => ($options.changePageToNext($event))),
                               disabled: $options.isLastPage || $options.empty
                             }, null, 8, ["disabled"]))
                           : (item === 'LastPageLink')
                             ? (vue.openBlock(), vue.createBlock(_component_LastPageLink, {
                                 key: 3,
-                                onClick: _cache[4] || (_cache[4] = $event => ($options.changePageToLast($event))),
+                                onClick: _cache[3] || (_cache[3] = $event => ($options.changePageToLast($event))),
                                 disabled: $options.isLastPage || $options.empty
                               }, null, 8, ["disabled"]))
                             : (item === 'PageLinks')
@@ -6360,7 +6387,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                                   key: 4,
                                   value: $options.pageLinks,
                                   page: $options.page,
-                                  onClick: _cache[5] || (_cache[5] = $event => ($options.changePageLink($event)))
+                                  onClick: _cache[4] || (_cache[4] = $event => ($options.changePageLink($event)))
                                 }, null, 8, ["value", "page"]))
                               : (item === 'CurrentPageReport')
                                 ? (vue.openBlock(), vue.createBlock(_component_CurrentPageReport, {
@@ -6378,7 +6405,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                                       key: 6,
                                       rows: $data.d_rows,
                                       options: $props.rowsPerPageOptions,
-                                      onRowsChange: _cache[6] || (_cache[6] = $event => ($options.onRowChange($event))),
+                                      onRowsChange: _cache[5] || (_cache[5] = $event => ($options.onRowChange($event))),
                                       disabled: $options.empty
                                     }, null, 8, ["rows", "options", "disabled"]))
                                   : (item === 'JumpToPageDropdown')
@@ -6386,21 +6413,21 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                                         key: 7,
                                         page: $options.page,
                                         pageCount: $options.pageCount,
-                                        onPageChange: _cache[7] || (_cache[7] = $event => ($options.changePage($event))),
+                                        onPageChange: _cache[6] || (_cache[6] = $event => ($options.changePage($event))),
                                         disabled: $options.empty
                                       }, null, 8, ["page", "pageCount", "disabled"]))
                                     : (item === 'JumpToPageInput')
                                       ? (vue.openBlock(), vue.createBlock(_component_JumpToPageInput, {
                                           key: 8,
                                           page: $options.currentPage,
-                                          onPageChange: _cache[8] || (_cache[8] = $event => ($options.changePage($event))),
+                                          onPageChange: _cache[7] || (_cache[7] = $event => ($options.changePage($event))),
                                           disabled: $options.empty
                                         }, null, 8, ["page", "disabled"]))
                                       : vue.createCommentVNode("", true)
                   ], 64))
                 }), 128)),
                 (_ctx.$slots.end)
-                  ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
+                  ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
                       vue.renderSlot(_ctx.$slots, "end", { state: $options.currentState })
                     ]))
                   : vue.createCommentVNode("", true)
@@ -6442,7 +6469,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
 
         return script;
 
-}(Vue, primevue.ripple, primevue.dropdown, primevue.inputnumber));
+})(Vue, primevue.ripple, primevue.dropdown, primevue.inputnumber);
 
 this.primevue = this.primevue || {};
 this.primevue.tree = (function (utils, Ripple, vue) {
@@ -6711,16 +6738,18 @@ this.primevue.tree = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1$1 = {
+    const _hoisted_1$1 = ["aria-expanded"];
+    const _hoisted_2$1 = {
       key: 0,
       class: "p-checkbox p-component"
     };
-    const _hoisted_2$1 = { class: "p-treenode-label" };
-    const _hoisted_3$1 = {
+    const _hoisted_3$1 = ["aria-checked"];
+    const _hoisted_4$1 = { class: "p-treenode-label" };
+    const _hoisted_5$1 = {
       key: 0,
       class: "p-treenode-children",
       role: "group"
@@ -6730,53 +6759,61 @@ this.primevue.tree = (function (utils, Ripple, vue) {
       const _component_TreeNode = vue.resolveComponent("TreeNode", true);
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("li", { class: $options.containerClass }, [
-        vue.createVNode("div", {
-          class: $options.contentClass,
+      return (vue.openBlock(), vue.createElementBlock("li", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
+        vue.createElementVNode("div", {
+          class: vue.normalizeClass($options.contentClass),
           tabindex: "0",
           role: "treeitem",
           "aria-expanded": $options.expanded,
-          onClick: _cache[2] || (_cache[2] = (...args) => ($options.onClick && $options.onClick(...args))),
-          onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-          onTouchend: _cache[4] || (_cache[4] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
-          style: $props.node.style
+          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+          onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+          onTouchend: _cache[3] || (_cache[3] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
+          style: vue.normalizeStyle($props.node.style)
         }, [
-          vue.withDirectives(vue.createVNode("button", {
+          vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
             type: "button",
             class: "p-tree-toggler p-link",
-            onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggle && $options.toggle(...args))),
+            onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggle && $options.toggle(...args))),
             tabindex: "-1"
           }, [
-            vue.createVNode("span", { class: $options.toggleIcon }, null, 2)
-          ], 512), [
+            vue.createElementVNode("span", {
+              class: vue.normalizeClass($options.toggleIcon)
+            }, null, 2)
+          ])), [
             [_directive_ripple]
           ]),
           ($options.checkboxMode)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_1$1, [
-                vue.createVNode("div", {
-                  class: $options.checkboxClass,
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2$1, [
+                vue.createElementVNode("div", {
+                  class: vue.normalizeClass($options.checkboxClass),
                   role: "checkbox",
                   "aria-checked": $options.checked
                 }, [
-                  vue.createVNode("span", { class: $options.checkboxIcon }, null, 2)
-                ], 10, ["aria-checked"])
+                  vue.createElementVNode("span", {
+                    class: vue.normalizeClass($options.checkboxIcon)
+                  }, null, 2)
+                ], 10, _hoisted_3$1)
               ]))
             : vue.createCommentVNode("", true),
-          vue.createVNode("span", { class: $options.icon }, null, 2),
-          vue.createVNode("span", _hoisted_2$1, [
+          vue.createElementVNode("span", {
+            class: vue.normalizeClass($options.icon)
+          }, null, 2),
+          vue.createElementVNode("span", _hoisted_4$1, [
             ($props.templates[$props.node.type]||$props.templates['default'])
               ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates[$props.node.type]||$props.templates['default']), {
                   key: 0,
                   node: $props.node
                 }, null, 8, ["node"]))
-              : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
+              : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
                   vue.createTextVNode(vue.toDisplayString($options.label($props.node)), 1)
                 ], 64))
           ])
-        ], 46, ["aria-expanded"]),
+        ], 46, _hoisted_1$1),
         ($options.hasChildren && $options.expanded)
-          ? (vue.openBlock(), vue.createBlock("ul", _hoisted_3$1, [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.node.children, (childNode) => {
+          ? (vue.openBlock(), vue.createElementBlock("ul", _hoisted_5$1, [
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.node.children, (childNode) => {
                 return (vue.openBlock(), vue.createBlock(_component_TreeNode, {
                   key: childNode.key,
                   node: childNode,
@@ -7066,8 +7103,9 @@ this.primevue.tree = (function (utils, Ripple, vue) {
       key: 1,
       class: "p-tree-filter-container"
     };
-    const _hoisted_3 = /*#__PURE__*/vue.createVNode("span", { class: "p-tree-filter-icon pi pi-search" }, null, -1);
-    const _hoisted_4 = {
+    const _hoisted_3 = ["placeholder"];
+    const _hoisted_4 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-tree-filter-icon pi pi-search" }, null, -1);
+    const _hoisted_5 = {
       class: "p-tree-container",
       role: "tree"
     };
@@ -7075,33 +7113,37 @@ this.primevue.tree = (function (utils, Ripple, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_TreeNode = vue.resolveComponent("TreeNode");
 
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
         ($props.loading)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-              vue.createVNode("i", { class: $options.loadingIconClass }, null, 2)
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+              vue.createElementVNode("i", {
+                class: vue.normalizeClass($options.loadingIconClass)
+              }, null, 2)
             ]))
           : vue.createCommentVNode("", true),
         ($props.filter)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
-              vue.withDirectives(vue.createVNode("input", {
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
+              vue.withDirectives(vue.createElementVNode("input", {
                 type: "text",
                 autocomplete: "off",
                 class: "p-tree-filter p-inputtext p-component",
                 placeholder: $props.filterPlaceholder,
-                onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onFilterKeydown && $options.onFilterKeydown(...args))),
-                "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => ($data.filterValue = $event))
-              }, null, 40, ["placeholder"]), [
+                onKeydown: _cache[0] || (_cache[0] = (...args) => ($options.onFilterKeydown && $options.onFilterKeydown(...args))),
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (($data.filterValue) = $event))
+              }, null, 40, _hoisted_3), [
                 [vue.vModelText, $data.filterValue]
               ]),
-              _hoisted_3
+              _hoisted_4
             ]))
           : vue.createCommentVNode("", true),
-        vue.createVNode("div", {
+        vue.createElementVNode("div", {
           class: "p-tree-wrapper",
-          style: {maxHeight: $props.scrollHeight}
+          style: vue.normalizeStyle({maxHeight: $props.scrollHeight})
         }, [
-          vue.createVNode("ul", _hoisted_4, [
-            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.valueToRender, (node) => {
+          vue.createElementVNode("ul", _hoisted_5, [
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.valueToRender, (node) => {
               return (vue.openBlock(), vue.createBlock(_component_TreeNode, {
                 key: node.key,
                 node: node,
@@ -7153,7 +7195,7 @@ this.primevue.tree = (function (utils, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
@@ -7205,21 +7247,23 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default'],
-            'tooltip': Tooltip__default['default']
+            'ripple': Ripple__default["default"],
+            'tooltip': Tooltip__default["default"]
         }
     };
 
-    const _hoisted_1$1 = { class: "p-menuitem-text" };
-    const _hoisted_2$1 = /*#__PURE__*/vue.createTextVNode("    ");
-    const _hoisted_3 = {
+    const _hoisted_1$1 = ["href", "onClick"];
+    const _hoisted_2$1 = { class: "p-menuitem-text" };
+    const _hoisted_3 = /*#__PURE__*/vue.createTextVNode("    ");
+    const _hoisted_4 = {
       key: 0,
       class: "pi pi-info-circle",
       style: {}
     };
-    const _hoisted_4 = { class: "p-menuitem-text" };
-    const _hoisted_5 = /*#__PURE__*/vue.createTextVNode("    ");
-    const _hoisted_6 = {
+    const _hoisted_5 = ["href", "target", "tabindex"];
+    const _hoisted_6 = { class: "p-menuitem-text" };
+    const _hoisted_7 = /*#__PURE__*/vue.createTextVNode("    ");
+    const _hoisted_8 = {
       key: 0,
       class: "pi pi-info-circle",
       style: {}
@@ -7231,14 +7275,14 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
       return ($options.visible())
-        ? (vue.openBlock(), vue.createBlock("li", {
+        ? (vue.openBlock(), vue.createElementBlock("li", {
             key: 0,
-            class: $options.containerClass,
+            class: vue.normalizeClass($options.containerClass),
             role: "none",
-            style: $props.item.style
+            style: vue.normalizeStyle($props.item.style)
           }, [
             (!$props.template)
-              ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+              ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                   ($props.item.to && !$options.disabled($props.item))
                     ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                         key: 0,
@@ -7246,48 +7290,48 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
                         custom: ""
                       }, {
                         default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                          vue.withDirectives(vue.createVNode("a", {
+                          vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                             href: href,
                             onClick: $event => ($options.onClick($event, navigate)),
-                            class: $options.linkClass($props.item, {isActive, isExactActive}),
+                            class: vue.normalizeClass($options.linkClass($props.item, {isActive, isExactActive})),
                             role: "menuitem"
                           }, [
-                            vue.createVNode("span", {
-                              class: ['p-menuitem-icon', $props.item.icon]
+                            vue.createElementVNode("span", {
+                              class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
                             }, null, 2),
-                            vue.createVNode("span", _hoisted_1$1, vue.toDisplayString($options.label()), 1),
-                            _hoisted_2$1,
+                            vue.createElementVNode("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1),
+                            _hoisted_3,
                             ($props.item.info)
-                              ? vue.withDirectives((vue.openBlock(), vue.createBlock("i", _hoisted_3, null, 512)), [
+                              ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("i", _hoisted_4, null, 512)), [
                                   [_directive_tooltip, $props.item.info]
                                 ])
                               : vue.createCommentVNode("", true)
-                          ], 10, ["href", "onClick"]), [
+                          ], 10, _hoisted_1$1)), [
                             [_directive_ripple]
                           ])
                         ]),
                         _: 1
                       }, 8, ["to"]))
-                    : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                    : vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                         key: 1,
                         href: $props.item.url,
-                        class: $options.linkClass($props.item),
-                        onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+                        class: vue.normalizeClass($options.linkClass($props.item)),
+                        onClick: _cache[0] || (_cache[0] = (...args) => ($options.onClick && $options.onClick(...args))),
                         target: $props.item.target,
                         role: "menuitem",
                         tabindex: $options.disabled($props.item) ? null : '0'
                       }, [
-                        vue.createVNode("span", {
-                          class: ['p-menuitem-icon', $props.item.icon]
+                        vue.createElementVNode("span", {
+                          class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
                         }, null, 2),
-                        vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.label()), 1),
-                        _hoisted_5,
+                        vue.createElementVNode("span", _hoisted_6, vue.toDisplayString($options.label()), 1),
+                        _hoisted_7,
                         ($props.item.info)
-                          ? vue.withDirectives((vue.openBlock(), vue.createBlock("i", _hoisted_6, null, 512)), [
+                          ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("i", _hoisted_8, null, 512)), [
                               [_directive_tooltip, $props.item.info]
                             ])
                           : vue.createCommentVNode("", true)
-                      ], 10, ["href", "target", "tabindex"])), [
+                      ], 10, _hoisted_5)), [
                         [_directive_ripple]
                       ])
                 ], 64))
@@ -7478,7 +7522,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -7522,29 +7566,29 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
         }, {
           default: vue.withCtx(() => [
             ($props.popup ? $data.overlayVisible : true)
-              ? (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+              ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
                   key: 0,
                   ref: $options.containerRef,
                   class: $options.containerClass
                 }, _ctx.$attrs, {
-                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                 }), [
-                  vue.createVNode("ul", _hoisted_1, [
-                    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
-                      return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                  vue.createElementVNode("ul", _hoisted_1, [
+                    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
+                      return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                         key: $options.label(item) + i.toString()
                       }, [
                         (item.items && $options.visible(item) && !item.separator)
-                          ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                          ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                               (item.items)
-                                ? (vue.openBlock(), vue.createBlock("li", _hoisted_2, [
+                                ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_2, [
                                     vue.renderSlot(_ctx.$slots, "item", { item: item }, () => [
                                       vue.createTextVNode(vue.toDisplayString($options.label(item)), 1)
                                     ])
                                   ]))
                                 : vue.createCommentVNode("", true),
-                              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList(item.items, (child, j) => {
-                                return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(item.items, (child, j) => {
+                                return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                                   key: child.label + i + j
                                 }, [
                                   ($options.visible(child) && !child.separator)
@@ -7556,9 +7600,9 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
                                         exact: $props.exact
                                       }, null, 8, ["item", "onClick", "template", "exact"]))
                                     : ($options.visible(child) && child.separator)
-                                      ? (vue.openBlock(), vue.createBlock("li", {
-                                          class: ['p-menu-separator', child.class],
-                                          style: child.style,
+                                      ? (vue.openBlock(), vue.createElementBlock("li", {
+                                          class: vue.normalizeClass(['p-menu-separator', child.class]),
+                                          style: vue.normalizeStyle(child.style),
                                           key: 'separator' + i + j,
                                           role: "separator"
                                         }, null, 6))
@@ -7567,9 +7611,9 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
                               }), 128))
                             ], 64))
                           : ($options.visible(item) && item.separator)
-                            ? (vue.openBlock(), vue.createBlock("li", {
-                                class: ['p-menu-separator', item.class],
-                                style: item.style,
+                            ? (vue.openBlock(), vue.createElementBlock("li", {
+                                class: vue.normalizeClass(['p-menu-separator', item.class]),
+                                style: vue.normalizeStyle(item.style),
                                 key: 'separator' + i.toString(),
                                 role: "separator"
                               }, null, 6))
@@ -7625,7 +7669,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
@@ -7848,13 +7892,16 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1 = { class: "p-menuitem-text" };
-    const _hoisted_2 = { class: "p-menuitem-text" };
-    const _hoisted_3 = {
+    const _hoisted_1 = ["onMouseenter"];
+    const _hoisted_2 = ["href", "onClick", "onKeydown"];
+    const _hoisted_3 = { class: "p-menuitem-text" };
+    const _hoisted_4 = ["href", "target", "aria-haspopup", "aria-expanded", "onClick", "onKeydown", "tabindex"];
+    const _hoisted_5 = { class: "p-menuitem-text" };
+    const _hoisted_6 = {
       key: 0,
       class: "p-submenu-icon pi pi-angle-right"
     };
@@ -7864,26 +7911,26 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
       const _component_TieredMenuSub = vue.resolveComponent("TieredMenuSub", true);
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("ul", {
+      return (vue.openBlock(), vue.createElementBlock("ul", {
         ref: "element",
-        class: $options.containerClass,
+        class: vue.normalizeClass($options.containerClass),
         role: "'menubar' : 'menu'",
         "aria-orientation": "horizontal"
       }, [
-        (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
-          return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
+          return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
             key: $options.label(item) + i.toString()
           }, [
             ($options.visible(item) && !item.separator)
-              ? (vue.openBlock(), vue.createBlock("li", {
+              ? (vue.openBlock(), vue.createElementBlock("li", {
                   key: 0,
-                  class: $options.getItemClass(item),
-                  style: item.style,
+                  class: vue.normalizeClass($options.getItemClass(item)),
+                  style: vue.normalizeStyle(item.style),
                   onMouseenter: $event => ($options.onItemMouseEnter($event, item)),
                   role: "none"
                 }, [
                   (!$props.template)
-                    ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                    ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                         (item.to && !$options.disabled(item))
                           ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                               key: 0,
@@ -7891,27 +7938,27 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                               custom: ""
                             }, {
                               default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                                vue.withDirectives(vue.createVNode("a", {
+                                vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                                   href: href,
                                   onClick: $event => ($options.onItemClick($event, item, navigate)),
-                                  class: $options.linkClass(item, {isActive, isExactActive}),
+                                  class: vue.normalizeClass($options.linkClass(item, {isActive, isExactActive})),
                                   onKeydown: $event => ($options.onItemKeyDown($event, item)),
                                   role: "menuitem"
                                 }, [
-                                  vue.createVNode("span", {
-                                    class: ['p-menuitem-icon', item.icon]
+                                  vue.createElementVNode("span", {
+                                    class: vue.normalizeClass(['p-menuitem-icon', item.icon])
                                   }, null, 2),
-                                  vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.label(item)), 1)
-                                ], 42, ["href", "onClick", "onKeydown"]), [
+                                  vue.createElementVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
+                                ], 42, _hoisted_2)), [
                                   [_directive_ripple]
                                 ])
                               ]),
                               _: 2
                             }, 1032, ["to"]))
-                          : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                          : vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                               key: 1,
                               href: item.url,
-                              class: $options.linkClass(item),
+                              class: vue.normalizeClass($options.linkClass(item)),
                               target: item.target,
                               "aria-haspopup": item.items != null,
                               "aria-expanded": item === $data.activeItem,
@@ -7920,14 +7967,14 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                               role: "menuitem",
                               tabindex: $options.disabled(item) ? null : '0'
                             }, [
-                              vue.createVNode("span", {
-                                class: ['p-menuitem-icon', item.icon]
+                              vue.createElementVNode("span", {
+                                class: vue.normalizeClass(['p-menuitem-icon', item.icon])
                               }, null, 2),
-                              vue.createVNode("span", _hoisted_2, vue.toDisplayString($options.label(item)), 1),
+                              vue.createElementVNode("span", _hoisted_5, vue.toDisplayString($options.label(item)), 1),
                               (item.items)
-                                ? (vue.openBlock(), vue.createBlock("span", _hoisted_3))
+                                ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_6))
                                 : vue.createCommentVNode("", true)
-                            ], 42, ["href", "target", "aria-haspopup", "aria-expanded", "onClick", "onKeydown", "tabindex"])), [
+                            ], 42, _hoisted_4)), [
                               [_directive_ripple]
                             ])
                       ], 64))
@@ -7946,12 +7993,12 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                         exact: $props.exact
                       }, null, 8, ["model", "template", "onLeafClick", "onKeydownItem", "parentActive", "exact"]))
                     : vue.createCommentVNode("", true)
-                ], 46, ["onMouseenter"]))
+                ], 46, _hoisted_1))
               : vue.createCommentVNode("", true),
             ($options.visible(item) && item.separator)
-              ? (vue.openBlock(), vue.createBlock("li", {
-                  class: ['p-menu-separator', item.class],
-                  style: item.style,
+              ? (vue.openBlock(), vue.createElementBlock("li", {
+                  class: vue.normalizeClass(['p-menu-separator', item.class]),
+                  style: vue.normalizeStyle(item.style),
                   key: 'separator' + i.toString(),
                   role: "separator"
                 }, null, 6))
@@ -8122,7 +8169,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -8157,12 +8204,12 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
         }, {
           default: vue.withCtx(() => [
             ($props.popup ? $data.visible : true)
-              ? (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+              ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
                   key: 0,
                   ref: $options.containerRef,
                   class: $options.containerClass
                 }, _ctx.$attrs, {
-                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                 }), [
                   vue.createVNode(_component_TieredMenuSub, {
                     model: $props.model,
@@ -8214,5 +8261,5 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue);
 

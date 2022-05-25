@@ -265,16 +265,18 @@ this.primevue.tree = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1$1 = {
+    const _hoisted_1$1 = ["aria-expanded"];
+    const _hoisted_2$1 = {
       key: 0,
       class: "p-checkbox p-component"
     };
-    const _hoisted_2$1 = { class: "p-treenode-label" };
-    const _hoisted_3$1 = {
+    const _hoisted_3$1 = ["aria-checked"];
+    const _hoisted_4$1 = { class: "p-treenode-label" };
+    const _hoisted_5$1 = {
       key: 0,
       class: "p-treenode-children",
       role: "group"
@@ -284,53 +286,61 @@ this.primevue.tree = (function (utils, Ripple, vue) {
       const _component_TreeNode = vue.resolveComponent("TreeNode", true);
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("li", { class: $options.containerClass }, [
-        vue.createVNode("div", {
-          class: $options.contentClass,
+      return (vue.openBlock(), vue.createElementBlock("li", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
+        vue.createElementVNode("div", {
+          class: vue.normalizeClass($options.contentClass),
           tabindex: "0",
           role: "treeitem",
           "aria-expanded": $options.expanded,
-          onClick: _cache[2] || (_cache[2] = (...args) => ($options.onClick && $options.onClick(...args))),
-          onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-          onTouchend: _cache[4] || (_cache[4] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
-          style: $props.node.style
+          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+          onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+          onTouchend: _cache[3] || (_cache[3] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
+          style: vue.normalizeStyle($props.node.style)
         }, [
-          vue.withDirectives(vue.createVNode("button", {
+          vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
             type: "button",
             class: "p-tree-toggler p-link",
-            onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggle && $options.toggle(...args))),
+            onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggle && $options.toggle(...args))),
             tabindex: "-1"
           }, [
-            vue.createVNode("span", { class: $options.toggleIcon }, null, 2)
-          ], 512), [
+            vue.createElementVNode("span", {
+              class: vue.normalizeClass($options.toggleIcon)
+            }, null, 2)
+          ])), [
             [_directive_ripple]
           ]),
           ($options.checkboxMode)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_1$1, [
-                vue.createVNode("div", {
-                  class: $options.checkboxClass,
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2$1, [
+                vue.createElementVNode("div", {
+                  class: vue.normalizeClass($options.checkboxClass),
                   role: "checkbox",
                   "aria-checked": $options.checked
                 }, [
-                  vue.createVNode("span", { class: $options.checkboxIcon }, null, 2)
-                ], 10, ["aria-checked"])
+                  vue.createElementVNode("span", {
+                    class: vue.normalizeClass($options.checkboxIcon)
+                  }, null, 2)
+                ], 10, _hoisted_3$1)
               ]))
             : vue.createCommentVNode("", true),
-          vue.createVNode("span", { class: $options.icon }, null, 2),
-          vue.createVNode("span", _hoisted_2$1, [
+          vue.createElementVNode("span", {
+            class: vue.normalizeClass($options.icon)
+          }, null, 2),
+          vue.createElementVNode("span", _hoisted_4$1, [
             ($props.templates[$props.node.type]||$props.templates['default'])
               ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates[$props.node.type]||$props.templates['default']), {
                   key: 0,
                   node: $props.node
                 }, null, 8, ["node"]))
-              : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
+              : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
                   vue.createTextVNode(vue.toDisplayString($options.label($props.node)), 1)
                 ], 64))
           ])
-        ], 46, ["aria-expanded"]),
+        ], 46, _hoisted_1$1),
         ($options.hasChildren && $options.expanded)
-          ? (vue.openBlock(), vue.createBlock("ul", _hoisted_3$1, [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.node.children, (childNode) => {
+          ? (vue.openBlock(), vue.createElementBlock("ul", _hoisted_5$1, [
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.node.children, (childNode) => {
                 return (vue.openBlock(), vue.createBlock(_component_TreeNode, {
                   key: childNode.key,
                   node: childNode,
@@ -620,8 +630,9 @@ this.primevue.tree = (function (utils, Ripple, vue) {
       key: 1,
       class: "p-tree-filter-container"
     };
-    const _hoisted_3 = /*#__PURE__*/vue.createVNode("span", { class: "p-tree-filter-icon pi pi-search" }, null, -1);
-    const _hoisted_4 = {
+    const _hoisted_3 = ["placeholder"];
+    const _hoisted_4 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-tree-filter-icon pi pi-search" }, null, -1);
+    const _hoisted_5 = {
       class: "p-tree-container",
       role: "tree"
     };
@@ -629,33 +640,37 @@ this.primevue.tree = (function (utils, Ripple, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_TreeNode = vue.resolveComponent("TreeNode");
 
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
         ($props.loading)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-              vue.createVNode("i", { class: $options.loadingIconClass }, null, 2)
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+              vue.createElementVNode("i", {
+                class: vue.normalizeClass($options.loadingIconClass)
+              }, null, 2)
             ]))
           : vue.createCommentVNode("", true),
         ($props.filter)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
-              vue.withDirectives(vue.createVNode("input", {
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
+              vue.withDirectives(vue.createElementVNode("input", {
                 type: "text",
                 autocomplete: "off",
                 class: "p-tree-filter p-inputtext p-component",
                 placeholder: $props.filterPlaceholder,
-                onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onFilterKeydown && $options.onFilterKeydown(...args))),
-                "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => ($data.filterValue = $event))
-              }, null, 40, ["placeholder"]), [
+                onKeydown: _cache[0] || (_cache[0] = (...args) => ($options.onFilterKeydown && $options.onFilterKeydown(...args))),
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (($data.filterValue) = $event))
+              }, null, 40, _hoisted_3), [
                 [vue.vModelText, $data.filterValue]
               ]),
-              _hoisted_3
+              _hoisted_4
             ]))
           : vue.createCommentVNode("", true),
-        vue.createVNode("div", {
+        vue.createElementVNode("div", {
           class: "p-tree-wrapper",
-          style: {maxHeight: $props.scrollHeight}
+          style: vue.normalizeStyle({maxHeight: $props.scrollHeight})
         }, [
-          vue.createVNode("ul", _hoisted_4, [
-            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.valueToRender, (node) => {
+          vue.createElementVNode("ul", _hoisted_5, [
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.valueToRender, (node) => {
               return (vue.openBlock(), vue.createBlock(_component_TreeNode, {
                 key: node.key,
                 node: node,
@@ -707,4 +722,4 @@ this.primevue.tree = (function (utils, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);

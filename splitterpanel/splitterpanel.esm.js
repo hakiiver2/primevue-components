@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, renderSlot } from 'vue';
 
 var script = {
     name: 'SplitterPanel',
@@ -25,9 +25,9 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     ref: "container",
-    class: $options.containerClass
+    class: normalizeClass($options.containerClass)
   }, [
     renderSlot(_ctx.$slots, "default")
   ], 2))

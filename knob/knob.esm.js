@@ -1,4 +1,4 @@
-import { openBlock, createBlock, createVNode, toDisplayString, createCommentVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, createElementVNode, toDisplayString, createCommentVNode } from 'vue';
 
 var script = {
     name: 'Knob',
@@ -199,41 +199,48 @@ var script = {
 };
 //Derived and forked from https://github.com/kramer99/vue-knob-control
 
+const _hoisted_1 = ["width", "height"];
+const _hoisted_2 = ["d", "stroke-width", "stroke"];
+const _hoisted_3 = ["d", "stroke-width", "stroke"];
+const _hoisted_4 = ["fill"];
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
-    (openBlock(), createBlock("svg", {
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
+    (openBlock(), createElementBlock("svg", {
       viewBox: "0 0 100 100",
       width: $props.size,
       height: $props.size,
-      onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
-      onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.onMouseDown && $options.onMouseDown(...args))),
-      onMouseup: _cache[3] || (_cache[3] = (...args) => ($options.onMouseUp && $options.onMouseUp(...args))),
-      onTouchstart: _cache[4] || (_cache[4] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
-      onTouchend: _cache[5] || (_cache[5] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args)))
+      onClick: _cache[0] || (_cache[0] = (...args) => ($options.onClick && $options.onClick(...args))),
+      onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onMouseDown && $options.onMouseDown(...args))),
+      onMouseup: _cache[2] || (_cache[2] = (...args) => ($options.onMouseUp && $options.onMouseUp(...args))),
+      onTouchstart: _cache[3] || (_cache[3] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
+      onTouchend: _cache[4] || (_cache[4] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args)))
     }, [
-      createVNode("path", {
+      createElementVNode("path", {
         d: $options.rangePath,
         "stroke-width": $props.strokeWidth,
         stroke: $props.rangeColor,
         class: "p-knob-range"
-      }, null, 8, ["d", "stroke-width", "stroke"]),
-      createVNode("path", {
+      }, null, 8, _hoisted_2),
+      createElementVNode("path", {
         d: $options.valuePath,
         "stroke-width": $props.strokeWidth,
         stroke: $props.valueColor,
         class: "p-knob-value"
-      }, null, 8, ["d", "stroke-width", "stroke"]),
+      }, null, 8, _hoisted_3),
       ($props.showValue)
-        ? (openBlock(), createBlock("text", {
+        ? (openBlock(), createElementBlock("text", {
             key: 0,
             x: 50,
             y: 57,
             "text-anchor": "middle",
             fill: $props.textColor,
             class: "p-knob-text"
-          }, toDisplayString($options.valueToDisplay), 9, ["fill"]))
+          }, toDisplayString($options.valueToDisplay), 9, _hoisted_4))
         : createCommentVNode("", true)
-    ], 40, ["width", "height"]))
+    ], 40, _hoisted_1))
   ], 2))
 }
 

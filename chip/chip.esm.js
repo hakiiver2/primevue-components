@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, createCommentVNode, toDisplayString, withKeys } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, renderSlot, createCommentVNode, toDisplayString, withKeys } from 'vue';
 
 var script = {
     name: 'Chip',
@@ -51,40 +51,41 @@ var script = {
     }
 };
 
-const _hoisted_1 = {
+const _hoisted_1 = ["src"];
+const _hoisted_2 = {
   key: 2,
   class: "p-chip-text"
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ($data.visible)
-    ? (openBlock(), createBlock("div", {
+    ? (openBlock(), createElementBlock("div", {
         key: 0,
-        class: $options.containerClass
+        class: normalizeClass($options.containerClass)
       }, [
         renderSlot(_ctx.$slots, "default", {}, () => [
           ($props.image)
-            ? (openBlock(), createBlock("img", {
+            ? (openBlock(), createElementBlock("img", {
                 key: 0,
                 src: $props.image
-              }, null, 8, ["src"]))
+              }, null, 8, _hoisted_1))
             : ($props.icon)
-              ? (openBlock(), createBlock("span", {
+              ? (openBlock(), createElementBlock("span", {
                   key: 1,
-                  class: $options.iconClass
+                  class: normalizeClass($options.iconClass)
                 }, null, 2))
               : createCommentVNode("", true),
           ($props.label)
-            ? (openBlock(), createBlock("div", _hoisted_1, toDisplayString($props.label), 1))
+            ? (openBlock(), createElementBlock("div", _hoisted_2, toDisplayString($props.label), 1))
             : createCommentVNode("", true)
         ]),
         ($props.removable)
-          ? (openBlock(), createBlock("span", {
+          ? (openBlock(), createElementBlock("span", {
               key: 0,
               tabindex: "0",
-              class: $options.removeIconClass,
-              onClick: _cache[1] || (_cache[1] = (...args) => ($options.close && $options.close(...args))),
-              onKeydown: _cache[2] || (_cache[2] = withKeys((...args) => ($options.close && $options.close(...args)), ["enter"]))
+              class: normalizeClass($options.removeIconClass),
+              onClick: _cache[0] || (_cache[0] = (...args) => ($options.close && $options.close(...args))),
+              onKeydown: _cache[1] || (_cache[1] = withKeys((...args) => ($options.close && $options.close(...args)), ["enter"]))
             }, null, 34))
           : createCommentVNode("", true)
       ], 2))

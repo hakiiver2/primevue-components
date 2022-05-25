@@ -6,4 +6,4 @@ this.primevue.confirmationeventbus = (function (utils) {
 
 	return ConfirmationEventBus;
 
-}(primevue.utils));
+})(primevue.utils);

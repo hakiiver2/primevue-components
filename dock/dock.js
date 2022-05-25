@@ -74,34 +74,37 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default'],
-            'tooltip': Tooltip__default['default']
+            'ripple': Ripple__default["default"],
+            'tooltip': Tooltip__default["default"]
         }
     };
 
     const _hoisted_1 = { class: "p-dock-list-container" };
+    const _hoisted_2 = ["onMouseenter"];
+    const _hoisted_3 = ["href", "target", "onClick"];
+    const _hoisted_4 = ["href", "target", "onClick", "tabindex"];
 
     function render$1(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_router_link = vue.resolveComponent("router-link");
       const _directive_ripple = vue.resolveDirective("ripple");
       const _directive_tooltip = vue.resolveDirective("tooltip");
 
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-        vue.createVNode("ul", {
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+        vue.createElementVNode("ul", {
           ref: "list",
           class: "p-dock-list",
           role: "menu",
-          onMouseleave: _cache[1] || (_cache[1] = (...args) => ($options.onListMouseLeave && $options.onListMouseLeave(...args)))
+          onMouseleave: _cache[0] || (_cache[0] = (...args) => ($options.onListMouseLeave && $options.onListMouseLeave(...args)))
         }, [
-          (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, index) => {
-            return (vue.openBlock(), vue.createBlock("li", {
-              class: $options.itemClass(index),
+          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, index) => {
+            return (vue.openBlock(), vue.createElementBlock("li", {
+              class: vue.normalizeClass($options.itemClass(index)),
               key: index,
               role: "none",
               onMouseenter: $event => ($options.onItemMouseEnter(index))
             }, [
               (!$props.templates['item'])
-                ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                     (item.to && !$options.disabled(item))
                       ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                           key: 0,
@@ -109,17 +112,17 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
                           custom: ""
                         }, {
                           default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                            vue.withDirectives(vue.createVNode("a", {
+                            vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                               href: href,
                               role: "menuitem",
-                              class: $options.linkClass(item, {isActive, isExactActive}),
+                              class: vue.normalizeClass($options.linkClass(item, {isActive, isExactActive})),
                               target: item.target,
                               onClick: $event => ($options.onItemClick($event, item, navigate))
                             }, [
                               (!$props.templates['icon'])
-                                ? vue.withDirectives((vue.openBlock(), vue.createBlock("span", {
+                                ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("span", {
                                     key: 0,
-                                    class: ['p-dock-action-icon', item.icon]
+                                    class: vue.normalizeClass(['p-dock-action-icon', item.icon])
                                   }, null, 2)), [
                                     [_directive_ripple]
                                   ])
@@ -127,25 +130,25 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
                                     key: 1,
                                     item: item
                                   }, null, 8, ["item"]))
-                            ], 10, ["href", "target", "onClick"]), [
+                            ], 10, _hoisted_3)), [
                               [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions]
                             ])
                           ]),
                           _: 2
                         }, 1032, ["to"]))
-                      : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                      : vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                           key: 1,
                           href: item.url,
                           role: "menuitem",
-                          class: $options.linkClass(item),
+                          class: vue.normalizeClass($options.linkClass(item)),
                           target: item.target,
                           onClick: $event => ($options.onItemClick($event, item)),
                           tabindex: $options.disabled(item) ? null : '0'
                         }, [
                           (!$props.templates['icon'])
-                            ? vue.withDirectives((vue.openBlock(), vue.createBlock("span", {
+                            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("span", {
                                 key: 0,
-                                class: ['p-dock-action-icon', item.icon]
+                                class: vue.normalizeClass(['p-dock-action-icon', item.icon])
                               }, null, 2)), [
                                 [_directive_ripple]
                               ])
@@ -153,7 +156,7 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
                                 key: 1,
                                 item: item
                               }, null, 8, ["item"]))
-                        ], 10, ["href", "target", "onClick", "tabindex"])), [
+                        ], 10, _hoisted_4)), [
                           [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions]
                         ])
                   ], 64))
@@ -161,7 +164,7 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
                     key: 1,
                     item: item
                   }, null, 8, ["item"]))
-            ], 42, ["onMouseenter"]))
+            ], 42, _hoisted_2))
           }), 128))
         ], 544)
       ]))
@@ -198,9 +201,9 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_DockSub = vue.resolveComponent("DockSub");
 
-      return (vue.openBlock(), vue.createBlock("div", {
-        class: $options.containerClass,
-        style: $props.style
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass),
+        style: vue.normalizeStyle($props.style)
       }, [
         vue.createVNode(_component_DockSub, {
           model: $props.model,
@@ -245,4 +248,4 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
 
     return script;
 
-}(primevue.ripple, primevue.tooltip, Vue));
+})(primevue.ripple, primevue.tooltip, Vue);

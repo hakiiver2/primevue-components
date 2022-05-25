@@ -20,4 +20,4 @@ this.primevue.usetoast = (function (exports, vue) {
 
     return exports;
 
-}({}, Vue));
+})({}, Vue);

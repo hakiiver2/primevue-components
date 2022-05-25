@@ -82,7 +82,7 @@ this.primevue.blockui = (function (utils, vue) {
     };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+      return (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
         ref: "container",
         class: "p-blockui-container"
       }, _ctx.$attrs), [
@@ -124,4 +124,4 @@ this.primevue.blockui = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

@@ -1,4 +1,4 @@
-import { openBlock, createBlock } from 'vue';
+import { openBlock, createElementBlock, normalizeStyle, normalizeClass } from 'vue';
 
 var script = {
     name: 'Skeleton',
@@ -45,9 +45,9 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
-    style: $options.containerStyle,
-    class: $options.containerClass
+  return (openBlock(), createElementBlock("div", {
+    style: normalizeStyle($options.containerStyle),
+    class: normalizeClass($options.containerClass)
   }, null, 6))
 }
 

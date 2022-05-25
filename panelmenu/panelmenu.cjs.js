@@ -1,7 +1,12 @@
 'use strict';
 
+var Tooltip = require('primevue/tooltip');
 var vue = require('vue');
 var utils = require('primevue/utils');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
 
 var script$1 = {
     name: 'PanelMenuSub',
@@ -70,7 +75,8 @@ var script$1 = {
             return ['p-menuitem-link', {
                 'p-disabled': this.disabled(item),
                 'router-link-active': routerProps && routerProps.isActive,
-                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive,
+                // item.linkClass: item.linkClass != undefined
             }];
         },
         isActive(item) {
@@ -89,6 +95,9 @@ var script$1 = {
         label(item) {
             return (typeof item.label === 'function' ? item.label() : item.label);
         }
+    },
+    directives: {
+        "tooltip": Tooltip__default["default"]                                                                                                                                                                            
     }
 };
 
@@ -96,28 +105,41 @@ const _hoisted_1$1 = {
   class: "p-submenu-list",
   role: "tree"
 };
-const _hoisted_2$1 = { class: "p-menuitem-text" };
+const _hoisted_2$1 = ["href", "onClick", "aria-expanded"];
 const _hoisted_3$1 = { class: "p-menuitem-text" };
-const _hoisted_4$1 = { class: "p-toggleable-content" };
+const _hoisted_4$1 = {
+  key: 0,
+  class: "pi pi-info-circle p-panelmenu-info-icon",
+  style: {}
+};
+const _hoisted_5$1 = ["href", "target", "onClick", "onKeydown", "aria-expanded", "tabindex"];
+const _hoisted_6$1 = { class: "p-menuitem-text" };
+const _hoisted_7$1 = {
+  key: 1,
+  class: "pi pi-info-circle p-panelmenu-info-icon",
+  style: {}
+};
+const _hoisted_8$1 = { class: "p-toggleable-content" };
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = vue.resolveComponent("router-link");
   const _component_PanelMenuSub = vue.resolveComponent("PanelMenuSub", true);
+  const _directive_tooltip = vue.resolveDirective("tooltip");
 
-  return (vue.openBlock(), vue.createBlock("ul", _hoisted_1$1, [
-    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
-      return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+  return (vue.openBlock(), vue.createElementBlock("ul", _hoisted_1$1, [
+    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
+      return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
         key: $options.label(item) + i.toString()
       }, [
         ($options.visible(item) && !item.separator)
-          ? (vue.openBlock(), vue.createBlock("li", {
+          ? (vue.openBlock(), vue.createElementBlock("li", {
               key: 0,
               role: "none",
-              class: $options.getItemClass(item),
-              style: item.style
+              class: vue.normalizeClass($options.getItemClass(item)),
+              style: vue.normalizeStyle(item.style)
             }, [
               (!$props.template)
-                ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                     (item.to && !$options.disabled(item))
                       ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                           key: 0,
@@ -125,25 +147,30 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           custom: ""
                         }, {
                           default: vue.withCtx(({navigate, href, isActive:isRouterActive, isExactActive}) => [
-                            vue.createVNode("a", {
+                            vue.createElementVNode("a", {
                               href: href,
-                              class: $options.linkClass(item, {isRouterActive, isExactActive}),
+                              class: vue.normalizeClass($options.linkClass(item, {isRouterActive, isExactActive})),
                               onClick: $event => ($options.onItemClick($event, item, navigate)),
                               role: "treeitem",
                               "aria-expanded": $options.isActive(item)
                             }, [
-                              vue.createVNode("span", {
-                                class: ['p-menuitem-icon', item.icon]
+                              vue.createElementVNode("span", {
+                                class: vue.normalizeClass(['p-menuitem-icon', item.icon])
                               }, null, 2),
-                              vue.createVNode("span", _hoisted_2$1, vue.toDisplayString($options.label(item)), 1)
-                            ], 10, ["href", "onClick", "aria-expanded"])
+                              vue.createElementVNode("span", _hoisted_3$1, vue.toDisplayString($options.label(item)), 1),
+                              (item.info)
+                                ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("i", _hoisted_4$1, null, 512)), [
+                                    [_directive_tooltip, item.info]
+                                  ])
+                                : vue.createCommentVNode("", true)
+                            ], 10, _hoisted_2$1)
                           ]),
                           _: 2
                         }, 1032, ["to"]))
-                      : (vue.openBlock(), vue.createBlock("a", {
+                      : (vue.openBlock(), vue.createElementBlock("a", {
                           key: 1,
                           href: item.url,
-                          class: $options.linkClass(item),
+                          class: vue.normalizeClass($options.linkClass(item)),
                           target: item.target,
                           onClick: $event => ($options.onItemClick($event, item)),
                           onKeydown: $event => ($options.onItemKeydown($event, item)),
@@ -152,16 +179,21 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           tabindex: $options.disabled(item) ? null : '0'
                         }, [
                           (item.items)
-                            ? (vue.openBlock(), vue.createBlock("span", {
+                            ? (vue.openBlock(), vue.createElementBlock("span", {
                                 key: 0,
-                                class: $options.getSubmenuIcon(item)
+                                class: vue.normalizeClass($options.getSubmenuIcon(item))
                               }, null, 2))
                             : vue.createCommentVNode("", true),
-                          vue.createVNode("span", {
-                            class: ['p-menuitem-icon', item.icon]
+                          vue.createElementVNode("span", {
+                            class: vue.normalizeClass(['p-menuitem-icon', item.icon])
                           }, null, 2),
-                          vue.createVNode("span", _hoisted_3$1, vue.toDisplayString($options.label(item)), 1)
-                        ], 42, ["href", "target", "onClick", "onKeydown", "aria-expanded", "tabindex"]))
+                          vue.createElementVNode("span", _hoisted_6$1, vue.toDisplayString($options.label(item)), 1),
+                          (item.info)
+                            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("i", _hoisted_7$1, null, 512)), [
+                                [_directive_tooltip, item.info]
+                              ])
+                            : vue.createCommentVNode("", true)
+                        ], 42, _hoisted_5$1))
                   ], 64))
                 : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.template), {
                     key: 1,
@@ -169,14 +201,14 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                   }, null, 8, ["item"])),
               vue.createVNode(vue.Transition, { name: "p-toggleable-content" }, {
                 default: vue.withCtx(() => [
-                  vue.withDirectives(vue.createVNode("div", _hoisted_4$1, [
+                  vue.withDirectives(vue.createElementVNode("div", _hoisted_8$1, [
                     ($options.visible(item) && item.items)
                       ? (vue.openBlock(), vue.createBlock(_component_PanelMenuSub, {
                           model: item.items,
                           key: $options.label(item) + '_sub_',
                           template: $props.template,
                           expandedKeys: $props.expandedKeys,
-                          onItemToggle: _cache[1] || (_cache[1] = $event => (_ctx.$emit('item-toggle', $event))),
+                          onItemToggle: _cache[0] || (_cache[0] = $event => (_ctx.$emit('item-toggle', $event))),
                           exact: $props.exact
                         }, null, 8, ["model", "template", "expandedKeys", "exact"]))
                       : vue.createCommentVNode("", true)
@@ -189,9 +221,9 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
             ], 6))
           : vue.createCommentVNode("", true),
         ($options.visible(item) && item.separator)
-          ? (vue.openBlock(), vue.createBlock("li", {
-              class: ['p-menu-separator', item.class],
-              style: item.style,
+          ? (vue.openBlock(), vue.createElementBlock("li", {
+              class: vue.normalizeClass(['p-menu-separator', item.class]),
+              style: vue.normalizeStyle(item.style),
               key: 'separator' + i.toString()
             }, null, 6))
           : vue.createCommentVNode("", true)
@@ -284,7 +316,8 @@ var script = {
         getHeaderLinkClass(item, routerProps) {
             return ['p-panelmenu-header-link', {
                 'router-link-active': routerProps && routerProps.isActive,
-                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive
+                'router-link-active-exact': this.exact && routerProps && routerProps.isExactActive,
+                // item.headerLinkClass: item.headerLinkClass != undefined
             }];
         },
         isActive(item) {
@@ -310,13 +343,29 @@ var script = {
         ariaId() {
             return utils.UniqueComponentId();
         }
+    },
+    directives: {
+        "tooltip": Tooltip__default["default"]                                                                                                                                                                            
     }
 };
 
 const _hoisted_1 = { class: "p-panelmenu p-component" };
-const _hoisted_2 = { class: "p-menuitem-text" };
+const _hoisted_2 = ["href", "onClick"];
 const _hoisted_3 = { class: "p-menuitem-text" };
 const _hoisted_4 = {
+  key: 1,
+  class: "pi pi-info-circle p-panelmenu-info-icon",
+  style: {}
+};
+const _hoisted_5 = ["href", "onClick", "onKeydown", "tabindex", "aria-expanded", "id", "aria-controls"];
+const _hoisted_6 = { class: "p-menuitem-text" };
+const _hoisted_7 = {
+  key: 2,
+  class: "pi pi-info-circle p-panelmenu-info-icon",
+  style: {}
+};
+const _hoisted_8 = ["id", "aria-labelledby"];
+const _hoisted_9 = {
   key: 0,
   class: "p-panelmenu-content"
 };
@@ -324,24 +373,25 @@ const _hoisted_4 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = vue.resolveComponent("router-link");
   const _component_PanelMenuSub = vue.resolveComponent("PanelMenuSub");
+  const _directive_tooltip = vue.resolveDirective("tooltip");
 
-  return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, index) => {
-      return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+  return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, index) => {
+      return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
         key: $options.label(item) + '_' + index
       }, [
         ($options.visible(item))
-          ? (vue.openBlock(), vue.createBlock("div", {
+          ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
-              class: $options.getPanelClass(item),
-              style: item.style
+              class: vue.normalizeClass($options.getPanelClass(item)),
+              style: vue.normalizeStyle(item.style)
             }, [
-              vue.createVNode("div", {
-                class: $options.getHeaderClass(item),
-                style: item.style
+              vue.createElementVNode("div", {
+                class: vue.normalizeClass($options.getHeaderClass(item)),
+                style: vue.normalizeStyle(item.style)
               }, [
                 (!_ctx.$slots.item)
-                  ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                  ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                       (item.to && !$options.disabled(item))
                         ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                             key: 0,
@@ -349,27 +399,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             custom: ""
                           }, {
                             default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                              vue.createVNode("a", {
+                              vue.createElementVNode("a", {
                                 href: href,
-                                class: $options.getHeaderLinkClass(item, {isActive, isExactActive}),
+                                class: vue.normalizeClass($options.getHeaderLinkClass(item, {isActive, isExactActive})),
                                 onClick: $event => ($options.onItemClick($event, item, navigate)),
                                 role: "treeitem"
                               }, [
                                 (item.icon)
-                                  ? (vue.openBlock(), vue.createBlock("span", {
+                                  ? (vue.openBlock(), vue.createElementBlock("span", {
                                       key: 0,
-                                      class: $options.getPanelIcon(item)
+                                      class: vue.normalizeClass($options.getPanelIcon(item))
                                     }, null, 2))
                                   : vue.createCommentVNode("", true),
-                                vue.createVNode("span", _hoisted_2, vue.toDisplayString($options.label(item)), 1)
-                              ], 10, ["href", "onClick"])
+                                vue.createElementVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1),
+                                (item.info)
+                                  ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("i", _hoisted_4, null, 512)), [
+                                      [_directive_tooltip, item.info]
+                                    ])
+                                  : vue.createCommentVNode("", true)
+                              ], 10, _hoisted_2)
                             ]),
                             _: 2
                           }, 1032, ["to"]))
-                        : (vue.openBlock(), vue.createBlock("a", {
+                        : (vue.openBlock(), vue.createElementBlock("a", {
                             key: 1,
                             href: item.url,
-                            class: $options.getHeaderLinkClass(item),
+                            class: vue.normalizeClass($options.getHeaderLinkClass(item)),
                             onClick: $event => ($options.onItemClick($event, item)),
                             onKeydown: $event => ($options.onItemKeydown($event, item)),
                             tabindex: $options.disabled(item) ? null : '0',
@@ -378,19 +433,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             "aria-controls": $options.ariaId +'_content_' + index
                           }, [
                             (item.items)
-                              ? (vue.openBlock(), vue.createBlock("span", {
+                              ? (vue.openBlock(), vue.createElementBlock("span", {
                                   key: 0,
-                                  class: $options.getPanelToggleIcon(item)
+                                  class: vue.normalizeClass($options.getPanelToggleIcon(item))
                                 }, null, 2))
                               : vue.createCommentVNode("", true),
                             (item.icon)
-                              ? (vue.openBlock(), vue.createBlock("span", {
+                              ? (vue.openBlock(), vue.createElementBlock("span", {
                                   key: 1,
-                                  class: $options.getPanelIcon(item)
+                                  class: vue.normalizeClass($options.getPanelIcon(item))
                                 }, null, 2))
                               : vue.createCommentVNode("", true),
-                            vue.createVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
-                          ], 42, ["href", "onClick", "onKeydown", "tabindex", "aria-expanded", "id", "aria-controls"]))
+                            vue.createElementVNode("span", _hoisted_6, vue.toDisplayString($options.label(item)), 1),
+                            (item.info)
+                              ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("i", _hoisted_7, null, 512)), [
+                                  [_directive_tooltip, item.info]
+                                ])
+                              : vue.createCommentVNode("", true)
+                          ], 42, _hoisted_5))
                     ], 64))
                   : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.item), {
                       key: 1,
@@ -399,14 +459,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ], 6),
               vue.createVNode(vue.Transition, { name: "p-toggleable-content" }, {
                 default: vue.withCtx(() => [
-                  vue.withDirectives(vue.createVNode("div", {
+                  vue.withDirectives(vue.createElementVNode("div", {
                     class: "p-toggleable-content",
                     role: "region",
                     id: $options.ariaId +'_content_' + index,
                     "aria-labelledby": $options.ariaId +'_header_' + index
                   }, [
                     (item.items)
-                      ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
+                      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_9, [
                           vue.createVNode(_component_PanelMenuSub, {
                             model: item.items,
                             class: "p-panelmenu-root-submenu",
@@ -417,7 +477,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           }, null, 8, ["model", "template", "expandedKeys", "onItemToggle", "exact"])
                         ]))
                       : vue.createCommentVNode("", true)
-                  ], 8, ["id", "aria-labelledby"]), [
+                  ], 8, _hoisted_8), [
                     [vue.vShow, $options.isActive(item)]
                   ])
                 ]),

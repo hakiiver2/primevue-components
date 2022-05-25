@@ -1,6 +1,6 @@
 import { DomHandler, UniqueComponentId, ZIndexUtils } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, createVNode, withDirectives, createCommentVNode, resolveDynamicComponent, Fragment, renderList, withKeys, resolveComponent, Teleport, Transition, withCtx, mergeProps } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, createElementVNode, withDirectives, normalizeClass, createCommentVNode, createBlock, resolveDynamicComponent, Fragment, renderList, withKeys, normalizeStyle, resolveComponent, createVNode, Teleport, Transition, withCtx, mergeProps } from 'vue';
 
 var script$4 = {
     name: 'GalleriaItem',
@@ -134,18 +134,27 @@ var script$4 = {
 
 const _hoisted_1$2 = { class: "p-galleria-item-wrapper" };
 const _hoisted_2$2 = { class: "p-galleria-item-container" };
-const _hoisted_3$1 = /*#__PURE__*/createVNode("span", { class: "p-galleria-item-prev-icon pi pi-chevron-left" }, null, -1);
-const _hoisted_4$1 = { class: "p-galleria-item" };
-const _hoisted_5 = /*#__PURE__*/createVNode("span", { class: "p-galleria-item-next-icon pi pi-chevron-right" }, null, -1);
-const _hoisted_6 = {
+const _hoisted_3$2 = ["disabled"];
+const _hoisted_4$2 = /*#__PURE__*/createElementVNode("span", { class: "p-galleria-item-prev-icon pi pi-chevron-left" }, null, -1);
+const _hoisted_5$2 = [
+  _hoisted_4$2
+];
+const _hoisted_6$1 = { class: "p-galleria-item" };
+const _hoisted_7 = ["disabled"];
+const _hoisted_8 = /*#__PURE__*/createElementVNode("span", { class: "p-galleria-item-next-icon pi pi-chevron-right" }, null, -1);
+const _hoisted_9 = [
+  _hoisted_8
+];
+const _hoisted_10 = {
   key: 2,
   class: "p-galleria-caption"
 };
-const _hoisted_7 = {
+const _hoisted_11 = {
   key: 0,
   class: "p-galleria-indicators p-reset"
 };
-const _hoisted_8 = {
+const _hoisted_12 = ["onClick", "onMouseenter", "onKeydown"];
+const _hoisted_13 = {
   key: 0,
   type: "button",
   tabindex: "-1",
@@ -155,22 +164,20 @@ const _hoisted_8 = {
 function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", _hoisted_1$2, [
-    createVNode("div", _hoisted_2$2, [
+  return (openBlock(), createElementBlock("div", _hoisted_1$2, [
+    createElementVNode("div", _hoisted_2$2, [
       ($props.showItemNavigators)
-        ? withDirectives((openBlock(), createBlock("button", {
+        ? withDirectives((openBlock(), createElementBlock("button", {
             key: 0,
             type: "button",
-            class: $options.navBackwardClass,
-            onClick: _cache[1] || (_cache[1] = $event => ($options.navBackward($event))),
+            class: normalizeClass($options.navBackwardClass),
+            onClick: _cache[0] || (_cache[0] = $event => ($options.navBackward($event))),
             disabled: $options.isNavBackwardDisabled()
-          }, [
-            _hoisted_3$1
-          ], 10, ["disabled"])), [
+          }, _hoisted_5$2, 10, _hoisted_3$2)), [
             [_directive_ripple]
           ])
         : createCommentVNode("", true),
-      createVNode("div", _hoisted_4$1, [
+      createElementVNode("div", _hoisted_6$1, [
         ($props.templates.item)
           ? (openBlock(), createBlock(resolveDynamicComponent($props.templates.item), {
               key: 0,
@@ -179,20 +186,18 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
           : createCommentVNode("", true)
       ]),
       ($props.showItemNavigators)
-        ? withDirectives((openBlock(), createBlock("button", {
+        ? withDirectives((openBlock(), createElementBlock("button", {
             key: 1,
             type: "button",
-            class: $options.navForwardClass,
-            onClick: _cache[2] || (_cache[2] = $event => ($options.navForward($event))),
+            class: normalizeClass($options.navForwardClass),
+            onClick: _cache[1] || (_cache[1] = $event => ($options.navForward($event))),
             disabled: $options.isNavForwardDisabled()
-          }, [
-            _hoisted_5
-          ], 10, ["disabled"])), [
+          }, _hoisted_9, 10, _hoisted_7)), [
             [_directive_ripple]
           ])
         : createCommentVNode("", true),
       ($props.templates['caption'])
-        ? (openBlock(), createBlock("div", _hoisted_6, [
+        ? (openBlock(), createElementBlock("div", _hoisted_10, [
             ($props.templates.caption)
               ? (openBlock(), createBlock(resolveDynamicComponent($props.templates.caption), {
                   key: 0,
@@ -203,18 +208,18 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
         : createCommentVNode("", true)
     ]),
     ($props.showIndicators)
-      ? (openBlock(), createBlock("ul", _hoisted_7, [
-          (openBlock(true), createBlock(Fragment, null, renderList($props.value, (item, index) => {
-            return (openBlock(), createBlock("li", {
+      ? (openBlock(), createElementBlock("ul", _hoisted_11, [
+          (openBlock(true), createElementBlock(Fragment, null, renderList($props.value, (item, index) => {
+            return (openBlock(), createElementBlock("li", {
               key: `p-galleria-indicator-${index}`,
               tabindex: "0",
               onClick: $event => ($options.onIndicatorClick(index)),
               onMouseenter: $event => ($options.onIndicatorMouseEnter(index)),
               onKeydown: withKeys($event => ($options.onIndicatorKeyDown(index)), ["enter"]),
-              class: ['p-galleria-indicator', {'p-highlight': $options.isIndicatorItemActive(index)}]
+              class: normalizeClass(['p-galleria-indicator', {'p-highlight': $options.isIndicatorItemActive(index)}])
             }, [
               (!$props.templates['indicator'])
-                ? (openBlock(), createBlock("button", _hoisted_8))
+                ? (openBlock(), createElementBlock("button", _hoisted_13))
                 : createCommentVNode("", true),
               ($props.templates.indicator)
                 ? (openBlock(), createBlock(resolveDynamicComponent($props.templates.indicator), {
@@ -222,7 +227,7 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
                     index: index
                   }, null, 8, ["index"]))
                 : createCommentVNode("", true)
-            ], 42, ["onClick", "onMouseenter", "onKeydown"]))
+            ], 42, _hoisted_12))
           }), 128))
         ]))
       : createCommentVNode("", true)
@@ -615,47 +620,52 @@ var script$3 = {
 
 const _hoisted_1$1 = { class: "p-galleria-thumbnail-wrapper" };
 const _hoisted_2$1 = { class: "p-galleria-thumbnail-container" };
+const _hoisted_3$1 = ["disabled"];
+const _hoisted_4$1 = ["tabindex", "onClick", "onKeydown"];
+const _hoisted_5$1 = ["disabled"];
 
 function render$2(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", _hoisted_1$1, [
-    createVNode("div", _hoisted_2$1, [
+  return (openBlock(), createElementBlock("div", _hoisted_1$1, [
+    createElementVNode("div", _hoisted_2$1, [
       ($props.showThumbnailNavigators)
-        ? withDirectives((openBlock(), createBlock("button", {
+        ? withDirectives((openBlock(), createElementBlock("button", {
             key: 0,
-            class: $options.navBackwardClass,
-            onClick: _cache[1] || (_cache[1] = $event => ($options.navBackward($event))),
+            class: normalizeClass($options.navBackwardClass),
+            onClick: _cache[0] || (_cache[0] = $event => ($options.navBackward($event))),
             disabled: $options.isNavBackwardDisabled(),
             type: "button"
           }, [
-            createVNode("span", { class: $options.navBackwardIconClass }, null, 2)
-          ], 10, ["disabled"])), [
+            createElementVNode("span", {
+              class: normalizeClass($options.navBackwardIconClass)
+            }, null, 2)
+          ], 10, _hoisted_3$1)), [
             [_directive_ripple]
           ])
         : createCommentVNode("", true),
-      createVNode("div", {
+      createElementVNode("div", {
         class: "p-galleria-thumbnail-items-container",
-        style: {'height': $props.isVertical ? $props.contentHeight : ''}
+        style: normalizeStyle({'height': $props.isVertical ? $props.contentHeight : ''})
       }, [
-        createVNode("div", {
+        createElementVNode("div", {
           ref: "itemsContainer",
           class: "p-galleria-thumbnail-items",
-          onTransitionend: _cache[2] || (_cache[2] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args))),
-          onTouchstart: _cache[3] || (_cache[3] = $event => ($options.onTouchStart($event))),
-          onTouchmove: _cache[4] || (_cache[4] = $event => ($options.onTouchMove($event))),
-          onTouchend: _cache[5] || (_cache[5] = $event => ($options.onTouchEnd($event)))
+          onTransitionend: _cache[1] || (_cache[1] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args))),
+          onTouchstart: _cache[2] || (_cache[2] = $event => ($options.onTouchStart($event))),
+          onTouchmove: _cache[3] || (_cache[3] = $event => ($options.onTouchMove($event))),
+          onTouchend: _cache[4] || (_cache[4] = $event => ($options.onTouchEnd($event)))
         }, [
-          (openBlock(true), createBlock(Fragment, null, renderList($props.value, (item, index) => {
-            return (openBlock(), createBlock("div", {
+          (openBlock(true), createElementBlock(Fragment, null, renderList($props.value, (item, index) => {
+            return (openBlock(), createElementBlock("div", {
               key: `p-galleria-thumbnail-item-${index}`,
-              class: ['p-galleria-thumbnail-item', {
+              class: normalizeClass(['p-galleria-thumbnail-item', {
                         'p-galleria-thumbnail-item-current': $props.activeIndex === index,
                         'p-galleria-thumbnail-item-active': $options.isItemActive(index),
                         'p-galleria-thumbnail-item-start': $options.firstItemAciveIndex() === index,
-                        'p-galleria-thumbnail-item-end': $options.lastItemActiveIndex() === index }]
+                        'p-galleria-thumbnail-item-end': $options.lastItemActiveIndex() === index }])
             }, [
-              createVNode("div", {
+              createElementVNode("div", {
                 class: "p-galleria-thumbnail-item-content",
                 tabindex: $options.isItemActive(index) ? 0 : null,
                 onClick: $event => ($options.onItemClick(index)),
@@ -667,21 +677,23 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
                       item: item
                     }, null, 8, ["item"]))
                   : createCommentVNode("", true)
-              ], 40, ["tabindex", "onClick", "onKeydown"])
+              ], 40, _hoisted_4$1)
             ], 2))
           }), 128))
         ], 544)
       ], 4),
       ($props.showThumbnailNavigators)
-        ? withDirectives((openBlock(), createBlock("button", {
+        ? withDirectives((openBlock(), createElementBlock("button", {
             key: 1,
-            class: $options.navForwardClass,
-            onClick: _cache[6] || (_cache[6] = $event => ($options.navForward($event))),
+            class: normalizeClass($options.navForwardClass),
+            onClick: _cache[5] || (_cache[5] = $event => ($options.navForward($event))),
             disabled: $options.isNavForwardDisabled(),
             type: "button"
           }, [
-            createVNode("span", { class: $options.navForwardIconClass }, null, 2)
-          ], 10, ["disabled"])), [
+            createElementVNode("span", {
+              class: normalizeClass($options.navForwardIconClass)
+            }, null, 2)
+          ], 10, _hoisted_5$1)), [
             [_directive_ripple]
           ])
         : createCommentVNode("", true)
@@ -827,13 +839,17 @@ var script$1 = {
     }
 };
 
-const _hoisted_1 = /*#__PURE__*/createVNode("span", { class: "p-galleria-close-icon pi pi-times" }, null, -1);
-const _hoisted_2 = {
+const _hoisted_1 = ["id"];
+const _hoisted_2 = /*#__PURE__*/createElementVNode("span", { class: "p-galleria-close-icon pi pi-times" }, null, -1);
+const _hoisted_3 = [
+  _hoisted_2
+];
+const _hoisted_4 = {
   key: 1,
   class: "p-galleria-header"
 };
-const _hoisted_3 = { class: "p-galleria-content" };
-const _hoisted_4 = {
+const _hoisted_5 = { class: "p-galleria-content" };
+const _hoisted_6 = {
   key: 2,
   class: "p-galleria-footer"
 };
@@ -844,34 +860,32 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return (_ctx.$attrs.value && _ctx.$attrs.value.length > 0)
-    ? (openBlock(), createBlock("div", {
+    ? (openBlock(), createElementBlock("div", {
         key: 0,
         id: $data.id,
-        class: $options.galleriaClass,
-        style: _ctx.$attrs.containerStyle
+        class: normalizeClass($options.galleriaClass),
+        style: normalizeStyle(_ctx.$attrs.containerStyle)
       }, [
         (_ctx.$attrs.fullScreen)
-          ? withDirectives((openBlock(), createBlock("button", {
+          ? withDirectives((openBlock(), createElementBlock("button", {
               key: 0,
               type: "button",
               class: "p-galleria-close p-link",
-              onClick: _cache[1] || (_cache[1] = $event => (_ctx.$emit('mask-hide')))
-            }, [
-              _hoisted_1
-            ], 512)), [
+              onClick: _cache[0] || (_cache[0] = $event => (_ctx.$emit('mask-hide')))
+            }, _hoisted_3)), [
               [_directive_ripple]
             ])
           : createCommentVNode("", true),
         (_ctx.$attrs.templates && _ctx.$attrs.templates['header'])
-          ? (openBlock(), createBlock("div", _hoisted_2, [
+          ? (openBlock(), createElementBlock("div", _hoisted_4, [
               (openBlock(), createBlock(resolveDynamicComponent(_ctx.$attrs.templates['header'])))
             ]))
           : createCommentVNode("", true),
-        createVNode("div", _hoisted_3, [
+        createElementVNode("div", _hoisted_5, [
           createVNode(_component_GalleriaItem, {
             value: _ctx.$attrs.value,
             activeIndex: $data.activeIndex,
-            "onUpdate:activeIndex": _cache[2] || (_cache[2] = $event => ($data.activeIndex = $event)),
+            "onUpdate:activeIndex": _cache[1] || (_cache[1] = $event => (($data.activeIndex) = $event)),
             circular: _ctx.$attrs.circular,
             templates: _ctx.$attrs.templates,
             showIndicators: _ctx.$attrs.showIndicators,
@@ -879,7 +893,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
             showItemNavigators: _ctx.$attrs.showItemNavigators,
             autoPlay: _ctx.$attrs.autoPlay,
             slideShowActive: $data.slideShowActive,
-            "onUpdate:slideShowActive": _cache[3] || (_cache[3] = $event => ($data.slideShowActive = $event)),
+            "onUpdate:slideShowActive": _cache[2] || (_cache[2] = $event => (($data.slideShowActive) = $event)),
             onStartSlideshow: $options.startSlideShow,
             onStopSlideshow: $options.stopSlideShow
           }, null, 8, ["value", "activeIndex", "circular", "templates", "showIndicators", "changeItemOnIndicatorHover", "showItemNavigators", "autoPlay", "slideShowActive", "onStartSlideshow", "onStopSlideshow"]),
@@ -889,7 +903,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                 containerId: $data.id,
                 value: _ctx.$attrs.value,
                 activeIndex: $data.activeIndex,
-                "onUpdate:activeIndex": _cache[4] || (_cache[4] = $event => ($data.activeIndex = $event)),
+                "onUpdate:activeIndex": _cache[3] || (_cache[3] = $event => (($data.activeIndex) = $event)),
                 templates: _ctx.$attrs.templates,
                 numVisible: $data.numVisible,
                 responsiveOptions: _ctx.$attrs.responsiveOptions,
@@ -898,17 +912,17 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                 contentHeight: _ctx.$attrs.verticalThumbnailViewPortHeight,
                 showThumbnailNavigators: _ctx.$attrs.showThumbnailNavigators,
                 slideShowActive: $data.slideShowActive,
-                "onUpdate:slideShowActive": _cache[5] || (_cache[5] = $event => ($data.slideShowActive = $event)),
+                "onUpdate:slideShowActive": _cache[4] || (_cache[4] = $event => (($data.slideShowActive) = $event)),
                 onStopSlideshow: $options.stopSlideShow
               }, null, 8, ["containerId", "value", "activeIndex", "templates", "numVisible", "responsiveOptions", "circular", "isVertical", "contentHeight", "showThumbnailNavigators", "slideShowActive", "onStopSlideshow"]))
             : createCommentVNode("", true)
         ]),
         (_ctx.$attrs.templates && _ctx.$attrs.templates['footer'])
-          ? (openBlock(), createBlock("div", _hoisted_4, [
+          ? (openBlock(), createElementBlock("div", _hoisted_6, [
               (openBlock(), createBlock(resolveDynamicComponent(_ctx.$attrs.templates['footer'])))
             ]))
           : createCommentVNode("", true)
-      ], 14, ["id"]))
+      ], 14, _hoisted_1))
     : createCommentVNode("", true)
 }
 
@@ -1086,10 +1100,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         to: "body"
       }, [
         ($data.containerVisible)
-          ? (openBlock(), createBlock("div", {
+          ? (openBlock(), createElementBlock("div", {
               key: 0,
               ref: $options.maskRef,
-              class: $options.maskContentClass
+              class: normalizeClass($options.maskContentClass)
             }, [
               createVNode(Transition, {
                 name: "p-galleria",

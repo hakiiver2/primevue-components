@@ -1,6 +1,6 @@
 import { UniqueComponentId } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, createVNode, renderSlot, toDisplayString, createCommentVNode, withDirectives, withKeys, Transition, withCtx, vShow } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, toDisplayString, createCommentVNode, withDirectives, withKeys, createVNode, Transition, withCtx, vShow } from 'vue';
 
 var script = {
     name: 'Fieldset',
@@ -47,55 +47,60 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-fieldset-legend" };
-const _hoisted_2 = { class: "p-fieldset-legend-text" };
-const _hoisted_3 = { class: "p-fieldset-content" };
+const _hoisted_2 = ["id"];
+const _hoisted_3 = ["id", "aria-controls", "aria-expanded"];
+const _hoisted_4 = { class: "p-fieldset-legend-text" };
+const _hoisted_5 = ["id", "aria-labelledby"];
+const _hoisted_6 = { class: "p-fieldset-content" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("fieldset", {
-    class: ['p-fieldset p-component', {'p-fieldset-toggleable': $props.toggleable}]
+  return (openBlock(), createElementBlock("fieldset", {
+    class: normalizeClass(['p-fieldset p-component', {'p-fieldset-toggleable': $props.toggleable}])
   }, [
-    createVNode("legend", _hoisted_1, [
+    createElementVNode("legend", _hoisted_1, [
       (!$props.toggleable)
         ? renderSlot(_ctx.$slots, "legend", { key: 0 }, () => [
-            createVNode("span", {
+            createElementVNode("span", {
               class: "p-fieldset-legend-text",
               id: $options.ariaId + '_header'
-            }, toDisplayString($props.legend), 9, ["id"])
+            }, toDisplayString($props.legend), 9, _hoisted_2)
           ])
         : createCommentVNode("", true),
       ($props.toggleable)
-        ? withDirectives((openBlock(), createBlock("a", {
+        ? withDirectives((openBlock(), createElementBlock("a", {
             key: 1,
             tabindex: "0",
-            onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggle && $options.toggle(...args))),
-            onKeydown: _cache[2] || (_cache[2] = withKeys((...args) => ($options.toggle && $options.toggle(...args)), ["enter"])),
+            onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggle && $options.toggle(...args))),
+            onKeydown: _cache[1] || (_cache[1] = withKeys((...args) => ($options.toggle && $options.toggle(...args)), ["enter"])),
             id: $options.ariaId +  '_header',
             "aria-controls": $options.ariaId + '_content',
             "aria-expanded": !$data.d_collapsed
           }, [
-            createVNode("span", { class: $options.iconClass }, null, 2),
+            createElementVNode("span", {
+              class: normalizeClass($options.iconClass)
+            }, null, 2),
             renderSlot(_ctx.$slots, "legend", {}, () => [
-              createVNode("span", _hoisted_2, toDisplayString($props.legend), 1)
+              createElementVNode("span", _hoisted_4, toDisplayString($props.legend), 1)
             ])
-          ], 40, ["id", "aria-controls", "aria-expanded"])), [
+          ], 40, _hoisted_3)), [
             [_directive_ripple]
           ])
         : createCommentVNode("", true)
     ]),
     createVNode(Transition, { name: "p-toggleable-content" }, {
       default: withCtx(() => [
-        withDirectives(createVNode("div", {
+        withDirectives(createElementVNode("div", {
           class: "p-toggleable-content",
           role: "region",
           id: $options.ariaId + '_content',
           "aria-labelledby": $options.ariaId + '_header'
         }, [
-          createVNode("div", _hoisted_3, [
+          createElementVNode("div", _hoisted_6, [
             renderSlot(_ctx.$slots, "default")
           ])
-        ], 8, ["id", "aria-labelledby"]), [
+        ], 8, _hoisted_5), [
           [vShow, !$data.d_collapsed]
         ])
       ]),

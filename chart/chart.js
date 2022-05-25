@@ -103,15 +103,16 @@ this.primevue.chart = (function (vue) {
     };
 
     const _hoisted_1 = { class: "p-chart" };
+    const _hoisted_2 = ["width", "height"];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-        vue.createVNode("canvas", {
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+        vue.createElementVNode("canvas", {
           ref: "canvas",
           width: $props.width,
           height: $props.height,
-          onClick: _cache[1] || (_cache[1] = $event => ($options.onCanvasClick($event)))
-        }, null, 8, ["width", "height"])
+          onClick: _cache[0] || (_cache[0] = $event => ($options.onCanvasClick($event)))
+        }, null, 8, _hoisted_2)
       ]))
     }
 
@@ -149,4 +150,4 @@ this.primevue.chart = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

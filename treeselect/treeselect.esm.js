@@ -2,7 +2,7 @@ import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Tree from 'primevue/tree';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, openBlock, createBlock, createVNode, renderSlot, Fragment, createTextVNode, toDisplayString, renderList, createCommentVNode, Teleport, Transition, withCtx } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, Fragment, createTextVNode, toDisplayString, renderList, createCommentVNode, createBlock, Teleport, createVNode, Transition, withCtx, normalizeStyle } from 'vue';
 
 var script = {
     name: 'TreeSelect',
@@ -382,11 +382,12 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = { class: "p-treeselect-label-container" };
-const _hoisted_3 = { class: "p-treeselect-token-label" };
-const _hoisted_4 = { class: "p-treeselect-trigger" };
-const _hoisted_5 = /*#__PURE__*/createVNode("span", { class: "p-treeselect-trigger-icon pi pi-chevron-down" }, null, -1);
-const _hoisted_6 = {
+const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"];
+const _hoisted_3 = { class: "p-treeselect-label-container" };
+const _hoisted_4 = { class: "p-treeselect-token-label" };
+const _hoisted_5 = { class: "p-treeselect-trigger" };
+const _hoisted_6 = /*#__PURE__*/createElementVNode("span", { class: "p-treeselect-trigger-icon pi pi-chevron-down" }, null, -1);
+const _hoisted_7 = {
   key: 0,
   class: "p-treeselect-empty-message"
 };
@@ -394,50 +395,52 @@ const _hoisted_6 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TSTree = resolveComponent("TSTree");
 
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     ref: "container",
-    class: $options.containerClass,
-    onClick: _cache[7] || (_cache[7] = (...args) => ($options.onClick && $options.onClick(...args)))
+    class: normalizeClass($options.containerClass),
+    onClick: _cache[6] || (_cache[6] = (...args) => ($options.onClick && $options.onClick(...args)))
   }, [
-    createVNode("div", _hoisted_1, [
-      createVNode("input", {
+    createElementVNode("div", _hoisted_1, [
+      createElementVNode("input", {
         ref: "focusInput",
         type: "text",
         role: "listbox",
         id: $props.inputId,
         readonly: "",
         disabled: $props.disabled,
-        onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-        onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+        onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+        onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+        onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
         tabindex: $props.tabindex,
         "aria-haspopup": "true",
         "aria-expanded": $data.overlayVisible,
         "aria-labelledby": $props.ariaLabelledBy
-      }, null, 40, ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"])
+      }, null, 40, _hoisted_2)
     ]),
-    createVNode("div", _hoisted_2, [
-      createVNode("div", { class: $options.labelClass }, [
+    createElementVNode("div", _hoisted_3, [
+      createElementVNode("div", {
+        class: normalizeClass($options.labelClass)
+      }, [
         renderSlot(_ctx.$slots, "value", {
           value: $options.selectedNodes,
           placeholder: $props.placeholder
         }, () => [
           ($props.display === 'comma')
-            ? (openBlock(), createBlock(Fragment, { key: 0 }, [
+            ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                 createTextVNode(toDisplayString($options.label || 'empty'), 1)
               ], 64))
             : ($props.display === 'chip')
-              ? (openBlock(), createBlock(Fragment, { key: 1 }, [
-                  (openBlock(true), createBlock(Fragment, null, renderList($options.selectedNodes, (node) => {
-                    return (openBlock(), createBlock("div", {
+              ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList($options.selectedNodes, (node) => {
+                    return (openBlock(), createElementBlock("div", {
                       class: "p-treeselect-token",
                       key: node.key
                     }, [
-                      createVNode("span", _hoisted_3, toDisplayString(node.label), 1)
+                      createElementVNode("span", _hoisted_4, toDisplayString(node.label), 1)
                     ]))
                   }), 128)),
                   ($options.emptyValue)
-                    ? (openBlock(), createBlock(Fragment, { key: 0 }, [
+                    ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                         createTextVNode(toDisplayString($props.placeholder || 'empty'), 1)
                       ], 64))
                     : createCommentVNode("", true)
@@ -446,9 +449,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       ], 2)
     ]),
-    createVNode("div", _hoisted_4, [
+    createElementVNode("div", _hoisted_5, [
       renderSlot(_ctx.$slots, "indicator", {}, () => [
-        _hoisted_5
+        _hoisted_6
       ])
     ]),
     (openBlock(), createBlock(Teleport, {
@@ -463,19 +466,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: withCtx(() => [
           ($data.overlayVisible)
-            ? (openBlock(), createBlock("div", {
+            ? (openBlock(), createElementBlock("div", {
                 key: 0,
                 ref: $options.overlayRef,
-                onClick: _cache[6] || (_cache[6] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
-                class: $options.panelStyleClass
+                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                class: normalizeClass($options.panelStyleClass)
               }, [
                 renderSlot(_ctx.$slots, "header", {
                   value: $props.modelValue,
                   options: $props.options
                 }),
-                createVNode("div", {
+                createElementVNode("div", {
                   class: "p-treeselect-items-wrapper",
-                  style: {'max-height': $props.scrollHeight}
+                  style: normalizeStyle({'max-height': $props.scrollHeight})
                 }, [
                   createVNode(_component_TSTree, {
                     value: $props.options,
@@ -485,13 +488,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     expandedKeys: $data.expandedKeys,
                     "onUpdate:expandedKeys": $options.onNodeToggle,
                     metaKeySelection: $props.metaKeySelection,
-                    onNodeExpand: _cache[4] || (_cache[4] = $event => (_ctx.$emit('node-expand', $event))),
-                    onNodeCollapse: _cache[5] || (_cache[5] = $event => (_ctx.$emit('node-collapse', $event))),
+                    onNodeExpand: _cache[3] || (_cache[3] = $event => (_ctx.$emit('node-expand', $event))),
+                    onNodeCollapse: _cache[4] || (_cache[4] = $event => (_ctx.$emit('node-collapse', $event))),
                     onNodeSelect: $options.onNodeSelect,
                     onNodeUnselect: $options.onNodeUnselect
                   }, null, 8, ["value", "selectionMode", "onUpdate:selectionKeys", "selectionKeys", "expandedKeys", "onUpdate:expandedKeys", "metaKeySelection", "onNodeSelect", "onNodeUnselect"]),
                   ($options.emptyOptions)
-                    ? (openBlock(), createBlock("div", _hoisted_6, [
+                    ? (openBlock(), createElementBlock("div", _hoisted_7, [
                         renderSlot(_ctx.$slots, "empty", {}, () => [
                           createTextVNode(toDisplayString($options.emptyMessageText), 1)
                         ])

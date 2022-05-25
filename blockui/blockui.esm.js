@@ -1,5 +1,5 @@
 import { DomHandler, ZIndexUtils } from 'primevue/utils';
-import { openBlock, createBlock, mergeProps, renderSlot } from 'vue';
+import { openBlock, createElementBlock, mergeProps, renderSlot } from 'vue';
 
 var script = {
     name: 'BlockUI',
@@ -81,7 +81,7 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", mergeProps({
+  return (openBlock(), createElementBlock("div", mergeProps({
     ref: "container",
     class: "p-blockui-container"
   }, _ctx.$attrs), [

@@ -1,6 +1,6 @@
 import { DomHandler } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, Fragment, renderList, withCtx, withDirectives, createCommentVNode, toDisplayString, resolveDynamicComponent } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, createElementVNode, Fragment, renderList, createBlock, withCtx, normalizeClass, normalizeStyle, withDirectives, createCommentVNode, toDisplayString, resolveDynamicComponent } from 'vue';
 
 var script = {
     name: 'TabMenu',
@@ -123,9 +123,11 @@ const _hoisted_2 = {
   class: "p-tabmenu-nav p-reset",
   role: "tablist"
 };
-const _hoisted_3 = { class: "p-menuitem-text" };
+const _hoisted_3 = ["href", "onClick"];
 const _hoisted_4 = { class: "p-menuitem-text" };
-const _hoisted_5 = {
+const _hoisted_5 = ["href", "target", "onClick", "tabindex"];
+const _hoisted_6 = { class: "p-menuitem-text" };
+const _hoisted_7 = {
   ref: "inkbar",
   class: "p-tabmenu-ink-bar"
 };
@@ -134,10 +136,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = resolveComponent("router-link");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    createVNode("ul", _hoisted_2, [
-      (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item, i) => {
-        return (openBlock(), createBlock(Fragment, {
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
+    createElementVNode("ul", _hoisted_2, [
+      (openBlock(true), createElementBlock(Fragment, null, renderList($props.model, (item, i) => {
+        return (openBlock(), createElementBlock(Fragment, {
           key: $options.label(item) + '_' + i.toString()
         }, [
           (item.to && !$options.disabled(item))
@@ -148,14 +150,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }, {
                 default: withCtx(({navigate, href, isActive, isExactActive}) => [
                   ($options.visible(item))
-                    ? (openBlock(), createBlock("li", {
+                    ? (openBlock(), createElementBlock("li", {
                         key: 0,
-                        class: $options.getRouteItemClass(item,isActive,isExactActive),
-                        style: item.style,
+                        class: normalizeClass($options.getRouteItemClass(item,isActive,isExactActive)),
+                        style: normalizeStyle(item.style),
                         role: "tab"
                       }, [
                         (!_ctx.$slots.item)
-                          ? withDirectives((openBlock(), createBlock("a", {
+                          ? withDirectives((openBlock(), createElementBlock("a", {
                               key: 0,
                               href: href,
                               class: "p-menuitem-link",
@@ -163,13 +165,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               role: "presentation"
                             }, [
                               (item.icon)
-                                ? (openBlock(), createBlock("span", {
+                                ? (openBlock(), createElementBlock("span", {
                                     key: 0,
-                                    class: $options.getItemIcon(item)
+                                    class: normalizeClass($options.getItemIcon(item))
                                   }, null, 2))
                                 : createCommentVNode("", true),
-                              createVNode("span", _hoisted_3, toDisplayString($options.label(item)), 1)
-                            ], 8, ["href", "onClick"])), [
+                              createElementVNode("span", _hoisted_4, toDisplayString($options.label(item)), 1)
+                            ], 8, _hoisted_3)), [
                               [_directive_ripple]
                             ])
                           : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.item), {
@@ -182,13 +184,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 _: 2
               }, 1032, ["to"]))
             : ($options.visible(item))
-              ? (openBlock(), createBlock("li", {
+              ? (openBlock(), createElementBlock("li", {
                   key: 1,
-                  class: $options.getItemClass(item, i),
+                  class: normalizeClass($options.getItemClass(item, i)),
                   role: "tab"
                 }, [
                   (!_ctx.$slots.item)
-                    ? withDirectives((openBlock(), createBlock("a", {
+                    ? withDirectives((openBlock(), createElementBlock("a", {
                         key: 0,
                         href: item.url,
                         class: "p-menuitem-link",
@@ -198,13 +200,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         tabindex: $options.disabled(item) ? null : '0'
                       }, [
                         (item.icon)
-                          ? (openBlock(), createBlock("span", {
+                          ? (openBlock(), createElementBlock("span", {
                               key: 0,
-                              class: $options.getItemIcon(item)
+                              class: normalizeClass($options.getItemIcon(item))
                             }, null, 2))
                           : createCommentVNode("", true),
-                        createVNode("span", _hoisted_4, toDisplayString($options.label(item)), 1)
-                      ], 8, ["href", "target", "onClick", "tabindex"])), [
+                        createElementVNode("span", _hoisted_6, toDisplayString($options.label(item)), 1)
+                      ], 8, _hoisted_5)), [
                         [_directive_ripple]
                       ])
                     : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.item), {
@@ -215,7 +217,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               : createCommentVNode("", true)
         ], 64))
       }), 128)),
-      createVNode("li", _hoisted_5, null, 512)
+      createElementVNode("li", _hoisted_7, null, 512)
     ], 512)
   ]))
 }

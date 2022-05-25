@@ -52,21 +52,23 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default'],
-        'tooltip': Tooltip__default['default']
+        'ripple': Ripple__default["default"],
+        'tooltip': Tooltip__default["default"]
     }
 };
 
-const _hoisted_1$1 = { class: "p-menuitem-text" };
-const _hoisted_2$1 = /*#__PURE__*/vue.createTextVNode("    ");
-const _hoisted_3 = {
+const _hoisted_1$1 = ["href", "onClick"];
+const _hoisted_2$1 = { class: "p-menuitem-text" };
+const _hoisted_3 = /*#__PURE__*/vue.createTextVNode("    ");
+const _hoisted_4 = {
   key: 0,
   class: "pi pi-info-circle",
   style: {}
 };
-const _hoisted_4 = { class: "p-menuitem-text" };
-const _hoisted_5 = /*#__PURE__*/vue.createTextVNode("    ");
-const _hoisted_6 = {
+const _hoisted_5 = ["href", "target", "tabindex"];
+const _hoisted_6 = { class: "p-menuitem-text" };
+const _hoisted_7 = /*#__PURE__*/vue.createTextVNode("    ");
+const _hoisted_8 = {
   key: 0,
   class: "pi pi-info-circle",
   style: {}
@@ -78,14 +80,14 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
 
   return ($options.visible())
-    ? (vue.openBlock(), vue.createBlock("li", {
+    ? (vue.openBlock(), vue.createElementBlock("li", {
         key: 0,
-        class: $options.containerClass,
+        class: vue.normalizeClass($options.containerClass),
         role: "none",
-        style: $props.item.style
+        style: vue.normalizeStyle($props.item.style)
       }, [
         (!$props.template)
-          ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+          ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
               ($props.item.to && !$options.disabled($props.item))
                 ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                     key: 0,
@@ -93,48 +95,48 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     custom: ""
                   }, {
                     default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                      vue.withDirectives(vue.createVNode("a", {
+                      vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                         href: href,
                         onClick: $event => ($options.onClick($event, navigate)),
-                        class: $options.linkClass($props.item, {isActive, isExactActive}),
+                        class: vue.normalizeClass($options.linkClass($props.item, {isActive, isExactActive})),
                         role: "menuitem"
                       }, [
-                        vue.createVNode("span", {
-                          class: ['p-menuitem-icon', $props.item.icon]
+                        vue.createElementVNode("span", {
+                          class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
                         }, null, 2),
-                        vue.createVNode("span", _hoisted_1$1, vue.toDisplayString($options.label()), 1),
-                        _hoisted_2$1,
+                        vue.createElementVNode("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1),
+                        _hoisted_3,
                         ($props.item.info)
-                          ? vue.withDirectives((vue.openBlock(), vue.createBlock("i", _hoisted_3, null, 512)), [
+                          ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("i", _hoisted_4, null, 512)), [
                               [_directive_tooltip, $props.item.info]
                             ])
                           : vue.createCommentVNode("", true)
-                      ], 10, ["href", "onClick"]), [
+                      ], 10, _hoisted_1$1)), [
                         [_directive_ripple]
                       ])
                     ]),
                     _: 1
                   }, 8, ["to"]))
-                : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                : vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                     key: 1,
                     href: $props.item.url,
-                    class: $options.linkClass($props.item),
-                    onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+                    class: vue.normalizeClass($options.linkClass($props.item)),
+                    onClick: _cache[0] || (_cache[0] = (...args) => ($options.onClick && $options.onClick(...args))),
                     target: $props.item.target,
                     role: "menuitem",
                     tabindex: $options.disabled($props.item) ? null : '0'
                   }, [
-                    vue.createVNode("span", {
-                      class: ['p-menuitem-icon', $props.item.icon]
+                    vue.createElementVNode("span", {
+                      class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
                     }, null, 2),
-                    vue.createVNode("span", _hoisted_4, vue.toDisplayString($options.label()), 1),
-                    _hoisted_5,
+                    vue.createElementVNode("span", _hoisted_6, vue.toDisplayString($options.label()), 1),
+                    _hoisted_7,
                     ($props.item.info)
-                      ? vue.withDirectives((vue.openBlock(), vue.createBlock("i", _hoisted_6, null, 512)), [
+                      ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("i", _hoisted_8, null, 512)), [
                           [_directive_tooltip, $props.item.info]
                         ])
                       : vue.createCommentVNode("", true)
-                  ], 10, ["href", "target", "tabindex"])), [
+                  ], 10, _hoisted_5)), [
                     [_directive_ripple]
                   ])
             ], 64))
@@ -325,7 +327,7 @@ var script = {
             this.container = el;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.target
             });
@@ -369,29 +371,29 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, {
       default: vue.withCtx(() => [
         ($props.popup ? $data.overlayVisible : true)
-          ? (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+          ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
               key: 0,
               ref: $options.containerRef,
               class: $options.containerClass
             }, _ctx.$attrs, {
-              onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
             }), [
-              vue.createVNode("ul", _hoisted_1, [
-                (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
-                  return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+              vue.createElementVNode("ul", _hoisted_1, [
+                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
+                  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                     key: $options.label(item) + i.toString()
                   }, [
                     (item.items && $options.visible(item) && !item.separator)
-                      ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                      ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                           (item.items)
-                            ? (vue.openBlock(), vue.createBlock("li", _hoisted_2, [
+                            ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_2, [
                                 vue.renderSlot(_ctx.$slots, "item", { item: item }, () => [
                                   vue.createTextVNode(vue.toDisplayString($options.label(item)), 1)
                                 ])
                               ]))
                             : vue.createCommentVNode("", true),
-                          (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList(item.items, (child, j) => {
-                            return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(item.items, (child, j) => {
+                            return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                               key: child.label + i + j
                             }, [
                               ($options.visible(child) && !child.separator)
@@ -403,9 +405,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     exact: $props.exact
                                   }, null, 8, ["item", "onClick", "template", "exact"]))
                                 : ($options.visible(child) && child.separator)
-                                  ? (vue.openBlock(), vue.createBlock("li", {
-                                      class: ['p-menu-separator', child.class],
-                                      style: child.style,
+                                  ? (vue.openBlock(), vue.createElementBlock("li", {
+                                      class: vue.normalizeClass(['p-menu-separator', child.class]),
+                                      style: vue.normalizeStyle(child.style),
                                       key: 'separator' + i + j,
                                       role: "separator"
                                     }, null, 6))
@@ -414,9 +416,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           }), 128))
                         ], 64))
                       : ($options.visible(item) && item.separator)
-                        ? (vue.openBlock(), vue.createBlock("li", {
-                            class: ['p-menu-separator', item.class],
-                            style: item.style,
+                        ? (vue.openBlock(), vue.createElementBlock("li", {
+                            class: vue.normalizeClass(['p-menu-separator', item.class]),
+                            style: vue.normalizeStyle(item.style),
                             key: 'separator' + i.toString(),
                             role: "separator"
                           }, null, 6))

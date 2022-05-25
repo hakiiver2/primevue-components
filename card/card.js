@@ -27,28 +27,28 @@ this.primevue.card = (function (vue) {
     };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
         (_ctx.$slots.header)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
               vue.renderSlot(_ctx.$slots, "header")
             ]))
           : vue.createCommentVNode("", true),
-        vue.createVNode("div", _hoisted_3, [
+        vue.createElementVNode("div", _hoisted_3, [
           (_ctx.$slots.title)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_4, [
                 vue.renderSlot(_ctx.$slots, "title")
               ]))
             : vue.createCommentVNode("", true),
           (_ctx.$slots.subtitle)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_5, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_5, [
                 vue.renderSlot(_ctx.$slots, "subtitle")
               ]))
             : vue.createCommentVNode("", true),
-          vue.createVNode("div", _hoisted_6, [
+          vue.createElementVNode("div", _hoisted_6, [
             vue.renderSlot(_ctx.$slots, "content")
           ]),
           (_ctx.$slots.footer)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_7, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_7, [
                 vue.renderSlot(_ctx.$slots, "footer")
               ]))
             : vue.createCommentVNode("", true)
@@ -90,4 +90,4 @@ this.primevue.card = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

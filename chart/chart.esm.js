@@ -1,4 +1,4 @@
-import { openBlock, createBlock, createVNode } from 'vue';
+import { openBlock, createElementBlock, createElementVNode } from 'vue';
 
 var script = {
     name: 'Chart',
@@ -101,15 +101,16 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-chart" };
+const _hoisted_2 = ["width", "height"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    createVNode("canvas", {
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
+    createElementVNode("canvas", {
       ref: "canvas",
       width: $props.width,
       height: $props.height,
-      onClick: _cache[1] || (_cache[1] = $event => ($options.onCanvasClick($event)))
-    }, null, 8, ["width", "height"])
+      onClick: _cache[0] || (_cache[0] = $event => ($options.onCanvasClick($event)))
+    }, null, 8, _hoisted_2)
   ]))
 }
 

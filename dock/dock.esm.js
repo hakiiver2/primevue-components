@@ -1,6 +1,6 @@
 import Ripple from 'primevue/ripple';
 import Tooltip from 'primevue/tooltip';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, Fragment, renderList, withCtx, withDirectives, resolveDynamicComponent } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, createElementVNode, Fragment, renderList, normalizeClass, createBlock, withCtx, withDirectives, resolveDynamicComponent, normalizeStyle, createVNode } from 'vue';
 
 var script$1 = {
     name: 'DockSub',
@@ -75,28 +75,31 @@ var script$1 = {
 };
 
 const _hoisted_1 = { class: "p-dock-list-container" };
+const _hoisted_2 = ["onMouseenter"];
+const _hoisted_3 = ["href", "target", "onClick"];
+const _hoisted_4 = ["href", "target", "onClick", "tabindex"];
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = resolveComponent("router-link");
   const _directive_ripple = resolveDirective("ripple");
   const _directive_tooltip = resolveDirective("tooltip");
 
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    createVNode("ul", {
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
+    createElementVNode("ul", {
       ref: "list",
       class: "p-dock-list",
       role: "menu",
-      onMouseleave: _cache[1] || (_cache[1] = (...args) => ($options.onListMouseLeave && $options.onListMouseLeave(...args)))
+      onMouseleave: _cache[0] || (_cache[0] = (...args) => ($options.onListMouseLeave && $options.onListMouseLeave(...args)))
     }, [
-      (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item, index) => {
-        return (openBlock(), createBlock("li", {
-          class: $options.itemClass(index),
+      (openBlock(true), createElementBlock(Fragment, null, renderList($props.model, (item, index) => {
+        return (openBlock(), createElementBlock("li", {
+          class: normalizeClass($options.itemClass(index)),
           key: index,
           role: "none",
           onMouseenter: $event => ($options.onItemMouseEnter(index))
         }, [
           (!$props.templates['item'])
-            ? (openBlock(), createBlock(Fragment, { key: 0 }, [
+            ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                 (item.to && !$options.disabled(item))
                   ? (openBlock(), createBlock(_component_router_link, {
                       key: 0,
@@ -104,17 +107,17 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                       custom: ""
                     }, {
                       default: withCtx(({navigate, href, isActive, isExactActive}) => [
-                        withDirectives(createVNode("a", {
+                        withDirectives((openBlock(), createElementBlock("a", {
                           href: href,
                           role: "menuitem",
-                          class: $options.linkClass(item, {isActive, isExactActive}),
+                          class: normalizeClass($options.linkClass(item, {isActive, isExactActive})),
                           target: item.target,
                           onClick: $event => ($options.onItemClick($event, item, navigate))
                         }, [
                           (!$props.templates['icon'])
-                            ? withDirectives((openBlock(), createBlock("span", {
+                            ? withDirectives((openBlock(), createElementBlock("span", {
                                 key: 0,
-                                class: ['p-dock-action-icon', item.icon]
+                                class: normalizeClass(['p-dock-action-icon', item.icon])
                               }, null, 2)), [
                                 [_directive_ripple]
                               ])
@@ -122,25 +125,25 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                                 key: 1,
                                 item: item
                               }, null, 8, ["item"]))
-                        ], 10, ["href", "target", "onClick"]), [
+                        ], 10, _hoisted_3)), [
                           [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions]
                         ])
                       ]),
                       _: 2
                     }, 1032, ["to"]))
-                  : withDirectives((openBlock(), createBlock("a", {
+                  : withDirectives((openBlock(), createElementBlock("a", {
                       key: 1,
                       href: item.url,
                       role: "menuitem",
-                      class: $options.linkClass(item),
+                      class: normalizeClass($options.linkClass(item)),
                       target: item.target,
                       onClick: $event => ($options.onItemClick($event, item)),
                       tabindex: $options.disabled(item) ? null : '0'
                     }, [
                       (!$props.templates['icon'])
-                        ? withDirectives((openBlock(), createBlock("span", {
+                        ? withDirectives((openBlock(), createElementBlock("span", {
                             key: 0,
-                            class: ['p-dock-action-icon', item.icon]
+                            class: normalizeClass(['p-dock-action-icon', item.icon])
                           }, null, 2)), [
                             [_directive_ripple]
                           ])
@@ -148,7 +151,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                             key: 1,
                             item: item
                           }, null, 8, ["item"]))
-                    ], 10, ["href", "target", "onClick", "tabindex"])), [
+                    ], 10, _hoisted_4)), [
                       [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions]
                     ])
               ], 64))
@@ -156,7 +159,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                 key: 1,
                 item: item
               }, null, 8, ["item"]))
-        ], 42, ["onMouseenter"]))
+        ], 42, _hoisted_2))
       }), 128))
     ], 544)
   ]))
@@ -193,9 +196,9 @@ var script = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DockSub = resolveComponent("DockSub");
 
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
-    style: $props.style
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
+    style: normalizeStyle($props.style)
   }, [
     createVNode(_component_DockSub, {
       model: $props.model,

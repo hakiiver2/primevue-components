@@ -2,7 +2,7 @@ import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
 import Tooltip from 'primevue/tooltip';
 import { DomHandler } from 'primevue/utils';
-import { resolveComponent, resolveDirective, openBlock, createBlock, Fragment, createVNode, renderSlot, renderList, withDirectives, createCommentVNode, resolveDynamicComponent } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, Fragment, createElementVNode, normalizeClass, normalizeStyle, renderSlot, createVNode, renderList, withDirectives, createCommentVNode, createBlock, resolveDynamicComponent } from 'vue';
 
 var script = {
     name: 'SpeedDial',
@@ -246,54 +246,56 @@ var script = {
     }
 };
 
+const _hoisted_1 = ["href", "target", "onClick"];
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_SDButton = resolveComponent("SDButton");
   const _directive_tooltip = resolveDirective("tooltip");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock(Fragment, null, [
-    createVNode("div", {
+  return (openBlock(), createElementBlock(Fragment, null, [
+    createElementVNode("div", {
       ref: $options.containerRef,
-      class: $options.containerClass,
-      style: $props.style
+      class: normalizeClass($options.containerClass),
+      style: normalizeStyle($props.style)
     }, [
       renderSlot(_ctx.$slots, "button", { toggle: $options.onClick }, () => [
         createVNode(_component_SDButton, {
           type: "button",
-          class: $options.buttonClassName,
+          class: normalizeClass($options.buttonClassName),
           icon: $options.iconClassName,
-          onClick: _cache[1] || (_cache[1] = $event => ($options.onClick($event))),
+          onClick: _cache[0] || (_cache[0] = $event => ($options.onClick($event))),
           disabled: $props.disabled
         }, null, 8, ["class", "icon", "disabled"])
       ]),
-      createVNode("ul", {
+      createElementVNode("ul", {
         ref: $options.listRef,
         class: "p-speeddial-list",
         role: "menu"
       }, [
-        (openBlock(true), createBlock(Fragment, null, renderList($props.model, (item, index) => {
-          return (openBlock(), createBlock("li", {
+        (openBlock(true), createElementBlock(Fragment, null, renderList($props.model, (item, index) => {
+          return (openBlock(), createElementBlock("li", {
             key: index,
             class: "p-speeddial-item",
-            style: $options.getItemStyle(index),
+            style: normalizeStyle($options.getItemStyle(index)),
             role: "none"
           }, [
             (!_ctx.$slots.item)
-              ? withDirectives((openBlock(), createBlock("a", {
+              ? withDirectives((openBlock(), createElementBlock("a", {
                   key: 0,
                   href: item.url || '#',
                   role: "menuitem",
-                  class: ['p-speeddial-action', { 'p-disabled': item.disabled }],
+                  class: normalizeClass(['p-speeddial-action', { 'p-disabled': item.disabled }]),
                   target: item.target,
                   onClick: $event => ($options.onItemClick($event, item))
                 }, [
                   (item.icon)
-                    ? (openBlock(), createBlock("span", {
+                    ? (openBlock(), createElementBlock("span", {
                         key: 0,
-                        class: ['p-speeddial-action-icon', item.icon]
+                        class: normalizeClass(['p-speeddial-action-icon', item.icon])
                       }, null, 2))
                     : createCommentVNode("", true)
-                ], 10, ["href", "target", "onClick"])), [
+                ], 10, _hoisted_1)), [
                   [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions],
                   [_directive_ripple]
                 ])
@@ -306,10 +308,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ], 512)
     ], 6),
     ($props.mask)
-      ? (openBlock(), createBlock("div", {
+      ? (openBlock(), createElementBlock("div", {
           key: 0,
-          class: $options.maskClassName,
-          style: $props.maskStyle
+          class: normalizeClass($options.maskClassName),
+          style: normalizeStyle($props.maskStyle)
         }, null, 6))
       : createCommentVNode("", true)
   ], 64))

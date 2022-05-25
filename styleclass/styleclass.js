@@ -178,4 +178,4 @@ this.primevue.styleclass = (function (utils) {
 
     return StyleClass;
 
-}(primevue.utils));
+})(primevue.utils);

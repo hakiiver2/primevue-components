@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, createTextVNode, toDisplayString } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, renderSlot, createTextVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'Badge',
@@ -27,7 +27,9 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", { class: $options.badgeClass }, [
+  return (openBlock(), createElementBlock("span", {
+    class: normalizeClass($options.badgeClass)
+  }, [
     renderSlot(_ctx.$slots, "default", {}, () => [
       createTextVNode(toDisplayString($props.value), 1)
     ])

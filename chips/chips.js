@@ -141,43 +141,45 @@ this.primevue.chips = (function (vue) {
     };
 
     const _hoisted_1 = { class: "p-chips-token-label" };
-    const _hoisted_2 = { class: "p-chips-input-token" };
+    const _hoisted_2 = ["onClick"];
+    const _hoisted_3 = { class: "p-chips-input-token" };
+    const _hoisted_4 = ["disabled"];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", {
-        class: $options.containerClass,
-        style: $props.style
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass),
+        style: vue.normalizeStyle($props.style)
       }, [
-        vue.createVNode("ul", {
-          class: ['p-inputtext p-chips-multiple-container', {'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}],
-          onClick: _cache[6] || (_cache[6] = $event => ($options.onWrapperClick()))
+        vue.createElementVNode("ul", {
+          class: vue.normalizeClass(['p-inputtext p-chips-multiple-container', {'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
+          onClick: _cache[5] || (_cache[5] = $event => ($options.onWrapperClick()))
         }, [
-          (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.modelValue, (val, i) => {
-            return (vue.openBlock(), vue.createBlock("li", {
+          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.modelValue, (val, i) => {
+            return (vue.openBlock(), vue.createElementBlock("li", {
               key: `${i}_${val}`,
               class: "p-chips-token"
             }, [
               vue.renderSlot(_ctx.$slots, "chip", { value: val }, () => [
-                vue.createVNode("span", _hoisted_1, vue.toDisplayString(val), 1)
+                vue.createElementVNode("span", _hoisted_1, vue.toDisplayString(val), 1)
               ]),
-              vue.createVNode("span", {
+              vue.createElementVNode("span", {
                 class: "p-chips-token-icon pi pi-times-circle",
                 onClick: $event => ($options.removeItem($event, i))
-              }, null, 8, ["onClick"])
+              }, null, 8, _hoisted_2)
             ]))
           }), 128)),
-          vue.createVNode("li", _hoisted_2, [
-            vue.createVNode("input", vue.mergeProps({
+          vue.createElementVNode("li", _hoisted_3, [
+            vue.createElementVNode("input", vue.mergeProps({
               ref: "input",
               type: "text"
             }, _ctx.$attrs, {
-              onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-              onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur($event))),
-              onInput: _cache[3] || (_cache[3] = (...args) => ($options.onInput && $options.onInput(...args))),
-              onKeydown: _cache[4] || (_cache[4] = $event => ($options.onKeyDown($event))),
-              onPaste: _cache[5] || (_cache[5] = $event => ($options.onPaste($event))),
+              onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+              onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event))),
+              onInput: _cache[2] || (_cache[2] = (...args) => ($options.onInput && $options.onInput(...args))),
+              onKeydown: _cache[3] || (_cache[3] = $event => ($options.onKeyDown($event))),
+              onPaste: _cache[4] || (_cache[4] = $event => ($options.onPaste($event))),
               disabled: _ctx.$attrs.disabled || $options.maxedOut
-            }), null, 16, ["disabled"])
+            }), null, 16, _hoisted_4)
           ])
         ], 2)
       ], 6))
@@ -217,4 +219,4 @@ this.primevue.chips = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

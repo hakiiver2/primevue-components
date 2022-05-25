@@ -1,6 +1,6 @@
 import { UniqueComponentId, DomHandler } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, renderSlot, createCommentVNode, createVNode, withDirectives, Fragment, renderList } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, normalizeClass, renderSlot, createCommentVNode, createElementVNode, withDirectives, normalizeStyle, Fragment, renderList } from 'vue';
 
 var script = {
     name: 'Carousel',
@@ -445,11 +445,15 @@ var script = {
     }
 };
 
-const _hoisted_1 = {
+const _hoisted_1 = ["id"];
+const _hoisted_2 = {
   key: 0,
   class: "p-carousel-header"
 };
-const _hoisted_2 = {
+const _hoisted_3 = ["disabled"];
+const _hoisted_4 = ["disabled"];
+const _hoisted_5 = ["onClick"];
+const _hoisted_6 = {
   key: 1,
   class: "p-carousel-footer"
 };
@@ -457,49 +461,53 @@ const _hoisted_2 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     id: $data.id,
-    class: ['p-carousel p-component', {'p-carousel-vertical': $options.isVertical(), 'p-carousel-horizontal': !$options.isVertical()}]
+    class: normalizeClass(['p-carousel p-component', {'p-carousel-vertical': $options.isVertical(), 'p-carousel-horizontal': !$options.isVertical()}])
   }, [
     (_ctx.$slots.header)
-      ? (openBlock(), createBlock("div", _hoisted_1, [
+      ? (openBlock(), createElementBlock("div", _hoisted_2, [
           renderSlot(_ctx.$slots, "header")
         ]))
       : createCommentVNode("", true),
-    createVNode("div", { class: $options.contentClasses }, [
-      createVNode("div", { class: $options.containerClasses }, [
-        withDirectives(createVNode("button", {
-          class: ['p-carousel-prev p-link', {'p-disabled': $options.backwardIsDisabled}],
+    createElementVNode("div", {
+      class: normalizeClass($options.contentClasses)
+    }, [
+      createElementVNode("div", {
+        class: normalizeClass($options.containerClasses)
+      }, [
+        withDirectives((openBlock(), createElementBlock("button", {
+          class: normalizeClass(['p-carousel-prev p-link', {'p-disabled': $options.backwardIsDisabled}]),
           disabled: $options.backwardIsDisabled,
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.navBackward && $options.navBackward(...args))),
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.navBackward && $options.navBackward(...args))),
           type: "button"
         }, [
-          createVNode("span", {
-            class: ['p-carousel-prev-icon pi', {'pi-chevron-left': !$options.isVertical(),'pi-chevron-up': $options.isVertical()}]
+          createElementVNode("span", {
+            class: normalizeClass(['p-carousel-prev-icon pi', {'pi-chevron-left': !$options.isVertical(),'pi-chevron-up': $options.isVertical()}])
           }, null, 2)
-        ], 10, ["disabled"]), [
+        ], 10, _hoisted_3)), [
           [_directive_ripple]
         ]),
-        createVNode("div", {
+        createElementVNode("div", {
           class: "p-carousel-items-content",
-          style: [{'height': $options.isVertical() ? $props.verticalViewPortHeight : 'auto'}],
-          onTouchend: _cache[3] || (_cache[3] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
-          onTouchstart: _cache[4] || (_cache[4] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
-          onTouchmove: _cache[5] || (_cache[5] = (...args) => ($options.onTouchMove && $options.onTouchMove(...args)))
+          style: normalizeStyle([{'height': $options.isVertical() ? $props.verticalViewPortHeight : 'auto'}]),
+          onTouchend: _cache[2] || (_cache[2] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
+          onTouchstart: _cache[3] || (_cache[3] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
+          onTouchmove: _cache[4] || (_cache[4] = (...args) => ($options.onTouchMove && $options.onTouchMove(...args)))
         }, [
-          createVNode("div", {
+          createElementVNode("div", {
             ref: "itemsContainer",
             class: "p-carousel-items-container",
-            onTransitionend: _cache[2] || (_cache[2] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args)))
+            onTransitionend: _cache[1] || (_cache[1] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args)))
           }, [
             ($options.isCircular())
-              ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($props.value.slice(-1 * $data.d_numVisible), (item, index) => {
-                  return (openBlock(), createBlock("div", {
+              ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList($props.value.slice(-1 * $data.d_numVisible), (item, index) => {
+                  return (openBlock(), createElementBlock("div", {
                     key: index + '_scloned',
-                    class: ['p-carousel-item p-carousel-item-cloned',
+                    class: normalizeClass(['p-carousel-item p-carousel-item-cloned',
 								{'p-carousel-item-active': ($data.totalShiftedItems * -1) === ($props.value.length + $data.d_numVisible),
 								'p-carousel-item-start': 0 === index,
-								'p-carousel-item-end': $props.value.slice(-1 * $data.d_numVisible).length - 1 === index}]
+								'p-carousel-item-end': $props.value.slice(-1 * $data.d_numVisible).length - 1 === index}])
                   }, [
                     renderSlot(_ctx.$slots, "item", {
                       data: item,
@@ -508,13 +516,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   ], 2))
                 }), 128))
               : createCommentVNode("", true),
-            (openBlock(true), createBlock(Fragment, null, renderList($props.value, (item, index) => {
-              return (openBlock(), createBlock("div", {
+            (openBlock(true), createElementBlock(Fragment, null, renderList($props.value, (item, index) => {
+              return (openBlock(), createElementBlock("div", {
                 key: index,
-                class: ['p-carousel-item',
+                class: normalizeClass(['p-carousel-item',
 							{'p-carousel-item-active': $options.firstIndex() <= index && $options.lastIndex() >= index,
 							'p-carousel-item-start': $options.firstIndex() === index,
-							'p-carousel-item-end': $options.lastIndex() === index}]
+							'p-carousel-item-end': $options.lastIndex() === index}])
               }, [
                 renderSlot(_ctx.$slots, "item", {
                   data: item,
@@ -523,13 +531,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ], 2))
             }), 128)),
             ($options.isCircular())
-              ? (openBlock(true), createBlock(Fragment, { key: 1 }, renderList($props.value.slice(0, $data.d_numVisible), (item, index) => {
-                  return (openBlock(), createBlock("div", {
+              ? (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList($props.value.slice(0, $data.d_numVisible), (item, index) => {
+                  return (openBlock(), createElementBlock("div", {
                     key: index + '_fcloned',
-                    class: ['p-carousel-item p-carousel-item-cloned',
+                    class: normalizeClass(['p-carousel-item p-carousel-item-cloned',
 								{'p-carousel-item-active': $data.totalShiftedItems === 0,
 								'p-carousel-item-start': 0 === index,
-								'p-carousel-item-end': $props.value.slice(0, $data.d_numVisible).length - 1 === index}]
+								'p-carousel-item-end': $props.value.slice(0, $data.d_numVisible).length - 1 === index}])
                   }, [
                     renderSlot(_ctx.$slots, "item", {
                       data: item,
@@ -540,45 +548,45 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               : createCommentVNode("", true)
           ], 544)
         ], 36),
-        withDirectives(createVNode("button", {
-          class: ['p-carousel-next p-link', {'p-disabled': $options.forwardIsDisabled}],
+        withDirectives((openBlock(), createElementBlock("button", {
+          class: normalizeClass(['p-carousel-next p-link', {'p-disabled': $options.forwardIsDisabled}]),
           disabled: $options.forwardIsDisabled,
-          onClick: _cache[6] || (_cache[6] = (...args) => ($options.navForward && $options.navForward(...args))),
+          onClick: _cache[5] || (_cache[5] = (...args) => ($options.navForward && $options.navForward(...args))),
           type: "button"
         }, [
-          createVNode("span", {
-            class: ['p-carousel-prev-icon pi', {'pi-chevron-right': !$options.isVertical(),'pi-chevron-down': $options.isVertical()}]
+          createElementVNode("span", {
+            class: normalizeClass(['p-carousel-prev-icon pi', {'pi-chevron-right': !$options.isVertical(),'pi-chevron-down': $options.isVertical()}])
           }, null, 2)
-        ], 10, ["disabled"]), [
+        ], 10, _hoisted_4)), [
           [_directive_ripple]
         ])
       ], 2),
       ($options.totalIndicators >= 0)
-        ? (openBlock(), createBlock("ul", {
+        ? (openBlock(), createElementBlock("ul", {
             key: 0,
-            class: $options.indicatorsContentClasses
+            class: normalizeClass($options.indicatorsContentClasses)
           }, [
-            (openBlock(true), createBlock(Fragment, null, renderList($options.totalIndicators, (indicator, i) => {
-              return (openBlock(), createBlock("li", {
+            (openBlock(true), createElementBlock(Fragment, null, renderList($options.totalIndicators, (indicator, i) => {
+              return (openBlock(), createElementBlock("li", {
                 key: 'p-carousel-indicator-' + i.toString(),
-                class: ['p-carousel-indicator', {'p-highlight': $data.d_page === i}]
+                class: normalizeClass(['p-carousel-indicator', {'p-highlight': $data.d_page === i}])
               }, [
-                createVNode("button", {
+                createElementVNode("button", {
                   class: "p-link",
                   onClick: $event => ($options.onIndicatorClick($event, i)),
                   type: "button"
-                }, null, 8, ["onClick"])
+                }, null, 8, _hoisted_5)
               ], 2))
             }), 128))
           ], 2))
         : createCommentVNode("", true)
     ], 2),
     (_ctx.$slots.footer)
-      ? (openBlock(), createBlock("div", _hoisted_2, [
+      ? (openBlock(), createElementBlock("div", _hoisted_6, [
           renderSlot(_ctx.$slots, "footer")
         ]))
       : createCommentVNode("", true)
-  ], 10, ["id"]))
+  ], 10, _hoisted_1))
 }
 
 function styleInject(css, ref) {

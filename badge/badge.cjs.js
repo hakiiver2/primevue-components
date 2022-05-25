@@ -29,7 +29,9 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("span", { class: $options.badgeClass }, [
+  return (vue.openBlock(), vue.createElementBlock("span", {
+    class: vue.normalizeClass($options.badgeClass)
+  }, [
     vue.renderSlot(_ctx.$slots, "default", {}, () => [
       vue.createTextVNode(vue.toDisplayString($props.value), 1)
     ])

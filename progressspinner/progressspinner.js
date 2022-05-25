@@ -32,15 +32,16 @@ this.primevue.progressspinner = (function (vue) {
       role: "alert",
       "aria-busy": "true"
     };
+    const _hoisted_2 = ["fill", "stroke-width"];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-        (vue.openBlock(), vue.createBlock("svg", {
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+        (vue.openBlock(), vue.createElementBlock("svg", {
           class: "p-progress-spinner-svg",
           viewBox: "25 25 50 50",
-          style: $options.svgStyle
+          style: vue.normalizeStyle($options.svgStyle)
         }, [
-          vue.createVNode("circle", {
+          vue.createElementVNode("circle", {
             class: "p-progress-spinner-circle",
             cx: "50",
             cy: "50",
@@ -48,7 +49,7 @@ this.primevue.progressspinner = (function (vue) {
             fill: $props.fill,
             "stroke-width": $props.strokeWidth,
             strokeMiterlimit: "10"
-          }, null, 8, ["fill", "stroke-width"])
+          }, null, 8, _hoisted_2)
         ], 4))
       ]))
     }
@@ -87,4 +88,4 @@ this.primevue.progressspinner = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

@@ -239,26 +239,31 @@ var script = {
     }
 };
 
-const _hoisted_1 = /*#__PURE__*/vue.createVNode("div", { class: "p-splitter-gutter-handle" }, null, -1);
+const _hoisted_1 = ["onMousedown", "onTouchstart", "onTouchmove", "onTouchend"];
+const _hoisted_2 = /*#__PURE__*/vue.createElementVNode("div", { class: "p-splitter-gutter-handle" }, null, -1);
+const _hoisted_3 = [
+  _hoisted_2
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
-    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.panels, (panel, i) => {
-      return (vue.openBlock(), vue.createBlock(vue.Fragment, { key: i }, [
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass($options.containerClass)
+  }, [
+    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.panels, (panel, i) => {
+      return (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: i }, [
         (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(panel))),
         (i !== ($options.panels.length -1))
-          ? (vue.openBlock(), vue.createBlock("div", {
+          ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
               class: "p-splitter-gutter",
-              style: $options.gutterStyle,
+              style: vue.normalizeStyle($options.gutterStyle),
+              ref_for: true,
               ref: "splitterGutter",
               onMousedown: $event => ($options.onGutterMouseDown($event, i)),
               onTouchstart: $event => ($options.onGutterTouchStart($event, i)),
               onTouchmove: $event => ($options.onGutterTouchMove($event, i)),
               onTouchend: $event => ($options.onGutterTouchEnd($event, i))
-            }, [
-              _hoisted_1
-            ], 44, ["onMousedown", "onTouchstart", "onTouchmove", "onTouchend"]))
+            }, _hoisted_3, 44, _hoisted_1))
           : vue.createCommentVNode("", true)
       ], 64))
     }), 128))

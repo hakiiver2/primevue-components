@@ -1,7 +1,7 @@
 import { ObjectUtils, DomHandler, ZIndexUtils, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, Fragment, renderList, withDirectives, createVNode, resolveDynamicComponent, toDisplayString, createCommentVNode, renderSlot, createTextVNode, Teleport, Transition, withCtx } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, Fragment, renderList, normalizeClass, withDirectives, createBlock, resolveDynamicComponent, toDisplayString, createCommentVNode, createElementVNode, renderSlot, createTextVNode, Teleport, createVNode, Transition, withCtx } from 'vue';
 
 var script$1 = {
     name: 'CascadeSelectSub',
@@ -166,11 +166,12 @@ const _hoisted_1$1 = {
   role: "listbox",
   "aria-orientation": "horizontal"
 };
-const _hoisted_2$1 = {
+const _hoisted_2$1 = ["onClick", "onKeydown"];
+const _hoisted_3$1 = {
   key: 1,
   class: "p-cascadeselect-item-text"
 };
-const _hoisted_3 = {
+const _hoisted_4$1 = {
   key: 2,
   class: "p-cascadeselect-group-icon pi pi-angle-right"
 };
@@ -179,14 +180,14 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CascadeSelectSub = resolveComponent("CascadeSelectSub", true);
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("ul", _hoisted_1$1, [
-    (openBlock(true), createBlock(Fragment, null, renderList($props.options, (option, i) => {
-      return (openBlock(), createBlock("li", {
+  return (openBlock(), createElementBlock("ul", _hoisted_1$1, [
+    (openBlock(true), createElementBlock(Fragment, null, renderList($props.options, (option, i) => {
+      return (openBlock(), createElementBlock("li", {
         key: $options.getOptionLabelToRender(option),
-        class: $options.getItemClass(option),
+        class: normalizeClass($options.getItemClass(option)),
         role: "none"
       }, [
-        withDirectives(createVNode("div", {
+        withDirectives((openBlock(), createElementBlock("div", {
           class: "p-cascadeselect-item-content",
           onClick: $event => ($options.onOptionClick($event, option)),
           tabindex: "0",
@@ -197,11 +198,11 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                 key: 0,
                 option: option
               }, null, 8, ["option"]))
-            : (openBlock(), createBlock("span", _hoisted_2$1, toDisplayString($options.getOptionLabelToRender(option)), 1)),
+            : (openBlock(), createElementBlock("span", _hoisted_3$1, toDisplayString($options.getOptionLabelToRender(option)), 1)),
           ($options.isOptionGroup(option))
-            ? (openBlock(), createBlock("span", _hoisted_3))
+            ? (openBlock(), createElementBlock("span", _hoisted_4$1))
             : createCommentVNode("", true)
-        ], 40, ["onClick", "onKeydown"]), [
+        ], 40, _hoisted_2$1)), [
           [_directive_ripple]
         ]),
         ($options.isOptionGroup(option) && $options.isOptionActive(option))
@@ -534,33 +535,37 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = { class: "p-cascadeselect-items-wrapper" };
+const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"];
+const _hoisted_3 = ["aria-expanded"];
+const _hoisted_4 = { class: "p-cascadeselect-items-wrapper" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CascadeSelectSub = resolveComponent("CascadeSelectSub");
 
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     ref: "container",
-    class: $options.containerClass,
-    onClick: _cache[5] || (_cache[5] = $event => ($options.onClick($event)))
+    class: normalizeClass($options.containerClass),
+    onClick: _cache[4] || (_cache[4] = $event => ($options.onClick($event)))
   }, [
-    createVNode("div", _hoisted_1, [
-      createVNode("input", {
+    createElementVNode("div", _hoisted_1, [
+      createElementVNode("input", {
         ref: "focusInput",
         type: "text",
         id: $props.inputId,
         readonly: "",
         disabled: $props.disabled,
-        onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-        onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+        onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+        onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+        onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
         tabindex: $props.tabindex,
         "aria-haspopup": "listbox",
         "aria-expanded": $data.overlayVisible,
         "aria-labelledby": $props.ariaLabelledBy
-      }, null, 40, ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"])
+      }, null, 40, _hoisted_2)
     ]),
-    createVNode("span", { class: $options.labelClass }, [
+    createElementVNode("span", {
+      class: normalizeClass($options.labelClass)
+    }, [
       renderSlot(_ctx.$slots, "value", {
         value: $props.modelValue,
         placeholder: $props.placeholder
@@ -568,16 +573,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         createTextVNode(toDisplayString($options.label), 1)
       ])
     ], 2),
-    createVNode("div", {
+    createElementVNode("div", {
       class: "p-cascadeselect-trigger",
       role: "button",
       "aria-haspopup": "listbox",
       "aria-expanded": $data.overlayVisible
     }, [
       renderSlot(_ctx.$slots, "indicator", {}, () => [
-        createVNode("span", { class: $options.dropdownIconClass }, null, 2)
+        createElementVNode("span", {
+          class: normalizeClass($options.dropdownIconClass)
+        }, null, 2)
       ])
-    ], 8, ["aria-expanded"]),
+    ], 8, _hoisted_3),
     (openBlock(), createBlock(Teleport, {
       to: $options.appendTarget,
       disabled: $options.appendDisabled
@@ -590,13 +597,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: withCtx(() => [
           ($data.overlayVisible)
-            ? (openBlock(), createBlock("div", {
+            ? (openBlock(), createElementBlock("div", {
                 key: 0,
                 ref: $options.overlayRef,
-                class: $options.panelStyleClass,
-                onClick: _cache[4] || (_cache[4] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                class: normalizeClass($options.panelStyleClass),
+                onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
-                createVNode("div", _hoisted_2, [
+                createElementVNode("div", _hoisted_4, [
                   createVNode(_component_CascadeSelectSub, {
                     options: $props.options,
                     selectionPath: $data.selectionPath,

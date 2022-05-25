@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, createCommentVNode } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, renderSlot, createCommentVNode } from 'vue';
 
 var script = {
     name: 'Divider',
@@ -36,12 +36,12 @@ const _hoisted_1 = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
     role: "separator"
   }, [
     (_ctx.$slots.default)
-      ? (openBlock(), createBlock("div", _hoisted_1, [
+      ? (openBlock(), createElementBlock("div", _hoisted_1, [
           renderSlot(_ctx.$slots, "default")
         ]))
       : createCommentVNode("", true)

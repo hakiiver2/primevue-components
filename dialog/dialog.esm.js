@@ -1,6 +1,6 @@
 import { ZIndexUtils, DomHandler, UniqueComponentId } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, mergeProps, renderSlot, toDisplayString, createCommentVNode, withDirectives, createTextVNode } from 'vue';
+import { resolveDirective, openBlock, createBlock, Teleport, createElementBlock, normalizeClass, createVNode, Transition, withCtx, mergeProps, renderSlot, toDisplayString, createCommentVNode, createElementVNode, withDirectives, normalizeStyle, createTextVNode } from 'vue';
 
 var script = {
     name: 'Dialog',
@@ -388,9 +388,15 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-dialog-header-icons" };
-const _hoisted_2 = /*#__PURE__*/createVNode("span", { class: "p-dialog-header-close-icon pi pi-times" }, null, -1);
-const _hoisted_3 = {
+const _hoisted_1 = ["aria-labelledby", "aria-modal"];
+const _hoisted_2 = ["id"];
+const _hoisted_3 = { class: "p-dialog-header-icons" };
+const _hoisted_4 = ["aria-label"];
+const _hoisted_5 = /*#__PURE__*/createElementVNode("span", { class: "p-dialog-header-close-icon pi pi-times" }, null, -1);
+const _hoisted_6 = [
+  _hoisted_5
+];
+const _hoisted_7 = {
   key: 1,
   class: "p-dialog-footer"
 };
@@ -403,11 +409,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     disabled: $options.appendDisabled
   }, [
     ($data.containerVisible)
-      ? (openBlock(), createBlock("div", {
+      ? (openBlock(), createElementBlock("div", {
           key: 0,
           ref: $options.maskRef,
-          class: $options.maskClass,
-          onClick: _cache[4] || (_cache[4] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
+          class: normalizeClass($options.maskClass),
+          onClick: _cache[3] || (_cache[3] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
         }, [
           createVNode(Transition, {
             name: "p-dialog",
@@ -420,7 +426,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }, {
             default: withCtx(() => [
               ($props.visible)
-                ? (openBlock(), createBlock("div", mergeProps({
+                ? (openBlock(), createElementBlock("div", mergeProps({
                     key: 0,
                     ref: $options.containerRef,
                     class: $options.dialogClass
@@ -430,64 +436,64 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     "aria-modal": $props.modal
                   }), [
                     ($props.showHeader)
-                      ? (openBlock(), createBlock("div", {
+                      ? (openBlock(), createElementBlock("div", {
                           key: 0,
                           class: "p-dialog-header",
-                          onMousedown: _cache[3] || (_cache[3] = (...args) => ($options.initDrag && $options.initDrag(...args)))
+                          onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.initDrag && $options.initDrag(...args)))
                         }, [
                           renderSlot(_ctx.$slots, "header", {}, () => [
                             ($props.header)
-                              ? (openBlock(), createBlock("span", {
+                              ? (openBlock(), createElementBlock("span", {
                                   key: 0,
                                   id: $options.ariaLabelledById,
                                   class: "p-dialog-title"
-                                }, toDisplayString($props.header), 9, ["id"]))
+                                }, toDisplayString($props.header), 9, _hoisted_2))
                               : createCommentVNode("", true)
                           ]),
-                          createVNode("div", _hoisted_1, [
+                          createElementVNode("div", _hoisted_3, [
                             ($props.maximizable)
-                              ? withDirectives((openBlock(), createBlock("button", {
+                              ? withDirectives((openBlock(), createElementBlock("button", {
                                   key: 0,
                                   class: "p-dialog-header-icon p-dialog-header-maximize p-link",
-                                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.maximize && $options.maximize(...args))),
+                                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.maximize && $options.maximize(...args))),
                                   type: "button",
                                   tabindex: "-1"
                                 }, [
-                                  createVNode("span", { class: $options.maximizeIconClass }, null, 2)
-                                ], 512)), [
+                                  createElementVNode("span", {
+                                    class: normalizeClass($options.maximizeIconClass)
+                                  }, null, 2)
+                                ])), [
                                   [_directive_ripple]
                                 ])
                               : createCommentVNode("", true),
                             ($props.closable)
-                              ? withDirectives((openBlock(), createBlock("button", {
+                              ? withDirectives((openBlock(), createElementBlock("button", {
                                   key: 1,
                                   class: "p-dialog-header-icon p-dialog-header-close p-link",
-                                  onClick: _cache[2] || (_cache[2] = (...args) => ($options.close && $options.close(...args))),
+                                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.close && $options.close(...args))),
                                   "aria-label": $props.ariaCloseLabel,
                                   type: "button"
-                                }, [
-                                  _hoisted_2
-                                ], 8, ["aria-label"])), [
+                                }, _hoisted_6, 8, _hoisted_4)), [
                                   [_directive_ripple]
                                 ])
                               : createCommentVNode("", true)
                           ])
                         ], 32))
                       : createCommentVNode("", true),
-                    createVNode("div", {
-                      class: $options.contentStyleClass,
-                      style: $props.contentStyle
+                    createElementVNode("div", {
+                      class: normalizeClass($options.contentStyleClass),
+                      style: normalizeStyle($props.contentStyle)
                     }, [
                       renderSlot(_ctx.$slots, "default")
                     ], 6),
                     ($props.footer || _ctx.$slots.footer)
-                      ? (openBlock(), createBlock("div", _hoisted_3, [
+                      ? (openBlock(), createElementBlock("div", _hoisted_7, [
                           renderSlot(_ctx.$slots, "footer", {}, () => [
                             createTextVNode(toDisplayString($props.footer), 1)
                           ])
                         ]))
                       : createCommentVNode("", true)
-                  ], 16, ["aria-labelledby", "aria-modal"]))
+                  ], 16, _hoisted_1))
                 : createCommentVNode("", true)
             ]),
             _: 3

@@ -1,4 +1,4 @@
-import { openBlock, createBlock, createVNode, mergeProps, withKeys, withModifiers } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, normalizeStyle, createElementVNode, mergeProps, withKeys, withModifiers } from 'vue';
 
 var script = {
     name: 'InputSwitch',
@@ -62,28 +62,29 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = /*#__PURE__*/createVNode("span", { class: "p-inputswitch-slider" }, null, -1);
+const _hoisted_2 = ["checked", "aria-checked"];
+const _hoisted_3 = /*#__PURE__*/createElementVNode("span", { class: "p-inputswitch-slider" }, null, -1);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
-    onClick: _cache[4] || (_cache[4] = $event => ($options.onClick($event))),
-    style: $props.style
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
+    onClick: _cache[3] || (_cache[3] = $event => ($options.onClick($event))),
+    style: normalizeStyle($props.style)
   }, [
-    createVNode("div", _hoisted_1, [
-      createVNode("input", mergeProps({
+    createElementVNode("div", _hoisted_1, [
+      createElementVNode("input", mergeProps({
         ref: "input",
         type: "checkbox",
         checked: $options.checked
       }, _ctx.$attrs, {
-        onFocus: _cache[1] || (_cache[1] = $event => ($options.onFocus($event))),
-        onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur($event))),
-        onKeydown: _cache[3] || (_cache[3] = withKeys(withModifiers($event => ($options.onClick($event)), ["prevent"]), ["enter"])),
+        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event))),
+        onKeydown: _cache[2] || (_cache[2] = withKeys(withModifiers($event => ($options.onClick($event)), ["prevent"]), ["enter"])),
         role: "switch",
         "aria-checked": $options.checked
-      }), null, 16, ["checked", "aria-checked"])
+      }), null, 16, _hoisted_2)
     ]),
-    _hoisted_2
+    _hoisted_3
   ], 6))
 }
 

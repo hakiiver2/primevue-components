@@ -58,11 +58,12 @@ this.primevue.inplace = (function (Button, vue) {
             }
         },
         components: {
-            'IPButton': Button__default['default']
+            'IPButton': Button__default["default"]
         }
     };
 
-    const _hoisted_1 = {
+    const _hoisted_1 = ["tabindex"];
+    const _hoisted_2 = {
       key: 1,
       class: "p-inplace-content"
     };
@@ -70,18 +71,20 @@ this.primevue.inplace = (function (Button, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_IPButton = vue.resolveComponent("IPButton");
 
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
         (!$data.d_active)
-          ? (vue.openBlock(), vue.createBlock("div", {
+          ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
-              class: $options.displayClass,
+              class: vue.normalizeClass($options.displayClass),
               tabindex: _ctx.$attrs.tabindex||'0',
-              onClick: _cache[1] || (_cache[1] = (...args) => ($options.open && $options.open(...args))),
-              onKeydown: _cache[2] || (_cache[2] = vue.withKeys((...args) => ($options.open && $options.open(...args)), ["enter"]))
+              onClick: _cache[0] || (_cache[0] = (...args) => ($options.open && $options.open(...args))),
+              onKeydown: _cache[1] || (_cache[1] = vue.withKeys((...args) => ($options.open && $options.open(...args)), ["enter"]))
             }, [
               vue.renderSlot(_ctx.$slots, "display")
-            ], 42, ["tabindex"]))
-          : (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+            ], 42, _hoisted_1))
+          : (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
               vue.renderSlot(_ctx.$slots, "content"),
               ($props.closable)
                 ? (vue.openBlock(), vue.createBlock(_component_IPButton, {
@@ -128,4 +131,4 @@ this.primevue.inplace = (function (Button, vue) {
 
     return script;
 
-}(primevue.button, Vue));
+})(primevue.button, Vue);

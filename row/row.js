@@ -11,4 +11,4 @@ this.primevue.row = (function () {
 
     return script;
 
-}());
+})();

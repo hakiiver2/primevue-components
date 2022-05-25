@@ -246,62 +246,64 @@ var script = {
         }
     },
     components: {
-        'SDButton': Button__default['default']
+        'SDButton': Button__default["default"]
     },
     directives: {
-        'ripple': Ripple__default['default'],
-        'tooltip': Tooltip__default['default']
+        'ripple': Ripple__default["default"],
+        'tooltip': Tooltip__default["default"]
     }
 };
+
+const _hoisted_1 = ["href", "target", "onClick"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_SDButton = vue.resolveComponent("SDButton");
   const _directive_tooltip = vue.resolveDirective("tooltip");
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock(vue.Fragment, null, [
-    vue.createVNode("div", {
+  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+    vue.createElementVNode("div", {
       ref: $options.containerRef,
-      class: $options.containerClass,
-      style: $props.style
+      class: vue.normalizeClass($options.containerClass),
+      style: vue.normalizeStyle($props.style)
     }, [
       vue.renderSlot(_ctx.$slots, "button", { toggle: $options.onClick }, () => [
         vue.createVNode(_component_SDButton, {
           type: "button",
-          class: $options.buttonClassName,
+          class: vue.normalizeClass($options.buttonClassName),
           icon: $options.iconClassName,
-          onClick: _cache[1] || (_cache[1] = $event => ($options.onClick($event))),
+          onClick: _cache[0] || (_cache[0] = $event => ($options.onClick($event))),
           disabled: $props.disabled
         }, null, 8, ["class", "icon", "disabled"])
       ]),
-      vue.createVNode("ul", {
+      vue.createElementVNode("ul", {
         ref: $options.listRef,
         class: "p-speeddial-list",
         role: "menu"
       }, [
-        (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, index) => {
-          return (vue.openBlock(), vue.createBlock("li", {
+        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, index) => {
+          return (vue.openBlock(), vue.createElementBlock("li", {
             key: index,
             class: "p-speeddial-item",
-            style: $options.getItemStyle(index),
+            style: vue.normalizeStyle($options.getItemStyle(index)),
             role: "none"
           }, [
             (!_ctx.$slots.item)
-              ? vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+              ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                   key: 0,
                   href: item.url || '#',
                   role: "menuitem",
-                  class: ['p-speeddial-action', { 'p-disabled': item.disabled }],
+                  class: vue.normalizeClass(['p-speeddial-action', { 'p-disabled': item.disabled }]),
                   target: item.target,
                   onClick: $event => ($options.onItemClick($event, item))
                 }, [
                   (item.icon)
-                    ? (vue.openBlock(), vue.createBlock("span", {
+                    ? (vue.openBlock(), vue.createElementBlock("span", {
                         key: 0,
-                        class: ['p-speeddial-action-icon', item.icon]
+                        class: vue.normalizeClass(['p-speeddial-action-icon', item.icon])
                       }, null, 2))
                     : vue.createCommentVNode("", true)
-                ], 10, ["href", "target", "onClick"])), [
+                ], 10, _hoisted_1)), [
                   [_directive_tooltip, {value: item.label, disabled: !$props.tooltipOptions}, $props.tooltipOptions],
                   [_directive_ripple]
                 ])
@@ -314,10 +316,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ], 512)
     ], 6),
     ($props.mask)
-      ? (vue.openBlock(), vue.createBlock("div", {
+      ? (vue.openBlock(), vue.createElementBlock("div", {
           key: 0,
-          class: $options.maskClassName,
-          style: $props.maskStyle
+          class: vue.normalizeClass($options.maskClassName),
+          style: vue.normalizeStyle($props.maskStyle)
         }, null, 6))
       : vue.createCommentVNode("", true)
   ], 64))

@@ -67,34 +67,36 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
+const _hoisted_2 = ["checked", "value"];
+const _hoisted_3 = ["aria-checked"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", {
-    class: $options.containerClass,
-    onClick: _cache[3] || (_cache[3] = $event => ($options.onClick($event))),
-    style: $props.style
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass($options.containerClass),
+    onClick: _cache[2] || (_cache[2] = $event => ($options.onClick($event))),
+    style: vue.normalizeStyle($props.style)
   }, [
-    vue.createVNode("div", _hoisted_1, [
-      vue.createVNode("input", vue.mergeProps({
+    vue.createElementVNode("div", _hoisted_1, [
+      vue.createElementVNode("input", vue.mergeProps({
         ref: "input",
         type: "checkbox",
         checked: $options.checked,
         value: $props.value
       }, _ctx.$attrs, {
-        onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args)))
-      }), null, 16, ["checked", "value"])
+        onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+        onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args)))
+      }), null, 16, _hoisted_2)
     ]),
-    vue.createVNode("div", {
+    vue.createElementVNode("div", {
       ref: "box",
-      class: ['p-checkbox-box', {'p-highlight': $options.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}],
+      class: vue.normalizeClass(['p-checkbox-box', {'p-highlight': $options.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
       role: "checkbox",
       "aria-checked": $options.checked
     }, [
-      vue.createVNode("span", {
-        class: ['p-checkbox-icon', {'pi pi-check': $options.checked}]
+      vue.createElementVNode("span", {
+        class: vue.normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.checked}])
       }, null, 2)
-    ], 10, ["aria-checked"])
+    ], 10, _hoisted_3)
   ], 6))
 }
 

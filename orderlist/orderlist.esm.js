@@ -1,7 +1,7 @@
 import Button from 'primevue/button';
 import { ObjectUtils, DomHandler, UniqueComponentId } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, renderSlot, createCommentVNode, TransitionGroup, withCtx, Fragment, renderList, withDirectives } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, createVNode, createCommentVNode, TransitionGroup, normalizeStyle, withCtx, Fragment, renderList, withDirectives } from 'vue';
 
 var script = {
     name: 'OrderList',
@@ -346,13 +346,16 @@ const _hoisted_3 = {
   key: 0,
   class: "p-orderlist-header"
 };
+const _hoisted_4 = ["onClick", "onKeydown", "aria-selected"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_OLButton = resolveComponent("OLButton");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", { class: $options.containerClass }, [
-    createVNode("div", _hoisted_1, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass)
+  }, [
+    createElementVNode("div", _hoisted_1, [
       renderSlot(_ctx.$slots, "controlsstart"),
       createVNode(_component_OLButton, {
         type: "button",
@@ -376,9 +379,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8, ["onClick"]),
       renderSlot(_ctx.$slots, "controlsend")
     ]),
-    createVNode("div", _hoisted_2, [
+    createElementVNode("div", _hoisted_2, [
       (_ctx.$slots.header)
-        ? (openBlock(), createBlock("div", _hoisted_3, [
+        ? (openBlock(), createElementBlock("div", _hoisted_3, [
             renderSlot(_ctx.$slots, "header")
           ]))
         : createCommentVNode("", true),
@@ -387,19 +390,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         name: "p-orderlist-flip",
         tag: "ul",
         class: "p-orderlist-list",
-        style: $props.listStyle,
+        style: normalizeStyle($props.listStyle),
         role: "listbox",
         "aria-multiselectable": "multiple"
       }, {
         default: withCtx(() => [
-          (openBlock(true), createBlock(Fragment, null, renderList($props.modelValue, (item, i) => {
-            return withDirectives((openBlock(), createBlock("li", {
+          (openBlock(true), createElementBlock(Fragment, null, renderList($props.modelValue, (item, i) => {
+            return withDirectives((openBlock(), createElementBlock("li", {
               key: $options.getItemKey(item, i),
               tabindex: "0",
-              class: ['p-orderlist-item', {'p-highlight': $options.isSelected(item)}],
+              class: normalizeClass(['p-orderlist-item', {'p-highlight': $options.isSelected(item)}]),
               onClick: $event => ($options.onItemClick($event, item, i)),
               onKeydown: $event => ($options.onItemKeyDown($event, item, i)),
-              onTouchend: _cache[1] || (_cache[1] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
+              onTouchend: _cache[0] || (_cache[0] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
               role: "option",
               "aria-selected": $options.isSelected(item)
             }, [
@@ -407,7 +410,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 item: item,
                 index: i
               })
-            ], 42, ["onClick", "onKeydown", "aria-selected"])), [
+            ], 42, _hoisted_4)), [
               [_directive_ripple]
             ])
           }), 128))

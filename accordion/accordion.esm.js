@@ -1,5 +1,5 @@
 import { UniqueComponentId } from 'primevue/utils';
-import { openBlock, createBlock, Fragment, renderList, createVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, Transition, withCtx, withDirectives, vShow } from 'vue';
+import { openBlock, createElementBlock, Fragment, renderList, normalizeClass, createElementVNode, toDisplayString, createCommentVNode, createBlock, resolveDynamicComponent, createVNode, Transition, withCtx, withDirectives, vShow } from 'vue';
 
 var script = {
     name: 'Accordion',
@@ -126,23 +126,25 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-accordion p-component" };
-const _hoisted_2 = {
+const _hoisted_2 = ["onClick", "onKeydown", "tabindex", "aria-expanded", "id", "aria-controls"];
+const _hoisted_3 = {
   key: 0,
   class: "p-accordion-header-text"
 };
-const _hoisted_3 = { class: "p-accordion-content" };
+const _hoisted_4 = ["id", "aria-labelledby"];
+const _hoisted_5 = { class: "p-accordion-content" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    (openBlock(true), createBlock(Fragment, null, renderList($options.tabs, (tab, i) => {
-      return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
+    (openBlock(true), createElementBlock(Fragment, null, renderList($options.tabs, (tab, i) => {
+      return (openBlock(), createElementBlock("div", {
         key: $options.getKey(tab,i),
-        class: $options.getTabClass(i)
+        class: normalizeClass($options.getTabClass(i))
       }, [
-        createVNode("div", {
-          class: $options.getTabHeaderClass(tab, i)
+        createElementVNode("div", {
+          class: normalizeClass($options.getTabHeaderClass(tab, i))
         }, [
-          createVNode("a", {
+          createElementVNode("a", {
             role: "tab",
             class: "p-accordion-header-link",
             onClick: $event => ($options.onTabClick($event, tab, i)),
@@ -152,31 +154,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             id: $options.getTabAriaId(i) + '_header',
             "aria-controls": $options.getTabAriaId(i) + '_content'
           }, [
-            createVNode("span", {
-              class: $options.isTabActive(i) ? $options.getHeaderCollapseIcon() : $options.getHeaderExpandIcon()
+            createElementVNode("span", {
+              class: normalizeClass($options.isTabActive(i) ? $options.getHeaderCollapseIcon() : $options.getHeaderExpandIcon())
             }, null, 2),
             (tab.props && tab.props.header)
-              ? (openBlock(), createBlock("span", _hoisted_2, toDisplayString(tab.props.header), 1))
+              ? (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(tab.props.header), 1))
               : createCommentVNode("", true),
             (tab.children && tab.children.header)
               ? (openBlock(), createBlock(resolveDynamicComponent(tab.children.header), { key: 1 }))
               : createCommentVNode("", true)
-          ], 40, ["onClick", "onKeydown", "tabindex", "aria-expanded", "id", "aria-controls"])
+          ], 40, _hoisted_2)
         ], 2),
         createVNode(Transition, { name: "p-toggleable-content" }, {
           default: withCtx(() => [
             ($props.lazy ? $options.isTabActive(i) : true)
-              ? withDirectives((openBlock(), createBlock("div", {
+              ? withDirectives((openBlock(), createElementBlock("div", {
                   key: 0,
                   class: "p-toggleable-content",
                   role: "region",
                   id: $options.getTabAriaId(i) + '_content',
                   "aria-labelledby": $options.getTabAriaId(i) + '_header'
                 }, [
-                  createVNode("div", _hoisted_3, [
+                  createElementVNode("div", _hoisted_5, [
                     (openBlock(), createBlock(resolveDynamicComponent(tab)))
                   ])
-                ], 8, ["id", "aria-labelledby"])), [
+                ], 8, _hoisted_4)), [
                   [vShow, $props.lazy ? true: $options.isTabActive(i)]
                 ])
               : createCommentVNode("", true)

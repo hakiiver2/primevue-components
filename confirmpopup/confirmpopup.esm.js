@@ -2,7 +2,7 @@ import ConfirmationEventBus from 'primevue/confirmationeventbus';
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
-import { resolveComponent, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, mergeProps, toDisplayString, resolveDynamicComponent, createCommentVNode } from 'vue';
+import { resolveComponent, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, createElementBlock, mergeProps, createElementVNode, normalizeClass, toDisplayString, resolveDynamicComponent, createCommentVNode } from 'vue';
 
 var script = {
     name: 'ConfirmPopup',
@@ -226,34 +226,36 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, {
       default: withCtx(() => [
         ($data.visible)
-          ? (openBlock(), createBlock("div", mergeProps({
+          ? (openBlock(), createElementBlock("div", mergeProps({
               key: 0,
               class: $options.containerClass,
               ref: $options.containerRef
             }, _ctx.$attrs, {
-              onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              onClick: _cache[2] || (_cache[2] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
             }), [
               (!_ctx.$slots.message)
-                ? (openBlock(), createBlock("div", _hoisted_1, [
-                    createVNode("i", { class: $options.iconClass }, null, 2),
-                    createVNode("span", _hoisted_2, toDisplayString($data.confirmation.message), 1)
+                ? (openBlock(), createElementBlock("div", _hoisted_1, [
+                    createElementVNode("i", {
+                      class: normalizeClass($options.iconClass)
+                    }, null, 2),
+                    createElementVNode("span", _hoisted_2, toDisplayString($data.confirmation.message), 1)
                   ]))
                 : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.message), {
                     key: 1,
                     message: $data.confirmation
                   }, null, 8, ["message"])),
-              createVNode("div", _hoisted_3, [
+              createElementVNode("div", _hoisted_3, [
                 createVNode(_component_CPButton, {
                   label: $options.rejectLabel,
                   icon: $options.rejectIcon,
-                  class: $options.rejectClass,
-                  onClick: _cache[1] || (_cache[1] = $event => ($options.reject()))
+                  class: normalizeClass($options.rejectClass),
+                  onClick: _cache[0] || (_cache[0] = $event => ($options.reject()))
                 }, null, 8, ["label", "icon", "class"]),
                 createVNode(_component_CPButton, {
                   label: $options.acceptLabel,
                   icon: $options.acceptIcon,
-                  class: $options.acceptClass,
-                  onClick: _cache[2] || (_cache[2] = $event => ($options.accept())),
+                  class: normalizeClass($options.acceptClass),
+                  onClick: _cache[1] || (_cache[1] = $event => ($options.accept())),
                   autofocus: ""
                 }, null, 8, ["label", "icon", "class"])
               ])

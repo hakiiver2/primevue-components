@@ -62,33 +62,38 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
 const _hoisted_1 = { class: "p-toast-message-text" };
 const _hoisted_2 = { class: "p-toast-summary" };
 const _hoisted_3 = { class: "p-toast-detail" };
-const _hoisted_4 = /*#__PURE__*/vue.createVNode("span", { class: "p-toast-icon-close-icon pi pi-times" }, null, -1);
+const _hoisted_4 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-toast-icon-close-icon pi pi-times" }, null, -1);
+const _hoisted_5 = [
+  _hoisted_4
+];
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock("div", {
-    class: $options.containerClass,
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass($options.containerClass),
     role: "alert",
     "aria-live": "assertive",
     "aria-atomic": "true"
   }, [
-    vue.createVNode("div", {
-      class: ["p-toast-message-content", $props.message.contentStyleClass]
+    vue.createElementVNode("div", {
+      class: vue.normalizeClass(["p-toast-message-content", $props.message.contentStyleClass])
     }, [
       (!$props.template)
-        ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
-            vue.createVNode("span", { class: $options.iconClass }, null, 2),
-            vue.createVNode("div", _hoisted_1, [
-              vue.createVNode("span", _hoisted_2, vue.toDisplayString($props.message.summary), 1),
-              vue.createVNode("div", _hoisted_3, vue.toDisplayString($props.message.detail), 1)
+        ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
+            vue.createElementVNode("span", {
+              class: vue.normalizeClass($options.iconClass)
+            }, null, 2),
+            vue.createElementVNode("div", _hoisted_1, [
+              vue.createElementVNode("span", _hoisted_2, vue.toDisplayString($props.message.summary), 1),
+              vue.createElementVNode("div", _hoisted_3, vue.toDisplayString($props.message.detail), 1)
             ])
           ], 64))
         : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.template), {
@@ -96,14 +101,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
             message: $props.message
           }, null, 8, ["message"])),
       ($props.message.closable !== false)
-        ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+        ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
             key: 2,
             class: "p-toast-icon-close p-link",
-            onClick: _cache[1] || (_cache[1] = (...args) => ($options.onCloseClick && $options.onCloseClick(...args))),
+            onClick: _cache[0] || (_cache[0] = (...args) => ($options.onCloseClick && $options.onCloseClick(...args))),
             type: "button"
-          }, [
-            _hoisted_4
-          ], 512)), [
+          }, _hoisted_5)), [
             [_directive_ripple]
           ])
         : vue.createCommentVNode("", true)
@@ -147,9 +150,9 @@ var script = {
     },
     styleElement: null,
     mounted() {
-        ToastEventBus__default['default'].on('add', this.onAdd);
-        ToastEventBus__default['default'].on('remove-group', this.onRemoveGroup);
-        ToastEventBus__default['default'].on('remove-all-groups', this.onRemoveAllGroups);
+        ToastEventBus__default["default"].on('add', this.onAdd);
+        ToastEventBus__default["default"].on('remove-group', this.onRemoveGroup);
+        ToastEventBus__default["default"].on('remove-all-groups', this.onRemoveAllGroups);
 
         if (this.breakpoints) {
             this.createStyle();
@@ -162,9 +165,9 @@ var script = {
             utils.ZIndexUtils.clear(this.$refs.container);
         }
 
-        ToastEventBus__default['default'].off('add', this.onAdd);
-        ToastEventBus__default['default'].off('remove-group', this.onRemoveGroup);
-        ToastEventBus__default['default'].off('remove-all-groups', this.onRemoveAllGroups);
+        ToastEventBus__default["default"].off('add', this.onAdd);
+        ToastEventBus__default["default"].off('remove-group', this.onRemoveGroup);
+        ToastEventBus__default["default"].off('remove-all-groups', this.onRemoveAllGroups);
     },
     methods: {
         add(message) {
@@ -261,7 +264,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_ToastMessage = vue.resolveComponent("ToastMessage");
 
   return (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
-    vue.createVNode("div", vue.mergeProps({
+    vue.createElementVNode("div", vue.mergeProps({
       ref: "container",
       class: $options.containerClass
     }, _ctx.$attrs), [
@@ -272,11 +275,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onLeave: $options.onLeave
       }, {
         default: vue.withCtx(() => [
-          (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($data.messages, (msg) => {
+          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($data.messages, (msg) => {
             return (vue.openBlock(), vue.createBlock(_component_ToastMessage, {
               key: msg.id,
               message: msg,
-              onClose: _cache[1] || (_cache[1] = $event => ($options.remove($event))),
+              onClose: _cache[0] || (_cache[0] = $event => ($options.remove($event))),
               template: _ctx.$slots.message
             }, null, 8, ["message", "template"]))
           }), 128))

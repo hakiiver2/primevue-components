@@ -1,6 +1,6 @@
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import { resolveComponent, openBlock, createBlock, createVNode, mergeProps, toHandlers, createCommentVNode } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, normalizeStyle, createVNode, mergeProps, toHandlers, createCommentVNode, createBlock } from 'vue';
 
 var script = {
     name: 'InputNumber',
@@ -993,9 +993,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_INInputText = resolveComponent("INInputText");
   const _component_INButton = resolveComponent("INButton");
 
-  return (openBlock(), createBlock("span", {
-    class: $options.containerClass,
-    style: $props.style
+  return (openBlock(), createElementBlock("span", {
+    class: normalizeClass($options.containerClass),
+    style: normalizeStyle($props.style)
   }, [
     createVNode(_component_INInputText, mergeProps({
       ref: "input",
@@ -1015,7 +1015,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onBlur: $options.onInputBlur
     }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
     ($props.showButtons && $props.buttonLayout === 'stacked')
-      ? (openBlock(), createBlock("span", _hoisted_1, [
+      ? (openBlock(), createElementBlock("span", _hoisted_1, [
           createVNode(_component_INButton, mergeProps({
             class: $options.upButtonClass,
             icon: $props.incrementButtonIcon

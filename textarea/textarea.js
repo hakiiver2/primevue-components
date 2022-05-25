@@ -48,13 +48,15 @@ this.primevue.textarea = (function (vue) {
         }
     };
 
+    const _hoisted_1 = ["value"];
+
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("textarea", vue.mergeProps({
+      return (vue.openBlock(), vue.createElementBlock("textarea", vue.mergeProps({
         class: ['p-inputtextarea p-inputtext p-component', {'p-filled': $options.filled, 'p-inputtextarea-resizable ': $props.autoResize}]
       }, _ctx.$attrs, {
         value: $props.modelValue,
-        onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args)))
-      }), null, 16, ["value"]))
+        onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args)))
+      }), null, 16, _hoisted_1))
     }
 
     function styleInject(css, ref) {
@@ -91,4 +93,4 @@ this.primevue.textarea = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

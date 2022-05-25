@@ -9,7 +9,7 @@ this.primevue.avatargroup = (function (vue) {
     const _hoisted_1 = { class: "p-avatar-group p-component" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
         vue.renderSlot(_ctx.$slots, "default")
       ]))
     }
@@ -48,4 +48,4 @@ this.primevue.avatargroup = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

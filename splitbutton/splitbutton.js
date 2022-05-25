@@ -55,20 +55,18 @@ this.primevue.splitbutton = (function (Button, TieredMenu, utils, vue) {
             }
         },
         components: {
-            'PVSButton': Button__default['default'],
-            'PVSMenu': TieredMenu__default['default']
+            'PVSButton': Button__default["default"],
+            'PVSMenu': TieredMenu__default["default"]
         }
     };
 
-    const _withId = /*#__PURE__*/vue.withScopeId("data-v-3d44cde8");
-
-    const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $options) => {
+    function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_PVSButton = vue.resolveComponent("PVSButton");
       const _component_PVSMenu = vue.resolveComponent("PVSMenu");
 
-      return (vue.openBlock(), vue.createBlock("div", {
-        class: $options.containerClass,
-        style: $props.style
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass),
+        style: vue.normalizeStyle($props.style)
       }, [
         vue.renderSlot(_ctx.$slots, "default", {}, () => [
           vue.createVNode(_component_PVSButton, vue.mergeProps({
@@ -99,7 +97,7 @@ this.primevue.splitbutton = (function (Button, TieredMenu, utils, vue) {
           appendTo: $props.appendTo
         }, null, 8, ["id", "model", "autoZIndex", "baseZIndex", "appendTo"])
       ], 6))
-    });
+    }
 
     function styleInject(css, ref) {
       if ( ref === void 0 ) ref = {};
@@ -136,4 +134,4 @@ this.primevue.splitbutton = (function (Button, TieredMenu, utils, vue) {
 
     return script;
 
-}(primevue.button, primevue.tieredmenu, primevue.utils, Vue));
+})(primevue.button, primevue.tieredmenu, primevue.utils, Vue);

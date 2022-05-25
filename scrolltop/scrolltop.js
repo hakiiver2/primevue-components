@@ -115,14 +115,16 @@ this.primevue.scrolltop = (function (utils, vue) {
       }, {
         default: vue.withCtx(() => [
           ($data.visible)
-            ? (vue.openBlock(), vue.createBlock("button", {
+            ? (vue.openBlock(), vue.createElementBlock("button", {
                 key: 0,
                 ref: $options.containerRef,
-                class: $options.containerClass,
-                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+                class: vue.normalizeClass($options.containerClass),
+                onClick: _cache[0] || (_cache[0] = (...args) => ($options.onClick && $options.onClick(...args))),
                 type: "button"
               }, [
-                vue.createVNode("span", { class: $options.iconClass }, null, 2)
+                vue.createElementVNode("span", {
+                  class: vue.normalizeClass($options.iconClass)
+                }, null, 2)
               ], 2))
             : vue.createCommentVNode("", true)
         ]),
@@ -164,4 +166,4 @@ this.primevue.scrolltop = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

@@ -585,4 +585,4 @@ this.primevue.api = (function (exports, utils) {
 
     return exports;
 
-}({}, primevue.utils));
+})({}, primevue.utils);

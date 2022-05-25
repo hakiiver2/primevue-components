@@ -132,24 +132,33 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
     const _hoisted_1$2 = { class: "p-galleria-item-wrapper" };
     const _hoisted_2$2 = { class: "p-galleria-item-container" };
-    const _hoisted_3$1 = /*#__PURE__*/vue.createVNode("span", { class: "p-galleria-item-prev-icon pi pi-chevron-left" }, null, -1);
-    const _hoisted_4$1 = { class: "p-galleria-item" };
-    const _hoisted_5 = /*#__PURE__*/vue.createVNode("span", { class: "p-galleria-item-next-icon pi pi-chevron-right" }, null, -1);
-    const _hoisted_6 = {
+    const _hoisted_3$2 = ["disabled"];
+    const _hoisted_4$2 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-galleria-item-prev-icon pi pi-chevron-left" }, null, -1);
+    const _hoisted_5$2 = [
+      _hoisted_4$2
+    ];
+    const _hoisted_6$1 = { class: "p-galleria-item" };
+    const _hoisted_7 = ["disabled"];
+    const _hoisted_8 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-galleria-item-next-icon pi pi-chevron-right" }, null, -1);
+    const _hoisted_9 = [
+      _hoisted_8
+    ];
+    const _hoisted_10 = {
       key: 2,
       class: "p-galleria-caption"
     };
-    const _hoisted_7 = {
+    const _hoisted_11 = {
       key: 0,
       class: "p-galleria-indicators p-reset"
     };
-    const _hoisted_8 = {
+    const _hoisted_12 = ["onClick", "onMouseenter", "onKeydown"];
+    const _hoisted_13 = {
       key: 0,
       type: "button",
       tabindex: "-1",
@@ -159,22 +168,20 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
     function render$3(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1$2, [
-        vue.createVNode("div", _hoisted_2$2, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1$2, [
+        vue.createElementVNode("div", _hoisted_2$2, [
           ($props.showItemNavigators)
-            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                 key: 0,
                 type: "button",
-                class: $options.navBackwardClass,
-                onClick: _cache[1] || (_cache[1] = $event => ($options.navBackward($event))),
+                class: vue.normalizeClass($options.navBackwardClass),
+                onClick: _cache[0] || (_cache[0] = $event => ($options.navBackward($event))),
                 disabled: $options.isNavBackwardDisabled()
-              }, [
-                _hoisted_3$1
-              ], 10, ["disabled"])), [
+              }, _hoisted_5$2, 10, _hoisted_3$2)), [
                 [_directive_ripple]
               ])
             : vue.createCommentVNode("", true),
-          vue.createVNode("div", _hoisted_4$1, [
+          vue.createElementVNode("div", _hoisted_6$1, [
             ($props.templates.item)
               ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates.item), {
                   key: 0,
@@ -183,20 +190,18 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
               : vue.createCommentVNode("", true)
           ]),
           ($props.showItemNavigators)
-            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                 key: 1,
                 type: "button",
-                class: $options.navForwardClass,
-                onClick: _cache[2] || (_cache[2] = $event => ($options.navForward($event))),
+                class: vue.normalizeClass($options.navForwardClass),
+                onClick: _cache[1] || (_cache[1] = $event => ($options.navForward($event))),
                 disabled: $options.isNavForwardDisabled()
-              }, [
-                _hoisted_5
-              ], 10, ["disabled"])), [
+              }, _hoisted_9, 10, _hoisted_7)), [
                 [_directive_ripple]
               ])
             : vue.createCommentVNode("", true),
           ($props.templates['caption'])
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_6, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_10, [
                 ($props.templates.caption)
                   ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates.caption), {
                       key: 0,
@@ -207,18 +212,18 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             : vue.createCommentVNode("", true)
         ]),
         ($props.showIndicators)
-          ? (vue.openBlock(), vue.createBlock("ul", _hoisted_7, [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.value, (item, index) => {
-                return (vue.openBlock(), vue.createBlock("li", {
+          ? (vue.openBlock(), vue.createElementBlock("ul", _hoisted_11, [
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.value, (item, index) => {
+                return (vue.openBlock(), vue.createElementBlock("li", {
                   key: `p-galleria-indicator-${index}`,
                   tabindex: "0",
                   onClick: $event => ($options.onIndicatorClick(index)),
                   onMouseenter: $event => ($options.onIndicatorMouseEnter(index)),
                   onKeydown: vue.withKeys($event => ($options.onIndicatorKeyDown(index)), ["enter"]),
-                  class: ['p-galleria-indicator', {'p-highlight': $options.isIndicatorItemActive(index)}]
+                  class: vue.normalizeClass(['p-galleria-indicator', {'p-highlight': $options.isIndicatorItemActive(index)}])
                 }, [
                   (!$props.templates['indicator'])
-                    ? (vue.openBlock(), vue.createBlock("button", _hoisted_8))
+                    ? (vue.openBlock(), vue.createElementBlock("button", _hoisted_13))
                     : vue.createCommentVNode("", true),
                   ($props.templates.indicator)
                     ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates.indicator), {
@@ -226,7 +231,7 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
                         index: index
                       }, null, 8, ["index"]))
                     : vue.createCommentVNode("", true)
-                ], 42, ["onClick", "onMouseenter", "onKeydown"]))
+                ], 42, _hoisted_12))
               }), 128))
             ]))
           : vue.createCommentVNode("", true)
@@ -613,53 +618,58 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
     const _hoisted_1$1 = { class: "p-galleria-thumbnail-wrapper" };
     const _hoisted_2$1 = { class: "p-galleria-thumbnail-container" };
+    const _hoisted_3$1 = ["disabled"];
+    const _hoisted_4$1 = ["tabindex", "onClick", "onKeydown"];
+    const _hoisted_5$1 = ["disabled"];
 
     function render$2(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1$1, [
-        vue.createVNode("div", _hoisted_2$1, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1$1, [
+        vue.createElementVNode("div", _hoisted_2$1, [
           ($props.showThumbnailNavigators)
-            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                 key: 0,
-                class: $options.navBackwardClass,
-                onClick: _cache[1] || (_cache[1] = $event => ($options.navBackward($event))),
+                class: vue.normalizeClass($options.navBackwardClass),
+                onClick: _cache[0] || (_cache[0] = $event => ($options.navBackward($event))),
                 disabled: $options.isNavBackwardDisabled(),
                 type: "button"
               }, [
-                vue.createVNode("span", { class: $options.navBackwardIconClass }, null, 2)
-              ], 10, ["disabled"])), [
+                vue.createElementVNode("span", {
+                  class: vue.normalizeClass($options.navBackwardIconClass)
+                }, null, 2)
+              ], 10, _hoisted_3$1)), [
                 [_directive_ripple]
               ])
             : vue.createCommentVNode("", true),
-          vue.createVNode("div", {
+          vue.createElementVNode("div", {
             class: "p-galleria-thumbnail-items-container",
-            style: {'height': $props.isVertical ? $props.contentHeight : ''}
+            style: vue.normalizeStyle({'height': $props.isVertical ? $props.contentHeight : ''})
           }, [
-            vue.createVNode("div", {
+            vue.createElementVNode("div", {
               ref: "itemsContainer",
               class: "p-galleria-thumbnail-items",
-              onTransitionend: _cache[2] || (_cache[2] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args))),
-              onTouchstart: _cache[3] || (_cache[3] = $event => ($options.onTouchStart($event))),
-              onTouchmove: _cache[4] || (_cache[4] = $event => ($options.onTouchMove($event))),
-              onTouchend: _cache[5] || (_cache[5] = $event => ($options.onTouchEnd($event)))
+              onTransitionend: _cache[1] || (_cache[1] = (...args) => ($options.onTransitionEnd && $options.onTransitionEnd(...args))),
+              onTouchstart: _cache[2] || (_cache[2] = $event => ($options.onTouchStart($event))),
+              onTouchmove: _cache[3] || (_cache[3] = $event => ($options.onTouchMove($event))),
+              onTouchend: _cache[4] || (_cache[4] = $event => ($options.onTouchEnd($event)))
             }, [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.value, (item, index) => {
-                return (vue.openBlock(), vue.createBlock("div", {
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.value, (item, index) => {
+                return (vue.openBlock(), vue.createElementBlock("div", {
                   key: `p-galleria-thumbnail-item-${index}`,
-                  class: ['p-galleria-thumbnail-item', {
+                  class: vue.normalizeClass(['p-galleria-thumbnail-item', {
                             'p-galleria-thumbnail-item-current': $props.activeIndex === index,
                             'p-galleria-thumbnail-item-active': $options.isItemActive(index),
                             'p-galleria-thumbnail-item-start': $options.firstItemAciveIndex() === index,
-                            'p-galleria-thumbnail-item-end': $options.lastItemActiveIndex() === index }]
+                            'p-galleria-thumbnail-item-end': $options.lastItemActiveIndex() === index }])
                 }, [
-                  vue.createVNode("div", {
+                  vue.createElementVNode("div", {
                     class: "p-galleria-thumbnail-item-content",
                     tabindex: $options.isItemActive(index) ? 0 : null,
                     onClick: $event => ($options.onItemClick(index)),
@@ -671,21 +681,23 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
                           item: item
                         }, null, 8, ["item"]))
                       : vue.createCommentVNode("", true)
-                  ], 40, ["tabindex", "onClick", "onKeydown"])
+                  ], 40, _hoisted_4$1)
                 ], 2))
               }), 128))
             ], 544)
           ], 4),
           ($props.showThumbnailNavigators)
-            ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+            ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                 key: 1,
-                class: $options.navForwardClass,
-                onClick: _cache[6] || (_cache[6] = $event => ($options.navForward($event))),
+                class: vue.normalizeClass($options.navForwardClass),
+                onClick: _cache[5] || (_cache[5] = $event => ($options.navForward($event))),
                 disabled: $options.isNavForwardDisabled(),
                 type: "button"
               }, [
-                vue.createVNode("span", { class: $options.navForwardIconClass }, null, 2)
-              ], 10, ["disabled"])), [
+                vue.createElementVNode("span", {
+                  class: vue.normalizeClass($options.navForwardIconClass)
+                }, null, 2)
+              ], 10, _hoisted_5$1)), [
                 [_directive_ripple]
               ])
             : vue.createCommentVNode("", true)
@@ -827,17 +839,21 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             'GalleriaItemSlot': script$2
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1 = /*#__PURE__*/vue.createVNode("span", { class: "p-galleria-close-icon pi pi-times" }, null, -1);
-    const _hoisted_2 = {
+    const _hoisted_1 = ["id"];
+    const _hoisted_2 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-galleria-close-icon pi pi-times" }, null, -1);
+    const _hoisted_3 = [
+      _hoisted_2
+    ];
+    const _hoisted_4 = {
       key: 1,
       class: "p-galleria-header"
     };
-    const _hoisted_3 = { class: "p-galleria-content" };
-    const _hoisted_4 = {
+    const _hoisted_5 = { class: "p-galleria-content" };
+    const _hoisted_6 = {
       key: 2,
       class: "p-galleria-footer"
     };
@@ -848,34 +864,32 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
       return (_ctx.$attrs.value && _ctx.$attrs.value.length > 0)
-        ? (vue.openBlock(), vue.createBlock("div", {
+        ? (vue.openBlock(), vue.createElementBlock("div", {
             key: 0,
             id: $data.id,
-            class: $options.galleriaClass,
-            style: _ctx.$attrs.containerStyle
+            class: vue.normalizeClass($options.galleriaClass),
+            style: vue.normalizeStyle(_ctx.$attrs.containerStyle)
           }, [
             (_ctx.$attrs.fullScreen)
-              ? vue.withDirectives((vue.openBlock(), vue.createBlock("button", {
+              ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                   key: 0,
                   type: "button",
                   class: "p-galleria-close p-link",
-                  onClick: _cache[1] || (_cache[1] = $event => (_ctx.$emit('mask-hide')))
-                }, [
-                  _hoisted_1
-                ], 512)), [
+                  onClick: _cache[0] || (_cache[0] = $event => (_ctx.$emit('mask-hide')))
+                }, _hoisted_3)), [
                   [_directive_ripple]
                 ])
               : vue.createCommentVNode("", true),
             (_ctx.$attrs.templates && _ctx.$attrs.templates['header'])
-              ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
+              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_4, [
                   (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$attrs.templates['header'])))
                 ]))
               : vue.createCommentVNode("", true),
-            vue.createVNode("div", _hoisted_3, [
+            vue.createElementVNode("div", _hoisted_5, [
               vue.createVNode(_component_GalleriaItem, {
                 value: _ctx.$attrs.value,
                 activeIndex: $data.activeIndex,
-                "onUpdate:activeIndex": _cache[2] || (_cache[2] = $event => ($data.activeIndex = $event)),
+                "onUpdate:activeIndex": _cache[1] || (_cache[1] = $event => (($data.activeIndex) = $event)),
                 circular: _ctx.$attrs.circular,
                 templates: _ctx.$attrs.templates,
                 showIndicators: _ctx.$attrs.showIndicators,
@@ -883,7 +897,7 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
                 showItemNavigators: _ctx.$attrs.showItemNavigators,
                 autoPlay: _ctx.$attrs.autoPlay,
                 slideShowActive: $data.slideShowActive,
-                "onUpdate:slideShowActive": _cache[3] || (_cache[3] = $event => ($data.slideShowActive = $event)),
+                "onUpdate:slideShowActive": _cache[2] || (_cache[2] = $event => (($data.slideShowActive) = $event)),
                 onStartSlideshow: $options.startSlideShow,
                 onStopSlideshow: $options.stopSlideShow
               }, null, 8, ["value", "activeIndex", "circular", "templates", "showIndicators", "changeItemOnIndicatorHover", "showItemNavigators", "autoPlay", "slideShowActive", "onStartSlideshow", "onStopSlideshow"]),
@@ -893,7 +907,7 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
                     containerId: $data.id,
                     value: _ctx.$attrs.value,
                     activeIndex: $data.activeIndex,
-                    "onUpdate:activeIndex": _cache[4] || (_cache[4] = $event => ($data.activeIndex = $event)),
+                    "onUpdate:activeIndex": _cache[3] || (_cache[3] = $event => (($data.activeIndex) = $event)),
                     templates: _ctx.$attrs.templates,
                     numVisible: $data.numVisible,
                     responsiveOptions: _ctx.$attrs.responsiveOptions,
@@ -902,17 +916,17 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
                     contentHeight: _ctx.$attrs.verticalThumbnailViewPortHeight,
                     showThumbnailNavigators: _ctx.$attrs.showThumbnailNavigators,
                     slideShowActive: $data.slideShowActive,
-                    "onUpdate:slideShowActive": _cache[5] || (_cache[5] = $event => ($data.slideShowActive = $event)),
+                    "onUpdate:slideShowActive": _cache[4] || (_cache[4] = $event => (($data.slideShowActive) = $event)),
                     onStopSlideshow: $options.stopSlideShow
                   }, null, 8, ["containerId", "value", "activeIndex", "templates", "numVisible", "responsiveOptions", "circular", "isVertical", "contentHeight", "showThumbnailNavigators", "slideShowActive", "onStopSlideshow"]))
                 : vue.createCommentVNode("", true)
             ]),
             (_ctx.$attrs.templates && _ctx.$attrs.templates['footer'])
-              ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
+              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_6, [
                   (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$attrs.templates['footer'])))
                 ]))
               : vue.createCommentVNode("", true)
-          ], 14, ["id"]))
+          ], 14, _hoisted_1))
         : vue.createCommentVNode("", true)
     }
 
@@ -1090,10 +1104,10 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             to: "body"
           }, [
             ($data.containerVisible)
-              ? (vue.openBlock(), vue.createBlock("div", {
+              ? (vue.openBlock(), vue.createElementBlock("div", {
                   key: 0,
                   ref: $options.maskRef,
-                  class: $options.maskContentClass
+                  class: vue.normalizeClass($options.maskContentClass)
                 }, [
                   vue.createVNode(vue.Transition, {
                     name: "p-galleria",
@@ -1160,4 +1174,4 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);

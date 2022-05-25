@@ -513,10 +513,10 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             }
         },
         components: {
-            'PLButton': Button__default['default']
+            'PLButton': Button__default["default"]
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -526,46 +526,50 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
       key: 0,
       class: "p-picklist-header"
     };
-    const _hoisted_4 = { class: "p-picklist-buttons p-picklist-transfer-buttons" };
-    const _hoisted_5 = { class: "p-picklist-list-wrapper p-picklist-target-wrapper" };
-    const _hoisted_6 = {
+    const _hoisted_4 = ["onClick", "onDblclick", "onKeydown", "aria-selected"];
+    const _hoisted_5 = { class: "p-picklist-buttons p-picklist-transfer-buttons" };
+    const _hoisted_6 = { class: "p-picklist-list-wrapper p-picklist-target-wrapper" };
+    const _hoisted_7 = {
       key: 0,
       class: "p-picklist-header"
     };
-    const _hoisted_7 = { class: "p-picklist-buttons p-picklist-target-controls" };
+    const _hoisted_8 = ["onClick", "onDblclick", "onKeydown", "aria-selected"];
+    const _hoisted_9 = { class: "p-picklist-buttons p-picklist-target-controls" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_PLButton = vue.resolveComponent("PLButton");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
-        vue.createVNode("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
+        vue.createElementVNode("div", _hoisted_1, [
           vue.renderSlot(_ctx.$slots, "sourcecontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-up",
-            onClick: _cache[1] || (_cache[1] = $event => ($options.moveUp($event, 0)))
+            onClick: _cache[0] || (_cache[0] = $event => ($options.moveUp($event, 0)))
           }),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-double-up",
-            onClick: _cache[2] || (_cache[2] = $event => ($options.moveTop($event, 0)))
+            onClick: _cache[1] || (_cache[1] = $event => ($options.moveTop($event, 0)))
           }),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-down",
-            onClick: _cache[3] || (_cache[3] = $event => ($options.moveDown($event, 0)))
+            onClick: _cache[2] || (_cache[2] = $event => ($options.moveDown($event, 0)))
           }),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-double-down",
-            onClick: _cache[4] || (_cache[4] = $event => ($options.moveBottom($event, 0)))
+            onClick: _cache[3] || (_cache[3] = $event => ($options.moveBottom($event, 0)))
           }),
           vue.renderSlot(_ctx.$slots, "sourcecontrolsend")
         ]),
-        vue.createVNode("div", _hoisted_2, [
+        vue.createElementVNode("div", _hoisted_2, [
           (_ctx.$slots.sourceheader)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_3, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
                 vue.renderSlot(_ctx.$slots, "sourceheader")
               ]))
             : vue.createCommentVNode("", true),
@@ -574,20 +578,20 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             name: "p-picklist-flip",
             tag: "ul",
             class: "p-picklist-list p-picklist-source",
-            style: $props.listStyle,
+            style: vue.normalizeStyle($props.listStyle),
             role: "listbox",
             "aria-multiselectable": "multiple"
           }, {
             default: vue.withCtx(() => [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.sourceList, (item, i) => {
-                return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.sourceList, (item, i) => {
+                return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
                   key: $options.getItemKey(item, i),
                   tabindex: "0",
-                  class: ['p-picklist-item', {'p-highlight': $options.isSelected(item, 0)}],
+                  class: vue.normalizeClass(['p-picklist-item', {'p-highlight': $options.isSelected(item, 0)}]),
                   onClick: $event => ($options.onItemClick($event, item, 0)),
                   onDblclick: $event => ($options.onItemDblClick($event, item, 0)),
                   onKeydown: $event => ($options.onItemKeyDown($event, item, 0)),
-                  onTouchend: _cache[5] || (_cache[5] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
+                  onTouchend: _cache[4] || (_cache[4] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
                   role: "option",
                   "aria-selected": $options.isSelected(item, 0)
                 }, [
@@ -595,7 +599,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
                     item: item,
                     index: i
                   })
-                ], 42, ["onClick", "onDblclick", "onKeydown", "aria-selected"])), [
+                ], 42, _hoisted_4)), [
                   [_directive_ripple]
                 ])
               }), 128))
@@ -603,7 +607,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             _: 3
           }, 8, ["style"])
         ]),
-        vue.createVNode("div", _hoisted_4, [
+        vue.createElementVNode("div", _hoisted_5, [
           vue.renderSlot(_ctx.$slots, "movecontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
@@ -627,9 +631,9 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
           }, null, 8, ["onClick"]),
           vue.renderSlot(_ctx.$slots, "movecontrolsend")
         ]),
-        vue.createVNode("div", _hoisted_5, [
+        vue.createElementVNode("div", _hoisted_6, [
           (_ctx.$slots.targetheader)
-            ? (vue.openBlock(), vue.createBlock("div", _hoisted_6, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_7, [
                 vue.renderSlot(_ctx.$slots, "targetheader")
               ]))
             : vue.createCommentVNode("", true),
@@ -638,20 +642,20 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             name: "p-picklist-flip",
             tag: "ul",
             class: "p-picklist-list p-picklist-target",
-            style: $props.listStyle,
+            style: vue.normalizeStyle($props.listStyle),
             role: "listbox",
             "aria-multiselectable": "multiple"
           }, {
             default: vue.withCtx(() => [
-              (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.targetList, (item, i) => {
-                return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.targetList, (item, i) => {
+                return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
                   key: $options.getItemKey(item, i),
                   tabindex: "0",
-                  class: ['p-picklist-item', {'p-highlight': $options.isSelected(item, 1)}],
+                  class: vue.normalizeClass(['p-picklist-item', {'p-highlight': $options.isSelected(item, 1)}]),
                   onClick: $event => ($options.onItemClick($event, item, 1)),
                   onDblclick: $event => ($options.onItemDblClick($event, item, 1)),
                   onKeydown: $event => ($options.onItemKeyDown($event, item, 1)),
-                  onTouchend: _cache[6] || (_cache[6] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
+                  onTouchend: _cache[5] || (_cache[5] = (...args) => ($options.onItemTouchEnd && $options.onItemTouchEnd(...args))),
                   role: "option",
                   "aria-selected": $options.isSelected(item, 1)
                 }, [
@@ -659,7 +663,7 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
                     item: item,
                     index: i
                   })
-                ], 42, ["onClick", "onDblclick", "onKeydown", "aria-selected"])), [
+                ], 42, _hoisted_8)), [
                   [_directive_ripple]
                 ])
               }), 128))
@@ -667,27 +671,27 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             _: 3
           }, 8, ["style"])
         ]),
-        vue.createVNode("div", _hoisted_7, [
+        vue.createElementVNode("div", _hoisted_9, [
           vue.renderSlot(_ctx.$slots, "targetcontrolsstart"),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-up",
-            onClick: _cache[7] || (_cache[7] = $event => ($options.moveUp($event, 1)))
+            onClick: _cache[6] || (_cache[6] = $event => ($options.moveUp($event, 1)))
           }),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-double-up",
-            onClick: _cache[8] || (_cache[8] = $event => ($options.moveTop($event, 1)))
+            onClick: _cache[7] || (_cache[7] = $event => ($options.moveTop($event, 1)))
           }),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-down",
-            onClick: _cache[9] || (_cache[9] = $event => ($options.moveDown($event, 1)))
+            onClick: _cache[8] || (_cache[8] = $event => ($options.moveDown($event, 1)))
           }),
           vue.createVNode(_component_PLButton, {
             type: "button",
             icon: "pi pi-angle-double-down",
-            onClick: _cache[10] || (_cache[10] = $event => ($options.moveBottom($event, 1)))
+            onClick: _cache[9] || (_cache[9] = $event => ($options.moveBottom($event, 1)))
           }),
           vue.renderSlot(_ctx.$slots, "targetcontrolsend")
         ])
@@ -728,4 +732,4 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
 
     return script;
 
-}(primevue.button, primevue.utils, primevue.ripple, Vue));
+})(primevue.button, primevue.utils, primevue.ripple, Vue);

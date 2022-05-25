@@ -1,4 +1,4 @@
-import { openBlock, createBlock, renderSlot, createCommentVNode } from 'vue';
+import { openBlock, createElementBlock, renderSlot, createCommentVNode } from 'vue';
 
 var script = {
     name: 'DeferredContent',
@@ -58,7 +58,7 @@ var script = {
 const _hoisted_1 = { ref: "container" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1, [
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
     ($data.loaded)
       ? renderSlot(_ctx.$slots, "default", { key: 0 })
       : createCommentVNode("", true)

@@ -58,30 +58,31 @@ this.primevue.togglebutton = (function (Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1 = { class: "p-button-label" };
+    const _hoisted_1 = ["aria-checked", "tabindex"];
+    const _hoisted_2 = { class: "p-button-label" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return vue.withDirectives((vue.openBlock(), vue.createBlock("div", {
-        class: $options.buttonClass,
-        onClick: _cache[1] || (_cache[1] = $event => ($options.onClick($event))),
+      return vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.buttonClass),
+        onClick: _cache[0] || (_cache[0] = $event => ($options.onClick($event))),
         role: "checkbox",
         "aria-checked": $props.modelValue,
         tabindex: _ctx.$attrs.disabled ? null : '0'
       }, [
         ($options.hasIcon)
-          ? (vue.openBlock(), vue.createBlock("span", {
+          ? (vue.openBlock(), vue.createElementBlock("span", {
               key: 0,
-              class: $options.iconClass
+              class: vue.normalizeClass($options.iconClass)
             }, null, 2))
           : vue.createCommentVNode("", true),
-        vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.label), 1)
-      ], 10, ["aria-checked", "tabindex"])), [
+        vue.createElementVNode("span", _hoisted_2, vue.toDisplayString($options.label), 1)
+      ], 10, _hoisted_1)), [
         [_directive_ripple]
       ])
     }
@@ -90,4 +91,4 @@ this.primevue.togglebutton = (function (Ripple, vue) {
 
     return script;
 
-}(primevue.ripple, Vue));
+})(primevue.ripple, Vue);

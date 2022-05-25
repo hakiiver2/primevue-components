@@ -53,40 +53,41 @@ this.primevue.chip = (function (vue) {
         }
     };
 
-    const _hoisted_1 = {
+    const _hoisted_1 = ["src"];
+    const _hoisted_2 = {
       key: 2,
       class: "p-chip-text"
     };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       return ($data.visible)
-        ? (vue.openBlock(), vue.createBlock("div", {
+        ? (vue.openBlock(), vue.createElementBlock("div", {
             key: 0,
-            class: $options.containerClass
+            class: vue.normalizeClass($options.containerClass)
           }, [
             vue.renderSlot(_ctx.$slots, "default", {}, () => [
               ($props.image)
-                ? (vue.openBlock(), vue.createBlock("img", {
+                ? (vue.openBlock(), vue.createElementBlock("img", {
                     key: 0,
                     src: $props.image
-                  }, null, 8, ["src"]))
+                  }, null, 8, _hoisted_1))
                 : ($props.icon)
-                  ? (vue.openBlock(), vue.createBlock("span", {
+                  ? (vue.openBlock(), vue.createElementBlock("span", {
                       key: 1,
-                      class: $options.iconClass
+                      class: vue.normalizeClass($options.iconClass)
                     }, null, 2))
                   : vue.createCommentVNode("", true),
               ($props.label)
-                ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, vue.toDisplayString($props.label), 1))
+                ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, vue.toDisplayString($props.label), 1))
                 : vue.createCommentVNode("", true)
             ]),
             ($props.removable)
-              ? (vue.openBlock(), vue.createBlock("span", {
+              ? (vue.openBlock(), vue.createElementBlock("span", {
                   key: 0,
                   tabindex: "0",
-                  class: $options.removeIconClass,
-                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.close && $options.close(...args))),
-                  onKeydown: _cache[2] || (_cache[2] = vue.withKeys((...args) => ($options.close && $options.close(...args)), ["enter"]))
+                  class: vue.normalizeClass($options.removeIconClass),
+                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.close && $options.close(...args))),
+                  onKeydown: _cache[1] || (_cache[1] = vue.withKeys((...args) => ($options.close && $options.close(...args)), ["enter"]))
                 }, null, 34))
               : vue.createCommentVNode("", true)
           ], 2))
@@ -127,4 +128,4 @@ this.primevue.chip = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

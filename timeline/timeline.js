@@ -34,24 +34,26 @@ this.primevue.timeline = (function (utils, vue) {
 
     const _hoisted_1 = { class: "p-timeline-event-opposite" };
     const _hoisted_2 = { class: "p-timeline-event-separator" };
-    const _hoisted_3 = /*#__PURE__*/vue.createVNode("div", { class: "p-timeline-event-marker" }, null, -1);
-    const _hoisted_4 = /*#__PURE__*/vue.createVNode("div", { class: "p-timeline-event-connector" }, null, -1);
+    const _hoisted_3 = /*#__PURE__*/vue.createElementVNode("div", { class: "p-timeline-event-marker" }, null, -1);
+    const _hoisted_4 = /*#__PURE__*/vue.createElementVNode("div", { class: "p-timeline-event-connector" }, null, -1);
     const _hoisted_5 = { class: "p-timeline-event-content" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
-        (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.value, (item, index) => {
-          return (vue.openBlock(), vue.createBlock("div", {
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
+        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.value, (item, index) => {
+          return (vue.openBlock(), vue.createElementBlock("div", {
             key: $options.getKey(item, index),
             class: "p-timeline-event"
           }, [
-            vue.createVNode("div", _hoisted_1, [
+            vue.createElementVNode("div", _hoisted_1, [
               vue.renderSlot(_ctx.$slots, "opposite", {
                 item: item,
                 index: index
               })
             ]),
-            vue.createVNode("div", _hoisted_2, [
+            vue.createElementVNode("div", _hoisted_2, [
               vue.renderSlot(_ctx.$slots, "marker", {
                 item: item,
                 index: index
@@ -64,7 +66,7 @@ this.primevue.timeline = (function (utils, vue) {
                   ])
                 : vue.createCommentVNode("", true)
             ]),
-            vue.createVNode("div", _hoisted_5, [
+            vue.createElementVNode("div", _hoisted_5, [
               vue.renderSlot(_ctx.$slots, "content", {
                 item: item,
                 index: index
@@ -109,4 +111,4 @@ this.primevue.timeline = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

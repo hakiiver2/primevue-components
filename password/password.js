@@ -229,7 +229,7 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, vue) {
                 this.unmasked = !this.unmasked;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -286,7 +286,7 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, vue) {
             }
         },
         components: {
-            'PInputText': InputText__default['default']
+            'PInputText': InputText__default["default"]
         }
     };
 
@@ -296,9 +296,9 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_PInputText = vue.resolveComponent("PInputText");
 
-      return (vue.openBlock(), vue.createBlock("div", {
-        class: $options.containerClass,
-        style: $props.style
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass),
+        style: vue.normalizeStyle($props.style)
       }, [
         vue.createVNode(_component_PInputText, vue.mergeProps({
           ref: "input",
@@ -312,10 +312,10 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, vue) {
           onKeyup: $options.onKeyUp
         }, _ctx.$attrs), null, 16, ["class", "style", "type", "value", "onInput", "onFocus", "onBlur", "onKeyup"]),
         ($props.toggleMask)
-          ? (vue.openBlock(), vue.createBlock("i", {
+          ? (vue.openBlock(), vue.createElementBlock("i", {
               key: 0,
-              class: $options.toggleIconClass,
-              onClick: _cache[1] || (_cache[1] = (...args) => ($options.onMaskToggle && $options.onMaskToggle(...args)))
+              class: vue.normalizeClass($options.toggleIconClass),
+              onClick: _cache[0] || (_cache[0] = (...args) => ($options.onMaskToggle && $options.onMaskToggle(...args)))
             }, null, 2))
           : vue.createCommentVNode("", true),
         (vue.openBlock(), vue.createBlock(vue.Teleport, {
@@ -330,21 +330,21 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, vue) {
           }, {
             default: vue.withCtx(() => [
               ($data.overlayVisible)
-                ? (vue.openBlock(), vue.createBlock("div", {
+                ? (vue.openBlock(), vue.createElementBlock("div", {
                     key: 0,
                     ref: $options.overlayRef,
-                    class: $options.panelStyleClass,
-                    onClick: _cache[2] || (_cache[2] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                    class: vue.normalizeClass($options.panelStyleClass),
+                    onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                   }, [
                     vue.renderSlot(_ctx.$slots, "header"),
                     vue.renderSlot(_ctx.$slots, "content", {}, () => [
-                      vue.createVNode("div", _hoisted_1, [
-                        vue.createVNode("div", {
-                          class: $options.strengthClass,
-                          style: {'width': $data.meter ? $data.meter.width : ''}
+                      vue.createElementVNode("div", _hoisted_1, [
+                        vue.createElementVNode("div", {
+                          class: vue.normalizeClass($options.strengthClass),
+                          style: vue.normalizeStyle({'width': $data.meter ? $data.meter.width : ''})
                         }, null, 6)
                       ]),
-                      vue.createVNode("div", _hoisted_2, vue.toDisplayString($data.infoText), 1)
+                      vue.createElementVNode("div", _hoisted_2, vue.toDisplayString($data.infoText), 1)
                     ]),
                     vue.renderSlot(_ctx.$slots, "footer")
                   ], 2))
@@ -390,4 +390,4 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, vue) {
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.inputtext, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.inputtext, Vue);

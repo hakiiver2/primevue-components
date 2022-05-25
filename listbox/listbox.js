@@ -282,10 +282,10 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         },
         components: {
-            'VirtualScroller': VirtualScroller__default['default']
+            'VirtualScroller': VirtualScroller__default["default"]
         }
     };
 
@@ -295,13 +295,16 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
       class: "p-listbox-header"
     };
     const _hoisted_3 = { class: "p-listbox-filter-container" };
-    const _hoisted_4 = /*#__PURE__*/vue.createVNode("span", { class: "p-listbox-filter-icon pi pi-search" }, null, -1);
-    const _hoisted_5 = { class: "p-listbox-item-group" };
-    const _hoisted_6 = {
+    const _hoisted_4 = ["placeholder"];
+    const _hoisted_5 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-listbox-filter-icon pi pi-search" }, null, -1);
+    const _hoisted_6 = ["tabindex", "onClick", "onKeydown", "aria-label", "aria-selected"];
+    const _hoisted_7 = { class: "p-listbox-item-group" };
+    const _hoisted_8 = ["tabindex", "onClick", "onKeydown", "aria-label", "aria-selected"];
+    const _hoisted_9 = {
       key: 2,
       class: "p-listbox-empty-message"
     };
-    const _hoisted_7 = {
+    const _hoisted_10 = {
       key: 3,
       class: "p-listbox-empty-message"
     };
@@ -310,30 +313,30 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
       const _component_VirtualScroller = vue.resolveComponent("VirtualScroller");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
         vue.renderSlot(_ctx.$slots, "header", {
           value: $props.modelValue,
           options: $options.visibleOptions
         }),
         ($props.filter)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_2, [
-              vue.createVNode("div", _hoisted_3, [
-                vue.withDirectives(vue.createVNode("input", {
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
+              vue.createElementVNode("div", _hoisted_3, [
+                vue.withDirectives(vue.createElementVNode("input", {
                   type: "text",
                   class: "p-listbox-filter p-inputtext p-component",
-                  "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => ($data.filterValue = $event)),
+                  "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($data.filterValue) = $event)),
                   placeholder: $props.filterPlaceholder,
-                  onInput: _cache[2] || (_cache[2] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
-                }, null, 40, ["placeholder"]), [
+                  onInput: _cache[1] || (_cache[1] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                }, null, 40, _hoisted_4), [
                   [vue.vModelText, $data.filterValue]
                 ]),
-                _hoisted_4
+                _hoisted_5
               ])
             ]))
           : vue.createCommentVNode("", true),
-        vue.createVNode("div", {
+        vue.createElementVNode("div", {
           class: "p-listbox-list-wrapper",
-          style: $props.listStyle
+          style: vue.normalizeStyle($props.listStyle)
         }, [
           vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
             style: $props.listStyle,
@@ -341,21 +344,21 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
             disabled: $options.virtualScrollerDisabled
           }), vue.createSlots({
             content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
-              vue.createVNode("ul", {
+              vue.createElementVNode("ul", {
                 ref: contentRef,
-                class: ['p-listbox-list', styleClass],
-                style: contentStyle,
+                class: vue.normalizeClass(['p-listbox-list', styleClass]),
+                style: vue.normalizeStyle(contentStyle),
                 role: "listbox",
                 "aria-multiselectable": "multiple"
               }, [
                 (!$props.optionGroupLabel)
-                  ? (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (option, i) => {
-                      return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
+                  ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (option, i) => {
+                      return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
                         tabindex: $options.isOptionDisabled(option) ? null : '0',
-                        class: ['p-listbox-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                        class: vue.normalizeClass(['p-listbox-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
                         key: $options.getOptionRenderKey(option),
                         onClick: $event => ($options.onOptionSelect($event, option)),
-                        onTouchend: _cache[3] || (_cache[3] = $event => ($options.onOptionTouchEnd())),
+                        onTouchend: _cache[2] || (_cache[2] = $event => ($options.onOptionTouchEnd())),
                         onKeydown: $event => ($options.onOptionKeyDown($event, option)),
                         role: "option",
                         "aria-label": $options.getOptionLabel(option),
@@ -367,15 +370,15 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
                         }, () => [
                           vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
                         ])
-                      ], 42, ["tabindex", "onClick", "onKeydown", "aria-label", "aria-selected"])), [
+                      ], 42, _hoisted_6)), [
                         [_directive_ripple]
                       ])
                     }), 128))
-                  : (vue.openBlock(true), vue.createBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
-                      return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+                  : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
+                      return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                         key: $options.getOptionGroupRenderKey(optionGroup)
                       }, [
-                        vue.createVNode("li", _hoisted_5, [
+                        vue.createElementVNode("li", _hoisted_7, [
                           vue.renderSlot(_ctx.$slots, "optiongroup", {
                             option: optionGroup,
                             index: $options.getOptionIndex(i, getItemOptions)
@@ -383,13 +386,13 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
                             vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                           ])
                         ]),
-                        (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
-                          return vue.withDirectives((vue.openBlock(), vue.createBlock("li", {
+                        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                          return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
                             tabindex: $options.isOptionDisabled(option) ? null : '0',
-                            class: ['p-listbox-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                            class: vue.normalizeClass(['p-listbox-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
                             key: $options.getOptionRenderKey(option),
                             onClick: $event => ($options.onOptionSelect($event, option)),
-                            onTouchend: _cache[4] || (_cache[4] = $event => ($options.onOptionTouchEnd())),
+                            onTouchend: _cache[3] || (_cache[3] = $event => ($options.onOptionTouchEnd())),
                             onKeydown: $event => ($options.onOptionKeyDown($event, option)),
                             role: "option",
                             "aria-label": $options.getOptionLabel(option),
@@ -401,20 +404,20 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
                             }, () => [
                               vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
                             ])
-                          ], 42, ["tabindex", "onClick", "onKeydown", "aria-label", "aria-selected"])), [
+                          ], 42, _hoisted_8)), [
                             [_directive_ripple]
                           ])
                         }), 128))
                       ], 64))
                     }), 128)),
                 ($data.filterValue && (!items || (items && items.length === 0)))
-                  ? (vue.openBlock(), vue.createBlock("li", _hoisted_6, [
+                  ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_9, [
                       vue.renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
                         vue.createTextVNode(vue.toDisplayString($options.emptyFilterMessageText), 1)
                       ])
                     ]))
                   : ((!$props.options || ($props.options && $props.options.length === 0)))
-                    ? (vue.openBlock(), vue.createBlock("li", _hoisted_7, [
+                    ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_10, [
                         vue.renderSlot(_ctx.$slots, "empty", {}, () => [
                           vue.createTextVNode(vue.toDisplayString($options.emptyMessageText), 1)
                         ])
@@ -475,4 +478,4 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
 
     return script;
 
-}(primevue.utils, primevue.api, primevue.ripple, primevue.virtualscroller, Vue));
+})(primevue.utils, primevue.api, primevue.ripple, primevue.virtualscroller, Vue);

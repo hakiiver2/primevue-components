@@ -203,26 +203,26 @@ const _hoisted_1 = { class: "p-scrollpanel p-component" };
 const _hoisted_2 = { class: "p-scrollpanel-wrapper" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-    vue.createVNode("div", _hoisted_2, [
-      vue.createVNode("div", {
+  return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+    vue.createElementVNode("div", _hoisted_2, [
+      vue.createElementVNode("div", {
         ref: "content",
         class: "p-scrollpanel-content",
-        onScroll: _cache[1] || (_cache[1] = (...args) => ($options.moveBar && $options.moveBar(...args))),
-        onMouseenter: _cache[2] || (_cache[2] = (...args) => ($options.moveBar && $options.moveBar(...args)))
+        onScroll: _cache[0] || (_cache[0] = (...args) => ($options.moveBar && $options.moveBar(...args))),
+        onMouseenter: _cache[1] || (_cache[1] = (...args) => ($options.moveBar && $options.moveBar(...args)))
       }, [
         vue.renderSlot(_ctx.$slots, "default")
       ], 544)
     ]),
-    vue.createVNode("div", {
+    vue.createElementVNode("div", {
       ref: "xBar",
       class: "p-scrollpanel-bar p-scrollpanel-bar-x",
-      onMousedown: _cache[3] || (_cache[3] = (...args) => ($options.onXBarMouseDown && $options.onXBarMouseDown(...args)))
+      onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.onXBarMouseDown && $options.onXBarMouseDown(...args)))
     }, null, 544),
-    vue.createVNode("div", {
+    vue.createElementVNode("div", {
       ref: "yBar",
       class: "p-scrollpanel-bar p-scrollpanel-bar-y",
-      onMousedown: _cache[4] || (_cache[4] = (...args) => ($options.onYBarMouseDown && $options.onYBarMouseDown(...args)))
+      onMousedown: _cache[3] || (_cache[3] = (...args) => ($options.onYBarMouseDown && $options.onYBarMouseDown(...args)))
     }, null, 544)
   ]))
 }

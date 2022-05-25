@@ -1,5 +1,5 @@
 import { ZIndexUtils, DomHandler } from 'primevue/utils';
-import { openBlock, createBlock, Transition, withCtx, createVNode, createCommentVNode } from 'vue';
+import { openBlock, createBlock, Transition, withCtx, createElementBlock, normalizeClass, createElementVNode, createCommentVNode } from 'vue';
 
 var script = {
     name: 'ScrollTop',
@@ -114,14 +114,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     default: withCtx(() => [
       ($data.visible)
-        ? (openBlock(), createBlock("button", {
+        ? (openBlock(), createElementBlock("button", {
             key: 0,
             ref: $options.containerRef,
-            class: $options.containerClass,
-            onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+            class: normalizeClass($options.containerClass),
+            onClick: _cache[0] || (_cache[0] = (...args) => ($options.onClick && $options.onClick(...args))),
             type: "button"
           }, [
-            createVNode("span", { class: $options.iconClass }, null, 2)
+            createElementVNode("span", {
+              class: normalizeClass($options.iconClass)
+            }, null, 2)
           ], 2))
         : createCommentVNode("", true)
     ]),

@@ -1,6 +1,6 @@
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
-import { openBlock, createBlock, createCommentVNode, Teleport, createVNode, Transition, withCtx } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, createCommentVNode, createBlock, Teleport, createVNode, Transition, withCtx, createElementVNode } from 'vue';
 
 var script = {
     name: 'ColorPicker',
@@ -554,27 +554,28 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-colorpicker-content" };
-const _hoisted_2 = { class: "p-colorpicker-color" };
+const _hoisted_1 = ["tabindex", "disabled", "aria-labelledby"];
+const _hoisted_2 = { class: "p-colorpicker-content" };
+const _hoisted_3 = { class: "p-colorpicker-color" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     ref: "container",
-    class: $options.containerClass
+    class: normalizeClass($options.containerClass)
   }, [
     (!$props.inline)
-      ? (openBlock(), createBlock("input", {
+      ? (openBlock(), createElementBlock("input", {
           key: 0,
           ref: "input",
           type: "text",
-          class: $options.inputClass,
+          class: normalizeClass($options.inputClass),
           readonly: "readonly",
           tabindex: $props.tabindex,
           disabled: $props.disabled,
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onInputClick && $options.onInputClick(...args))),
-          onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onInputKeydown && $options.onInputKeydown(...args))),
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.onInputClick && $options.onInputClick(...args))),
+          onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onInputKeydown && $options.onInputKeydown(...args))),
           "aria-labelledby": $props.ariaLabelledBy
-        }, null, 42, ["tabindex", "disabled", "aria-labelledby"]))
+        }, null, 42, _hoisted_1))
       : createCommentVNode("", true),
     (openBlock(), createBlock(Teleport, {
       to: $options.appendTarget,
@@ -588,37 +589,37 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: withCtx(() => [
           ($props.inline ? true : $data.overlayVisible)
-            ? (openBlock(), createBlock("div", {
+            ? (openBlock(), createElementBlock("div", {
                 key: 0,
                 ref: $options.pickerRef,
-                class: $options.pickerClass,
-                onClick: _cache[11] || (_cache[11] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                class: normalizeClass($options.pickerClass),
+                onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
-                createVNode("div", _hoisted_1, [
-                  createVNode("div", {
+                createElementVNode("div", _hoisted_2, [
+                  createElementVNode("div", {
                     ref: $options.colorSelectorRef,
                     class: "p-colorpicker-color-selector",
-                    onMousedown: _cache[3] || (_cache[3] = $event => ($options.onColorMousedown($event))),
-                    onTouchstart: _cache[4] || (_cache[4] = $event => ($options.onColorDragStart($event))),
-                    onTouchmove: _cache[5] || (_cache[5] = $event => ($options.onDrag($event))),
-                    onTouchend: _cache[6] || (_cache[6] = $event => ($options.onDragEnd()))
+                    onMousedown: _cache[2] || (_cache[2] = $event => ($options.onColorMousedown($event))),
+                    onTouchstart: _cache[3] || (_cache[3] = $event => ($options.onColorDragStart($event))),
+                    onTouchmove: _cache[4] || (_cache[4] = $event => ($options.onDrag($event))),
+                    onTouchend: _cache[5] || (_cache[5] = $event => ($options.onDragEnd()))
                   }, [
-                    createVNode("div", _hoisted_2, [
-                      createVNode("div", {
+                    createElementVNode("div", _hoisted_3, [
+                      createElementVNode("div", {
                         ref: $options.colorHandleRef,
                         class: "p-colorpicker-color-handle"
                       }, null, 512)
                     ])
                   ], 544),
-                  createVNode("div", {
+                  createElementVNode("div", {
                     ref: $options.hueViewRef,
                     class: "p-colorpicker-hue",
-                    onMousedown: _cache[7] || (_cache[7] = $event => ($options.onHueMousedown($event))),
-                    onTouchstart: _cache[8] || (_cache[8] = $event => ($options.onHueDragStart($event))),
-                    onTouchmove: _cache[9] || (_cache[9] = $event => ($options.onDrag($event))),
-                    onTouchend: _cache[10] || (_cache[10] = $event => ($options.onDragEnd()))
+                    onMousedown: _cache[6] || (_cache[6] = $event => ($options.onHueMousedown($event))),
+                    onTouchstart: _cache[7] || (_cache[7] = $event => ($options.onHueDragStart($event))),
+                    onTouchmove: _cache[8] || (_cache[8] = $event => ($options.onDrag($event))),
+                    onTouchend: _cache[9] || (_cache[9] = $event => ($options.onDragEnd()))
                   }, [
-                    createVNode("div", {
+                    createElementVNode("div", {
                       ref: $options.hueHandleRef,
                       class: "p-colorpicker-hue-handle"
                     }, null, 512)

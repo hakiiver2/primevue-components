@@ -43,12 +43,12 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
                 this.visible = false;
                 this.confirmation = null;
             };
-            ConfirmationEventBus__default['default'].on('confirm', this.confirmListener);
-            ConfirmationEventBus__default['default'].on('close', this.closeListener);
+            ConfirmationEventBus__default["default"].on('confirm', this.confirmListener);
+            ConfirmationEventBus__default["default"].on('close', this.closeListener);
         },
         beforeUnmount() {
-            ConfirmationEventBus__default['default'].off('confirm', this.confirmListener);
-            ConfirmationEventBus__default['default'].off('close', this.closeListener);
+            ConfirmationEventBus__default["default"].off('confirm', this.confirmListener);
+            ConfirmationEventBus__default["default"].off('close', this.closeListener);
 
             this.unbindOutsideClickListener();
             if (this.scrollHandler) {
@@ -168,7 +168,7 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -207,7 +207,7 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
             }
         },
         components: {
-            'CPButton': Button__default['default']
+            'CPButton': Button__default["default"]
         }
     };
 
@@ -230,34 +230,36 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
         }, {
           default: vue.withCtx(() => [
             ($data.visible)
-              ? (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+              ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
                   key: 0,
                   class: $options.containerClass,
                   ref: $options.containerRef
                 }, _ctx.$attrs, {
-                  onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                  onClick: _cache[2] || (_cache[2] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                 }), [
                   (!_ctx.$slots.message)
-                    ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-                        vue.createVNode("i", { class: $options.iconClass }, null, 2),
-                        vue.createVNode("span", _hoisted_2, vue.toDisplayString($data.confirmation.message), 1)
+                    ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+                        vue.createElementVNode("i", {
+                          class: vue.normalizeClass($options.iconClass)
+                        }, null, 2),
+                        vue.createElementVNode("span", _hoisted_2, vue.toDisplayString($data.confirmation.message), 1)
                       ]))
                     : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.message), {
                         key: 1,
                         message: $data.confirmation
                       }, null, 8, ["message"])),
-                  vue.createVNode("div", _hoisted_3, [
+                  vue.createElementVNode("div", _hoisted_3, [
                     vue.createVNode(_component_CPButton, {
                       label: $options.rejectLabel,
                       icon: $options.rejectIcon,
-                      class: $options.rejectClass,
-                      onClick: _cache[1] || (_cache[1] = $event => ($options.reject()))
+                      class: vue.normalizeClass($options.rejectClass),
+                      onClick: _cache[0] || (_cache[0] = $event => ($options.reject()))
                     }, null, 8, ["label", "icon", "class"]),
                     vue.createVNode(_component_CPButton, {
                       label: $options.acceptLabel,
                       icon: $options.acceptIcon,
-                      class: $options.acceptClass,
-                      onClick: _cache[2] || (_cache[2] = $event => ($options.accept())),
+                      class: vue.normalizeClass($options.acceptClass),
+                      onClick: _cache[1] || (_cache[1] = $event => ($options.accept())),
                       autofocus: ""
                     }, null, 8, ["label", "icon", "class"])
                   ])
@@ -303,4 +305,4 @@ this.primevue.confirmpopup = (function (ConfirmationEventBus, utils, OverlayEven
 
     return script;
 
-}(primevue.confirmationeventbus, primevue.utils, primevue.overlayeventbus, primevue.button, Vue));
+})(primevue.confirmationeventbus, primevue.utils, primevue.overlayeventbus, primevue.button, Vue);

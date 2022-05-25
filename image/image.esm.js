@@ -1,5 +1,5 @@
 import { ZIndexUtils, DomHandler } from 'primevue/utils';
-import { openBlock, createBlock, createVNode, mergeProps, renderSlot, createCommentVNode, Teleport, Transition, withCtx } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, normalizeStyle, createElementVNode, mergeProps, renderSlot, createCommentVNode, createBlock, Teleport, createVNode, Transition, withCtx } from 'vue';
 
 var script = {
     name: 'Image',
@@ -124,82 +124,91 @@ var script = {
     }
 };
 
-const _hoisted_1 = /*#__PURE__*/createVNode("i", { class: "p-image-preview-icon pi pi-eye" }, null, -1);
-const _hoisted_2 = { class: "p-image-toolbar" };
-const _hoisted_3 = /*#__PURE__*/createVNode("i", { class: "pi pi-refresh" }, null, -1);
-const _hoisted_4 = /*#__PURE__*/createVNode("i", { class: "pi pi-undo" }, null, -1);
-const _hoisted_5 = /*#__PURE__*/createVNode("i", { class: "pi pi-search-minus" }, null, -1);
-const _hoisted_6 = /*#__PURE__*/createVNode("i", { class: "pi pi-search-plus" }, null, -1);
-const _hoisted_7 = /*#__PURE__*/createVNode("i", { class: "pi pi-times" }, null, -1);
-const _hoisted_8 = { key: 0 };
+const _hoisted_1 = ["showPreview"];
+const _hoisted_2 = /*#__PURE__*/createElementVNode("i", { class: "p-image-preview-icon pi pi-eye" }, null, -1);
+const _hoisted_3 = { class: "p-image-toolbar" };
+const _hoisted_4 = /*#__PURE__*/createElementVNode("i", { class: "pi pi-refresh" }, null, -1);
+const _hoisted_5 = [
+  _hoisted_4
+];
+const _hoisted_6 = /*#__PURE__*/createElementVNode("i", { class: "pi pi-undo" }, null, -1);
+const _hoisted_7 = [
+  _hoisted_6
+];
+const _hoisted_8 = ["disabled"];
+const _hoisted_9 = /*#__PURE__*/createElementVNode("i", { class: "pi pi-search-minus" }, null, -1);
+const _hoisted_10 = [
+  _hoisted_9
+];
+const _hoisted_11 = ["disabled"];
+const _hoisted_12 = /*#__PURE__*/createElementVNode("i", { class: "pi pi-search-plus" }, null, -1);
+const _hoisted_13 = [
+  _hoisted_12
+];
+const _hoisted_14 = /*#__PURE__*/createElementVNode("i", { class: "pi pi-times" }, null, -1);
+const _hoisted_15 = [
+  _hoisted_14
+];
+const _hoisted_16 = { key: 0 };
+const _hoisted_17 = ["src"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", {
-    class: $options.containerClass,
-    style: $props.style
+  return (openBlock(), createElementBlock("span", {
+    class: normalizeClass($options.containerClass),
+    style: normalizeStyle($props.style)
   }, [
-    createVNode("img", mergeProps(_ctx.$attrs, {
+    createElementVNode("img", mergeProps(_ctx.$attrs, {
       style: $props.imageStyle,
       class: $props.imageClass
     }), null, 16),
     ($props.preview)
-      ? (openBlock(), createBlock("div", {
+      ? (openBlock(), createElementBlock("div", {
           key: 0,
           class: "p-image-preview-indicator",
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onImageClick && $options.onImageClick(...args))),
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.onImageClick && $options.onImageClick(...args))),
           showPreview: $props.showPreview
         }, [
           renderSlot(_ctx.$slots, "indicator", {}, () => [
-            _hoisted_1
+            _hoisted_2
           ])
-        ], 8, ["showPreview"]))
+        ], 8, _hoisted_1))
       : createCommentVNode("", true),
     (openBlock(), createBlock(Teleport, { to: "body" }, [
       ($data.maskVisible)
-        ? (openBlock(), createBlock("div", {
+        ? (openBlock(), createElementBlock("div", {
             key: 0,
             ref: $options.maskRef,
-            class: $options.maskClass,
-            onClick: _cache[8] || (_cache[8] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
+            class: normalizeClass($options.maskClass),
+            onClick: _cache[7] || (_cache[7] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
           }, [
-            createVNode("div", _hoisted_2, [
-              createVNode("button", {
+            createElementVNode("div", _hoisted_3, [
+              createElementVNode("button", {
                 class: "p-image-action p-link",
-                onClick: _cache[2] || (_cache[2] = (...args) => ($options.rotateRight && $options.rotateRight(...args))),
+                onClick: _cache[1] || (_cache[1] = (...args) => ($options.rotateRight && $options.rotateRight(...args))),
                 type: "button"
-              }, [
-                _hoisted_3
-              ]),
-              createVNode("button", {
+              }, _hoisted_5),
+              createElementVNode("button", {
                 class: "p-image-action p-link",
-                onClick: _cache[3] || (_cache[3] = (...args) => ($options.rotateLeft && $options.rotateLeft(...args))),
+                onClick: _cache[2] || (_cache[2] = (...args) => ($options.rotateLeft && $options.rotateLeft(...args))),
                 type: "button"
-              }, [
-                _hoisted_4
-              ]),
-              createVNode("button", {
+              }, _hoisted_7),
+              createElementVNode("button", {
                 class: "p-image-action p-link",
-                onClick: _cache[4] || (_cache[4] = (...args) => ($options.zoomOut && $options.zoomOut(...args))),
+                onClick: _cache[3] || (_cache[3] = (...args) => ($options.zoomOut && $options.zoomOut(...args))),
                 type: "button",
                 disabled: $options.zoomDisabled
-              }, [
-                _hoisted_5
-              ], 8, ["disabled"]),
-              createVNode("button", {
+              }, _hoisted_10, 8, _hoisted_8),
+              createElementVNode("button", {
                 class: "p-image-action p-link",
-                onClick: _cache[5] || (_cache[5] = (...args) => ($options.zoomIn && $options.zoomIn(...args))),
+                onClick: _cache[4] || (_cache[4] = (...args) => ($options.zoomIn && $options.zoomIn(...args))),
                 type: "button",
                 disabled: $options.zoomDisabled
-              }, [
-                _hoisted_6
-              ], 8, ["disabled"]),
-              createVNode("button", {
+              }, _hoisted_13, 8, _hoisted_11),
+              createElementVNode("button", {
                 class: "p-image-action p-link",
                 type: "button",
-                onClick: _cache[6] || (_cache[6] = (...args) => (_ctx.hidePreview && _ctx.hidePreview(...args)))
-              }, [
-                _hoisted_7
-              ])
+                onClick: _cache[5] || (_cache[5] = (...args) => (_ctx.hidePreview && _ctx.hidePreview(...args)))
+              }, _hoisted_15)
             ]),
             createVNode(Transition, {
               name: "p-image-preview",
@@ -211,13 +220,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, {
               default: withCtx(() => [
                 ($data.previewVisible)
-                  ? (openBlock(), createBlock("div", _hoisted_8, [
-                      createVNode("img", {
+                  ? (openBlock(), createElementBlock("div", _hoisted_16, [
+                      createElementVNode("img", {
                         src: _ctx.$attrs.src,
                         class: "p-image-preview",
-                        style: $options.imagePreviewStyle,
-                        onClick: _cache[7] || (_cache[7] = (...args) => ($options.onPreviewImageClick && $options.onPreviewImageClick(...args)))
-                      }, null, 12, ["src"])
+                        style: normalizeStyle($options.imagePreviewStyle),
+                        onClick: _cache[6] || (_cache[6] = (...args) => ($options.onPreviewImageClick && $options.onPreviewImageClick(...args)))
+                      }, null, 12, _hoisted_17)
                     ]))
                   : createCommentVNode("", true)
               ]),

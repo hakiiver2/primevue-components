@@ -1,5 +1,5 @@
 import Ripple from 'primevue/ripple';
-import { resolveDirective, withDirectives, openBlock, createBlock, renderSlot, createCommentVNode, createVNode, toDisplayString } from 'vue';
+import { resolveDirective, withDirectives, openBlock, createElementBlock, normalizeClass, renderSlot, createCommentVNode, createElementVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'Button',
@@ -68,38 +68,39 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-button-label" };
+const _hoisted_1 = ["disabled"];
+const _hoisted_2 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return withDirectives((openBlock(), createBlock("button", {
-    class: $options.buttonClass,
+  return withDirectives((openBlock(), createElementBlock("button", {
+    class: normalizeClass($options.buttonClass),
     type: "button",
     disabled: $options.disabled
   }, [
     renderSlot(_ctx.$slots, "default", {}, () => [
       ($props.loading && !$props.icon)
-        ? (openBlock(), createBlock("span", {
+        ? (openBlock(), createElementBlock("span", {
             key: 0,
-            class: $options.iconClass
+            class: normalizeClass($options.iconClass)
           }, null, 2))
         : createCommentVNode("", true),
       ($props.icon)
-        ? (openBlock(), createBlock("span", {
+        ? (openBlock(), createElementBlock("span", {
             key: 1,
-            class: $options.iconClass
+            class: normalizeClass($options.iconClass)
           }, null, 2))
         : createCommentVNode("", true),
-      createVNode("span", _hoisted_1, toDisplayString($props.label||' '), 1),
+      createElementVNode("span", _hoisted_2, toDisplayString($props.label||' '), 1),
       ($props.badge)
-        ? (openBlock(), createBlock("span", {
+        ? (openBlock(), createElementBlock("span", {
             key: 2,
-            class: $options.badgeStyleClass
+            class: normalizeClass($options.badgeStyleClass)
           }, toDisplayString($props.badge), 3))
         : createCommentVNode("", true)
     ])
-  ], 10, ["disabled"])), [
+  ], 10, _hoisted_1)), [
     [_directive_ripple]
   ])
 }

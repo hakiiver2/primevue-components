@@ -3,7 +3,7 @@ import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
 import VirtualScroller from 'primevue/virtualscroller';
-import { resolveComponent, resolveDirective, openBlock, createBlock, mergeProps, createCommentVNode, Fragment, renderList, renderSlot, createVNode, toDisplayString, Teleport, Transition, withCtx, createSlots, withDirectives, createTextVNode } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, normalizeStyle, mergeProps, createCommentVNode, Fragment, renderList, renderSlot, createElementVNode, toDisplayString, createBlock, Teleport, createVNode, Transition, withCtx, createSlots, withDirectives, createTextVNode } from 'vue';
 
 var script = {
     name: 'AutoComplete',
@@ -573,89 +573,96 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-autocomplete-token-label" };
-const _hoisted_2 = { class: "p-autocomplete-input-token" };
-const _hoisted_3 = {
+const _hoisted_1 = ["aria-owns", "aria-expanded"];
+const _hoisted_2 = ["value", "aria-controls"];
+const _hoisted_3 = { class: "p-autocomplete-token-label" };
+const _hoisted_4 = ["onClick"];
+const _hoisted_5 = { class: "p-autocomplete-input-token" };
+const _hoisted_6 = ["aria-controls"];
+const _hoisted_7 = {
   key: 2,
   class: "p-autocomplete-loader pi pi-spinner pi-spin"
 };
-const _hoisted_4 = { class: "p-autocomplete-item-group" };
+const _hoisted_8 = ["id"];
+const _hoisted_9 = ["onClick", "data-index"];
+const _hoisted_10 = { class: "p-autocomplete-item-group" };
+const _hoisted_11 = ["onClick", "data-group", "data-index"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Button = resolveComponent("Button");
   const _component_VirtualScroller = resolveComponent("VirtualScroller");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("span", {
+  return (openBlock(), createElementBlock("span", {
     ref: "container",
-    class: $options.containerClass,
+    class: normalizeClass($options.containerClass),
     "aria-haspopup": "listbox",
     "aria-owns": $options.listId,
     "aria-expanded": $data.overlayVisible,
-    style: $props.style
+    style: normalizeStyle($props.style)
   }, [
     (!$props.multiple)
-      ? (openBlock(), createBlock("input", mergeProps({
+      ? (openBlock(), createElementBlock("input", mergeProps({
           key: 0,
           ref: "input",
           class: $options.inputFieldClass,
           style: $props.inputStyle
         }, _ctx.$attrs, {
           value: $options.inputValue,
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onInputClicked && $options.onInputClicked(...args))),
-          onInput: _cache[2] || (_cache[2] = (...args) => ($options.onInput && $options.onInput(...args))),
-          onFocus: _cache[3] || (_cache[3] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-          onBlur: _cache[4] || (_cache[4] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-          onKeydown: _cache[5] || (_cache[5] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-          onChange: _cache[6] || (_cache[6] = (...args) => ($options.onChange && $options.onChange(...args))),
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.onInputClicked && $options.onInputClicked(...args))),
+          onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args))),
+          onFocus: _cache[2] || (_cache[2] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+          onBlur: _cache[3] || (_cache[3] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+          onKeydown: _cache[4] || (_cache[4] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+          onChange: _cache[5] || (_cache[5] = (...args) => ($options.onChange && $options.onChange(...args))),
           type: "text",
           autoComplete: "off",
           role: "searchbox",
           "aria-autocomplete": "list",
           "aria-controls": $options.listId
-        }), null, 16, ["value", "aria-controls"]))
+        }), null, 16, _hoisted_2))
       : createCommentVNode("", true),
     ($props.multiple)
-      ? (openBlock(), createBlock("ul", {
+      ? (openBlock(), createElementBlock("ul", {
           key: 1,
           ref: "multiContainer",
-          class: $options.multiContainerClass,
-          onClick: _cache[12] || (_cache[12] = (...args) => ($options.onMultiContainerClick && $options.onMultiContainerClick(...args)))
+          class: normalizeClass($options.multiContainerClass),
+          onClick: _cache[11] || (_cache[11] = (...args) => ($options.onMultiContainerClick && $options.onMultiContainerClick(...args)))
         }, [
-          (openBlock(true), createBlock(Fragment, null, renderList($props.modelValue, (item, i) => {
-            return (openBlock(), createBlock("li", {
+          (openBlock(true), createElementBlock(Fragment, null, renderList($props.modelValue, (item, i) => {
+            return (openBlock(), createElementBlock("li", {
               key: i,
               class: "p-autocomplete-token"
             }, [
               renderSlot(_ctx.$slots, "chip", { value: item }, () => [
-                createVNode("span", _hoisted_1, toDisplayString($options.getItemContent(item)), 1)
+                createElementVNode("span", _hoisted_3, toDisplayString($options.getItemContent(item)), 1)
               ]),
-              createVNode("span", {
+              createElementVNode("span", {
                 class: "p-autocomplete-token-icon pi pi-times-circle",
                 onClick: $event => ($options.removeItem($event, i))
-              }, null, 8, ["onClick"])
+              }, null, 8, _hoisted_4)
             ]))
           }), 128)),
-          createVNode("li", _hoisted_2, [
-            createVNode("input", mergeProps({
+          createElementVNode("li", _hoisted_5, [
+            createElementVNode("input", mergeProps({
               ref: "input",
               type: "text",
               autoComplete: "off"
             }, _ctx.$attrs, {
-              onInput: _cache[7] || (_cache[7] = (...args) => ($options.onInput && $options.onInput(...args))),
-              onFocus: _cache[8] || (_cache[8] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-              onBlur: _cache[9] || (_cache[9] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-              onKeydown: _cache[10] || (_cache[10] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-              onChange: _cache[11] || (_cache[11] = (...args) => ($options.onChange && $options.onChange(...args))),
+              onInput: _cache[6] || (_cache[6] = (...args) => ($options.onInput && $options.onInput(...args))),
+              onFocus: _cache[7] || (_cache[7] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+              onBlur: _cache[8] || (_cache[8] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+              onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+              onChange: _cache[10] || (_cache[10] = (...args) => ($options.onChange && $options.onChange(...args))),
               role: "searchbox",
               "aria-autocomplete": "list",
               "aria-controls": $options.listId
-            }), null, 16, ["aria-controls"])
+            }), null, 16, _hoisted_6)
           ])
         ], 2))
       : createCommentVNode("", true),
     ($data.searching)
-      ? (openBlock(), createBlock("i", _hoisted_3))
+      ? (openBlock(), createElementBlock("i", _hoisted_7))
       : createCommentVNode("", true),
     ($props.dropdown)
       ? (openBlock(), createBlock(_component_Button, {
@@ -680,12 +687,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: withCtx(() => [
           ($data.overlayVisible)
-            ? (openBlock(), createBlock("div", {
+            ? (openBlock(), createElementBlock("div", {
                 key: 0,
                 ref: $options.overlayRef,
-                class: $options.panelStyleClass,
-                style: {'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''},
-                onClick: _cache[13] || (_cache[13] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                class: normalizeClass($options.panelStyleClass),
+                style: normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}),
+                onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
                 renderSlot(_ctx.$slots, "header", {
                   value: $props.modelValue,
@@ -697,16 +704,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   disabled: $options.virtualScrollerDisabled
                 }), createSlots({
                   content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
-                    createVNode("ul", {
+                    createElementVNode("ul", {
                       id: $options.listId,
                       ref: (el) => $options.listRef(el, contentRef),
-                      class: ['p-autocomplete-items', styleClass],
-                      style: contentStyle,
+                      class: normalizeClass(['p-autocomplete-items', styleClass]),
+                      style: normalizeStyle(contentStyle),
                       role: "listbox"
                     }, [
                       (!$props.optionGroupLabel)
-                        ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList(items, (item, i) => {
-                            return withDirectives((openBlock(), createBlock("li", {
+                        ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(items, (item, i) => {
+                            return withDirectives((openBlock(), createElementBlock("li", {
                               class: "p-autocomplete-item",
                               key: $options.getOptionRenderKey(item),
                               onClick: $event => ($options.selectItem($event, item)),
@@ -719,15 +726,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               }, () => [
                                 createTextVNode(toDisplayString($options.getItemContent(item)), 1)
                               ])
-                            ], 8, ["onClick", "data-index"])), [
+                            ], 8, _hoisted_9)), [
                               [_directive_ripple]
                             ])
                           }), 128))
-                        : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
-                            return (openBlock(), createBlock(Fragment, {
+                        : (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
+                            return (openBlock(), createElementBlock(Fragment, {
                               key: $options.getOptionGroupRenderKey(optionGroup)
                             }, [
-                              createVNode("li", _hoisted_4, [
+                              createElementVNode("li", _hoisted_10, [
                                 renderSlot(_ctx.$slots, "optiongroup", {
                                   item: optionGroup,
                                   index: $options.getOptionIndex(i, getItemOptions)
@@ -735,8 +742,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                 ])
                               ]),
-                              (openBlock(true), createBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
-                                return withDirectives((openBlock(), createBlock("li", {
+                              (openBlock(true), createElementBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
+                                return withDirectives((openBlock(), createElementBlock("li", {
                                   class: "p-autocomplete-item",
                                   key: j,
                                   onClick: $event => ($options.selectItem($event, item)),
@@ -750,13 +757,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                   }, () => [
                                     createTextVNode(toDisplayString($options.getItemContent(item)), 1)
                                   ])
-                                ], 8, ["onClick", "data-group", "data-index"])), [
+                                ], 8, _hoisted_11)), [
                                   [_directive_ripple]
                                 ])
                               }), 128))
                             ], 64))
                           }), 128))
-                    ], 14, ["id"])
+                    ], 14, _hoisted_8)
                   ]),
                   _: 2
                 }, [
@@ -779,7 +786,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 3
       }, 8, ["onEnter", "onLeave", "onAfterLeave"])
     ], 8, ["to", "disabled"]))
-  ], 14, ["aria-owns", "aria-expanded"]))
+  ], 14, _hoisted_1))
 }
 
 function styleInject(css, ref) {

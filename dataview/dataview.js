@@ -199,7 +199,7 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
             }
         },
         components: {
-            'DVPaginator': Paginator__default['default']
+            'DVPaginator': Paginator__default["default"]
         }
     };
 
@@ -222,9 +222,11 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_DVPaginator = vue.resolveComponent("DVPaginator");
 
-      return (vue.openBlock(), vue.createBlock("div", { class: $options.containerClass }, [
+      return (vue.openBlock(), vue.createElementBlock("div", {
+        class: vue.normalizeClass($options.containerClass)
+      }, [
         (_ctx.$slots.header)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
               vue.renderSlot(_ctx.$slots, "header")
             ]))
           : vue.createCommentVNode("", true),
@@ -238,9 +240,9 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
               template: $props.paginatorTemplate,
               rowsPerPageOptions: $props.rowsPerPageOptions,
               currentPageReportTemplate: $props.currentPageReportTemplate,
-              class: {'p-paginator-top': $options.paginatorTop},
+              class: vue.normalizeClass({'p-paginator-top': $options.paginatorTop}),
               alwaysShow: $props.alwaysShowPaginator,
-              onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event)))
+              onPage: _cache[0] || (_cache[0] = $event => ($options.onPage($event)))
             }, vue.createSlots({ _: 2 }, [
               (_ctx.$slots.paginatorstart)
                 ? {
@@ -260,10 +262,10 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
                 : undefined
             ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "currentPageReportTemplate", "class", "alwaysShow"]))
           : vue.createCommentVNode("", true),
-        vue.createVNode("div", _hoisted_2, [
-          vue.createVNode("div", _hoisted_3, [
-            (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.items, (item, index) => {
-              return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+        vue.createElementVNode("div", _hoisted_2, [
+          vue.createElementVNode("div", _hoisted_3, [
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.items, (item, index) => {
+              return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                 key: $options.getKey(item, index)
               }, [
                 (_ctx.$slots.list && $props.layout === 'list')
@@ -283,8 +285,8 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
               ], 64))
             }), 128)),
             ($options.empty)
-              ? (vue.openBlock(), vue.createBlock("div", _hoisted_4, [
-                  vue.createVNode("div", _hoisted_5, [
+              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_4, [
+                  vue.createElementVNode("div", _hoisted_5, [
                     vue.renderSlot(_ctx.$slots, "empty")
                   ])
                 ]))
@@ -305,9 +307,9 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
               onTouchmove: $options.touchmove,
               onTouchend: $options.touchend,
               currentPageReportTemplate: $props.currentPageReportTemplate,
-              class: {'p-paginator-bottom': $options.paginatorBottom},
+              class: vue.normalizeClass({'p-paginator-bottom': $options.paginatorBottom}),
               alwaysShow: $props.alwaysShowPaginator,
-              onPage: _cache[2] || (_cache[2] = $event => ($options.onPage($event)))
+              onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event)))
             }, vue.createSlots({ _: 2 }, [
               (_ctx.$slots.paginatorstart)
                 ? {
@@ -328,7 +330,7 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
             ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "class", "alwaysShow"]))
           : vue.createCommentVNode("", true),
         (_ctx.$slots.footer)
-          ? (vue.openBlock(), vue.createBlock("div", _hoisted_6, [
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_6, [
               vue.renderSlot(_ctx.$slots, "footer")
             ]))
           : vue.createCommentVNode("", true)
@@ -339,4 +341,4 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
 
     return script;
 
-}(primevue.utils, primevue.paginator, Vue));
+})(primevue.utils, primevue.paginator, Vue);

@@ -254,7 +254,7 @@ var script = {
             this.overlay = el;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -382,19 +382,20 @@ var script = {
         }
     },
     components: {
-        'TSTree': Tree__default['default']
+        'TSTree': Tree__default["default"]
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = { class: "p-treeselect-label-container" };
-const _hoisted_3 = { class: "p-treeselect-token-label" };
-const _hoisted_4 = { class: "p-treeselect-trigger" };
-const _hoisted_5 = /*#__PURE__*/vue.createVNode("span", { class: "p-treeselect-trigger-icon pi pi-chevron-down" }, null, -1);
-const _hoisted_6 = {
+const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"];
+const _hoisted_3 = { class: "p-treeselect-label-container" };
+const _hoisted_4 = { class: "p-treeselect-token-label" };
+const _hoisted_5 = { class: "p-treeselect-trigger" };
+const _hoisted_6 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-treeselect-trigger-icon pi pi-chevron-down" }, null, -1);
+const _hoisted_7 = {
   key: 0,
   class: "p-treeselect-empty-message"
 };
@@ -402,50 +403,52 @@ const _hoisted_6 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TSTree = vue.resolveComponent("TSTree");
 
-  return (vue.openBlock(), vue.createBlock("div", {
+  return (vue.openBlock(), vue.createElementBlock("div", {
     ref: "container",
-    class: $options.containerClass,
-    onClick: _cache[7] || (_cache[7] = (...args) => ($options.onClick && $options.onClick(...args)))
+    class: vue.normalizeClass($options.containerClass),
+    onClick: _cache[6] || (_cache[6] = (...args) => ($options.onClick && $options.onClick(...args)))
   }, [
-    vue.createVNode("div", _hoisted_1, [
-      vue.createVNode("input", {
+    vue.createElementVNode("div", _hoisted_1, [
+      vue.createElementVNode("input", {
         ref: "focusInput",
         type: "text",
         role: "listbox",
         id: $props.inputId,
         readonly: "",
         disabled: $props.disabled,
-        onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-        onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+        onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+        onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+        onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
         tabindex: $props.tabindex,
         "aria-haspopup": "true",
         "aria-expanded": $data.overlayVisible,
         "aria-labelledby": $props.ariaLabelledBy
-      }, null, 40, ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"])
+      }, null, 40, _hoisted_2)
     ]),
-    vue.createVNode("div", _hoisted_2, [
-      vue.createVNode("div", { class: $options.labelClass }, [
+    vue.createElementVNode("div", _hoisted_3, [
+      vue.createElementVNode("div", {
+        class: vue.normalizeClass($options.labelClass)
+      }, [
         vue.renderSlot(_ctx.$slots, "value", {
           value: $options.selectedNodes,
           placeholder: $props.placeholder
         }, () => [
           ($props.display === 'comma')
-            ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+            ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                 vue.createTextVNode(vue.toDisplayString($options.label || 'empty'), 1)
               ], 64))
             : ($props.display === 'chip')
-              ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
-                  (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($options.selectedNodes, (node) => {
-                    return (vue.openBlock(), vue.createBlock("div", {
+              ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
+                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.selectedNodes, (node) => {
+                    return (vue.openBlock(), vue.createElementBlock("div", {
                       class: "p-treeselect-token",
                       key: node.key
                     }, [
-                      vue.createVNode("span", _hoisted_3, vue.toDisplayString(node.label), 1)
+                      vue.createElementVNode("span", _hoisted_4, vue.toDisplayString(node.label), 1)
                     ]))
                   }), 128)),
                   ($options.emptyValue)
-                    ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                    ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                         vue.createTextVNode(vue.toDisplayString($props.placeholder || 'empty'), 1)
                       ], 64))
                     : vue.createCommentVNode("", true)
@@ -454,9 +457,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       ], 2)
     ]),
-    vue.createVNode("div", _hoisted_4, [
+    vue.createElementVNode("div", _hoisted_5, [
       vue.renderSlot(_ctx.$slots, "indicator", {}, () => [
-        _hoisted_5
+        _hoisted_6
       ])
     ]),
     (vue.openBlock(), vue.createBlock(vue.Teleport, {
@@ -471,19 +474,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: vue.withCtx(() => [
           ($data.overlayVisible)
-            ? (vue.openBlock(), vue.createBlock("div", {
+            ? (vue.openBlock(), vue.createElementBlock("div", {
                 key: 0,
                 ref: $options.overlayRef,
-                onClick: _cache[6] || (_cache[6] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
-                class: $options.panelStyleClass
+                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                class: vue.normalizeClass($options.panelStyleClass)
               }, [
                 vue.renderSlot(_ctx.$slots, "header", {
                   value: $props.modelValue,
                   options: $props.options
                 }),
-                vue.createVNode("div", {
+                vue.createElementVNode("div", {
                   class: "p-treeselect-items-wrapper",
-                  style: {'max-height': $props.scrollHeight}
+                  style: vue.normalizeStyle({'max-height': $props.scrollHeight})
                 }, [
                   vue.createVNode(_component_TSTree, {
                     value: $props.options,
@@ -493,13 +496,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     expandedKeys: $data.expandedKeys,
                     "onUpdate:expandedKeys": $options.onNodeToggle,
                     metaKeySelection: $props.metaKeySelection,
-                    onNodeExpand: _cache[4] || (_cache[4] = $event => (_ctx.$emit('node-expand', $event))),
-                    onNodeCollapse: _cache[5] || (_cache[5] = $event => (_ctx.$emit('node-collapse', $event))),
+                    onNodeExpand: _cache[3] || (_cache[3] = $event => (_ctx.$emit('node-expand', $event))),
+                    onNodeCollapse: _cache[4] || (_cache[4] = $event => (_ctx.$emit('node-collapse', $event))),
                     onNodeSelect: $options.onNodeSelect,
                     onNodeUnselect: $options.onNodeUnselect
                   }, null, 8, ["value", "selectionMode", "onUpdate:selectionKeys", "selectionKeys", "expandedKeys", "onUpdate:expandedKeys", "metaKeySelection", "onNodeSelect", "onNodeUnselect"]),
                   ($options.emptyOptions)
-                    ? (vue.openBlock(), vue.createBlock("div", _hoisted_6, [
+                    ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_7, [
                         vue.renderSlot(_ctx.$slots, "empty", {}, () => [
                           vue.createTextVNode(vue.toDisplayString($options.emptyMessageText), 1)
                         ])

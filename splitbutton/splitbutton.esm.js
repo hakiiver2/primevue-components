@@ -1,7 +1,7 @@
 import Button from 'primevue/button';
 import TieredMenu from 'primevue/tieredmenu';
 import { UniqueComponentId } from 'primevue/utils';
-import { resolveComponent, openBlock, createBlock, renderSlot, createVNode, mergeProps, withScopeId } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, normalizeStyle, renderSlot, createVNode, mergeProps } from 'vue';
 
 var script = {
     name: 'SplitButton',
@@ -56,15 +56,13 @@ var script = {
     }
 };
 
-const _withId = /*#__PURE__*/withScopeId("data-v-3d44cde8");
-
-const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $options) => {
+function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PVSButton = resolveComponent("PVSButton");
   const _component_PVSMenu = resolveComponent("PVSMenu");
 
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
-    style: $props.style
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
+    style: normalizeStyle($props.style)
   }, [
     renderSlot(_ctx.$slots, "default", {}, () => [
       createVNode(_component_PVSButton, mergeProps({
@@ -95,7 +93,7 @@ const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $optio
       appendTo: $props.appendTo
     }, null, 8, ["id", "model", "autoZIndex", "baseZIndex", "appendTo"])
   ], 6))
-});
+}
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};

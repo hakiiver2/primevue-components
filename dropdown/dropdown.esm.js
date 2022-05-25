@@ -3,7 +3,7 @@ import OverlayEventBus from 'primevue/overlayeventbus';
 import { FilterService } from 'primevue/api';
 import Ripple from 'primevue/ripple';
 import VirtualScroller from 'primevue/virtualscroller';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, createCommentVNode, renderSlot, createTextVNode, toDisplayString, Teleport, Transition, withCtx, mergeProps, createSlots, Fragment, renderList, withDirectives } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, createCommentVNode, renderSlot, createTextVNode, toDisplayString, createBlock, Teleport, createVNode, Transition, withCtx, normalizeStyle, mergeProps, createSlots, Fragment, renderList, withDirectives } from 'vue';
 
 var script = {
     name: 'Dropdown',
@@ -671,18 +671,24 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = {
+const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"];
+const _hoisted_3 = ["disabled", "placeholder", "value", "aria-expanded"];
+const _hoisted_4 = ["aria-expanded"];
+const _hoisted_5 = {
   key: 0,
   class: "p-dropdown-header"
 };
-const _hoisted_3 = { class: "p-dropdown-filter-container" };
-const _hoisted_4 = /*#__PURE__*/createVNode("span", { class: "p-dropdown-filter-icon pi pi-search" }, null, -1);
-const _hoisted_5 = { class: "p-dropdown-item-group" };
-const _hoisted_6 = {
+const _hoisted_6 = { class: "p-dropdown-filter-container" };
+const _hoisted_7 = ["value", "placeholder"];
+const _hoisted_8 = /*#__PURE__*/createElementVNode("span", { class: "p-dropdown-filter-icon pi pi-search" }, null, -1);
+const _hoisted_9 = ["onClick", "aria-label", "aria-selected"];
+const _hoisted_10 = { class: "p-dropdown-item-group" };
+const _hoisted_11 = ["onClick", "aria-label", "aria-selected"];
+const _hoisted_12 = {
   key: 2,
   class: "p-dropdown-empty-message"
 };
-const _hoisted_7 = {
+const _hoisted_13 = {
   key: 3,
   class: "p-dropdown-empty-message"
 };
@@ -691,46 +697,46 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_VirtualScroller = resolveComponent("VirtualScroller");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     ref: "container",
-    class: $options.containerClass,
-    onClick: _cache[12] || (_cache[12] = $event => ($options.onClick($event)))
+    class: normalizeClass($options.containerClass),
+    onClick: _cache[11] || (_cache[11] = $event => ($options.onClick($event)))
   }, [
-    createVNode("div", _hoisted_1, [
-      createVNode("input", {
+    createElementVNode("div", _hoisted_1, [
+      createElementVNode("input", {
         ref: "focusInput",
         type: "text",
         id: $props.inputId,
         readonly: "",
         disabled: $props.disabled,
-        onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-        onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+        onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+        onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+        onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
         tabindex: $props.tabindex,
         "aria-haspopup": "true",
         "aria-expanded": $data.overlayVisible,
         "aria-labelledby": $props.ariaLabelledBy
-      }, null, 40, ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"])
+      }, null, 40, _hoisted_2)
     ]),
     ($props.editable)
-      ? (openBlock(), createBlock("input", {
+      ? (openBlock(), createElementBlock("input", {
           key: 0,
           type: "text",
           class: "p-dropdown-label p-inputtext",
           disabled: $props.disabled,
-          onFocus: _cache[4] || (_cache[4] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-          onBlur: _cache[5] || (_cache[5] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+          onFocus: _cache[3] || (_cache[3] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+          onBlur: _cache[4] || (_cache[4] = (...args) => ($options.onBlur && $options.onBlur(...args))),
           placeholder: $props.placeholder,
           value: $options.editableInputValue,
-          onInput: _cache[6] || (_cache[6] = (...args) => ($options.onEditableInput && $options.onEditableInput(...args))),
+          onInput: _cache[5] || (_cache[5] = (...args) => ($options.onEditableInput && $options.onEditableInput(...args))),
           "aria-haspopup": "listbox",
           "aria-expanded": $data.overlayVisible
-        }, null, 40, ["disabled", "placeholder", "value", "aria-expanded"]))
+        }, null, 40, _hoisted_3))
       : createCommentVNode("", true),
     (!$props.editable)
-      ? (openBlock(), createBlock("span", {
+      ? (openBlock(), createElementBlock("span", {
           key: 1,
-          class: $options.labelClass
+          class: normalizeClass($options.labelClass)
         }, [
           renderSlot(_ctx.$slots, "value", {
             value: $props.modelValue,
@@ -741,22 +747,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ], 2))
       : createCommentVNode("", true),
     ($props.showClear && $props.modelValue != null)
-      ? (openBlock(), createBlock("i", {
+      ? (openBlock(), createElementBlock("i", {
           key: 2,
           class: "p-dropdown-clear-icon pi pi-times",
-          onClick: _cache[7] || (_cache[7] = $event => ($options.onClearClick($event)))
+          onClick: _cache[6] || (_cache[6] = $event => ($options.onClearClick($event)))
         }))
       : createCommentVNode("", true),
-    createVNode("div", {
+    createElementVNode("div", {
       class: "p-dropdown-trigger",
       role: "button",
       "aria-haspopup": "listbox",
       "aria-expanded": $data.overlayVisible
     }, [
       renderSlot(_ctx.$slots, "indicator", {}, () => [
-        createVNode("span", { class: $options.dropdownIconClass }, null, 2)
+        createElementVNode("span", {
+          class: normalizeClass($options.dropdownIconClass)
+        }, null, 2)
       ])
-    ], 8, ["aria-expanded"]),
+    ], 8, _hoisted_4),
     (openBlock(), createBlock(Teleport, {
       to: $options.appendTarget,
       disabled: $options.appendDisabled
@@ -770,38 +778,38 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         default: withCtx(() => [
           ($data.overlayVisible)
-            ? (openBlock(), createBlock("div", {
+            ? (openBlock(), createElementBlock("div", {
                 key: 0,
                 ref: $options.overlayRef,
-                class: $options.panelStyleClass,
-                onClick: _cache[11] || (_cache[11] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                class: normalizeClass($options.panelStyleClass),
+                onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
               }, [
                 renderSlot(_ctx.$slots, "header", {
                   value: $props.modelValue,
                   options: $options.visibleOptions
                 }),
                 ($props.filter)
-                  ? (openBlock(), createBlock("div", _hoisted_2, [
-                      createVNode("div", _hoisted_3, [
-                        createVNode("input", {
+                  ? (openBlock(), createElementBlock("div", _hoisted_5, [
+                      createElementVNode("div", _hoisted_6, [
+                        createElementVNode("input", {
                           type: "text",
                           ref: "filterInput",
                           value: $data.filterValue,
-                          onVnodeUpdated: _cache[8] || (_cache[8] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
+                          onVnodeUpdated: _cache[7] || (_cache[7] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
                           autoComplete: "off",
                           class: "p-dropdown-filter p-inputtext p-component",
                           placeholder: $props.filterPlaceholder,
-                          onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
-                          onInput: _cache[10] || (_cache[10] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
-                        }, null, 40, ["value", "placeholder"]),
-                        _hoisted_4
+                          onKeydown: _cache[8] || (_cache[8] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
+                          onInput: _cache[9] || (_cache[9] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                        }, null, 40, _hoisted_7),
+                        _hoisted_8
                       ])
                     ]))
                   : createCommentVNode("", true),
-                createVNode("div", {
+                createElementVNode("div", {
                   ref: $options.itemsWrapperRef,
                   class: "p-dropdown-items-wrapper",
-                  style: {'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}
+                  style: normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''})
                 }, [
                   createVNode(_component_VirtualScroller, mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
                     items: $options.visibleOptions,
@@ -809,16 +817,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     disabled: $options.virtualScrollerDisabled
                   }), createSlots({
                     content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
-                      createVNode("ul", {
+                      createElementVNode("ul", {
                         ref: contentRef,
-                        class: ['p-dropdown-items', styleClass],
-                        style: contentStyle,
+                        class: normalizeClass(['p-dropdown-items', styleClass]),
+                        style: normalizeStyle(contentStyle),
                         role: "listbox"
                       }, [
                         (!$props.optionGroupLabel)
-                          ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList(items, (option, i) => {
-                              return withDirectives((openBlock(), createBlock("li", {
-                                class: ['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                          ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(items, (option, i) => {
+                              return withDirectives((openBlock(), createElementBlock("li", {
+                                class: normalizeClass(['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
                                 key: $options.getOptionRenderKey(option),
                                 onClick: $event => ($options.onOptionSelect($event, option)),
                                 role: "option",
@@ -831,15 +839,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 }, () => [
                                   createTextVNode(toDisplayString($options.getOptionLabel(option)), 1)
                                 ])
-                              ], 10, ["onClick", "aria-label", "aria-selected"])), [
+                              ], 10, _hoisted_9)), [
                                 [_directive_ripple]
                               ])
                             }), 128))
-                          : (openBlock(true), createBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
-                              return (openBlock(), createBlock(Fragment, {
+                          : (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
+                              return (openBlock(), createElementBlock(Fragment, {
                                 key: $options.getOptionGroupRenderKey(optionGroup)
                               }, [
-                                createVNode("li", _hoisted_5, [
+                                createElementVNode("li", _hoisted_10, [
                                   renderSlot(_ctx.$slots, "optiongroup", {
                                     option: optionGroup,
                                     index: $options.getOptionIndex(i, getItemOptions)
@@ -847,9 +855,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                   ])
                                 ]),
-                                (openBlock(true), createBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
-                                  return withDirectives((openBlock(), createBlock("li", {
-                                    class: ['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}],
+                                (openBlock(true), createElementBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                                  return withDirectives((openBlock(), createElementBlock("li", {
+                                    class: normalizeClass(['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
                                     key: $options.getOptionRenderKey(option),
                                     onClick: $event => ($options.onOptionSelect($event, option)),
                                     role: "option",
@@ -862,20 +870,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     }, () => [
                                       createTextVNode(toDisplayString($options.getOptionLabel(option)), 1)
                                     ])
-                                  ], 10, ["onClick", "aria-label", "aria-selected"])), [
+                                  ], 10, _hoisted_11)), [
                                     [_directive_ripple]
                                   ])
                                 }), 128))
                               ], 64))
                             }), 128)),
                         ($data.filterValue && (!items || (items && items.length === 0)))
-                          ? (openBlock(), createBlock("li", _hoisted_6, [
+                          ? (openBlock(), createElementBlock("li", _hoisted_12, [
                               renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
                                 createTextVNode(toDisplayString($options.emptyFilterMessageText), 1)
                               ])
                             ]))
                           : ((!$props.options || ($props.options && $props.options.length === 0)))
-                            ? (openBlock(), createBlock("li", _hoisted_7, [
+                            ? (openBlock(), createElementBlock("li", _hoisted_13, [
                                 renderSlot(_ctx.$slots, "empty", {}, () => [
                                   createTextVNode(toDisplayString($options.emptyMessageText), 1)
                                 ])

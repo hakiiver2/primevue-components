@@ -219,13 +219,16 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1 = { class: "p-menuitem-text" };
-    const _hoisted_2 = { class: "p-menuitem-text" };
-    const _hoisted_3 = {
+    const _hoisted_1 = ["onMouseenter"];
+    const _hoisted_2 = ["href", "onClick", "onKeydown"];
+    const _hoisted_3 = { class: "p-menuitem-text" };
+    const _hoisted_4 = ["href", "target", "aria-haspopup", "aria-expanded", "onClick", "onKeydown", "tabindex"];
+    const _hoisted_5 = { class: "p-menuitem-text" };
+    const _hoisted_6 = {
       key: 0,
       class: "p-submenu-icon pi pi-angle-right"
     };
@@ -235,26 +238,26 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
       const _component_TieredMenuSub = vue.resolveComponent("TieredMenuSub", true);
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock("ul", {
+      return (vue.openBlock(), vue.createElementBlock("ul", {
         ref: "element",
-        class: $options.containerClass,
+        class: vue.normalizeClass($options.containerClass),
         role: "'menubar' : 'menu'",
         "aria-orientation": "horizontal"
       }, [
-        (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
-          return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
+          return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
             key: $options.label(item) + i.toString()
           }, [
             ($options.visible(item) && !item.separator)
-              ? (vue.openBlock(), vue.createBlock("li", {
+              ? (vue.openBlock(), vue.createElementBlock("li", {
                   key: 0,
-                  class: $options.getItemClass(item),
-                  style: item.style,
+                  class: vue.normalizeClass($options.getItemClass(item)),
+                  style: vue.normalizeStyle(item.style),
                   onMouseenter: $event => ($options.onItemMouseEnter($event, item)),
                   role: "none"
                 }, [
                   (!$props.template)
-                    ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                    ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
                         (item.to && !$options.disabled(item))
                           ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                               key: 0,
@@ -262,27 +265,27 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                               custom: ""
                             }, {
                               default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                                vue.withDirectives(vue.createVNode("a", {
+                                vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                                   href: href,
                                   onClick: $event => ($options.onItemClick($event, item, navigate)),
-                                  class: $options.linkClass(item, {isActive, isExactActive}),
+                                  class: vue.normalizeClass($options.linkClass(item, {isActive, isExactActive})),
                                   onKeydown: $event => ($options.onItemKeyDown($event, item)),
                                   role: "menuitem"
                                 }, [
-                                  vue.createVNode("span", {
-                                    class: ['p-menuitem-icon', item.icon]
+                                  vue.createElementVNode("span", {
+                                    class: vue.normalizeClass(['p-menuitem-icon', item.icon])
                                   }, null, 2),
-                                  vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.label(item)), 1)
-                                ], 42, ["href", "onClick", "onKeydown"]), [
+                                  vue.createElementVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
+                                ], 42, _hoisted_2)), [
                                   [_directive_ripple]
                                 ])
                               ]),
                               _: 2
                             }, 1032, ["to"]))
-                          : vue.withDirectives((vue.openBlock(), vue.createBlock("a", {
+                          : vue.withDirectives((vue.openBlock(), vue.createElementBlock("a", {
                               key: 1,
                               href: item.url,
-                              class: $options.linkClass(item),
+                              class: vue.normalizeClass($options.linkClass(item)),
                               target: item.target,
                               "aria-haspopup": item.items != null,
                               "aria-expanded": item === $data.activeItem,
@@ -291,14 +294,14 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                               role: "menuitem",
                               tabindex: $options.disabled(item) ? null : '0'
                             }, [
-                              vue.createVNode("span", {
-                                class: ['p-menuitem-icon', item.icon]
+                              vue.createElementVNode("span", {
+                                class: vue.normalizeClass(['p-menuitem-icon', item.icon])
                               }, null, 2),
-                              vue.createVNode("span", _hoisted_2, vue.toDisplayString($options.label(item)), 1),
+                              vue.createElementVNode("span", _hoisted_5, vue.toDisplayString($options.label(item)), 1),
                               (item.items)
-                                ? (vue.openBlock(), vue.createBlock("span", _hoisted_3))
+                                ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_6))
                                 : vue.createCommentVNode("", true)
-                            ], 42, ["href", "target", "aria-haspopup", "aria-expanded", "onClick", "onKeydown", "tabindex"])), [
+                            ], 42, _hoisted_4)), [
                               [_directive_ripple]
                             ])
                       ], 64))
@@ -317,12 +320,12 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                         exact: $props.exact
                       }, null, 8, ["model", "template", "onLeafClick", "onKeydownItem", "parentActive", "exact"]))
                     : vue.createCommentVNode("", true)
-                ], 46, ["onMouseenter"]))
+                ], 46, _hoisted_1))
               : vue.createCommentVNode("", true),
             ($options.visible(item) && item.separator)
-              ? (vue.openBlock(), vue.createBlock("li", {
-                  class: ['p-menu-separator', item.class],
-                  style: item.style,
+              ? (vue.openBlock(), vue.createElementBlock("li", {
+                  class: vue.normalizeClass(['p-menu-separator', item.class]),
+                  style: vue.normalizeStyle(item.style),
                   key: 'separator' + i.toString(),
                   role: "separator"
                 }, null, 6))
@@ -493,7 +496,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -528,12 +531,12 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
         }, {
           default: vue.withCtx(() => [
             ($props.popup ? $data.visible : true)
-              ? (vue.openBlock(), vue.createBlock("div", vue.mergeProps({
+              ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
                   key: 0,
                   ref: $options.containerRef,
                   class: $options.containerClass
                 }, _ctx.$attrs, {
-                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                 }), [
                   vue.createVNode(_component_TieredMenuSub, {
                     model: $props.model,
@@ -585,4 +588,4 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue);

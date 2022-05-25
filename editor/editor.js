@@ -1,10 +1,14 @@
 this.primevue = this.primevue || {};
-this.primevue.editor = (function (Quill, vue) {
+this.primevue.editor = (function (Quill, QuillImageDropAndPaste, vue) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var Quill__default = /*#__PURE__*/_interopDefaultLegacy(Quill);
+    var QuillImageDropAndPaste__default = /*#__PURE__*/_interopDefaultLegacy(QuillImageDropAndPaste);
+
+    Quill__default["default"].register('modules/imageDropAndPaste', QuillImageDropAndPaste__default["default"]);
+
 
     var script = {
         name: 'Editor',
@@ -14,7 +18,19 @@ this.primevue.editor = (function (Quill, vue) {
             placeholder: String,
             readonly: Boolean,
             formats: Array,
-            editorStyle: null
+            editorStyle: null,
+            quillHandlers: {
+                type: Object,
+                default: function() {
+                    return {}
+                }
+            },
+            quillImageHandler: {
+                type: Function,
+            },
+            quillImageDropAndPaste: {
+                type: Function,
+            },
         },
         quill: null,
         watch: {
@@ -25,10 +41,32 @@ this.primevue.editor = (function (Quill, vue) {
             }
         },
         mounted() {
-            this.quill = new Quill__default['default'](this.$refs.editorElement, {
-                modules: {
-                    toolbar: this.$refs.toolbarElement
-                },
+            let handlers = {};
+            console.log(this.quillImageHandler);
+            console.log(this.quillImageDropAndPaste);
+            if(this.quillImageHandler) {
+                handlers = {
+                    image: this.quillImageHandler
+                };
+            }
+
+            let toolbar = {
+                container: this.$refs.toolbarElement,
+            };
+            if(Object.keys(handlers).length) {
+                toolbar.handlers = handlers;
+            }
+
+            let modules = {
+                toolbar: toolbar,
+            };
+            if(this.quillImageDropAndPaste) {
+                modules.imageDropAndPaste = {
+                    handler: this.quillImageDropAndPaste
+                };
+            }
+            this.quill = new Quill__default["default"](this.$refs.editorElement, {
+                modules: modules,
                 readOnly: this.readonly,
                 theme: 'snow',
                 formats: this.formats,
@@ -57,6 +95,15 @@ this.primevue.editor = (function (Quill, vue) {
             });
         },
         methods: {
+            imageHandler() {
+                var range = this.quill.getSelection();
+                var value = prompt('please copy paste the image url here.');
+                if(value){
+                    this.quill.insertEmbed(range.index, 'image', value, Quill__default["default"].sources.USER);
+                }
+
+            },
+
             renderValue(value) {
                 if (this.quill) {
                     if (value)
@@ -76,45 +123,45 @@ this.primevue.editor = (function (Quill, vue) {
       ref: "toolbarElement",
       class: "p-editor-toolbar"
     };
-    const _hoisted_3 = /*#__PURE__*/vue.createVNode("span", { class: "ql-formats" }, [
-      /*#__PURE__*/vue.createVNode("select", {
+    const _hoisted_3 = /*#__PURE__*/vue.createElementVNode("span", { class: "ql-formats" }, [
+      /*#__PURE__*/vue.createElementVNode("select", {
         class: "ql-header",
         defaultValue: "0"
       }, [
-        /*#__PURE__*/vue.createVNode("option", { value: "1" }, "Heading"),
-        /*#__PURE__*/vue.createVNode("option", { value: "2" }, "Subheading"),
-        /*#__PURE__*/vue.createVNode("option", { value: "0" }, "Normal")
+        /*#__PURE__*/vue.createElementVNode("option", { value: "1" }, "Heading"),
+        /*#__PURE__*/vue.createElementVNode("option", { value: "2" }, "Subheading"),
+        /*#__PURE__*/vue.createElementVNode("option", { value: "0" }, "Normal")
       ]),
-      /*#__PURE__*/vue.createVNode("select", { class: "ql-font" }, [
-        /*#__PURE__*/vue.createVNode("option"),
-        /*#__PURE__*/vue.createVNode("option", { value: "serif" }),
-        /*#__PURE__*/vue.createVNode("option", { value: "monospace" })
+      /*#__PURE__*/vue.createElementVNode("select", { class: "ql-font" }, [
+        /*#__PURE__*/vue.createElementVNode("option"),
+        /*#__PURE__*/vue.createElementVNode("option", { value: "serif" }),
+        /*#__PURE__*/vue.createElementVNode("option", { value: "monospace" })
       ])
     ], -1);
     const _hoisted_4 = /*#__PURE__*/vue.createStaticVNode("<span class=\"ql-formats\"><button class=\"ql-bold\" type=\"button\"></button><button class=\"ql-italic\" type=\"button\"></button><button class=\"ql-underline\" type=\"button\"></button></span><span class=\"ql-formats\"><select class=\"ql-color\"></select><select class=\"ql-background\"></select></span>", 2);
-    const _hoisted_6 = /*#__PURE__*/vue.createVNode("span", { class: "ql-formats" }, [
-      /*#__PURE__*/vue.createVNode("button", {
+    const _hoisted_6 = /*#__PURE__*/vue.createElementVNode("span", { class: "ql-formats" }, [
+      /*#__PURE__*/vue.createElementVNode("button", {
         class: "ql-list",
         value: "ordered",
         type: "button"
       }),
-      /*#__PURE__*/vue.createVNode("button", {
+      /*#__PURE__*/vue.createElementVNode("button", {
         class: "ql-list",
         value: "bullet",
         type: "button"
       }),
-      /*#__PURE__*/vue.createVNode("select", { class: "ql-align" }, [
-        /*#__PURE__*/vue.createVNode("option", { defaultValue: "" }),
-        /*#__PURE__*/vue.createVNode("option", { value: "center" }),
-        /*#__PURE__*/vue.createVNode("option", { value: "right" }),
-        /*#__PURE__*/vue.createVNode("option", { value: "justify" })
+      /*#__PURE__*/vue.createElementVNode("select", { class: "ql-align" }, [
+        /*#__PURE__*/vue.createElementVNode("option", { defaultValue: "" }),
+        /*#__PURE__*/vue.createElementVNode("option", { value: "center" }),
+        /*#__PURE__*/vue.createElementVNode("option", { value: "right" }),
+        /*#__PURE__*/vue.createElementVNode("option", { value: "justify" })
       ])
     ], -1);
     const _hoisted_7 = /*#__PURE__*/vue.createStaticVNode("<span class=\"ql-formats\"><button class=\"ql-link\" type=\"button\"></button><button class=\"ql-image\" type=\"button\"></button><button class=\"ql-code-block\" type=\"button\"></button></span><span class=\"ql-formats\"><button class=\"ql-clean\" type=\"button\"></button></span>", 2);
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createBlock("div", _hoisted_1, [
-        vue.createVNode("div", _hoisted_2, [
+      return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+        vue.createElementVNode("div", _hoisted_2, [
           vue.renderSlot(_ctx.$slots, "toolbar", {}, () => [
             _hoisted_3,
             _hoisted_4,
@@ -122,10 +169,10 @@ this.primevue.editor = (function (Quill, vue) {
             _hoisted_7
           ])
         ], 512),
-        vue.createVNode("div", {
+        vue.createElementVNode("div", {
           ref: "editorElement",
           class: "p-editor-content",
-          style: $props.editorStyle
+          style: vue.normalizeStyle($props.editorStyle)
         }, null, 4)
       ]))
     }
@@ -164,4 +211,4 @@ this.primevue.editor = (function (Quill, vue) {
 
     return script;
 
-}(Quill, Vue));
+})(Quill, QuillImageDropAndPaste, Vue);

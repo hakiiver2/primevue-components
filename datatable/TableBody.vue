@@ -2,7 +2,7 @@
     <tbody :ref="bodyRef" class="p-datatable-tbody" role="rowgroup" :style="bodyStyle">
         <template v-if="!empty">
             <template v-for="(rowData, index) of value" :key="getRowKey(rowData, getRowIndex(index)) + '_subheader'">
-                <tr class="p-rowgroup-header" :style="rowGroupHeaderStyle" v-if="templates['groupheader'] && rowGroupMode === 'subheader' && shouldRenderRowGroupHeader(value, rowData, getRowIndex(index))" role="row">
+                <tr class="p-rowgroup-header" :style="rowGroupHeaderStyle" v-if="templates['groupheader'] && rowGroupMode === 'subheader' && shouldRenderRowGroupHeader(value, rowData, getRowIndex(index))" role="row" >
                     <td :colspan="columnsLength - 1">
                         <button class="p-row-toggler p-link" @click="onRowGroupToggle($event, rowData)" v-if="expandableRowGroups" type="button">
                             <span :class="rowGroupTogglerIcon(rowData)"></span>
@@ -13,7 +13,7 @@
                 <tr :class="getRowClass(rowData)" :style="rowStyle" :key="getRowKey(rowData, getRowIndex(index))"
                     v-if="expandableRowGroups ? isRowGroupExpanded(rowData): true"
                     @click="onRowClick($event, rowData, getRowIndex(index))" @dblclick="onRowDblClick($event, rowData, getRowIndex(index))" @contextmenu="onRowRightClick($event, rowData, getRowIndex(index))" @touchend="onRowTouchEnd($event)" @keydown="onRowKeyDown($event, rowData, getRowIndex(index))" :tabindex="selectionMode || contextMenu ? '0' : null"
-                    @mousedown="onRowMouseDown($event)" @dragstart="onRowDragStart($event, getRowIndex(index))" @dragover="onRowDragOver($event, getRowIndex(index))" @dragleave="onRowDragLeave($event)" @dragend="onRowDragEnd($event)" @drop="onRowDrop($event)" role="row">
+                    @mousedown="onRowMouseDown($event)" @dragstart="onRowDragStart($event, getRowIndex(index))" @dragover="onRowDragOver($event, getRowIndex(index))" @dragleave="onRowDragLeave($event)" @dragend="onRowDragEnd($event)" @drop="onRowDrop($event)" role="row" >
                     <template v-for="(col,i) of columns" :key="columnProp(col,'columnKey')||columnProp(col,'field')||i">
                         <DTBodyCell v-if="shouldRenderBodyCell(value, col, getRowIndex(index))" :rowData="rowData" :column="col" :rowIndex="getRowIndex(index)" :index="i" :selected="isSelected(rowData)"
                             :rowTogglerIcon="columnProp(col,'expander') ? rowTogglerIcon(rowData): null" :frozenRow="frozenRow"
@@ -25,17 +25,17 @@
                             :editingMeta="editingMeta" @editing-meta-change="onEditingMetaChange" :virtualScrollerContentProps="virtualScrollerContentProps"/>
                     </template>
                 </tr>
-                <tr class="p-datatable-row-expansion" v-if="templates['expansion'] && expandedRows && isRowExpanded(rowData)" :key="getRowKey(rowData, getRowIndex(index)) + '_expansion'" role="row">
+                <tr class="p-datatable-row-expansion" v-if="templates['expansion'] && expandedRows && isRowExpanded(rowData)" :key="getRowKey(rowData, getRowIndex(index)) + '_expansion'" role="row"  >
                     <td :colspan="columnsLength">
                         <component :is="templates['expansion']" :data="rowData" :index="getRowIndex(index)" />
                     </td>
                 </tr>
-                <tr class="p-rowgroup-footer" v-if="templates['groupfooter'] && rowGroupMode === 'subheader' && shouldRenderRowGroupFooter(value, rowData, getRowIndex(index))" :key="getRowKey(rowData, getRowIndex(index)) + '_subfooter'" role="row">
+                <tr class="p-rowgroup-footer" v-if="templates['groupfooter'] && rowGroupMode === 'subheader' && shouldRenderRowGroupFooter(value, rowData, getRowIndex(index))" :key="getRowKey(rowData, getRowIndex(index)) + '_subfooter'" role="row" >
                     <component :is="templates['groupfooter']" :data="rowData" :index="getRowIndex(index)" />
                 </tr>
             </template>
         </template>
-        <tr v-else class="p-datatable-emptymessage" role="row">
+        <tr v-else class="p-datatable-emptymessage" role="row" >
             <td :colspan="columnsLength">
                 <component :is="templates.empty" v-if="templates.empty && !loading" />
                 <component :is="templates.loading" v-if="templates.loading && loading" />

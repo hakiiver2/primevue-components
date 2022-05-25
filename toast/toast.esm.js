@@ -1,6 +1,6 @@
 import ToastEventBus from 'primevue/toasteventbus';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, createVNode, Fragment, toDisplayString, resolveDynamicComponent, withDirectives, createCommentVNode, resolveComponent, Teleport, mergeProps, TransitionGroup, withCtx, renderList } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, Fragment, toDisplayString, createBlock, resolveDynamicComponent, withDirectives, createCommentVNode, resolveComponent, Teleport, mergeProps, createVNode, TransitionGroup, withCtx, renderList } from 'vue';
 import { ZIndexUtils, ObjectUtils, UniqueComponentId } from 'primevue/utils';
 
 var script$1 = {
@@ -62,26 +62,31 @@ var script$1 = {
 const _hoisted_1 = { class: "p-toast-message-text" };
 const _hoisted_2 = { class: "p-toast-summary" };
 const _hoisted_3 = { class: "p-toast-detail" };
-const _hoisted_4 = /*#__PURE__*/createVNode("span", { class: "p-toast-icon-close-icon pi pi-times" }, null, -1);
+const _hoisted_4 = /*#__PURE__*/createElementVNode("span", { class: "p-toast-icon-close-icon pi pi-times" }, null, -1);
+const _hoisted_5 = [
+  _hoisted_4
+];
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
     role: "alert",
     "aria-live": "assertive",
     "aria-atomic": "true"
   }, [
-    createVNode("div", {
-      class: ["p-toast-message-content", $props.message.contentStyleClass]
+    createElementVNode("div", {
+      class: normalizeClass(["p-toast-message-content", $props.message.contentStyleClass])
     }, [
       (!$props.template)
-        ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-            createVNode("span", { class: $options.iconClass }, null, 2),
-            createVNode("div", _hoisted_1, [
-              createVNode("span", _hoisted_2, toDisplayString($props.message.summary), 1),
-              createVNode("div", _hoisted_3, toDisplayString($props.message.detail), 1)
+        ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+            createElementVNode("span", {
+              class: normalizeClass($options.iconClass)
+            }, null, 2),
+            createElementVNode("div", _hoisted_1, [
+              createElementVNode("span", _hoisted_2, toDisplayString($props.message.summary), 1),
+              createElementVNode("div", _hoisted_3, toDisplayString($props.message.detail), 1)
             ])
           ], 64))
         : (openBlock(), createBlock(resolveDynamicComponent($props.template), {
@@ -89,14 +94,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
             message: $props.message
           }, null, 8, ["message"])),
       ($props.message.closable !== false)
-        ? withDirectives((openBlock(), createBlock("button", {
+        ? withDirectives((openBlock(), createElementBlock("button", {
             key: 2,
             class: "p-toast-icon-close p-link",
-            onClick: _cache[1] || (_cache[1] = (...args) => ($options.onCloseClick && $options.onCloseClick(...args))),
+            onClick: _cache[0] || (_cache[0] = (...args) => ($options.onCloseClick && $options.onCloseClick(...args))),
             type: "button"
-          }, [
-            _hoisted_4
-          ], 512)), [
+          }, _hoisted_5)), [
             [_directive_ripple]
           ])
         : createCommentVNode("", true)
@@ -254,7 +257,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_ToastMessage = resolveComponent("ToastMessage");
 
   return (openBlock(), createBlock(Teleport, { to: "body" }, [
-    createVNode("div", mergeProps({
+    createElementVNode("div", mergeProps({
       ref: "container",
       class: $options.containerClass
     }, _ctx.$attrs), [
@@ -265,11 +268,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onLeave: $options.onLeave
       }, {
         default: withCtx(() => [
-          (openBlock(true), createBlock(Fragment, null, renderList($data.messages, (msg) => {
+          (openBlock(true), createElementBlock(Fragment, null, renderList($data.messages, (msg) => {
             return (openBlock(), createBlock(_component_ToastMessage, {
               key: msg.id,
               message: msg,
-              onClose: _cache[1] || (_cache[1] = $event => ($options.remove($event))),
+              onClose: _cache[0] || (_cache[0] = $event => ($options.remove($event))),
               template: _ctx.$slots.message
             }, null, 8, ["message", "template"]))
           }), 128))

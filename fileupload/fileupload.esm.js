@@ -3,7 +3,7 @@ import ProgressBar from 'primevue/progressbar';
 import Message from 'primevue/message';
 import { DomHandler } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, createVNode, withDirectives, withKeys, toDisplayString, createCommentVNode, Fragment, renderList, withCtx, createTextVNode, renderSlot } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, createElementVNode, withDirectives, normalizeClass, normalizeStyle, withKeys, toDisplayString, createBlock, createCommentVNode, Fragment, renderList, withCtx, createTextVNode, createVNode, renderSlot } from 'vue';
 
 var script = {
     name: 'FileUpload',
@@ -443,21 +443,24 @@ const _hoisted_1 = {
   class: "p-fileupload p-fileupload-advanced p-component"
 };
 const _hoisted_2 = { class: "p-fileupload-buttonbar" };
-const _hoisted_3 = { class: "p-button-label" };
-const _hoisted_4 = {
+const _hoisted_3 = ["multiple", "accept", "disabled"];
+const _hoisted_4 = { class: "p-button-label" };
+const _hoisted_5 = {
   key: 1,
   class: "p-fileupload-files"
 };
-const _hoisted_5 = { class: "p-fileupload-filename" };
-const _hoisted_6 = {
+const _hoisted_6 = ["alt", "src", "width"];
+const _hoisted_7 = { class: "p-fileupload-filename" };
+const _hoisted_8 = {
   key: 2,
   class: "p-fileupload-empty"
 };
-const _hoisted_7 = {
+const _hoisted_9 = {
   key: 1,
   class: "p-fileupload p-fileupload-basic p-component"
 };
-const _hoisted_8 = { class: "p-button-label" };
+const _hoisted_10 = { class: "p-button-label" };
+const _hoisted_11 = ["accept", "disabled", "multiple"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_FileUploadButton = resolveComponent("FileUploadButton");
@@ -466,28 +469,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return ($options.isAdvanced)
-    ? (openBlock(), createBlock("div", _hoisted_1, [
-        createVNode("div", _hoisted_2, [
-          withDirectives(createVNode("span", {
-            class: $options.advancedChooseButtonClass,
-            style: $props.style,
-            onClick: _cache[2] || (_cache[2] = (...args) => ($options.choose && $options.choose(...args))),
-            onKeydown: _cache[3] || (_cache[3] = withKeys((...args) => ($options.choose && $options.choose(...args)), ["enter"])),
-            onFocus: _cache[4] || (_cache[4] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-            onBlur: _cache[5] || (_cache[5] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+    ? (openBlock(), createElementBlock("div", _hoisted_1, [
+        createElementVNode("div", _hoisted_2, [
+          withDirectives((openBlock(), createElementBlock("span", {
+            class: normalizeClass($options.advancedChooseButtonClass),
+            style: normalizeStyle($props.style),
+            onClick: _cache[1] || (_cache[1] = (...args) => ($options.choose && $options.choose(...args))),
+            onKeydown: _cache[2] || (_cache[2] = withKeys((...args) => ($options.choose && $options.choose(...args)), ["enter"])),
+            onFocus: _cache[3] || (_cache[3] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+            onBlur: _cache[4] || (_cache[4] = (...args) => ($options.onBlur && $options.onBlur(...args))),
             tabindex: "0"
           }, [
-            createVNode("input", {
+            createElementVNode("input", {
               ref: "fileInput",
               type: "file",
-              onChange: _cache[1] || (_cache[1] = (...args) => ($options.onFileSelect && $options.onFileSelect(...args))),
+              onChange: _cache[0] || (_cache[0] = (...args) => ($options.onFileSelect && $options.onFileSelect(...args))),
               multiple: $props.multiple,
               accept: $props.accept,
               disabled: $options.chooseDisabled
-            }, null, 40, ["multiple", "accept", "disabled"]),
-            createVNode("span", { class: $options.advancedChooseIconClass }, null, 2),
-            createVNode("span", _hoisted_3, toDisplayString($options.chooseButtonLabel), 1)
-          ], 38), [
+            }, null, 40, _hoisted_3),
+            createElementVNode("span", {
+              class: normalizeClass($options.advancedChooseIconClass)
+            }, null, 2),
+            createElementVNode("span", _hoisted_4, toDisplayString($options.chooseButtonLabel), 1)
+          ], 38)), [
             [_directive_ripple]
           ]),
           ($props.showUploadButton)
@@ -509,13 +514,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }, null, 8, ["label", "icon", "onClick", "disabled"]))
             : createCommentVNode("", true)
         ]),
-        createVNode("div", {
+        createElementVNode("div", {
           ref: "content",
           class: "p-fileupload-content",
-          onDragenter: _cache[6] || (_cache[6] = (...args) => ($options.onDragEnter && $options.onDragEnter(...args))),
-          onDragover: _cache[7] || (_cache[7] = (...args) => ($options.onDragOver && $options.onDragOver(...args))),
-          onDragleave: _cache[8] || (_cache[8] = (...args) => ($options.onDragLeave && $options.onDragLeave(...args))),
-          onDrop: _cache[9] || (_cache[9] = (...args) => ($options.onDrop && $options.onDrop(...args)))
+          onDragenter: _cache[5] || (_cache[5] = (...args) => ($options.onDragEnter && $options.onDragEnter(...args))),
+          onDragover: _cache[6] || (_cache[6] = (...args) => ($options.onDragOver && $options.onDragOver(...args))),
+          onDragleave: _cache[7] || (_cache[7] = (...args) => ($options.onDragLeave && $options.onDragLeave(...args))),
+          onDrop: _cache[8] || (_cache[8] = (...args) => ($options.onDrop && $options.onDrop(...args)))
         }, [
           ($options.hasFiles)
             ? (openBlock(), createBlock(_component_FileUploadProgressBar, {
@@ -523,7 +528,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 value: $data.progress
               }, null, 8, ["value"]))
             : createCommentVNode("", true),
-          (openBlock(true), createBlock(Fragment, null, renderList($data.messages, (msg) => {
+          (openBlock(true), createElementBlock(Fragment, null, renderList($data.messages, (msg) => {
             return (openBlock(), createBlock(_component_FileUploadMessage, {
               severity: "error",
               key: msg,
@@ -536,26 +541,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, 1032, ["onClose"]))
           }), 128)),
           ($options.hasFiles)
-            ? (openBlock(), createBlock("div", _hoisted_4, [
-                (openBlock(true), createBlock(Fragment, null, renderList($data.files, (file, index) => {
-                  return (openBlock(), createBlock("div", {
+            ? (openBlock(), createElementBlock("div", _hoisted_5, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList($data.files, (file, index) => {
+                  return (openBlock(), createElementBlock("div", {
                     class: "p-fileupload-row",
                     key: file.name + file.type + file.size
                   }, [
-                    createVNode("div", null, [
+                    createElementVNode("div", null, [
                       ($options.isImage(file))
-                        ? (openBlock(), createBlock("img", {
+                        ? (openBlock(), createElementBlock("img", {
                             key: 0,
                             role: "presentation",
                             alt: file.name,
                             src: file.objectURL,
                             width: $props.previewWidth
-                          }, null, 8, ["alt", "src", "width"]))
+                          }, null, 8, _hoisted_6))
                         : createCommentVNode("", true)
                     ]),
-                    createVNode("div", _hoisted_5, toDisplayString(file.name), 1),
-                    createVNode("div", null, toDisplayString($options.formatSize(file.size)), 1),
-                    createVNode("div", null, [
+                    createElementVNode("div", _hoisted_7, toDisplayString(file.name), 1),
+                    createElementVNode("div", null, toDisplayString($options.formatSize(file.size)), 1),
+                    createElementVNode("div", null, [
                       createVNode(_component_FileUploadButton, {
                         type: "button",
                         icon: "pi pi-times",
@@ -567,15 +572,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ]))
             : createCommentVNode("", true),
           (_ctx.$slots.empty && !$options.hasFiles)
-            ? (openBlock(), createBlock("div", _hoisted_6, [
+            ? (openBlock(), createElementBlock("div", _hoisted_8, [
                 renderSlot(_ctx.$slots, "empty")
               ]))
             : createCommentVNode("", true)
         ], 544)
       ]))
     : ($options.isBasic)
-      ? (openBlock(), createBlock("div", _hoisted_7, [
-          (openBlock(true), createBlock(Fragment, null, renderList($data.messages, (msg) => {
+      ? (openBlock(), createElementBlock("div", _hoisted_9, [
+          (openBlock(true), createElementBlock(Fragment, null, renderList($data.messages, (msg) => {
             return (openBlock(), createBlock(_component_FileUploadMessage, {
               severity: "error",
               key: msg,
@@ -587,31 +592,33 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               _: 2
             }, 1032, ["onClose"]))
           }), 128)),
-          withDirectives(createVNode("span", {
-            class: $options.basicChooseButtonClass,
-            style: $props.style,
-            onMouseup: _cache[13] || (_cache[13] = (...args) => ($options.onBasicUploaderClick && $options.onBasicUploaderClick(...args))),
-            onKeydown: _cache[14] || (_cache[14] = withKeys((...args) => ($options.choose && $options.choose(...args)), ["enter"])),
-            onFocus: _cache[15] || (_cache[15] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-            onBlur: _cache[16] || (_cache[16] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+          withDirectives((openBlock(), createElementBlock("span", {
+            class: normalizeClass($options.basicChooseButtonClass),
+            style: normalizeStyle($props.style),
+            onMouseup: _cache[12] || (_cache[12] = (...args) => ($options.onBasicUploaderClick && $options.onBasicUploaderClick(...args))),
+            onKeydown: _cache[13] || (_cache[13] = withKeys((...args) => ($options.choose && $options.choose(...args)), ["enter"])),
+            onFocus: _cache[14] || (_cache[14] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+            onBlur: _cache[15] || (_cache[15] = (...args) => ($options.onBlur && $options.onBlur(...args))),
             tabindex: "0"
           }, [
-            createVNode("span", { class: $options.basicChooseButtonIconClass }, null, 2),
-            createVNode("span", _hoisted_8, toDisplayString($options.basicChooseButtonLabel), 1),
+            createElementVNode("span", {
+              class: normalizeClass($options.basicChooseButtonIconClass)
+            }, null, 2),
+            createElementVNode("span", _hoisted_10, toDisplayString($options.basicChooseButtonLabel), 1),
             (!$options.hasFiles)
-              ? (openBlock(), createBlock("input", {
+              ? (openBlock(), createElementBlock("input", {
                   key: 0,
                   ref: "fileInput",
                   type: "file",
                   accept: $props.accept,
                   disabled: $props.disabled,
                   multiple: $props.multiple,
-                  onChange: _cache[10] || (_cache[10] = (...args) => ($options.onFileSelect && $options.onFileSelect(...args))),
-                  onFocus: _cache[11] || (_cache[11] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-                  onBlur: _cache[12] || (_cache[12] = (...args) => ($options.onBlur && $options.onBlur(...args)))
-                }, null, 40, ["accept", "disabled", "multiple"]))
+                  onChange: _cache[9] || (_cache[9] = (...args) => ($options.onFileSelect && $options.onFileSelect(...args))),
+                  onFocus: _cache[10] || (_cache[10] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+                  onBlur: _cache[11] || (_cache[11] = (...args) => ($options.onBlur && $options.onBlur(...args)))
+                }, null, 40, _hoisted_11))
               : createCommentVNode("", true)
-          ], 38), [
+          ], 38)), [
             [_directive_ripple]
           ])
         ]))

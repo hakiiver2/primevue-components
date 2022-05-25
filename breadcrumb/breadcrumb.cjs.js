@@ -48,11 +48,13 @@ var script$1 = {
     }
 };
 
-const _hoisted_1$1 = {
+const _hoisted_1$1 = ["href", "onClick"];
+const _hoisted_2$1 = {
   key: 1,
   class: "p-menuitem-text"
 };
-const _hoisted_2$1 = {
+const _hoisted_3 = ["href", "target"];
+const _hoisted_4 = {
   key: 1,
   class: "p-menuitem-text"
 };
@@ -61,12 +63,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_router_link = vue.resolveComponent("router-link");
 
   return ($options.visible())
-    ? (vue.openBlock(), vue.createBlock("li", {
+    ? (vue.openBlock(), vue.createElementBlock("li", {
         key: 0,
-        class: $options.containerClass($props.item)
+        class: vue.normalizeClass($options.containerClass($props.item))
       }, [
         (!$props.template)
-          ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+          ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
               ($props.item.to)
                 ? (vue.openBlock(), vue.createBlock(_component_router_link, {
                     key: 0,
@@ -74,41 +76,41 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     custom: ""
                   }, {
                     default: vue.withCtx(({navigate, href, isActive, isExactActive}) => [
-                      vue.createVNode("a", {
+                      vue.createElementVNode("a", {
                         href: href,
-                        class: $options.linkClass({isActive, isExactActive}),
+                        class: vue.normalizeClass($options.linkClass({isActive, isExactActive})),
                         onClick: $event => ($options.onClick($event, navigate))
                       }, [
                         ($props.item.icon)
-                          ? (vue.openBlock(), vue.createBlock("span", {
+                          ? (vue.openBlock(), vue.createElementBlock("span", {
                               key: 0,
-                              class: $options.iconClass
+                              class: vue.normalizeClass($options.iconClass)
                             }, null, 2))
                           : vue.createCommentVNode("", true),
                         ($props.item.label)
-                          ? (vue.openBlock(), vue.createBlock("span", _hoisted_1$1, vue.toDisplayString($options.label()), 1))
+                          ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1))
                           : vue.createCommentVNode("", true)
-                      ], 10, ["href", "onClick"])
+                      ], 10, _hoisted_1$1)
                     ]),
                     _: 1
                   }, 8, ["to"]))
-                : (vue.openBlock(), vue.createBlock("a", {
+                : (vue.openBlock(), vue.createElementBlock("a", {
                     key: 1,
                     href: $props.item.url||'#',
-                    class: $options.linkClass(),
-                    onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+                    class: vue.normalizeClass($options.linkClass()),
+                    onClick: _cache[0] || (_cache[0] = (...args) => ($options.onClick && $options.onClick(...args))),
                     target: $props.item.target
                   }, [
                     ($props.item.icon)
-                      ? (vue.openBlock(), vue.createBlock("span", {
+                      ? (vue.openBlock(), vue.createElementBlock("span", {
                           key: 0,
-                          class: $options.iconClass
+                          class: vue.normalizeClass($options.iconClass)
                         }, null, 2))
                       : vue.createCommentVNode("", true),
                     ($props.item.label)
-                      ? (vue.openBlock(), vue.createBlock("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1))
+                      ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_4, vue.toDisplayString($options.label()), 1))
                       : vue.createCommentVNode("", true)
-                  ], 10, ["href", "target"]))
+                  ], 10, _hoisted_3))
             ], 64))
           : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.template), {
               key: 1,
@@ -145,13 +147,13 @@ const _hoisted_1 = {
   class: "p-breadcrumb p-component",
   "aria-label": "Breadcrumb"
 };
-const _hoisted_2 = /*#__PURE__*/vue.createVNode("li", { class: "p-breadcrumb-chevron pi pi-chevron-right" }, null, -1);
+const _hoisted_2 = /*#__PURE__*/vue.createElementVNode("li", { class: "p-breadcrumb-chevron pi pi-chevron-right" }, null, -1);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_BreadcrumbItem = vue.resolveComponent("BreadcrumbItem");
 
-  return (vue.openBlock(), vue.createBlock("nav", _hoisted_1, [
-    vue.createVNode("ul", null, [
+  return (vue.openBlock(), vue.createElementBlock("nav", _hoisted_1, [
+    vue.createElementVNode("ul", null, [
       ($props.home)
         ? (vue.openBlock(), vue.createBlock(_component_BreadcrumbItem, {
             key: 0,
@@ -161,8 +163,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             exact: $props.exact
           }, null, 8, ["item", "template", "exact"]))
         : vue.createCommentVNode("", true),
-      (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.model, (item) => {
-        return (vue.openBlock(), vue.createBlock(vue.Fragment, {
+      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item) => {
+        return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
           key: item.label
         }, [
           _hoisted_2,

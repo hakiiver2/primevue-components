@@ -1,7 +1,7 @@
 import { ObjectUtils, DomHandler } from 'primevue/utils';
 import { FilterService } from 'primevue/api';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, withDirectives, createVNode, createCommentVNode, resolveDynamicComponent, toDisplayString, resolveComponent, Fragment, renderList, createTextVNode, renderSlot, createSlots, withCtx } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, normalizeStyle, normalizeClass, withDirectives, createElementVNode, createCommentVNode, createBlock, resolveDynamicComponent, toDisplayString, resolveComponent, Fragment, renderList, createTextVNode, renderSlot, createSlots, withCtx } from 'vue';
 import Paginator from 'primevue/paginator';
 
 var script$4 = {
@@ -138,52 +138,57 @@ var script$4 = {
     }
 };
 
-const _hoisted_1$2 = { class: "p-hidden-accessible" };
-const _hoisted_2$2 = { key: 3 };
+const _hoisted_1$2 = ["aria-checked"];
+const _hoisted_2$2 = { class: "p-hidden-accessible" };
+const _hoisted_3$2 = { key: 3 };
 
 function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock("td", {
-    style: $options.containerStyle,
-    class: $options.containerClass
+  return (openBlock(), createElementBlock("td", {
+    style: normalizeStyle($options.containerStyle),
+    class: normalizeClass($options.containerClass)
   }, [
     ($options.columnProp('expander'))
-      ? withDirectives((openBlock(), createBlock("button", {
+      ? withDirectives((openBlock(), createElementBlock("button", {
           key: 0,
           type: "button",
           class: "p-treetable-toggler p-link",
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.toggle && $options.toggle(...args))),
-          style: $options.togglerStyle,
+          onClick: _cache[0] || (_cache[0] = (...args) => ($options.toggle && $options.toggle(...args))),
+          style: normalizeStyle($options.togglerStyle),
           tabindex: "-1"
         }, [
-          createVNode("i", { class: $options.togglerIcon }, null, 2)
+          createElementVNode("i", {
+            class: normalizeClass($options.togglerIcon)
+          }, null, 2)
         ], 4)), [
           [_directive_ripple]
         ])
       : createCommentVNode("", true),
     ($options.checkboxSelectionMode && $options.columnProp('expander'))
-      ? (openBlock(), createBlock("div", {
+      ? (openBlock(), createElementBlock("div", {
           key: 1,
-          class: ['p-checkbox p-treetable-checkbox p-component', {'p-checkbox-focused': $data.checkboxFocused}],
-          onClick: _cache[4] || (_cache[4] = (...args) => ($options.toggleCheckbox && $options.toggleCheckbox(...args))),
+          class: normalizeClass(['p-checkbox p-treetable-checkbox p-component', {'p-checkbox-focused': $data.checkboxFocused}]),
+          onClick: _cache[3] || (_cache[3] = (...args) => ($options.toggleCheckbox && $options.toggleCheckbox(...args))),
           role: "checkbox",
           "aria-checked": $props.checked
         }, [
-          createVNode("div", _hoisted_1$2, [
-            createVNode("input", {
+          createElementVNode("div", _hoisted_2$2, [
+            createElementVNode("input", {
               type: "checkbox",
-              onFocus: _cache[2] || (_cache[2] = (...args) => ($options.onCheckboxFocus && $options.onCheckboxFocus(...args))),
-              onBlur: _cache[3] || (_cache[3] = (...args) => ($options.onCheckboxBlur && $options.onCheckboxBlur(...args)))
+              onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onCheckboxFocus && $options.onCheckboxFocus(...args))),
+              onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onCheckboxBlur && $options.onCheckboxBlur(...args)))
             }, null, 32)
           ]),
-          createVNode("div", {
+          createElementVNode("div", {
             ref: "checkboxEl",
-            class: $options.checkboxClass
+            class: normalizeClass($options.checkboxClass)
           }, [
-            createVNode("span", { class: $options.checkboxIcon }, null, 2)
+            createElementVNode("span", {
+              class: normalizeClass($options.checkboxIcon)
+            }, null, 2)
           ], 2)
-        ], 10, ["aria-checked"]))
+        ], 10, _hoisted_1$2))
       : createCommentVNode("", true),
     ($props.column.children && $props.column.children.body)
       ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.body), {
@@ -191,7 +196,7 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
           node: $props.node,
           column: $props.column
         }, null, 8, ["node", "column"]))
-      : (openBlock(), createBlock("span", _hoisted_2$2, toDisplayString($options.resolveFieldData($props.node.data, $options.columnProp('field'))), 1))
+      : (openBlock(), createElementBlock("span", _hoisted_3$2, toDisplayString($options.resolveFieldData($props.node.data, $options.columnProp('field'))), 1))
   ], 6))
 }
 
@@ -433,17 +438,17 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TTBodyCell = resolveComponent("TTBodyCell");
   const _component_TreeTableRow = resolveComponent("TreeTableRow", true);
 
-  return (openBlock(), createBlock(Fragment, null, [
-    createVNode("tr", {
-      class: $options.containerClass,
-      onClick: _cache[2] || (_cache[2] = (...args) => ($options.onClick && $options.onClick(...args))),
-      onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-      onTouchend: _cache[4] || (_cache[4] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
-      style: $props.node.style,
+  return (openBlock(), createElementBlock(Fragment, null, [
+    createElementVNode("tr", {
+      class: normalizeClass($options.containerClass),
+      onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+      onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+      onTouchend: _cache[3] || (_cache[3] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args))),
+      style: normalizeStyle($props.node.style),
       tabindex: "0"
     }, [
-      (openBlock(true), createBlock(Fragment, null, renderList($props.columns, (col, i) => {
-        return (openBlock(), createBlock(Fragment, {
+      (openBlock(true), createElementBlock(Fragment, null, renderList($props.columns, (col, i) => {
+        return (openBlock(), createElementBlock(Fragment, {
           key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||i
         }, [
           (!$options.columnProp(col, 'hidden'))
@@ -458,7 +463,7 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
                 selectionMode: $props.selectionMode,
                 checked: $options.checked,
                 partialChecked: $options.partialChecked,
-                onNodeToggle: _cache[1] || (_cache[1] = $event => (_ctx.$emit('node-toggle', $event))),
+                onNodeToggle: _cache[0] || (_cache[0] = $event => (_ctx.$emit('node-toggle', $event))),
                 onCheckboxToggle: $options.toggleCheckbox
               }, null, 8, ["column", "node", "level", "leaf", "indentation", "expanded", "selectionMode", "checked", "partialChecked", "onCheckboxToggle"]))
             : createCommentVNode("", true)
@@ -466,7 +471,7 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
       }), 128))
     ], 38),
     ($options.expanded && $props.node.children && $props.node.children.length)
-      ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($props.node.children, (childNode) => {
+      ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList($props.node.children, (childNode) => {
           return (openBlock(), createBlock(_component_TreeTableRow, {
             key: childNode.key,
             columns: $props.columns,
@@ -477,8 +482,8 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
             selectionMode: $props.selectionMode,
             selectionKeys: $props.selectionKeys,
             indentation: $props.indentation,
-            onNodeToggle: _cache[5] || (_cache[5] = $event => (_ctx.$emit('node-toggle', $event))),
-            onNodeClick: _cache[6] || (_cache[6] = $event => (_ctx.$emit('node-click', $event))),
+            onNodeToggle: _cache[4] || (_cache[4] = $event => (_ctx.$emit('node-toggle', $event))),
+            onNodeClick: _cache[5] || (_cache[5] = $event => (_ctx.$emit('node-click', $event))),
             onCheckboxChange: $options.onCheckboxChange
           }, null, 8, ["columns", "node", "parentNode", "level", "expandedKeys", "selectionMode", "selectionKeys", "indentation", "onCheckboxChange"]))
         }), 128))
@@ -651,29 +656,30 @@ var script$2 = {
     }
 };
 
-const _hoisted_1$1 = {
+const _hoisted_1$1 = ["tabindex", "aria-sort"];
+const _hoisted_2$1 = {
   key: 2,
   class: "p-column-title"
 };
-const _hoisted_2$1 = {
+const _hoisted_3$1 = {
   key: 4,
   class: "p-sortable-column-badge"
 };
 
 function render$2(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("th", {
-    style: [$options.containerStyle],
-    class: $options.containerClass,
-    onClick: _cache[2] || (_cache[2] = (...args) => ($options.onClick && $options.onClick(...args))),
-    onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+  return (openBlock(), createElementBlock("th", {
+    style: normalizeStyle([$options.containerStyle]),
+    class: normalizeClass($options.containerClass),
+    onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
+    onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
     tabindex: $options.columnProp('sortable') ? '0' : null,
     "aria-sort": $options.ariaSort
   }, [
     ($props.resizableColumns && !$options.columnProp('frozen'))
-      ? (openBlock(), createBlock("span", {
+      ? (openBlock(), createElementBlock("span", {
           key: 0,
           class: "p-column-resizer",
-          onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onResizeStart && $options.onResizeStart(...args)))
+          onMousedown: _cache[0] || (_cache[0] = (...args) => ($options.onResizeStart && $options.onResizeStart(...args)))
         }, null, 32))
       : createCommentVNode("", true),
     ($props.column.children && $props.column.children.header)
@@ -683,18 +689,18 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 8, ["column"]))
       : createCommentVNode("", true),
     ($options.columnProp('header'))
-      ? (openBlock(), createBlock("span", _hoisted_1$1, toDisplayString($options.columnProp('header')), 1))
+      ? (openBlock(), createElementBlock("span", _hoisted_2$1, toDisplayString($options.columnProp('header')), 1))
       : createCommentVNode("", true),
     ($options.columnProp('sortable'))
-      ? (openBlock(), createBlock("span", {
+      ? (openBlock(), createElementBlock("span", {
           key: 3,
-          class: $options.sortableColumnIcon
+          class: normalizeClass($options.sortableColumnIcon)
         }, null, 2))
       : createCommentVNode("", true),
     ($options.isMultiSorted())
-      ? (openBlock(), createBlock("span", _hoisted_2$1, toDisplayString($options.getMultiSortMetaIndex() + 1), 1))
+      ? (openBlock(), createElementBlock("span", _hoisted_3$1, toDisplayString($options.getMultiSortMetaIndex() + 1), 1))
       : createCommentVNode("", true)
-  ], 46, ["tabindex", "aria-sort"]))
+  ], 46, _hoisted_1$1))
 }
 
 script$2.render = render$2;
@@ -764,9 +770,9 @@ var script$1 = {
 };
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("td", {
-    style: $options.containerStyle,
-    class: $options.containerClass
+  return (openBlock(), createElementBlock("td", {
+    style: normalizeStyle($options.containerStyle),
+    class: normalizeClass($options.containerClass)
   }, [
     ($props.column.children && $props.column.children.footer)
       ? (openBlock(), createBlock(resolveDynamicComponent($props.column.children.footer), {
@@ -1622,15 +1628,16 @@ const _hoisted_8 = {
   key: 1,
   class: "p-treetable-emptymessage"
 };
-const _hoisted_9 = {
+const _hoisted_9 = ["colspan"];
+const _hoisted_10 = {
   key: 0,
   class: "p-treetable-tfoot"
 };
-const _hoisted_10 = {
+const _hoisted_11 = {
   key: 4,
   class: "p-treetable-footer"
 };
-const _hoisted_11 = {
+const _hoisted_12 = {
   ref: "resizeHelper",
   class: "p-column-resizer-helper p-highlight",
   style: {"display":"none"}
@@ -1642,19 +1649,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TTRow = resolveComponent("TTRow");
   const _component_TTFooterCell = resolveComponent("TTFooterCell");
 
-  return (openBlock(), createBlock("div", {
-    class: $options.containerClass,
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass($options.containerClass),
     "data-scrollselectors": ".p-treetable-scrollable-body"
   }, [
     ($props.loading)
-      ? (openBlock(), createBlock("div", _hoisted_1, [
-          createVNode("div", _hoisted_2, [
-            createVNode("i", { class: $options.loadingIconClass }, null, 2)
+      ? (openBlock(), createElementBlock("div", _hoisted_1, [
+          createElementVNode("div", _hoisted_2, [
+            createElementVNode("i", {
+              class: normalizeClass($options.loadingIconClass)
+            }, null, 2)
           ])
         ]))
       : createCommentVNode("", true),
     (_ctx.$slots.header)
-      ? (openBlock(), createBlock("div", _hoisted_3, [
+      ? (openBlock(), createElementBlock("div", _hoisted_3, [
           renderSlot(_ctx.$slots, "header")
         ]))
       : createCommentVNode("", true),
@@ -1669,7 +1678,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           rowsPerPageOptions: $props.rowsPerPageOptions,
           currentPageReportTemplate: $props.currentPageReportTemplate,
           class: "p-paginator-top",
-          onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event))),
+          onPage: _cache[0] || (_cache[0] = $event => ($options.onPage($event))),
           alwaysShow: $props.alwaysShowPaginator
         }, createSlots({ _: 2 }, [
           (_ctx.$slots.paginatorstart)
@@ -1690,15 +1699,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             : undefined
         ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "currentPageReportTemplate", "alwaysShow"]))
       : createCommentVNode("", true),
-    createVNode("div", {
+    createElementVNode("div", {
       class: "p-treetable-wrapper",
-      style: {maxHeight: $props.scrollHeight}
+      style: normalizeStyle({maxHeight: $props.scrollHeight})
     }, [
-      createVNode("table", _hoisted_4, [
-        createVNode("thead", _hoisted_5, [
-          createVNode("tr", null, [
-            (openBlock(true), createBlock(Fragment, null, renderList($options.columns, (col, i) => {
-              return (openBlock(), createBlock(Fragment, {
+      createElementVNode("table", _hoisted_4, [
+        createElementVNode("thead", _hoisted_5, [
+          createElementVNode("tr", null, [
+            (openBlock(true), createElementBlock(Fragment, null, renderList($options.columns, (col, i) => {
+              return (openBlock(), createElementBlock(Fragment, {
                 key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||i
               }, [
                 (!$options.columnProp(col, 'hidden'))
@@ -1718,16 +1727,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }), 128))
           ]),
           ($options.hasColumnFilter())
-            ? (openBlock(), createBlock("tr", _hoisted_6, [
-                (openBlock(true), createBlock(Fragment, null, renderList($options.columns, (col, i) => {
-                  return (openBlock(), createBlock(Fragment, {
+            ? (openBlock(), createElementBlock("tr", _hoisted_6, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList($options.columns, (col, i) => {
+                  return (openBlock(), createElementBlock(Fragment, {
                     key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||i
                   }, [
                     (!$options.columnProp(col, 'hidden'))
-                      ? (openBlock(), createBlock("th", {
+                      ? (openBlock(), createElementBlock("th", {
                           key: 0,
-                          class: $options.getFilterColumnHeaderClass(col),
-                          style: [$options.columnProp(col, 'style'),$options.columnProp(col, 'filterHeaderStyle')]
+                          class: normalizeClass($options.getFilterColumnHeaderClass(col)),
+                          style: normalizeStyle([$options.columnProp(col, 'style'),$options.columnProp(col, 'filterHeaderStyle')])
                         }, [
                           (col.children && col.children.filter)
                             ? (openBlock(), createBlock(resolveDynamicComponent(col.children.filter), {
@@ -1742,9 +1751,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ]))
             : createCommentVNode("", true)
         ]),
-        createVNode("tbody", _hoisted_7, [
+        createElementVNode("tbody", _hoisted_7, [
           (!$options.empty)
-            ? (openBlock(true), createBlock(Fragment, { key: 0 }, renderList($options.dataToRender, (node) => {
+            ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList($options.dataToRender, (node) => {
                 return (openBlock(), createBlock(_component_TTRow, {
                   key: node.key,
                   columns: $options.columns,
@@ -1759,19 +1768,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   onCheckboxChange: $options.onCheckboxChange
                 }, null, 8, ["columns", "node", "expandedKeys", "onNodeToggle", "indentation", "selectionMode", "selectionKeys", "onNodeClick", "onCheckboxChange"]))
               }), 128))
-            : (openBlock(), createBlock("tr", _hoisted_8, [
-                createVNode("td", {
+            : (openBlock(), createElementBlock("tr", _hoisted_8, [
+                createElementVNode("td", {
                   colspan: $options.columns.length
                 }, [
                   renderSlot(_ctx.$slots, "empty")
-                ], 8, ["colspan"])
+                ], 8, _hoisted_9)
               ]))
         ]),
         ($options.hasFooter)
-          ? (openBlock(), createBlock("tfoot", _hoisted_9, [
-              createVNode("tr", null, [
-                (openBlock(true), createBlock(Fragment, null, renderList($options.columns, (col, i) => {
-                  return (openBlock(), createBlock(Fragment, {
+          ? (openBlock(), createElementBlock("tfoot", _hoisted_10, [
+              createElementVNode("tr", null, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList($options.columns, (col, i) => {
+                  return (openBlock(), createElementBlock(Fragment, {
                     key: $options.columnProp(col, 'columnKey')||$options.columnProp(col, 'field')||i
                   }, [
                     (!$options.columnProp(col, 'hidden'))
@@ -1798,7 +1807,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           rowsPerPageOptions: $props.rowsPerPageOptions,
           currentPageReportTemplate: $props.currentPageReportTemplate,
           class: "p-paginator-bottom",
-          onPage: _cache[2] || (_cache[2] = $event => ($options.onPage($event))),
+          onPage: _cache[1] || (_cache[1] = $event => ($options.onPage($event))),
           alwaysShow: $props.alwaysShowPaginator
         }, createSlots({ _: 2 }, [
           (_ctx.$slots.paginatorstart)
@@ -1820,11 +1829,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "currentPageReportTemplate", "alwaysShow"]))
       : createCommentVNode("", true),
     (_ctx.$slots.footer)
-      ? (openBlock(), createBlock("div", _hoisted_10, [
+      ? (openBlock(), createElementBlock("div", _hoisted_11, [
           renderSlot(_ctx.$slots, "footer")
         ]))
       : createCommentVNode("", true),
-    createVNode("div", _hoisted_11, null, 512)
+    createElementVNode("div", _hoisted_12, null, 512)
   ], 2))
 }
 

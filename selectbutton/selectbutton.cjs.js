@@ -101,21 +101,22 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
-const _hoisted_1 = { class: "p-button-label" };
+const _hoisted_1 = ["aria-label", "aria-pressed", "onClick", "onKeydown", "tabindex", "aria-labelledby"];
+const _hoisted_2 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock("div", {
-    class: $options.containerClass,
+  return (vue.openBlock(), vue.createElementBlock("div", {
+    class: vue.normalizeClass($options.containerClass),
     role: "group"
   }, [
-    (vue.openBlock(true), vue.createBlock(vue.Fragment, null, vue.renderList($props.options, (option, i) => {
-      return vue.withDirectives((vue.openBlock(), vue.createBlock("div", {
+    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.options, (option, i) => {
+      return vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", {
         key: $options.getOptionRenderKey(option),
         "aria-label": $options.getOptionLabel(option),
         role: "button",
@@ -126,18 +127,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           vue.withKeys(vue.withModifiers($event => ($options.onOptionSelect($event, option)), ["prevent"]), ["space"])
         ],
         tabindex: $options.isOptionDisabled(option) ? null : '0',
-        onFocus: _cache[1] || (_cache[1] = $event => ($options.onFocus($event))),
-        onBlur: _cache[2] || (_cache[2] = $event => ($options.onBlur($event))),
+        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event))),
         "aria-labelledby": $props.ariaLabelledBy,
-        class: $options.getButtonClass(option)
+        class: vue.normalizeClass($options.getButtonClass(option))
       }, [
         vue.renderSlot(_ctx.$slots, "option", {
           option: option,
           index: i
         }, () => [
-          vue.createVNode("span", _hoisted_1, vue.toDisplayString($options.getOptionLabel(option)), 1)
+          vue.createElementVNode("span", _hoisted_2, vue.toDisplayString($options.getOptionLabel(option)), 1)
         ])
-      ], 42, ["aria-label", "aria-pressed", "onClick", "onKeydown", "tabindex", "aria-labelledby"])), [
+      ], 42, _hoisted_1)), [
         [_directive_ripple]
       ])
     }), 128))
