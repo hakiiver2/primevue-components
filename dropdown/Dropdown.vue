@@ -131,7 +131,11 @@ export default {
         virtualScrollerOptions: {
             type: Object,
             default: null
-        }
+        },
+        beforeChangeEvent: {
+            type: Function,
+            default: () => true
+        },
     },
     data() {
         return {
@@ -479,9 +483,12 @@ export default {
                 DomHandler.absolutePosition(this.overlay, this.$el);
             }
         },
-        updateModel(event, value) {
-            this.$emit('update:modelValue', value);
-            this.$emit('change', {originalEvent: event, value: value});
+        async updateModel(event, value) {
+            const beforeChange = await this.beforeChangeEvent()
+            if(beforeChange) {
+                this.$emit('update:modelValue', value);
+                this.$emit('change', {originalEvent: event, value: value});
+            }
         },
         bindOutsideClickListener() {
             if (!this.outsideClickListener) {
