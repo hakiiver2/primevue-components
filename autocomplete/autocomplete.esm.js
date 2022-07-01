@@ -3,7 +3,8 @@ import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
 import VirtualScroller from 'primevue/virtualscroller';
-import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, normalizeStyle, mergeProps, createCommentVNode, Fragment, renderList, renderSlot, createElementVNode, toDisplayString, createBlock, Teleport, createVNode, Transition, withCtx, createSlots, withDirectives, createTextVNode } from 'vue';
+import Portal from 'primevue/portal';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, normalizeStyle, mergeProps, createCommentVNode, Fragment, renderList, renderSlot, createElementVNode, toDisplayString, createBlock, createVNode, withCtx, Transition, createSlots, withDirectives, createTextVNode } from 'vue';
 
 var script = {
     name: 'AutoComplete',
@@ -69,6 +70,10 @@ var script = {
         virtualScrollerOptions: {
             type: Object,
             default: null
+        },
+        loadingIcon: {
+            type: String,
+            default: 'pi pi-spinner'
         }
     },
     timeout: null,
@@ -155,7 +160,7 @@ var script = {
         },
         alignOverlay() {
             let target = this.multiple ? this.$refs.multiContainer : this.$refs.input;
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 DomHandler.relativePosition(this.overlay, target);
             }
             else {
@@ -192,7 +197,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hideOverlay();
                     }
                 };
@@ -538,6 +543,9 @@ var script = {
                 'p-ripple-disabled': this.$primevue.config.ripple === false
             }];
         },
+        loadingIconClass() {
+            return ['p-autocomplete-loader pi-spin', this.loadingIcon];
+        },
         inputValue() {
             if (this.modelValue) {
                 if (this.field && typeof this.modelValue === 'object') {
@@ -554,19 +562,14 @@ var script = {
         listId() {
             return UniqueComponentId() + '_list';
         },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
-        },
         virtualScrollerDisabled() {
             return !this.virtualScrollerOptions;
         }
     },
     components: {
         'Button': Button,
-        'VirtualScroller': VirtualScroller
+        'VirtualScroller': VirtualScroller,
+        'Portal': Portal
     },
     directives: {
         'ripple': Ripple
@@ -579,18 +582,15 @@ const _hoisted_3 = { class: "p-autocomplete-token-label" };
 const _hoisted_4 = ["onClick"];
 const _hoisted_5 = { class: "p-autocomplete-input-token" };
 const _hoisted_6 = ["aria-controls"];
-const _hoisted_7 = {
-  key: 2,
-  class: "p-autocomplete-loader pi pi-spinner pi-spin"
-};
-const _hoisted_8 = ["id"];
-const _hoisted_9 = ["onClick", "data-index"];
-const _hoisted_10 = { class: "p-autocomplete-item-group" };
-const _hoisted_11 = ["onClick", "data-group", "data-index"];
+const _hoisted_7 = ["id"];
+const _hoisted_8 = ["onClick", "data-index"];
+const _hoisted_9 = { class: "p-autocomplete-item-group" };
+const _hoisted_10 = ["onClick", "data-group", "data-index"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Button = resolveComponent("Button");
   const _component_VirtualScroller = resolveComponent("VirtualScroller");
+  const _component_Portal = resolveComponent("Portal");
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createElementBlock("span", {
@@ -662,7 +662,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ], 2))
       : createCommentVNode("", true),
     ($data.searching)
-      ? (openBlock(), createElementBlock("i", _hoisted_7))
+      ? (openBlock(), createElementBlock("i", {
+          key: 2,
+          class: normalizeClass($options.loadingIconClass)
+        }, null, 2))
       : createCommentVNode("", true),
     ($props.dropdown)
       ? (openBlock(), createBlock(_component_Button, {
@@ -675,117 +678,117 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: $options.onDropdownClick
         }, null, 8, ["disabled", "onClick"]))
       : createCommentVNode("", true),
-    (openBlock(), createBlock(Teleport, {
-      to: $options.appendTarget,
-      disabled: $options.appendDisabled
-    }, [
-      createVNode(Transition, {
-        name: "p-connected-overlay",
-        onEnter: $options.onOverlayEnter,
-        onLeave: $options.onOverlayLeave,
-        onAfterLeave: $options.onOverlayAfterLeave
-      }, {
-        default: withCtx(() => [
-          ($data.overlayVisible)
-            ? (openBlock(), createElementBlock("div", {
-                key: 0,
-                ref: $options.overlayRef,
-                class: normalizeClass($options.panelStyleClass),
-                style: normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}),
-                onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-              }, [
-                renderSlot(_ctx.$slots, "header", {
-                  value: $props.modelValue,
-                  suggestions: $props.suggestions
-                }),
-                createVNode(_component_VirtualScroller, mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
-                  style: {'height': $props.scrollHeight},
-                  items: $props.suggestions,
-                  disabled: $options.virtualScrollerDisabled
-                }), createSlots({
-                  content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
-                    createElementVNode("ul", {
-                      id: $options.listId,
-                      ref: (el) => $options.listRef(el, contentRef),
-                      class: normalizeClass(['p-autocomplete-items', styleClass]),
-                      style: normalizeStyle(contentStyle),
-                      role: "listbox"
-                    }, [
-                      (!$props.optionGroupLabel)
-                        ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(items, (item, i) => {
-                            return withDirectives((openBlock(), createElementBlock("li", {
-                              class: "p-autocomplete-item",
-                              key: $options.getOptionRenderKey(item),
-                              onClick: $event => ($options.selectItem($event, item)),
-                              role: "option",
-                              "data-index": $options.getOptionIndex(i, getItemOptions)
-                            }, [
-                              renderSlot(_ctx.$slots, "item", {
-                                item: item,
-                                index: $options.getOptionIndex(i, getItemOptions)
-                              }, () => [
-                                createTextVNode(toDisplayString($options.getItemContent(item)), 1)
-                              ])
-                            ], 8, _hoisted_9)), [
-                              [_directive_ripple]
-                            ])
-                          }), 128))
-                        : (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
-                            return (openBlock(), createElementBlock(Fragment, {
-                              key: $options.getOptionGroupRenderKey(optionGroup)
-                            }, [
-                              createElementVNode("li", _hoisted_10, [
-                                renderSlot(_ctx.$slots, "optiongroup", {
-                                  item: optionGroup,
+    createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+      default: withCtx(() => [
+        createVNode(Transition, {
+          name: "p-connected-overlay",
+          onEnter: $options.onOverlayEnter,
+          onLeave: $options.onOverlayLeave,
+          onAfterLeave: $options.onOverlayAfterLeave
+        }, {
+          default: withCtx(() => [
+            ($data.overlayVisible)
+              ? (openBlock(), createElementBlock("div", {
+                  key: 0,
+                  ref: $options.overlayRef,
+                  class: normalizeClass($options.panelStyleClass),
+                  style: normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}),
+                  onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                }, [
+                  renderSlot(_ctx.$slots, "header", {
+                    value: $props.modelValue,
+                    suggestions: $props.suggestions
+                  }),
+                  createVNode(_component_VirtualScroller, mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
+                    style: {'height': $props.scrollHeight},
+                    items: $props.suggestions,
+                    disabled: $options.virtualScrollerDisabled
+                  }), createSlots({
+                    content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
+                      createElementVNode("ul", {
+                        id: $options.listId,
+                        ref: (el) => $options.listRef(el, contentRef),
+                        class: normalizeClass(['p-autocomplete-items', styleClass]),
+                        style: normalizeStyle(contentStyle),
+                        role: "listbox"
+                      }, [
+                        (!$props.optionGroupLabel)
+                          ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(items, (item, i) => {
+                              return withDirectives((openBlock(), createElementBlock("li", {
+                                class: "p-autocomplete-item",
+                                key: $options.getOptionRenderKey(item),
+                                onClick: $event => ($options.selectItem($event, item)),
+                                role: "option",
+                                "data-index": $options.getOptionIndex(i, getItemOptions)
+                              }, [
+                                renderSlot(_ctx.$slots, "item", {
+                                  item: item,
                                   index: $options.getOptionIndex(i, getItemOptions)
                                 }, () => [
-                                  createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                                  createTextVNode(toDisplayString($options.getItemContent(item)), 1)
                                 ])
-                              ]),
-                              (openBlock(true), createElementBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
-                                return withDirectives((openBlock(), createElementBlock("li", {
-                                  class: "p-autocomplete-item",
-                                  key: j,
-                                  onClick: $event => ($options.selectItem($event, item)),
-                                  role: "option",
-                                  "data-group": i,
-                                  "data-index": $options.getOptionIndex(j, getItemOptions)
-                                }, [
-                                  renderSlot(_ctx.$slots, "item", {
-                                    item: item,
-                                    index: $options.getOptionIndex(j, getItemOptions)
+                              ], 8, _hoisted_8)), [
+                                [_directive_ripple]
+                              ])
+                            }), 128))
+                          : (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
+                              return (openBlock(), createElementBlock(Fragment, {
+                                key: $options.getOptionGroupRenderKey(optionGroup)
+                              }, [
+                                createElementVNode("li", _hoisted_9, [
+                                  renderSlot(_ctx.$slots, "optiongroup", {
+                                    item: optionGroup,
+                                    index: $options.getOptionIndex(i, getItemOptions)
                                   }, () => [
-                                    createTextVNode(toDisplayString($options.getItemContent(item)), 1)
+                                    createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                   ])
-                                ], 8, _hoisted_11)), [
-                                  [_directive_ripple]
-                                ])
-                              }), 128))
-                            ], 64))
-                          }), 128))
-                    ], 14, _hoisted_8)
-                  ]),
-                  _: 2
-                }, [
-                  (_ctx.$slots.loader)
-                    ? {
-                        name: "loader",
-                        fn: withCtx(({ options }) => [
-                          renderSlot(_ctx.$slots, "loader", { options: options })
-                        ])
-                      }
-                    : undefined
-                ]), 1040, ["style", "items", "disabled"]),
-                renderSlot(_ctx.$slots, "footer", {
-                  value: $props.modelValue,
-                  suggestions: $props.suggestions
-                })
-              ], 6))
-            : createCommentVNode("", true)
-        ]),
-        _: 3
-      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-    ], 8, ["to", "disabled"]))
+                                ]),
+                                (openBlock(true), createElementBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
+                                  return withDirectives((openBlock(), createElementBlock("li", {
+                                    class: "p-autocomplete-item",
+                                    key: j,
+                                    onClick: $event => ($options.selectItem($event, item)),
+                                    role: "option",
+                                    "data-group": i,
+                                    "data-index": $options.getOptionIndex(j, getItemOptions)
+                                  }, [
+                                    renderSlot(_ctx.$slots, "item", {
+                                      item: item,
+                                      index: $options.getOptionIndex(j, getItemOptions)
+                                    }, () => [
+                                      createTextVNode(toDisplayString($options.getItemContent(item)), 1)
+                                    ])
+                                  ], 8, _hoisted_10)), [
+                                    [_directive_ripple]
+                                  ])
+                                }), 128))
+                              ], 64))
+                            }), 128))
+                      ], 14, _hoisted_7)
+                    ]),
+                    _: 2
+                  }, [
+                    (_ctx.$slots.loader)
+                      ? {
+                          name: "loader",
+                          fn: withCtx(({ options }) => [
+                            renderSlot(_ctx.$slots, "loader", { options: options })
+                          ])
+                        }
+                      : undefined
+                  ]), 1040, ["style", "items", "disabled"]),
+                  renderSlot(_ctx.$slots, "footer", {
+                    value: $props.modelValue,
+                    suggestions: $props.suggestions
+                  })
+                ], 6))
+              : createCommentVNode("", true)
+          ]),
+          _: 3
+        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+      ]),
+      _: 3
+    }, 8, ["appendTo"])
   ], 14, _hoisted_1))
 }
 

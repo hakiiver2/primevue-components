@@ -268,7 +268,7 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -540,4 +540,4 @@ this.primevue.megamenu = (function (utils, Ripple, vue) {
 
     return script;
 
-})(primevue.utils, primevue.ripple, Vue);
+}(primevue.utils, primevue.ripple, Vue));

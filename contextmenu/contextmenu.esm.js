@@ -1,6 +1,7 @@
 import { DomHandler, ZIndexUtils } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createBlock, Transition, withCtx, createElementBlock, normalizeClass, Fragment, renderList, normalizeStyle, withDirectives, createElementVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, Teleport, createVNode, mergeProps } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createBlock, Transition, withCtx, createElementBlock, normalizeClass, Fragment, renderList, normalizeStyle, withDirectives, createElementVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, createVNode, mergeProps } from 'vue';
+import Portal from 'primevue/portal';
 
 var script$1 = {
     name: 'ContextMenuSub',
@@ -410,7 +411,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.visible) {
+                    if (this.visible && !DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -451,40 +452,45 @@ var script = {
         }
     },
     components: {
-        'ContextMenuSub': script$1
+        'ContextMenuSub': script$1,
+        'Portal': Portal
     }
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_ContextMenuSub = resolveComponent("ContextMenuSub");
+  const _component_Portal = resolveComponent("Portal");
 
-  return (openBlock(), createBlock(Teleport, { to: $props.appendTo }, [
-    createVNode(Transition, {
-      name: "p-contextmenu",
-      onEnter: $options.onEnter,
-      onLeave: $options.onLeave,
-      onAfterLeave: $options.onAfterLeave
-    }, {
-      default: withCtx(() => [
-        ($data.visible)
-          ? (openBlock(), createElementBlock("div", mergeProps({
-              key: 0,
-              ref: $options.containerRef,
-              class: $options.containerClass
-            }, _ctx.$attrs), [
-              createVNode(_component_ContextMenuSub, {
-                model: $props.model,
-                root: true,
-                onLeafClick: $options.onLeafClick,
-                template: _ctx.$slots.item,
-                exact: $props.exact
-              }, null, 8, ["model", "onLeafClick", "template", "exact"])
-            ], 16))
-          : createCommentVNode("", true)
-      ]),
-      _: 1
-    }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-  ], 8, ["to"]))
+  return (openBlock(), createBlock(_component_Portal, { appendTo: $props.appendTo }, {
+    default: withCtx(() => [
+      createVNode(Transition, {
+        name: "p-contextmenu",
+        onEnter: $options.onEnter,
+        onLeave: $options.onLeave,
+        onAfterLeave: $options.onAfterLeave
+      }, {
+        default: withCtx(() => [
+          ($data.visible)
+            ? (openBlock(), createElementBlock("div", mergeProps({
+                key: 0,
+                ref: $options.containerRef,
+                class: $options.containerClass
+              }, _ctx.$attrs), [
+                createVNode(_component_ContextMenuSub, {
+                  model: $props.model,
+                  root: true,
+                  onLeafClick: $options.onLeafClick,
+                  template: _ctx.$slots.item,
+                  exact: $props.exact
+                }, null, 8, ["model", "onLeafClick", "template", "exact"])
+              ], 16))
+            : createCommentVNode("", true)
+        ]),
+        _: 1
+      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+    ]),
+    _: 1
+  }, 8, ["appendTo"]))
 }
 
 function styleInject(css, ref) {

@@ -39,6 +39,7 @@
       "class",
       "style",
       "panelClass",
+      "loadingIcon",
       "virtualScrollerOptions"
     ]
   },
@@ -743,6 +744,7 @@
       "maxSelectedLabels",
       "selectedItemsLabel",
       "selectAll",
+      "resetFilterOnHide",
       "virtualScrollerOptions"
     ]
   },
@@ -843,6 +845,13 @@
       "responsive",
       "breakpoint",
       "stripedRows"
+    ]
+  },
+  "Portal": {
+    "description": "Portal moves its container to a specific location based on target elements. Basically it uses <Teleport> in the background.",
+    "attributes": [
+      "appendTo",
+      "disabled"
     ]
   },
   "ProgressBar": {

@@ -1,5 +1,5 @@
 this.primevue = this.primevue || {};
-this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
+this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Portal) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -7,6 +7,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
     var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
     var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script$1 = {
         name: 'Menuitem',
@@ -48,8 +49,8 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"],
-            'tooltip': Tooltip__default["default"]
+            'ripple': Ripple__default['default'],
+            'tooltip': Tooltip__default['default']
         }
     };
 
@@ -294,7 +295,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
             bindResizeListener() {
                 if (!this.resizeListener) {
                     this.resizeListener = () => {
-                        if (this.overlayVisible) {
+                        if (this.overlayVisible && !utils.DomHandler.isTouchDevice()) {
                             this.hide();
                         }
                     };
@@ -323,7 +324,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default["default"].emit('overlay-click', {
+                OverlayEventBus__default['default'].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -339,7 +340,8 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
             }
         },
         components: {
-            'Menuitem': script$1
+            'Menuitem': script$1,
+            'Portal': Portal__default['default']
         }
     };
 
@@ -354,86 +356,90 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_Menuitem = vue.resolveComponent("Menuitem");
+      const _component_Portal = vue.resolveComponent("Portal");
 
-      return (vue.openBlock(), vue.createBlock(vue.Teleport, {
-        to: $props.appendTo,
+      return (vue.openBlock(), vue.createBlock(_component_Portal, {
+        appendTo: $props.appendTo,
         disabled: !$props.popup
-      }, [
-        vue.createVNode(vue.Transition, {
-          name: "p-connected-overlay",
-          onEnter: $options.onEnter,
-          onLeave: $options.onLeave,
-          onAfterLeave: $options.onAfterLeave
-        }, {
-          default: vue.withCtx(() => [
-            ($props.popup ? $data.overlayVisible : true)
-              ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
-                  key: 0,
-                  ref: $options.containerRef,
-                  class: $options.containerClass
-                }, _ctx.$attrs, {
-                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-                }), [
-                  vue.createElementVNode("ul", _hoisted_1, [
-                    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
-                      return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
-                        key: $options.label(item) + i.toString()
-                      }, [
-                        (item.items && $options.visible(item) && !item.separator)
-                          ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
-                              (item.items)
-                                ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_2, [
-                                    vue.renderSlot(_ctx.$slots, "item", { item: item }, () => [
-                                      vue.createTextVNode(vue.toDisplayString($options.label(item)), 1)
-                                    ])
-                                  ]))
-                                : vue.createCommentVNode("", true),
-                              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(item.items, (child, j) => {
-                                return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
-                                  key: child.label + i + j
-                                }, [
-                                  ($options.visible(child) && !child.separator)
-                                    ? (vue.openBlock(), vue.createBlock(_component_Menuitem, {
-                                        key: 0,
-                                        item: child,
-                                        onClick: $options.itemClick,
-                                        template: _ctx.$slots.item,
-                                        exact: $props.exact
-                                      }, null, 8, ["item", "onClick", "template", "exact"]))
-                                    : ($options.visible(child) && child.separator)
-                                      ? (vue.openBlock(), vue.createElementBlock("li", {
-                                          class: vue.normalizeClass(['p-menu-separator', child.class]),
-                                          style: vue.normalizeStyle(child.style),
-                                          key: 'separator' + i + j,
-                                          role: "separator"
-                                        }, null, 6))
-                                      : vue.createCommentVNode("", true)
-                                ], 64))
-                              }), 128))
-                            ], 64))
-                          : ($options.visible(item) && item.separator)
-                            ? (vue.openBlock(), vue.createElementBlock("li", {
-                                class: vue.normalizeClass(['p-menu-separator', item.class]),
-                                style: vue.normalizeStyle(item.style),
-                                key: 'separator' + i.toString(),
-                                role: "separator"
-                              }, null, 6))
-                            : (vue.openBlock(), vue.createBlock(_component_Menuitem, {
-                                key: $options.label(item) + i.toString(),
-                                item: item,
-                                onClick: $options.itemClick,
-                                template: _ctx.$slots.item,
-                                exact: $props.exact
-                              }, null, 8, ["item", "onClick", "template", "exact"]))
-                      ], 64))
-                    }), 128))
-                  ])
-                ], 16))
-              : vue.createCommentVNode("", true)
-          ]),
-          _: 3
-        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-      ], 8, ["to", "disabled"]))
+      }, {
+        default: vue.withCtx(() => [
+          vue.createVNode(vue.Transition, {
+            name: "p-connected-overlay",
+            onEnter: $options.onEnter,
+            onLeave: $options.onLeave,
+            onAfterLeave: $options.onAfterLeave
+          }, {
+            default: vue.withCtx(() => [
+              ($props.popup ? $data.overlayVisible : true)
+                ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
+                    key: 0,
+                    ref: $options.containerRef,
+                    class: $options.containerClass
+                  }, _ctx.$attrs, {
+                    onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                  }), [
+                    vue.createElementVNode("ul", _hoisted_1, [
+                      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.model, (item, i) => {
+                        return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
+                          key: $options.label(item) + i.toString()
+                        }, [
+                          (item.items && $options.visible(item) && !item.separator)
+                            ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
+                                (item.items)
+                                  ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_2, [
+                                      vue.renderSlot(_ctx.$slots, "item", { item: item }, () => [
+                                        vue.createTextVNode(vue.toDisplayString($options.label(item)), 1)
+                                      ])
+                                    ]))
+                                  : vue.createCommentVNode("", true),
+                                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(item.items, (child, j) => {
+                                  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
+                                    key: child.label + i + j
+                                  }, [
+                                    ($options.visible(child) && !child.separator)
+                                      ? (vue.openBlock(), vue.createBlock(_component_Menuitem, {
+                                          key: 0,
+                                          item: child,
+                                          onClick: $options.itemClick,
+                                          template: _ctx.$slots.item,
+                                          exact: $props.exact
+                                        }, null, 8, ["item", "onClick", "template", "exact"]))
+                                      : ($options.visible(child) && child.separator)
+                                        ? (vue.openBlock(), vue.createElementBlock("li", {
+                                            class: vue.normalizeClass(['p-menu-separator', child.class]),
+                                            style: vue.normalizeStyle(child.style),
+                                            key: 'separator' + i + j,
+                                            role: "separator"
+                                          }, null, 6))
+                                        : vue.createCommentVNode("", true)
+                                  ], 64))
+                                }), 128))
+                              ], 64))
+                            : ($options.visible(item) && item.separator)
+                              ? (vue.openBlock(), vue.createElementBlock("li", {
+                                  class: vue.normalizeClass(['p-menu-separator', item.class]),
+                                  style: vue.normalizeStyle(item.style),
+                                  key: 'separator' + i.toString(),
+                                  role: "separator"
+                                }, null, 6))
+                              : (vue.openBlock(), vue.createBlock(_component_Menuitem, {
+                                  key: $options.label(item) + i.toString(),
+                                  item: item,
+                                  onClick: $options.itemClick,
+                                  template: _ctx.$slots.item,
+                                  exact: $props.exact
+                                }, null, 8, ["item", "onClick", "template", "exact"]))
+                        ], 64))
+                      }), 128))
+                    ])
+                  ], 16))
+                : vue.createCommentVNode("", true)
+            ]),
+            _: 3
+          }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+        ]),
+        _: 3
+      }, 8, ["appendTo", "disabled"]))
     }
 
     function styleInject(css, ref) {
@@ -470,4 +476,4 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue) {
 
     return script;
 
-})(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue);
+}(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue, primevue.portal));

@@ -42,4 +42,4 @@ this.primevue.badge = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

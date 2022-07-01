@@ -1088,6 +1088,10 @@
   transition-duration: 0.2s;
 }
 
+.p-float-label > .p-invalid + label {
+  color: #FCA5A5;
+}
+
 .p-input-icon-left > i:first-of-type {
   left: 0.75rem;
   color: rgba(255, 255, 255, 0.6);
@@ -4060,6 +4064,10 @@
   color: rgba(255, 255, 255, 0.87);
   padding: 0 1.5rem 2rem 1.5rem;
 }
+.p-dialog .p-dialog-content:last-of-type {
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
 .p-dialog .p-dialog-footer {
   border-top: 0 none;
   background: #071426;
@@ -4113,7 +4121,7 @@
 .p-overlaypanel:before {
   border: solid transparent;
   border-color: rgba(11, 33, 63, 0);
-  border-bottom-color: #0b213f;
+  border-bottom-color: #0a1f3c;
 }
 .p-overlaypanel.p-overlaypanel-flipped:after {
   border-top-color: #071426;
@@ -4858,7 +4866,6 @@
   border: 1px solid #0b213f;
   background: #071426;
   color: rgba(255, 255, 255, 0.87);
-  margin-bottom: 4px;
   border-top: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 0;

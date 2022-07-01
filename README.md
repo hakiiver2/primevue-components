@@ -56,7 +56,7 @@ app.component('Dialog', Dialog);
 
 Finally you'll be able to utilize the component in your application. See the Styles section to apply styling.
 
-```
+```vue
 <Dialog></Dialog>
 ```
 
@@ -125,7 +125,7 @@ Other alternative is utilizing the components directly within the browser with t
 
 The css dependencies are as follows, note that you may change the theme with another one of your choice.
 
-```
+```css
 primevue/resources/themes/saga-blue/theme.css       //theme
 primevue/resources/primevue.min.css                 //core css
 primeicons/primeicons.css                           //icons
@@ -194,7 +194,7 @@ dependencies: {
 
 Component prop names are described as camel case throughout the documentation however camel-case is also fully supported. Events on the other hand should always be camel-case.
 
-```
+```vue
 <Dialog :showHeader="false"></Dialog>
 
 <!-- can be written as -->
@@ -206,7 +206,7 @@ Component prop names are described as camel case throughout the documentation ho
 
 Ripple is an optional animation for the supported components such as buttons. It is disabled by default and needs to be enabled at your app's entry file (e.g. main.js) during the PrimeVue setup. 
 
-```
+```javascript
 import {createApp} from 'vue';
 import PrimeVue from 'primevue/config';
 const app = createApp(App);

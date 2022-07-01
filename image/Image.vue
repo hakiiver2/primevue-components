@@ -1,12 +1,12 @@
 <template>
     <span :class="containerClass" :style="style">
-        <img v-bind="$attrs" :style="imageStyle" :class="imageClass" />
+        <img v-bind="$attrs" :style="imageStyle" :class="imageClass" @error="onError"/>
         <div class="p-image-preview-indicator" v-if="preview" @click="onImageClick" :showPreview="showPreview" >
             <slot name="indicator">
                 <i class="p-image-preview-icon pi pi-eye"></i>
             </slot>
         </div>
-        <Teleport to="body">
+        <Portal>
             <div :ref="maskRef" :class="maskClass" v-if="maskVisible" @click="onMaskClick">
                 <div class="p-image-toolbar">
                     <button class="p-image-action p-link" @click="rotateRight" type="button">
@@ -31,16 +31,18 @@
                     </div>
                 </transition>
             </div>
-        </Teleport>
+        </Portal>
     </span>
 </template>
 
 <script>
 import {DomHandler,ZIndexUtils} from 'primevue/utils';
+import Portal from 'primevue/portal';
 
 export default {
     name: 'Image',
     inheritAttrs: false,
+    emits: ['show', 'hide', 'error'],
     props: {
         preview: {
             type: Boolean,
@@ -107,6 +109,9 @@ export default {
 
             this.previewClick = false;
         },
+        onError() {
+            this.$emit('error');
+        },
         rotateRight() {
             this.rotate += 90;
             this.previewClick = true;
@@ -158,6 +163,9 @@ export default {
         zoomDisabled() {
             return this.scale <= 0.5 || this.scale >= 1.5;
         }
+    },
+    components: {
+        'Portal': Portal
     }
 }
 </script>

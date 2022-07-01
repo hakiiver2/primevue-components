@@ -3,7 +3,8 @@ import OverlayEventBus from 'primevue/overlayeventbus';
 import { FilterService } from 'primevue/api';
 import Ripple from 'primevue/ripple';
 import VirtualScroller from 'primevue/virtualscroller';
-import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, Fragment, createTextVNode, toDisplayString, renderList, createCommentVNode, createBlock, Teleport, createVNode, Transition, withCtx, withDirectives, vModelText, normalizeStyle, mergeProps, createSlots } from 'vue';
+import Portal from 'primevue/portal';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, Fragment, createTextVNode, toDisplayString, renderList, createCommentVNode, createVNode, withCtx, Transition, withDirectives, vModelText, normalizeStyle, mergeProps, createSlots } from 'vue';
 
 var script = {
     name: 'MultiSelect',
@@ -78,12 +79,16 @@ var script = {
             type: String,
             default: 'pi pi-spinner pi-spin'
         },
-        virtualScrollerOptions: {
-            type: Object,
-            default: null
-        },
         selectAll: {
             type: Boolean,
+            default: null
+        },
+        resetFilterOnHide: {
+            type: Boolean,
+            default: false
+        },
+        virtualScrollerOptions: {
+            type: Object,
             default: null
         }
     },
@@ -180,6 +185,9 @@ var script = {
         hide() {
             this.$emit('before-hide');
             this.overlayVisible = false;
+            if (this.resetFilterOnHide) {
+                this.filterValue = null;
+            }
         },
         onFocus() {
             this.focused = true;
@@ -340,7 +348,7 @@ var script = {
             ZIndexUtils.clear(el);
         },
         alignOverlay() {
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 DomHandler.relativePosition(this.overlay, this.$el);
             }
             else {
@@ -383,7 +391,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible && !DomHandler.isAndroid()) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -487,6 +495,9 @@ var script = {
                 originalEvent: event,
                 target: this.$el
             });
+        },
+        clearFilter() {
+            this.filterValue = null;
         }
     },
     computed: {
@@ -535,7 +546,10 @@ var script = {
             let label;
 
             if (this.modelValue && this.modelValue.length) {
-                if (!this.maxSelectedLabels || this.modelValue.length <= this.maxSelectedLabels) {
+                if (ObjectUtils.isNotEmpty(this.maxSelectedLabels) && this.modelValue.length > this.maxSelectedLabels) {
+                    return this.getSelectedItemsLabel();
+                }
+                else {
                     label = '';
                     for(let i = 0; i < this.modelValue.length; i++) {
                         if(i !== 0) {
@@ -544,9 +558,6 @@ var script = {
 
                         label += this.getLabelByValue(this.modelValue[i]);
                     }
-                }
-                else {
-                    return this.getSelectedItemsLabel();
                 }
             }
             else {
@@ -611,12 +622,6 @@ var script = {
         emptyMessageText() {
             return this.emptyMessage || this.$primevue.config.locale.emptyMessage;
         },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
-        },
         virtualScrollerDisabled() {
             return !this.virtualScrollerOptions;
         },
@@ -631,7 +636,8 @@ var script = {
         'ripple': Ripple
     },
     components: {
-        'VirtualScroller': VirtualScroller
+        'VirtualScroller': VirtualScroller,
+        'Portal': Portal
     }
 };
 
@@ -674,6 +680,7 @@ const _hoisted_22 = {
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_VirtualScroller = resolveComponent("VirtualScroller");
+  const _component_Portal = resolveComponent("Portal");
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createElementBlock("div", {
@@ -746,212 +753,212 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 2)
       ])
     ]),
-    (openBlock(), createBlock(Teleport, {
-      to: $options.appendTarget,
-      disabled: $options.appendDisabled
-    }, [
-      createVNode(Transition, {
-        name: "p-connected-overlay",
-        onEnter: $options.onOverlayEnter,
-        onAfterEnter: $options.onOverlayAfterEnter,
-        onLeave: $options.onOverlayLeave,
-        onAfterLeave: $options.onOverlayAfterLeave
-      }, {
-        default: withCtx(() => [
-          ($data.overlayVisible)
-            ? (openBlock(), createElementBlock("div", {
-                key: 0,
-                ref: $options.overlayRef,
-                class: normalizeClass($options.panelStyleClass),
-                onClick: _cache[9] || (_cache[9] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-              }, [
-                renderSlot(_ctx.$slots, "header", {
-                  value: $props.modelValue,
-                  options: $options.visibleOptions
-                }),
-                (($props.showToggleAll && $props.selectionLimit == null) || $props.filter)
-                  ? (openBlock(), createElementBlock("div", _hoisted_7, [
-                      ($props.showToggleAll && $props.selectionLimit == null)
-                        ? (openBlock(), createElementBlock("div", {
-                            key: 0,
-                            class: "p-checkbox p-component",
-                            onClick: _cache[5] || (_cache[5] = (...args) => ($options.onToggleAll && $options.onToggleAll(...args))),
-                            role: "checkbox",
-                            "aria-checked": $options.allSelected
-                          }, [
-                            createElementVNode("div", _hoisted_9, [
-                              createElementVNode("input", {
-                                type: "checkbox",
-                                readonly: "",
-                                onFocus: _cache[3] || (_cache[3] = (...args) => ($options.onHeaderCheckboxFocus && $options.onHeaderCheckboxFocus(...args))),
-                                onBlur: _cache[4] || (_cache[4] = (...args) => ($options.onHeaderCheckboxBlur && $options.onHeaderCheckboxBlur(...args)))
-                              }, null, 32)
-                            ]),
-                            createElementVNode("div", {
-                              class: normalizeClass(['p-checkbox-box', {'p-highlight': $options.allSelected, 'p-focus': $data.headerCheckboxFocused}]),
+    createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+      default: withCtx(() => [
+        createVNode(Transition, {
+          name: "p-connected-overlay",
+          onEnter: $options.onOverlayEnter,
+          onAfterEnter: $options.onOverlayAfterEnter,
+          onLeave: $options.onOverlayLeave,
+          onAfterLeave: $options.onOverlayAfterLeave
+        }, {
+          default: withCtx(() => [
+            ($data.overlayVisible)
+              ? (openBlock(), createElementBlock("div", {
+                  key: 0,
+                  ref: $options.overlayRef,
+                  class: normalizeClass($options.panelStyleClass),
+                  onClick: _cache[9] || (_cache[9] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                }, [
+                  renderSlot(_ctx.$slots, "header", {
+                    value: $props.modelValue,
+                    options: $options.visibleOptions
+                  }),
+                  (($props.showToggleAll && $props.selectionLimit == null) || $props.filter)
+                    ? (openBlock(), createElementBlock("div", _hoisted_7, [
+                        ($props.showToggleAll && $props.selectionLimit == null)
+                          ? (openBlock(), createElementBlock("div", {
+                              key: 0,
+                              class: "p-checkbox p-component",
+                              onClick: _cache[5] || (_cache[5] = (...args) => ($options.onToggleAll && $options.onToggleAll(...args))),
                               role: "checkbox",
                               "aria-checked": $options.allSelected
                             }, [
-                              createElementVNode("span", {
-                                class: normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.allSelected}])
-                              }, null, 2)
-                            ], 10, _hoisted_10)
-                          ], 8, _hoisted_8))
-                        : createCommentVNode("", true),
-                      ($props.filter)
-                        ? (openBlock(), createElementBlock("div", _hoisted_11, [
-                            withDirectives(createElementVNode("input", {
-                              type: "text",
-                              ref: "filterInput",
-                              "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => (($data.filterValue) = $event)),
-                              autoComplete: "on",
-                              class: "p-multiselect-filter p-inputtext p-component",
-                              placeholder: $props.filterPlaceholder,
-                              onInput: _cache[7] || (_cache[7] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
-                            }, null, 40, _hoisted_12), [
-                              [vModelText, $data.filterValue]
-                            ]),
-                            _hoisted_13
-                          ]))
-                        : createCommentVNode("", true),
-                      withDirectives((openBlock(), createElementBlock("button", {
-                        class: "p-multiselect-close p-link",
-                        onClick: _cache[8] || (_cache[8] = (...args) => ($options.onCloseClick && $options.onCloseClick(...args))),
-                        type: "button"
-                      }, _hoisted_15)), [
-                        [_directive_ripple]
-                      ])
-                    ]))
-                  : createCommentVNode("", true),
-                createElementVNode("div", {
-                  class: "p-multiselect-items-wrapper",
-                  style: normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''})
-                }, [
-                  createVNode(_component_VirtualScroller, mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
-                    items: $options.visibleOptions,
-                    style: {'height': $props.scrollHeight},
-                    disabled: $options.virtualScrollerDisabled
-                  }), createSlots({
-                    content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle}) => [
-                      createElementVNode("ul", {
-                        ref: contentRef,
-                        class: normalizeClass(['p-multiselect-items p-component', styleClass]),
-                        style: normalizeStyle(contentStyle),
-                        role: "listbox",
-                        "aria-multiselectable": "true"
-                      }, [
-                        (!$props.optionGroupLabel)
-                          ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(items, (option, i) => {
-                              return withDirectives((openBlock(), createElementBlock("li", {
-                                class: normalizeClass(['p-multiselect-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
-                                role: "option",
-                                "aria-selected": $options.isSelected(option),
-                                key: $options.getOptionRenderKey(option),
-                                onClick: $event => ($options.onOptionSelect($event, option)),
-                                onKeydown: $event => ($options.onOptionKeyDown($event, option)),
-                                tabindex: $props.tabindex||'0',
-                                "aria-label": $options.getOptionLabel(option)
+                              createElementVNode("div", _hoisted_9, [
+                                createElementVNode("input", {
+                                  type: "checkbox",
+                                  readonly: "",
+                                  onFocus: _cache[3] || (_cache[3] = (...args) => ($options.onHeaderCheckboxFocus && $options.onHeaderCheckboxFocus(...args))),
+                                  onBlur: _cache[4] || (_cache[4] = (...args) => ($options.onHeaderCheckboxBlur && $options.onHeaderCheckboxBlur(...args)))
+                                }, null, 32)
+                              ]),
+                              createElementVNode("div", {
+                                class: normalizeClass(['p-checkbox-box', {'p-highlight': $options.allSelected, 'p-focus': $data.headerCheckboxFocused}]),
+                                role: "checkbox",
+                                "aria-checked": $options.allSelected
                               }, [
-                                createElementVNode("div", _hoisted_17, [
-                                  createElementVNode("div", {
-                                    class: normalizeClass(['p-checkbox-box', {'p-highlight': $options.isSelected(option)}])
-                                  }, [
-                                    createElementVNode("span", {
-                                      class: normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.isSelected(option)}])
-                                    }, null, 2)
-                                  ], 2)
-                                ]),
-                                renderSlot(_ctx.$slots, "option", {
-                                  option: option,
-                                  index: $options.getOptionIndex(i, getItemOptions)
-                                }, () => [
-                                  createElementVNode("span", null, toDisplayString($options.getOptionLabel(option)), 1)
-                                ])
-                              ], 42, _hoisted_16)), [
-                                [_directive_ripple]
-                              ])
-                            }), 128))
-                          : (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
-                              return (openBlock(), createElementBlock(Fragment, {
-                                key: $options.getOptionGroupRenderKey(optionGroup)
-                              }, [
-                                createElementVNode("li", _hoisted_18, [
-                                  renderSlot(_ctx.$slots, "optiongroup", {
-                                    option: optionGroup,
+                                createElementVNode("span", {
+                                  class: normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.allSelected}])
+                                }, null, 2)
+                              ], 10, _hoisted_10)
+                            ], 8, _hoisted_8))
+                          : createCommentVNode("", true),
+                        ($props.filter)
+                          ? (openBlock(), createElementBlock("div", _hoisted_11, [
+                              withDirectives(createElementVNode("input", {
+                                type: "text",
+                                ref: "filterInput",
+                                "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => (($data.filterValue) = $event)),
+                                autoComplete: "on",
+                                class: "p-multiselect-filter p-inputtext p-component",
+                                placeholder: $props.filterPlaceholder,
+                                onInput: _cache[7] || (_cache[7] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                              }, null, 40, _hoisted_12), [
+                                [vModelText, $data.filterValue]
+                              ]),
+                              _hoisted_13
+                            ]))
+                          : createCommentVNode("", true),
+                        withDirectives((openBlock(), createElementBlock("button", {
+                          class: "p-multiselect-close p-link",
+                          onClick: _cache[8] || (_cache[8] = (...args) => ($options.onCloseClick && $options.onCloseClick(...args))),
+                          type: "button"
+                        }, _hoisted_15)), [
+                          [_directive_ripple]
+                        ])
+                      ]))
+                    : createCommentVNode("", true),
+                  createElementVNode("div", {
+                    class: "p-multiselect-items-wrapper",
+                    style: normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''})
+                  }, [
+                    createVNode(_component_VirtualScroller, mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
+                      items: $options.visibleOptions,
+                      style: {'height': $props.scrollHeight},
+                      disabled: $options.virtualScrollerDisabled
+                    }), createSlots({
+                      content: withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle}) => [
+                        createElementVNode("ul", {
+                          ref: contentRef,
+                          class: normalizeClass(['p-multiselect-items p-component', styleClass]),
+                          style: normalizeStyle(contentStyle),
+                          role: "listbox",
+                          "aria-multiselectable": "true"
+                        }, [
+                          (!$props.optionGroupLabel)
+                            ? (openBlock(true), createElementBlock(Fragment, { key: 0 }, renderList(items, (option, i) => {
+                                return withDirectives((openBlock(), createElementBlock("li", {
+                                  class: normalizeClass(['p-multiselect-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
+                                  role: "option",
+                                  "aria-selected": $options.isSelected(option),
+                                  key: $options.getOptionRenderKey(option),
+                                  onClick: $event => ($options.onOptionSelect($event, option)),
+                                  onKeydown: $event => ($options.onOptionKeyDown($event, option)),
+                                  tabindex: $props.tabindex||'0',
+                                  "aria-label": $options.getOptionLabel(option)
+                                }, [
+                                  createElementVNode("div", _hoisted_17, [
+                                    createElementVNode("div", {
+                                      class: normalizeClass(['p-checkbox-box', {'p-highlight': $options.isSelected(option)}])
+                                    }, [
+                                      createElementVNode("span", {
+                                        class: normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.isSelected(option)}])
+                                      }, null, 2)
+                                    ], 2)
+                                  ]),
+                                  renderSlot(_ctx.$slots, "option", {
+                                    option: option,
                                     index: $options.getOptionIndex(i, getItemOptions)
                                   }, () => [
-                                    createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                                    createElementVNode("span", null, toDisplayString($options.getOptionLabel(option)), 1)
                                   ])
-                                ]),
-                                (openBlock(true), createElementBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
-                                  return withDirectives((openBlock(), createElementBlock("li", {
-                                    class: normalizeClass(['p-multiselect-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
-                                    role: "option",
-                                    "aria-selected": $options.isSelected(option),
-                                    key: $options.getOptionRenderKey(option),
-                                    onClick: $event => ($options.onOptionSelect($event, option)),
-                                    onKeydown: $event => ($options.onOptionKeyDown($event, option)),
-                                    tabindex: $props.tabindex||'0',
-                                    "aria-label": $options.getOptionLabel(option)
-                                  }, [
-                                    createElementVNode("div", _hoisted_20, [
-                                      createElementVNode("div", {
-                                        class: normalizeClass(['p-checkbox-box', {'p-highlight': $options.isSelected(option)}])
-                                      }, [
-                                        createElementVNode("span", {
-                                          class: normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.isSelected(option)}])
-                                        }, null, 2)
-                                      ], 2)
-                                    ]),
-                                    renderSlot(_ctx.$slots, "option", {
-                                      option: option,
+                                ], 42, _hoisted_16)), [
+                                  [_directive_ripple]
+                                ])
+                              }), 128))
+                            : (openBlock(true), createElementBlock(Fragment, { key: 1 }, renderList(items, (optionGroup, i) => {
+                                return (openBlock(), createElementBlock(Fragment, {
+                                  key: $options.getOptionGroupRenderKey(optionGroup)
+                                }, [
+                                  createElementVNode("li", _hoisted_18, [
+                                    renderSlot(_ctx.$slots, "optiongroup", {
+                                      option: optionGroup,
                                       index: $options.getOptionIndex(i, getItemOptions)
                                     }, () => [
-                                      createElementVNode("span", null, toDisplayString($options.getOptionLabel(option)), 1)
+                                      createTextVNode(toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                     ])
-                                  ], 42, _hoisted_19)), [
-                                    [_directive_ripple]
-                                  ])
-                                }), 128))
-                              ], 64))
-                            }), 128)),
-                        ($data.filterValue && (!items || (items && items.length === 0)))
-                          ? (openBlock(), createElementBlock("li", _hoisted_21, [
-                              renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
-                                createTextVNode(toDisplayString($options.emptyFilterMessageText), 1)
-                              ])
-                            ]))
-                          : ((!$props.options || ($props.options && $props.options.length === 0)))
-                            ? (openBlock(), createElementBlock("li", _hoisted_22, [
-                                renderSlot(_ctx.$slots, "empty", {}, () => [
-                                  createTextVNode(toDisplayString($options.emptyMessageText), 1)
+                                  ]),
+                                  (openBlock(true), createElementBlock(Fragment, null, renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                                    return withDirectives((openBlock(), createElementBlock("li", {
+                                      class: normalizeClass(['p-multiselect-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
+                                      role: "option",
+                                      "aria-selected": $options.isSelected(option),
+                                      key: $options.getOptionRenderKey(option),
+                                      onClick: $event => ($options.onOptionSelect($event, option)),
+                                      onKeydown: $event => ($options.onOptionKeyDown($event, option)),
+                                      tabindex: $props.tabindex||'0',
+                                      "aria-label": $options.getOptionLabel(option)
+                                    }, [
+                                      createElementVNode("div", _hoisted_20, [
+                                        createElementVNode("div", {
+                                          class: normalizeClass(['p-checkbox-box', {'p-highlight': $options.isSelected(option)}])
+                                        }, [
+                                          createElementVNode("span", {
+                                            class: normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.isSelected(option)}])
+                                          }, null, 2)
+                                        ], 2)
+                                      ]),
+                                      renderSlot(_ctx.$slots, "option", {
+                                        option: option,
+                                        index: $options.getOptionIndex(i, getItemOptions)
+                                      }, () => [
+                                        createElementVNode("span", null, toDisplayString($options.getOptionLabel(option)), 1)
+                                      ])
+                                    ], 42, _hoisted_19)), [
+                                      [_directive_ripple]
+                                    ])
+                                  }), 128))
+                                ], 64))
+                              }), 128)),
+                          ($data.filterValue && (!items || (items && items.length === 0)))
+                            ? (openBlock(), createElementBlock("li", _hoisted_21, [
+                                renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
+                                  createTextVNode(toDisplayString($options.emptyFilterMessageText), 1)
                                 ])
                               ]))
-                            : createCommentVNode("", true)
-                      ], 6)
-                    ]),
-                    _: 2
-                  }, [
-                    (_ctx.$slots.loader)
-                      ? {
-                          name: "loader",
-                          fn: withCtx(({ options }) => [
-                            renderSlot(_ctx.$slots, "loader", { options: options })
-                          ])
-                        }
-                      : undefined
-                  ]), 1040, ["items", "style", "disabled"])
-                ], 4),
-                renderSlot(_ctx.$slots, "footer", {
-                  value: $props.modelValue,
-                  options: $options.visibleOptions
-                })
-              ], 2))
-            : createCommentVNode("", true)
-        ]),
-        _: 3
-      }, 8, ["onEnter", "onAfterEnter", "onLeave", "onAfterLeave"])
-    ], 8, ["to", "disabled"]))
+                            : ((!$props.options || ($props.options && $props.options.length === 0)))
+                              ? (openBlock(), createElementBlock("li", _hoisted_22, [
+                                  renderSlot(_ctx.$slots, "empty", {}, () => [
+                                    createTextVNode(toDisplayString($options.emptyMessageText), 1)
+                                  ])
+                                ]))
+                              : createCommentVNode("", true)
+                        ], 6)
+                      ]),
+                      _: 2
+                    }, [
+                      (_ctx.$slots.loader)
+                        ? {
+                            name: "loader",
+                            fn: withCtx(({ options }) => [
+                              renderSlot(_ctx.$slots, "loader", { options: options })
+                            ])
+                          }
+                        : undefined
+                    ]), 1040, ["items", "style", "disabled"])
+                  ], 4),
+                  renderSlot(_ctx.$slots, "footer", {
+                    value: $props.modelValue,
+                    options: $options.visibleOptions
+                  })
+                ], 2))
+              : createCommentVNode("", true)
+          ]),
+          _: 3
+        }, 8, ["onEnter", "onAfterEnter", "onLeave", "onAfterLeave"])
+      ]),
+      _: 3
+    }, 8, ["appendTo"])
   ], 2))
 }
 

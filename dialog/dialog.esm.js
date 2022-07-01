@@ -1,11 +1,12 @@
+import { computed, resolveComponent, resolveDirective, openBlock, createBlock, withCtx, createElementBlock, normalizeClass, createVNode, Transition, mergeProps, renderSlot, toDisplayString, createCommentVNode, createElementVNode, withDirectives, normalizeStyle, createTextVNode } from 'vue';
 import { ZIndexUtils, DomHandler, UniqueComponentId } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, Teleport, createElementBlock, normalizeClass, createVNode, Transition, withCtx, mergeProps, renderSlot, toDisplayString, createCommentVNode, createElementVNode, withDirectives, normalizeStyle, createTextVNode } from 'vue';
+import Portal from 'primevue/portal';
 
 var script = {
     name: 'Dialog',
     inheritAttrs: false,
-    emits: ['update:visible','show','hide','maximize','unmaximize','dragend'],
+    emits: ['update:visible','show','hide', 'after-hide', 'maximize','unmaximize','dragend'],
     props: {
         header: null,
         footer: null,
@@ -67,6 +68,12 @@ var script = {
         appendTo: {
             type: String,
             default: 'body'
+        },
+        _instance: null
+    },
+    provide() {
+        return {
+            dialogRef: computed(() => this._instance)
         }
     },
     data() {
@@ -94,12 +101,11 @@ var script = {
         this.unbindGlobalListeners();
         this.destroyStyle();
 
-        this.mask = null;
-
-        if (this.container && this.autoZIndex) {
-            ZIndexUtils.clear(this.container);
+        if (this.mask && this.autoZIndex) {
+            ZIndexUtils.clear(this.mask);
         }
         this.container = null;
+        this.mask = null;
     },
     mounted() {
         if (this.breakpoints) {
@@ -111,19 +117,17 @@ var script = {
             this.$emit('update:visible', false);
         },
         onBeforeEnter(el) {
-            if (this.autoZIndex) {
-                ZIndexUtils.set('modal', el, this.baseZIndex + this.$primevue.config.zIndex.modal);
-            }
-
             el.setAttribute(this.attributeSelector, '');
         },
         onEnter() {
-            this.mask.style.zIndex = String(parseInt(this.container.style.zIndex, 10) - 1);
-
             this.$emit('show');
             this.focus();
             this.enableDocumentSettings();
             this.bindGlobalListeners();
+
+            if (this.autoZIndex) {
+                ZIndexUtils.set('modal', this.mask, this.baseZIndex + this.$primevue.config.zIndex.modal);
+            }
         },
         onBeforeLeave() {
             if (this.modal) {
@@ -131,16 +135,16 @@ var script = {
             }
         },
         onLeave() {
-
             this.$emit('hide');
         },
-        onAfterLeave(el) {
+        onAfterLeave() {
             if (this.autoZIndex) {
-                ZIndexUtils.clear(el);
+                ZIndexUtils.clear(this.mask);
             }
             this.containerVisible = false;
             this.unbindDocumentState();
             this.unbindGlobalListeners();
+            this.$emit('after-hide');
         },
         onMaskClick(event) {
             if (this.dismissableMask && this.closable && this.modal && this.mask === event.target) {
@@ -375,16 +379,13 @@ var script = {
         },
         contentStyleClass() {
             return ['p-dialog-content', this.contentClass];
-        },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
         }
     },
     directives: {
         'ripple': Ripple
+    },
+    components: {
+        'Portal': Portal
     }
 };
 
@@ -402,105 +403,106 @@ const _hoisted_7 = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_Portal = resolveComponent("Portal");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock(Teleport, {
-    to: $options.appendTarget,
-    disabled: $options.appendDisabled
-  }, [
-    ($data.containerVisible)
-      ? (openBlock(), createElementBlock("div", {
-          key: 0,
-          ref: $options.maskRef,
-          class: normalizeClass($options.maskClass),
-          onClick: _cache[3] || (_cache[3] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
-        }, [
-          createVNode(Transition, {
-            name: "p-dialog",
-            onBeforeEnter: $options.onBeforeEnter,
-            onEnter: $options.onEnter,
-            onBeforeLeave: $options.onBeforeLeave,
-            onLeave: $options.onLeave,
-            onAfterLeave: $options.onAfterLeave,
-            appear: ""
-          }, {
-            default: withCtx(() => [
-              ($props.visible)
-                ? (openBlock(), createElementBlock("div", mergeProps({
-                    key: 0,
-                    ref: $options.containerRef,
-                    class: $options.dialogClass
-                  }, _ctx.$attrs, {
-                    role: "dialog",
-                    "aria-labelledby": $options.ariaLabelledById,
-                    "aria-modal": $props.modal
-                  }), [
-                    ($props.showHeader)
-                      ? (openBlock(), createElementBlock("div", {
-                          key: 0,
-                          class: "p-dialog-header",
-                          onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.initDrag && $options.initDrag(...args)))
-                        }, [
-                          renderSlot(_ctx.$slots, "header", {}, () => [
-                            ($props.header)
-                              ? (openBlock(), createElementBlock("span", {
-                                  key: 0,
-                                  id: $options.ariaLabelledById,
-                                  class: "p-dialog-title"
-                                }, toDisplayString($props.header), 9, _hoisted_2))
-                              : createCommentVNode("", true)
-                          ]),
-                          createElementVNode("div", _hoisted_3, [
-                            ($props.maximizable)
-                              ? withDirectives((openBlock(), createElementBlock("button", {
-                                  key: 0,
-                                  class: "p-dialog-header-icon p-dialog-header-maximize p-link",
-                                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.maximize && $options.maximize(...args))),
-                                  type: "button",
-                                  tabindex: "-1"
-                                }, [
-                                  createElementVNode("span", {
-                                    class: normalizeClass($options.maximizeIconClass)
-                                  }, null, 2)
-                                ])), [
-                                  [_directive_ripple]
-                                ])
-                              : createCommentVNode("", true),
-                            ($props.closable)
-                              ? withDirectives((openBlock(), createElementBlock("button", {
-                                  key: 1,
-                                  class: "p-dialog-header-icon p-dialog-header-close p-link",
-                                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.close && $options.close(...args))),
-                                  "aria-label": $props.ariaCloseLabel,
-                                  type: "button"
-                                }, _hoisted_6, 8, _hoisted_4)), [
-                                  [_directive_ripple]
-                                ])
-                              : createCommentVNode("", true)
-                          ])
-                        ], 32))
-                      : createCommentVNode("", true),
-                    createElementVNode("div", {
-                      class: normalizeClass($options.contentStyleClass),
-                      style: normalizeStyle($props.contentStyle)
-                    }, [
-                      renderSlot(_ctx.$slots, "default")
-                    ], 6),
-                    ($props.footer || _ctx.$slots.footer)
-                      ? (openBlock(), createElementBlock("div", _hoisted_7, [
-                          renderSlot(_ctx.$slots, "footer", {}, () => [
-                            createTextVNode(toDisplayString($props.footer), 1)
-                          ])
-                        ]))
-                      : createCommentVNode("", true)
-                  ], 16, _hoisted_1))
-                : createCommentVNode("", true)
-            ]),
-            _: 3
-          }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onLeave", "onAfterLeave"])
-        ], 2))
-      : createCommentVNode("", true)
-  ], 8, ["to", "disabled"]))
+  return (openBlock(), createBlock(_component_Portal, { appendTo: $props.appendTo }, {
+    default: withCtx(() => [
+      ($data.containerVisible)
+        ? (openBlock(), createElementBlock("div", {
+            key: 0,
+            ref: $options.maskRef,
+            class: normalizeClass($options.maskClass),
+            onClick: _cache[3] || (_cache[3] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
+          }, [
+            createVNode(Transition, {
+              name: "p-dialog",
+              onBeforeEnter: $options.onBeforeEnter,
+              onEnter: $options.onEnter,
+              onBeforeLeave: $options.onBeforeLeave,
+              onLeave: $options.onLeave,
+              onAfterLeave: $options.onAfterLeave,
+              appear: ""
+            }, {
+              default: withCtx(() => [
+                ($props.visible)
+                  ? (openBlock(), createElementBlock("div", mergeProps({
+                      key: 0,
+                      ref: $options.containerRef,
+                      class: $options.dialogClass
+                    }, _ctx.$attrs, {
+                      role: "dialog",
+                      "aria-labelledby": $options.ariaLabelledById,
+                      "aria-modal": $props.modal
+                    }), [
+                      ($props.showHeader)
+                        ? (openBlock(), createElementBlock("div", {
+                            key: 0,
+                            class: "p-dialog-header",
+                            onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.initDrag && $options.initDrag(...args)))
+                          }, [
+                            renderSlot(_ctx.$slots, "header", {}, () => [
+                              ($props.header)
+                                ? (openBlock(), createElementBlock("span", {
+                                    key: 0,
+                                    id: $options.ariaLabelledById,
+                                    class: "p-dialog-title"
+                                  }, toDisplayString($props.header), 9, _hoisted_2))
+                                : createCommentVNode("", true)
+                            ]),
+                            createElementVNode("div", _hoisted_3, [
+                              ($props.maximizable)
+                                ? withDirectives((openBlock(), createElementBlock("button", {
+                                    key: 0,
+                                    class: "p-dialog-header-icon p-dialog-header-maximize p-link",
+                                    onClick: _cache[0] || (_cache[0] = (...args) => ($options.maximize && $options.maximize(...args))),
+                                    type: "button",
+                                    tabindex: "-1"
+                                  }, [
+                                    createElementVNode("span", {
+                                      class: normalizeClass($options.maximizeIconClass)
+                                    }, null, 2)
+                                  ])), [
+                                    [_directive_ripple]
+                                  ])
+                                : createCommentVNode("", true),
+                              ($props.closable)
+                                ? withDirectives((openBlock(), createElementBlock("button", {
+                                    key: 1,
+                                    class: "p-dialog-header-icon p-dialog-header-close p-link",
+                                    onClick: _cache[1] || (_cache[1] = (...args) => ($options.close && $options.close(...args))),
+                                    "aria-label": $props.ariaCloseLabel,
+                                    type: "button"
+                                  }, _hoisted_6, 8, _hoisted_4)), [
+                                    [_directive_ripple]
+                                  ])
+                                : createCommentVNode("", true)
+                            ])
+                          ], 32))
+                        : createCommentVNode("", true),
+                      createElementVNode("div", {
+                        class: normalizeClass($options.contentStyleClass),
+                        style: normalizeStyle($props.contentStyle)
+                      }, [
+                        renderSlot(_ctx.$slots, "default")
+                      ], 6),
+                      ($props.footer || _ctx.$slots.footer)
+                        ? (openBlock(), createElementBlock("div", _hoisted_7, [
+                            renderSlot(_ctx.$slots, "footer", {}, () => [
+                              createTextVNode(toDisplayString($props.footer), 1)
+                            ])
+                          ]))
+                        : createCommentVNode("", true)
+                    ], 16, _hoisted_1))
+                  : createCommentVNode("", true)
+              ]),
+              _: 3
+            }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onLeave", "onAfterLeave"])
+          ], 2))
+        : createCommentVNode("", true)
+    ]),
+    _: 3
+  }, 8, ["appendTo"]))
 }
 
 function styleInject(css, ref) {

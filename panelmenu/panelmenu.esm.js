@@ -143,7 +143,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           default: withCtx(({navigate, href, isActive:isRouterActive, isExactActive}) => [
                             createElementVNode("a", {
                               href: href,
-                              class: normalizeClass($options.linkClass(item, {isRouterActive, isExactActive})),
+                              class: normalizeClass($options.linkClass(item, {isActive:isRouterActive, isExactActive})),
                               onClick: $event => ($options.onItemClick($event, item, navigate)),
                               role: "treeitem",
                               "aria-expanded": $options.isActive(item)

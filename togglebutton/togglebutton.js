@@ -58,7 +58,7 @@ this.primevue.togglebutton = (function (Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -91,4 +91,4 @@ this.primevue.togglebutton = (function (Ripple, vue) {
 
     return script;
 
-})(primevue.ripple, Vue);
+}(primevue.ripple, Vue));

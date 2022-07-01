@@ -1,7 +1,8 @@
 import ToastEventBus from 'primevue/toasteventbus';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, Fragment, toDisplayString, createBlock, resolveDynamicComponent, withDirectives, createCommentVNode, resolveComponent, Teleport, mergeProps, createVNode, TransitionGroup, withCtx, renderList } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, Fragment, toDisplayString, createBlock, resolveDynamicComponent, withDirectives, createCommentVNode, resolveComponent, withCtx, mergeProps, createVNode, TransitionGroup, renderList } from 'vue';
 import { ZIndexUtils, ObjectUtils, UniqueComponentId } from 'primevue/utils';
+import Portal from 'primevue/portal';
 
 var script$1 = {
     name: 'ToastMessage',
@@ -238,7 +239,8 @@ var script = {
         }
     },
     components: {
-        'ToastMessage': script$1
+        'ToastMessage': script$1,
+        'Portal': Portal
     },
     computed: {
         containerClass() {
@@ -255,32 +257,36 @@ var script = {
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_ToastMessage = resolveComponent("ToastMessage");
+  const _component_Portal = resolveComponent("Portal");
 
-  return (openBlock(), createBlock(Teleport, { to: "body" }, [
-    createElementVNode("div", mergeProps({
-      ref: "container",
-      class: $options.containerClass
-    }, _ctx.$attrs), [
-      createVNode(TransitionGroup, {
-        name: "p-toast-message",
-        tag: "div",
-        onEnter: $options.onEnter,
-        onLeave: $options.onLeave
-      }, {
-        default: withCtx(() => [
-          (openBlock(true), createElementBlock(Fragment, null, renderList($data.messages, (msg) => {
-            return (openBlock(), createBlock(_component_ToastMessage, {
-              key: msg.id,
-              message: msg,
-              onClose: _cache[0] || (_cache[0] = $event => ($options.remove($event))),
-              template: _ctx.$slots.message
-            }, null, 8, ["message", "template"]))
-          }), 128))
-        ]),
-        _: 1
-      }, 8, ["onEnter", "onLeave"])
-    ], 16)
-  ]))
+  return (openBlock(), createBlock(_component_Portal, null, {
+    default: withCtx(() => [
+      createElementVNode("div", mergeProps({
+        ref: "container",
+        class: $options.containerClass
+      }, _ctx.$attrs), [
+        createVNode(TransitionGroup, {
+          name: "p-toast-message",
+          tag: "div",
+          onEnter: $options.onEnter,
+          onLeave: $options.onLeave
+        }, {
+          default: withCtx(() => [
+            (openBlock(true), createElementBlock(Fragment, null, renderList($data.messages, (msg) => {
+              return (openBlock(), createBlock(_component_ToastMessage, {
+                key: msg.id,
+                message: msg,
+                onClose: _cache[0] || (_cache[0] = $event => ($options.remove($event))),
+                template: _ctx.$slots.message
+              }, null, 8, ["message", "template"]))
+            }), 128))
+          ]),
+          _: 1
+        }, 8, ["onEnter", "onLeave"])
+      ], 16)
+    ]),
+    _: 1
+  }))
 }
 
 function styleInject(css, ref) {

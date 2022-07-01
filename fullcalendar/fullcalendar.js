@@ -63,4 +63,4 @@ this.primevue.fullcalendar = (function (vdom, core, vue) {
 
     return script;
 
-})(null, FullCalendar, Vue);
+}(null, FullCalendar, Vue));

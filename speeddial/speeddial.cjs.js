@@ -246,11 +246,11 @@ var script = {
         }
     },
     components: {
-        'SDButton': Button__default["default"]
+        'SDButton': Button__default['default']
     },
     directives: {
-        'ripple': Ripple__default["default"],
-        'tooltip': Tooltip__default["default"]
+        'ripple': Ripple__default['default'],
+        'tooltip': Tooltip__default['default']
     }
 };
 

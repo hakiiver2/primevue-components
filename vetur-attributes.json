@@ -107,6 +107,10 @@
     "description": "Style class of the overlay panel.",
     "type": "string"
   },
+  "autocomplete/loadingIcon": {
+    "description": "Icon to display in loading state.",
+    "type": "string"
+  },
   "autocomplete/virtualScrollerOptions": {
     "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
     "type": "object"
@@ -825,7 +829,7 @@
   },
   "datatable/dataKey": {
     "description": "Name of the field that uniquely identifies the a record in the data.",
-    "type": "string"
+    "type": "string|function"
   },
   "datatable/rows": {
     "description": "Number of rows to display per page.",
@@ -2083,6 +2087,10 @@
     "description": "Whether all data is selected.",
     "type": "boolean"
   },
+  "multiselect/resetFilterOnHide": {
+    "description": "Clears the filter value when hiding the dropdown.",
+    "type": "boolean"
+  },
   "multiselect/virtualScrollerOptions": {
     "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
     "type": "object"
@@ -2217,7 +2225,7 @@
   },
   "panelmenu/expandedKeys": {
     "description": "A map of keys to represent the expansion state in controlled mode.",
-    "type": "array"
+    "type": "object"
   },
   "panelmenu/exact": {
     "description": "Whether to apply 'router-link-active-exact' class if route exactly matches the item path.",
@@ -2321,6 +2329,14 @@
   },
   "picklist/stripedRows": {
     "description": "Whether to displays rows with alternating colors.",
+    "type": "boolean"
+  },
+  "portal/appendTo": {
+    "description": "A valid query selector or an HTMLElement to specify where the dialog gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
+    "type": "string"
+  },
+  "portal/disabled": {
+    "description": "If disabled, the Portal feature is eliminated and the content is displayed directly.",
     "type": "boolean"
   },
   "progressbar/value": {

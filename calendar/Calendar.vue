@@ -3,9 +3,9 @@
         <input :ref="inputRef" v-if="!inline" type="text" :class="['p-inputtext p-component', inputClass]" :style="inputStyle" @input="onInput" v-bind="$attrs"
             @focus="onFocus" @blur="onBlur" @keydown="onKeyDown" :readonly="!manualInput" inputmode="none">
         <CalendarButton v-if="showIcon" :icon="icon" tabindex="-1" class="p-datepicker-trigger" :disabled="$attrs.disabled" @click="onButtonClick" type="button" :aria-label="inputFieldValue"/>
-        <Teleport :to="appendTarget" :disabled="appendDisabled">
+        <Portal :appendTo="appendTo" :disabled="inline">
             <transition name="p-connected-overlay" @enter="onOverlayEnter($event)" @after-enter="onOverlayEnterComplete" @after-leave="onOverlayAfterLeave" @leave="onOverlayLeave">
-                <div :ref="overlayRef" :class="panelStyleClass" v-if="inline ? true : overlayVisible" :role="inline ? null : 'dialog'" @click="onOverlayClick" @mouseup="onOverlayMouseUp">
+                <div :ref="overlayRef" :class="panelStyleClass" v-if="inline || overlayVisible" :role="inline ? null : 'dialog'" @click="onOverlayClick" @mouseup="onOverlayMouseUp">
                     <template v-if="!timeOnly">
                         <div class="p-datepicker-group-container">
                             <div class="p-datepicker-group" v-for="(month,groupIndex) of months" :key="month.month + month.year">
@@ -138,7 +138,7 @@
                     <slot name="footer"></slot>
                 </div>
             </transition>
-        </Teleport>
+        </Portal>
     </span>
 </template>
 
@@ -147,6 +147,7 @@ import {ConnectedOverlayScrollHandler,DomHandler,ZIndexUtils,UniqueComponentId} 
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
+import Portal from 'primevue/portal';
 
 export default {
     name: 'Calendar',
@@ -441,7 +442,7 @@ export default {
 
                     return selected;
                 }
-                else if( this.isRangeSelection()) {
+                else if (this.isRangeSelection()) {
                     if (this.modelValue[1])
                         return this.isDateEquals(this.modelValue[0], dateMeta) || this.isDateEquals(this.modelValue[1], dateMeta) || this.isDateBetween(this.modelValue[0], this.modelValue[1], dateMeta);
                     else {
@@ -768,7 +769,7 @@ export default {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.overlayVisible = false;
                     }
                 };
@@ -794,7 +795,7 @@ export default {
                 this.enableModality();
             }
             else if (this.overlay) {
-                if (this.appendDisabled) {
+                if (this.appendTo === 'self' || this.inline) {
                     DomHandler.relativePosition(this.overlay, this.$el);
                 }
                 else {
@@ -1715,9 +1716,10 @@ export default {
             }
 
             date = this.daylightSavingAdjust(new Date(year, month - 1, day));
-                    if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
-                        throw "Invalid date"; // E.g. 31/02/00
-                    }
+
+            if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
+                throw "Invalid date"; // E.g. 31/02/00
+            }
 
             return date;
         },
@@ -2197,12 +2199,12 @@ export default {
             this.$emit('focus', event);
         },
         onBlur(event) {
-            this.$emit('blur', {originalEvent: event, value: this.input.value});
+            this.$emit('blur', {originalEvent: event, value: event.target.value});
 
             this.focused = false;
-            this.input.value = this.formatValue(this.modelValue);
+            event.target.value = this.formatValue(this.modelValue);
         },
-        onKeyDown() {
+        onKeyDown(event) {
             if (event.keyCode === 40 && this.overlay) {
                 this.trapFocus(event);
             }
@@ -2297,7 +2299,12 @@ export default {
         viewDate() {
             let propValue = this.modelValue;
             if (propValue && Array.isArray(propValue)) {
-                propValue = propValue[0];
+                if (this.isRangeSelection()) {
+                    propValue = propValue[1] || propValue[0];
+                }
+                else if (this.isMultipleSelection()) {
+                    propValue = propValue[propValue.length - 1];
+                }
             }
 
             if (propValue && typeof propValue !== 'string') {
@@ -2305,12 +2312,15 @@ export default {
             }
             else {
                 let today = new Date();
+
                 if (this.maxDate && this.maxDate < today) {
                     return this.maxDate;
                 }
+
                 if (this.minDate && this.minDate > today) {
                     return this.minDate;
                 }
+
                 return today;
             }
         },
@@ -2497,12 +2507,6 @@ export default {
         monthNames() {
             return this.$primevue.config.locale.monthNames;
         },
-        appendDisabled() {
-            return this.appendTo === 'self' || this.inline;
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
-        },
         attributeSelector() {
             return UniqueComponentId();
         },
@@ -2511,7 +2515,8 @@ export default {
         }
     },
     components: {
-        'CalendarButton': Button
+        'CalendarButton': Button,
+        'Portal': Portal
     },
     directives: {
         'ripple': Ripple

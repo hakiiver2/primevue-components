@@ -69,7 +69,7 @@ this.primevue.button = (function (Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -114,4 +114,4 @@ this.primevue.button = (function (Ripple, vue) {
 
     return script;
 
-})(primevue.ripple, Vue);
+}(primevue.ripple, Vue));

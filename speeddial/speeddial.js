@@ -242,11 +242,11 @@ this.primevue.speeddial = (function (Button, Ripple, Tooltip, utils, vue) {
             }
         },
         components: {
-            'SDButton': Button__default["default"]
+            'SDButton': Button__default['default']
         },
         directives: {
-            'ripple': Ripple__default["default"],
-            'tooltip': Tooltip__default["default"]
+            'ripple': Ripple__default['default'],
+            'tooltip': Tooltip__default['default']
         }
     };
 
@@ -355,4 +355,4 @@ this.primevue.speeddial = (function (Button, Ripple, Tooltip, utils, vue) {
 
     return script;
 
-})(primevue.button, primevue.ripple, primevue.tooltip, primevue.utils, Vue);
+}(primevue.button, primevue.ripple, primevue.tooltip, primevue.utils, Vue));

@@ -2,7 +2,8 @@ import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Tree from 'primevue/tree';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, Fragment, createTextVNode, toDisplayString, renderList, createCommentVNode, createBlock, Teleport, createVNode, Transition, withCtx, normalizeStyle } from 'vue';
+import Portal from 'primevue/portal';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, Fragment, createTextVNode, toDisplayString, renderList, createCommentVNode, createVNode, withCtx, Transition, normalizeStyle } from 'vue';
 
 var script = {
     name: 'TreeSelect',
@@ -183,7 +184,7 @@ var script = {
             ZIndexUtils.clear(el);
         },
         alignOverlay() {
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 DomHandler.relativePosition(this.overlay, this.$el);
             }
             else {
@@ -226,7 +227,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -365,16 +366,11 @@ var script = {
         },
         emptyOptions() {
             return !this.options || this.options.length === 0;
-        },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
         }
     },
     components: {
-        'TSTree': Tree
+        'TSTree': Tree,
+        'Portal': Portal
     },
     directives: {
         'ripple': Ripple
@@ -394,6 +390,7 @@ const _hoisted_7 = {
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TSTree = resolveComponent("TSTree");
+  const _component_Portal = resolveComponent("Portal");
 
   return (openBlock(), createElementBlock("div", {
     ref: "container",
@@ -454,63 +451,63 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _hoisted_6
       ])
     ]),
-    (openBlock(), createBlock(Teleport, {
-      to: $options.appendTarget,
-      disabled: $options.appendDisabled
-    }, [
-      createVNode(Transition, {
-        name: "p-connected-overlay",
-        onEnter: $options.onOverlayEnter,
-        onLeave: $options.onOverlayLeave,
-        onAfterLeave: $options.onOverlayAfterLeave
-      }, {
-        default: withCtx(() => [
-          ($data.overlayVisible)
-            ? (openBlock(), createElementBlock("div", {
-                key: 0,
-                ref: $options.overlayRef,
-                onClick: _cache[5] || (_cache[5] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
-                class: normalizeClass($options.panelStyleClass)
-              }, [
-                renderSlot(_ctx.$slots, "header", {
-                  value: $props.modelValue,
-                  options: $props.options
-                }),
-                createElementVNode("div", {
-                  class: "p-treeselect-items-wrapper",
-                  style: normalizeStyle({'max-height': $props.scrollHeight})
+    createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+      default: withCtx(() => [
+        createVNode(Transition, {
+          name: "p-connected-overlay",
+          onEnter: $options.onOverlayEnter,
+          onLeave: $options.onOverlayLeave,
+          onAfterLeave: $options.onOverlayAfterLeave
+        }, {
+          default: withCtx(() => [
+            ($data.overlayVisible)
+              ? (openBlock(), createElementBlock("div", {
+                  key: 0,
+                  ref: $options.overlayRef,
+                  onClick: _cache[5] || (_cache[5] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                  class: normalizeClass($options.panelStyleClass)
                 }, [
-                  createVNode(_component_TSTree, {
-                    value: $props.options,
-                    selectionMode: $props.selectionMode,
-                    "onUpdate:selectionKeys": $options.onSelectionChange,
-                    selectionKeys: $props.modelValue,
-                    expandedKeys: $data.expandedKeys,
-                    "onUpdate:expandedKeys": $options.onNodeToggle,
-                    metaKeySelection: $props.metaKeySelection,
-                    onNodeExpand: _cache[3] || (_cache[3] = $event => (_ctx.$emit('node-expand', $event))),
-                    onNodeCollapse: _cache[4] || (_cache[4] = $event => (_ctx.$emit('node-collapse', $event))),
-                    onNodeSelect: $options.onNodeSelect,
-                    onNodeUnselect: $options.onNodeUnselect
-                  }, null, 8, ["value", "selectionMode", "onUpdate:selectionKeys", "selectionKeys", "expandedKeys", "onUpdate:expandedKeys", "metaKeySelection", "onNodeSelect", "onNodeUnselect"]),
-                  ($options.emptyOptions)
-                    ? (openBlock(), createElementBlock("div", _hoisted_7, [
-                        renderSlot(_ctx.$slots, "empty", {}, () => [
-                          createTextVNode(toDisplayString($options.emptyMessageText), 1)
-                        ])
-                      ]))
-                    : createCommentVNode("", true)
-                ], 4),
-                renderSlot(_ctx.$slots, "footer", {
-                  value: $props.modelValue,
-                  options: $props.options
-                })
-              ], 2))
-            : createCommentVNode("", true)
-        ]),
-        _: 3
-      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-    ], 8, ["to", "disabled"]))
+                  renderSlot(_ctx.$slots, "header", {
+                    value: $props.modelValue,
+                    options: $props.options
+                  }),
+                  createElementVNode("div", {
+                    class: "p-treeselect-items-wrapper",
+                    style: normalizeStyle({'max-height': $props.scrollHeight})
+                  }, [
+                    createVNode(_component_TSTree, {
+                      value: $props.options,
+                      selectionMode: $props.selectionMode,
+                      "onUpdate:selectionKeys": $options.onSelectionChange,
+                      selectionKeys: $props.modelValue,
+                      expandedKeys: $data.expandedKeys,
+                      "onUpdate:expandedKeys": $options.onNodeToggle,
+                      metaKeySelection: $props.metaKeySelection,
+                      onNodeExpand: _cache[3] || (_cache[3] = $event => (_ctx.$emit('node-expand', $event))),
+                      onNodeCollapse: _cache[4] || (_cache[4] = $event => (_ctx.$emit('node-collapse', $event))),
+                      onNodeSelect: $options.onNodeSelect,
+                      onNodeUnselect: $options.onNodeUnselect
+                    }, null, 8, ["value", "selectionMode", "onUpdate:selectionKeys", "selectionKeys", "expandedKeys", "onUpdate:expandedKeys", "metaKeySelection", "onNodeSelect", "onNodeUnselect"]),
+                    ($options.emptyOptions)
+                      ? (openBlock(), createElementBlock("div", _hoisted_7, [
+                          renderSlot(_ctx.$slots, "empty", {}, () => [
+                            createTextVNode(toDisplayString($options.emptyMessageText), 1)
+                          ])
+                        ]))
+                      : createCommentVNode("", true)
+                  ], 4),
+                  renderSlot(_ctx.$slots, "footer", {
+                    value: $props.modelValue,
+                    options: $props.options
+                  })
+                ], 2))
+              : createCommentVNode("", true)
+          ]),
+          _: 3
+        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+      ]),
+      _: 3
+    }, 8, ["appendTo"])
   ], 2))
 }
 

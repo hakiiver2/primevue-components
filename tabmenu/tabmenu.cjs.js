@@ -84,7 +84,7 @@ var script = {
         },
         getRouteItemClass(item, isActive, isExactActive) {
             return ['p-tabmenuitem', item.class, {
-                 'p-highlight': this.exact ? isExactActive : isActive,
+                'p-highlight': this.exact ? isExactActive : isActive,
                 'p-disabled': this.disabled(item)
             }];
         },
@@ -119,7 +119,7 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 

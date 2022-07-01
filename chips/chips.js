@@ -219,4 +219,4 @@ this.primevue.chips = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

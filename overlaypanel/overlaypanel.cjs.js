@@ -3,12 +3,14 @@
 var utils = require('primevue/utils');
 var OverlayEventBus = require('primevue/overlayeventbus');
 var Ripple = require('primevue/ripple');
+var Portal = require('primevue/portal');
 var vue = require('vue');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
 var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
 var script = {
     name: 'OverlayPanel',
@@ -76,7 +78,7 @@ var script = {
         }
 
         if (this.overlayEventListener) {
-            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         }
 
@@ -125,14 +127,14 @@ var script = {
                 }
             };
 
-            OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
             this.$emit('show');
         },
         onLeave() {
             this.unbindOutsideClickListener();
             this.unbindScrollListener();
             this.unbindResizeListener();
-            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
             this.$emit('hide');
         },
@@ -194,7 +196,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.visible && !utils.DomHandler.isAndroid()) {
+                    if (this.visible && !utils.DomHandler.isTouchDevice()) {
                         this.visible = false;
                     }
                 };
@@ -240,7 +242,7 @@ var script = {
             }
         },
         onOverlayClick(event) {
-            OverlayEventBus__default["default"].emit('overlay-click', {
+            OverlayEventBus__default['default'].emit('overlay-click', {
                 originalEvent: event,
                 target: this.target
             });
@@ -258,7 +260,10 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
+    },
+    components: {
+        'Portal': Portal__default['default']
     }
 };
 
@@ -269,48 +274,52 @@ const _hoisted_3 = [
 ];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_Portal = vue.resolveComponent("Portal");
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createBlock(vue.Teleport, { to: $props.appendTo }, [
-    vue.createVNode(vue.Transition, {
-      name: "p-overlaypanel",
-      onEnter: $options.onEnter,
-      onLeave: $options.onLeave,
-      onAfterLeave: $options.onAfterLeave
-    }, {
-      default: vue.withCtx(() => [
-        ($data.visible)
-          ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
-              key: 0,
-              class: $options.containerClass,
-              ref: $options.containerRef
-            }, _ctx.$attrs, {
-              onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-            }), [
-              vue.createElementVNode("div", {
-                class: "p-overlaypanel-content",
-                onClick: _cache[0] || (_cache[0] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
-                onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
-              }, [
-                vue.renderSlot(_ctx.$slots, "default")
-              ], 32),
-              ($props.showCloseIcon)
-                ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
-                    key: 0,
-                    class: "p-overlaypanel-close p-link",
-                    onClick: _cache[2] || (_cache[2] = (...args) => ($options.hide && $options.hide(...args))),
-                    "aria-label": $props.ariaCloseLabel,
-                    type: "button"
-                  }, _hoisted_3, 8, _hoisted_1)), [
-                    [_directive_ripple]
-                  ])
-                : vue.createCommentVNode("", true)
-            ], 16))
-          : vue.createCommentVNode("", true)
-      ]),
-      _: 3
-    }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-  ], 8, ["to"]))
+  return (vue.openBlock(), vue.createBlock(_component_Portal, { appendTo: $props.appendTo }, {
+    default: vue.withCtx(() => [
+      vue.createVNode(vue.Transition, {
+        name: "p-overlaypanel",
+        onEnter: $options.onEnter,
+        onLeave: $options.onLeave,
+        onAfterLeave: $options.onAfterLeave
+      }, {
+        default: vue.withCtx(() => [
+          ($data.visible)
+            ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
+                key: 0,
+                class: $options.containerClass,
+                ref: $options.containerRef
+              }, _ctx.$attrs, {
+                onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              }), [
+                vue.createElementVNode("div", {
+                  class: "p-overlaypanel-content",
+                  onClick: _cache[0] || (_cache[0] = (...args) => ($options.onContentClick && $options.onContentClick(...args))),
+                  onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onContentClick && $options.onContentClick(...args)))
+                }, [
+                  vue.renderSlot(_ctx.$slots, "default")
+                ], 32),
+                ($props.showCloseIcon)
+                  ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+                      key: 0,
+                      class: "p-overlaypanel-close p-link",
+                      onClick: _cache[2] || (_cache[2] = (...args) => ($options.hide && $options.hide(...args))),
+                      "aria-label": $props.ariaCloseLabel,
+                      type: "button"
+                    }, _hoisted_3, 8, _hoisted_1)), [
+                      [_directive_ripple]
+                    ])
+                  : vue.createCommentVNode("", true)
+              ], 16))
+            : vue.createCommentVNode("", true)
+        ]),
+        _: 3
+      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+    ]),
+    _: 3
+  }, 8, ["appendTo"]))
 }
 
 function styleInject(css, ref) {

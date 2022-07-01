@@ -4,6 +4,7 @@ var vue = require('vue');
 
 var script = {
     name: 'Textarea',
+    inheritAttrs: false,
     emits: ['update:modelValue'],
     props: {
         modelValue: null,
@@ -34,7 +35,7 @@ var script = {
             }
         },
         onInput(event) {
-             if (this.autoResize) {
+            if (this.autoResize) {
                 this.resize();
             }
 

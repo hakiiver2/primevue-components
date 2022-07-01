@@ -267,7 +267,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 

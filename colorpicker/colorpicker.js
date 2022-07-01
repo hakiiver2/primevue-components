@@ -1,10 +1,11 @@
 this.primevue = this.primevue || {};
-this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
+this.primevue.colorpicker = (function (utils, OverlayEventBus, Portal, vue) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script = {
         name: 'ColorPicker',
@@ -328,7 +329,7 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
                 if (this.autoZIndex) {
                     utils.ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
                 }
-                
+
                 this.$emit('show');
             },
             onOverlayLeave() {
@@ -344,7 +345,7 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
                 }
             },
             alignOverlay() {
-                if (this.appendDisabled)
+                if (this.appendTo === 'self')
                     utils.DomHandler.relativePosition(this.picker, this.$refs.input);
                 else
                     utils.DomHandler.absolutePosition(this.picker, this.$refs.input);
@@ -469,7 +470,7 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
             bindResizeListener() {
                 if (!this.resizeListener) {
                     this.resizeListener = () => {
-                        if (this.overlayVisible) {
+                        if (this.overlayVisible && !utils.DomHandler.isTouchDevice()) {
                             this.overlayVisible = false;
                         }
                     };
@@ -529,7 +530,7 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
                 this.hueHandle = null;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default["default"].emit('overlay-click', {
+                OverlayEventBus__default['default'].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -548,13 +549,10 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
                     'p-input-filled': this.$primevue.config.inputStyle === 'filled',
                     'p-ripple-disabled': this.$primevue.config.ripple === false
                 }];
-            },
-            appendDisabled() {
-                return this.appendTo === 'self' || this.inline;
-            },
-            appendTarget() {
-                return this.appendDisabled ? null : this.appendTo;
             }
+        },
+        components: {
+            'Portal': Portal__default['default']
         }
     };
 
@@ -563,6 +561,8 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
     const _hoisted_3 = { class: "p-colorpicker-color" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
+      const _component_Portal = vue.resolveComponent("Portal");
+
       return (vue.openBlock(), vue.createElementBlock("div", {
         ref: "container",
         class: vue.normalizeClass($options.containerClass)
@@ -581,60 +581,63 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
               "aria-labelledby": $props.ariaLabelledBy
             }, null, 42, _hoisted_1))
           : vue.createCommentVNode("", true),
-        (vue.openBlock(), vue.createBlock(vue.Teleport, {
-          to: $options.appendTarget,
-          disabled: $options.appendDisabled
-        }, [
-          vue.createVNode(vue.Transition, {
-            name: "p-connected-overlay",
-            onEnter: $options.onOverlayEnter,
-            onLeave: $options.onOverlayLeave,
-            onAfterLeave: $options.onOverlayAfterLeave
-          }, {
-            default: vue.withCtx(() => [
-              ($props.inline ? true : $data.overlayVisible)
-                ? (vue.openBlock(), vue.createElementBlock("div", {
-                    key: 0,
-                    ref: $options.pickerRef,
-                    class: vue.normalizeClass($options.pickerClass),
-                    onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-                  }, [
-                    vue.createElementVNode("div", _hoisted_2, [
-                      vue.createElementVNode("div", {
-                        ref: $options.colorSelectorRef,
-                        class: "p-colorpicker-color-selector",
-                        onMousedown: _cache[2] || (_cache[2] = $event => ($options.onColorMousedown($event))),
-                        onTouchstart: _cache[3] || (_cache[3] = $event => ($options.onColorDragStart($event))),
-                        onTouchmove: _cache[4] || (_cache[4] = $event => ($options.onDrag($event))),
-                        onTouchend: _cache[5] || (_cache[5] = $event => ($options.onDragEnd()))
-                      }, [
-                        vue.createElementVNode("div", _hoisted_3, [
-                          vue.createElementVNode("div", {
-                            ref: $options.colorHandleRef,
-                            class: "p-colorpicker-color-handle"
-                          }, null, 512)
-                        ])
-                      ], 544),
-                      vue.createElementVNode("div", {
-                        ref: $options.hueViewRef,
-                        class: "p-colorpicker-hue",
-                        onMousedown: _cache[6] || (_cache[6] = $event => ($options.onHueMousedown($event))),
-                        onTouchstart: _cache[7] || (_cache[7] = $event => ($options.onHueDragStart($event))),
-                        onTouchmove: _cache[8] || (_cache[8] = $event => ($options.onDrag($event))),
-                        onTouchend: _cache[9] || (_cache[9] = $event => ($options.onDragEnd()))
-                      }, [
+        vue.createVNode(_component_Portal, {
+          appendTo: $props.appendTo,
+          disabled: $props.inline
+        }, {
+          default: vue.withCtx(() => [
+            vue.createVNode(vue.Transition, {
+              name: "p-connected-overlay",
+              onEnter: $options.onOverlayEnter,
+              onLeave: $options.onOverlayLeave,
+              onAfterLeave: $options.onOverlayAfterLeave
+            }, {
+              default: vue.withCtx(() => [
+                ($props.inline ? true : $data.overlayVisible)
+                  ? (vue.openBlock(), vue.createElementBlock("div", {
+                      key: 0,
+                      ref: $options.pickerRef,
+                      class: vue.normalizeClass($options.pickerClass),
+                      onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                    }, [
+                      vue.createElementVNode("div", _hoisted_2, [
                         vue.createElementVNode("div", {
-                          ref: $options.hueHandleRef,
-                          class: "p-colorpicker-hue-handle"
-                        }, null, 512)
-                      ], 544)
-                    ])
-                  ], 2))
-                : vue.createCommentVNode("", true)
-            ]),
-            _: 1
-          }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-        ], 8, ["to", "disabled"]))
+                          ref: $options.colorSelectorRef,
+                          class: "p-colorpicker-color-selector",
+                          onMousedown: _cache[2] || (_cache[2] = $event => ($options.onColorMousedown($event))),
+                          onTouchstart: _cache[3] || (_cache[3] = $event => ($options.onColorDragStart($event))),
+                          onTouchmove: _cache[4] || (_cache[4] = $event => ($options.onDrag($event))),
+                          onTouchend: _cache[5] || (_cache[5] = $event => ($options.onDragEnd()))
+                        }, [
+                          vue.createElementVNode("div", _hoisted_3, [
+                            vue.createElementVNode("div", {
+                              ref: $options.colorHandleRef,
+                              class: "p-colorpicker-color-handle"
+                            }, null, 512)
+                          ])
+                        ], 544),
+                        vue.createElementVNode("div", {
+                          ref: $options.hueViewRef,
+                          class: "p-colorpicker-hue",
+                          onMousedown: _cache[6] || (_cache[6] = $event => ($options.onHueMousedown($event))),
+                          onTouchstart: _cache[7] || (_cache[7] = $event => ($options.onHueDragStart($event))),
+                          onTouchmove: _cache[8] || (_cache[8] = $event => ($options.onDrag($event))),
+                          onTouchend: _cache[9] || (_cache[9] = $event => ($options.onDragEnd()))
+                        }, [
+                          vue.createElementVNode("div", {
+                            ref: $options.hueHandleRef,
+                            class: "p-colorpicker-hue-handle"
+                          }, null, 512)
+                        ], 544)
+                      ])
+                    ], 2))
+                  : vue.createCommentVNode("", true)
+              ]),
+              _: 1
+            }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+          ]),
+          _: 1
+        }, 8, ["appendTo", "disabled"])
       ], 2))
     }
 
@@ -672,4 +675,4 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, vue) {
 
     return script;
 
-})(primevue.utils, primevue.overlayeventbus, Vue);
+}(primevue.utils, primevue.overlayeventbus, primevue.portal, Vue));

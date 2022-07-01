@@ -27,7 +27,7 @@
                 <span :class="dropdownIconClass"></span>
             </slot>
         </div>
-        <Teleport :to="appendTarget" :disabled="appendDisabled">
+        <Portal :appendTo="appendTo">
             <transition name="p-connected-overlay" @enter="onOverlayEnter" @after-enter="onOverlayAfterEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
                 <div :ref="overlayRef" :class="panelStyleClass" v-if="overlayVisible" @click="onOverlayClick">
                     <slot name="header" :value="modelValue" :options="visibleOptions"></slot>
@@ -99,7 +99,7 @@
                     <slot name="footer" :value="modelValue" :options="visibleOptions"></slot>
                 </div>
             </transition>
-        </Teleport>
+        </Portal>
     </div>
 </template>
 
@@ -109,6 +109,7 @@ import OverlayEventBus from 'primevue/overlayeventbus';
 import {FilterService} from 'primevue/api';
 import Ripple from 'primevue/ripple';
 import VirtualScroller from 'primevue/virtualscroller';
+import Portal from 'primevue/portal';
 
 export default {
     name: 'MultiSelect',
@@ -183,12 +184,16 @@ export default {
             type: String,
             default: 'pi pi-spinner pi-spin'
         },
-        virtualScrollerOptions: {
-            type: Object,
-            default: null
-        },
         selectAll: {
             type: Boolean,
+            default: null
+        },
+        resetFilterOnHide: {
+            type: Boolean,
+            default: false
+        },
+        virtualScrollerOptions: {
+            type: Object,
             default: null
         }
     },
@@ -285,6 +290,9 @@ export default {
         hide() {
             this.$emit('before-hide');
             this.overlayVisible = false;
+            if (this.resetFilterOnHide) {
+                this.filterValue = null;
+            }
         },
         onFocus() {
             this.focused = true;
@@ -451,7 +459,7 @@ export default {
             ZIndexUtils.clear(el);
         },
         alignOverlay() {
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 DomHandler.relativePosition(this.overlay, this.$el);
             }
             else {
@@ -494,7 +502,7 @@ export default {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible && !DomHandler.isAndroid()) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -598,6 +606,9 @@ export default {
                 originalEvent: event,
                 target: this.$el
             });
+        },
+        clearFilter() {
+            this.filterValue = null;
         }
     },
     computed: {
@@ -646,7 +657,10 @@ export default {
             let label;
 
             if (this.modelValue && this.modelValue.length) {
-                if (!this.maxSelectedLabels || this.modelValue.length <= this.maxSelectedLabels) {
+                if (ObjectUtils.isNotEmpty(this.maxSelectedLabels) && this.modelValue.length > this.maxSelectedLabels) {
+                    return this.getSelectedItemsLabel();
+                }
+                else {
                     label = '';
                     for(let i = 0; i < this.modelValue.length; i++) {
                         if(i !== 0) {
@@ -655,9 +669,6 @@ export default {
 
                         label += this.getLabelByValue(this.modelValue[i]);
                     }
-                }
-                else {
-                    return this.getSelectedItemsLabel();
                 }
             }
             else {
@@ -722,12 +733,6 @@ export default {
         emptyMessageText() {
             return this.emptyMessage || this.$primevue.config.locale.emptyMessage;
         },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
-        },
         virtualScrollerDisabled() {
             return !this.virtualScrollerOptions;
         },
@@ -742,7 +747,8 @@ export default {
         'ripple': Ripple
     },
     components: {
-        'VirtualScroller': VirtualScroller
+        'VirtualScroller': VirtualScroller,
+        'Portal': Portal
     }
 }
 </script>

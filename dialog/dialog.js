@@ -1,15 +1,16 @@
 this.primevue = this.primevue || {};
-this.primevue.dialog = (function (utils, Ripple, vue) {
+this.primevue.dialog = (function (vue, utils, Ripple, Portal) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script = {
         name: 'Dialog',
         inheritAttrs: false,
-        emits: ['update:visible','show','hide','maximize','unmaximize','dragend'],
+        emits: ['update:visible','show','hide', 'after-hide', 'maximize','unmaximize','dragend'],
         props: {
             header: null,
             footer: null,
@@ -71,6 +72,12 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
             appendTo: {
                 type: String,
                 default: 'body'
+            },
+            _instance: null
+        },
+        provide() {
+            return {
+                dialogRef: vue.computed(() => this._instance)
             }
         },
         data() {
@@ -98,12 +105,11 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
             this.unbindGlobalListeners();
             this.destroyStyle();
 
-            this.mask = null;
-
-            if (this.container && this.autoZIndex) {
-                utils.ZIndexUtils.clear(this.container);
+            if (this.mask && this.autoZIndex) {
+                utils.ZIndexUtils.clear(this.mask);
             }
             this.container = null;
+            this.mask = null;
         },
         mounted() {
             if (this.breakpoints) {
@@ -115,19 +121,17 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
                 this.$emit('update:visible', false);
             },
             onBeforeEnter(el) {
-                if (this.autoZIndex) {
-                    utils.ZIndexUtils.set('modal', el, this.baseZIndex + this.$primevue.config.zIndex.modal);
-                }
-
                 el.setAttribute(this.attributeSelector, '');
             },
             onEnter() {
-                this.mask.style.zIndex = String(parseInt(this.container.style.zIndex, 10) - 1);
-
                 this.$emit('show');
                 this.focus();
                 this.enableDocumentSettings();
                 this.bindGlobalListeners();
+
+                if (this.autoZIndex) {
+                    utils.ZIndexUtils.set('modal', this.mask, this.baseZIndex + this.$primevue.config.zIndex.modal);
+                }
             },
             onBeforeLeave() {
                 if (this.modal) {
@@ -135,16 +139,16 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
                 }
             },
             onLeave() {
-
                 this.$emit('hide');
             },
-            onAfterLeave(el) {
+            onAfterLeave() {
                 if (this.autoZIndex) {
-                    utils.ZIndexUtils.clear(el);
+                    utils.ZIndexUtils.clear(this.mask);
                 }
                 this.containerVisible = false;
                 this.unbindDocumentState();
                 this.unbindGlobalListeners();
+                this.$emit('after-hide');
             },
             onMaskClick(event) {
                 if (this.dismissableMask && this.closable && this.modal && this.mask === event.target) {
@@ -379,16 +383,13 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
             },
             contentStyleClass() {
                 return ['p-dialog-content', this.contentClass];
-            },
-            appendDisabled() {
-                return this.appendTo === 'self';
-            },
-            appendTarget() {
-                return this.appendDisabled ? null : this.appendTo;
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
+        },
+        components: {
+            'Portal': Portal__default['default']
         }
     };
 
@@ -406,105 +407,106 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
     };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
+      const _component_Portal = vue.resolveComponent("Portal");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock(vue.Teleport, {
-        to: $options.appendTarget,
-        disabled: $options.appendDisabled
-      }, [
-        ($data.containerVisible)
-          ? (vue.openBlock(), vue.createElementBlock("div", {
-              key: 0,
-              ref: $options.maskRef,
-              class: vue.normalizeClass($options.maskClass),
-              onClick: _cache[3] || (_cache[3] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
-            }, [
-              vue.createVNode(vue.Transition, {
-                name: "p-dialog",
-                onBeforeEnter: $options.onBeforeEnter,
-                onEnter: $options.onEnter,
-                onBeforeLeave: $options.onBeforeLeave,
-                onLeave: $options.onLeave,
-                onAfterLeave: $options.onAfterLeave,
-                appear: ""
-              }, {
-                default: vue.withCtx(() => [
-                  ($props.visible)
-                    ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
-                        key: 0,
-                        ref: $options.containerRef,
-                        class: $options.dialogClass
-                      }, _ctx.$attrs, {
-                        role: "dialog",
-                        "aria-labelledby": $options.ariaLabelledById,
-                        "aria-modal": $props.modal
-                      }), [
-                        ($props.showHeader)
-                          ? (vue.openBlock(), vue.createElementBlock("div", {
-                              key: 0,
-                              class: "p-dialog-header",
-                              onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.initDrag && $options.initDrag(...args)))
-                            }, [
-                              vue.renderSlot(_ctx.$slots, "header", {}, () => [
-                                ($props.header)
-                                  ? (vue.openBlock(), vue.createElementBlock("span", {
-                                      key: 0,
-                                      id: $options.ariaLabelledById,
-                                      class: "p-dialog-title"
-                                    }, vue.toDisplayString($props.header), 9, _hoisted_2))
-                                  : vue.createCommentVNode("", true)
-                              ]),
-                              vue.createElementVNode("div", _hoisted_3, [
-                                ($props.maximizable)
-                                  ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
-                                      key: 0,
-                                      class: "p-dialog-header-icon p-dialog-header-maximize p-link",
-                                      onClick: _cache[0] || (_cache[0] = (...args) => ($options.maximize && $options.maximize(...args))),
-                                      type: "button",
-                                      tabindex: "-1"
-                                    }, [
-                                      vue.createElementVNode("span", {
-                                        class: vue.normalizeClass($options.maximizeIconClass)
-                                      }, null, 2)
-                                    ])), [
-                                      [_directive_ripple]
-                                    ])
-                                  : vue.createCommentVNode("", true),
-                                ($props.closable)
-                                  ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
-                                      key: 1,
-                                      class: "p-dialog-header-icon p-dialog-header-close p-link",
-                                      onClick: _cache[1] || (_cache[1] = (...args) => ($options.close && $options.close(...args))),
-                                      "aria-label": $props.ariaCloseLabel,
-                                      type: "button"
-                                    }, _hoisted_6, 8, _hoisted_4)), [
-                                      [_directive_ripple]
-                                    ])
-                                  : vue.createCommentVNode("", true)
-                              ])
-                            ], 32))
-                          : vue.createCommentVNode("", true),
-                        vue.createElementVNode("div", {
-                          class: vue.normalizeClass($options.contentStyleClass),
-                          style: vue.normalizeStyle($props.contentStyle)
-                        }, [
-                          vue.renderSlot(_ctx.$slots, "default")
-                        ], 6),
-                        ($props.footer || _ctx.$slots.footer)
-                          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_7, [
-                              vue.renderSlot(_ctx.$slots, "footer", {}, () => [
-                                vue.createTextVNode(vue.toDisplayString($props.footer), 1)
-                              ])
-                            ]))
-                          : vue.createCommentVNode("", true)
-                      ], 16, _hoisted_1))
-                    : vue.createCommentVNode("", true)
-                ]),
-                _: 3
-              }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onLeave", "onAfterLeave"])
-            ], 2))
-          : vue.createCommentVNode("", true)
-      ], 8, ["to", "disabled"]))
+      return (vue.openBlock(), vue.createBlock(_component_Portal, { appendTo: $props.appendTo }, {
+        default: vue.withCtx(() => [
+          ($data.containerVisible)
+            ? (vue.openBlock(), vue.createElementBlock("div", {
+                key: 0,
+                ref: $options.maskRef,
+                class: vue.normalizeClass($options.maskClass),
+                onClick: _cache[3] || (_cache[3] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
+              }, [
+                vue.createVNode(vue.Transition, {
+                  name: "p-dialog",
+                  onBeforeEnter: $options.onBeforeEnter,
+                  onEnter: $options.onEnter,
+                  onBeforeLeave: $options.onBeforeLeave,
+                  onLeave: $options.onLeave,
+                  onAfterLeave: $options.onAfterLeave,
+                  appear: ""
+                }, {
+                  default: vue.withCtx(() => [
+                    ($props.visible)
+                      ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
+                          key: 0,
+                          ref: $options.containerRef,
+                          class: $options.dialogClass
+                        }, _ctx.$attrs, {
+                          role: "dialog",
+                          "aria-labelledby": $options.ariaLabelledById,
+                          "aria-modal": $props.modal
+                        }), [
+                          ($props.showHeader)
+                            ? (vue.openBlock(), vue.createElementBlock("div", {
+                                key: 0,
+                                class: "p-dialog-header",
+                                onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.initDrag && $options.initDrag(...args)))
+                              }, [
+                                vue.renderSlot(_ctx.$slots, "header", {}, () => [
+                                  ($props.header)
+                                    ? (vue.openBlock(), vue.createElementBlock("span", {
+                                        key: 0,
+                                        id: $options.ariaLabelledById,
+                                        class: "p-dialog-title"
+                                      }, vue.toDisplayString($props.header), 9, _hoisted_2))
+                                    : vue.createCommentVNode("", true)
+                                ]),
+                                vue.createElementVNode("div", _hoisted_3, [
+                                  ($props.maximizable)
+                                    ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+                                        key: 0,
+                                        class: "p-dialog-header-icon p-dialog-header-maximize p-link",
+                                        onClick: _cache[0] || (_cache[0] = (...args) => ($options.maximize && $options.maximize(...args))),
+                                        type: "button",
+                                        tabindex: "-1"
+                                      }, [
+                                        vue.createElementVNode("span", {
+                                          class: vue.normalizeClass($options.maximizeIconClass)
+                                        }, null, 2)
+                                      ])), [
+                                        [_directive_ripple]
+                                      ])
+                                    : vue.createCommentVNode("", true),
+                                  ($props.closable)
+                                    ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+                                        key: 1,
+                                        class: "p-dialog-header-icon p-dialog-header-close p-link",
+                                        onClick: _cache[1] || (_cache[1] = (...args) => ($options.close && $options.close(...args))),
+                                        "aria-label": $props.ariaCloseLabel,
+                                        type: "button"
+                                      }, _hoisted_6, 8, _hoisted_4)), [
+                                        [_directive_ripple]
+                                      ])
+                                    : vue.createCommentVNode("", true)
+                                ])
+                              ], 32))
+                            : vue.createCommentVNode("", true),
+                          vue.createElementVNode("div", {
+                            class: vue.normalizeClass($options.contentStyleClass),
+                            style: vue.normalizeStyle($props.contentStyle)
+                          }, [
+                            vue.renderSlot(_ctx.$slots, "default")
+                          ], 6),
+                          ($props.footer || _ctx.$slots.footer)
+                            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_7, [
+                                vue.renderSlot(_ctx.$slots, "footer", {}, () => [
+                                  vue.createTextVNode(vue.toDisplayString($props.footer), 1)
+                                ])
+                              ]))
+                            : vue.createCommentVNode("", true)
+                        ], 16, _hoisted_1))
+                      : vue.createCommentVNode("", true)
+                  ]),
+                  _: 3
+                }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onLeave", "onAfterLeave"])
+              ], 2))
+            : vue.createCommentVNode("", true)
+        ]),
+        _: 3
+      }, 8, ["appendTo"]))
     }
 
     function styleInject(css, ref) {
@@ -541,4 +543,4 @@ this.primevue.dialog = (function (utils, Ripple, vue) {
 
     return script;
 
-})(primevue.utils, primevue.ripple, Vue);
+}(Vue, primevue.utils, primevue.ripple, primevue.portal));

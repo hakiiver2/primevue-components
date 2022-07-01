@@ -4,11 +4,13 @@ var utils = require('primevue/utils');
 var OverlayEventBus = require('primevue/overlayeventbus');
 var Ripple = require('primevue/ripple');
 var vue = require('vue');
+var Portal = require('primevue/portal');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
 var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
 var script$1 = {
     name: 'CascadeSelectSub',
@@ -164,7 +166,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -402,7 +404,7 @@ var script = {
             utils.ZIndexUtils.clear(el);
         },
         alignOverlay() {
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 utils.DomHandler.relativePosition(this.overlay, this.$el);
             }
             else {
@@ -445,7 +447,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !utils.DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -487,7 +489,7 @@ var script = {
             }
         },
         onOverlayClick(event) {
-            OverlayEventBus__default["default"].emit('overlay-click', {
+            OverlayEventBus__default['default'].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -526,18 +528,13 @@ var script = {
                 'p-ripple-disabled': this.$primevue.config.ripple === false
             }];
         },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
-        },
         dropdownIconClass() {
             return ['p-cascadeselect-trigger-icon', this.loading ? this.loadingIcon : 'pi pi-chevron-down'];
         }
     },
     components: {
-        'CascadeSelectSub': script$1
+        'CascadeSelectSub': script$1,
+        'Portal': Portal__default['default']
     }
 };
 
@@ -548,6 +545,7 @@ const _hoisted_4 = { class: "p-cascadeselect-items-wrapper" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CascadeSelectSub = vue.resolveComponent("CascadeSelectSub");
+  const _component_Portal = vue.resolveComponent("Portal");
 
   return (vue.openBlock(), vue.createElementBlock("div", {
     ref: "container",
@@ -592,46 +590,46 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 2)
       ])
     ], 8, _hoisted_3),
-    (vue.openBlock(), vue.createBlock(vue.Teleport, {
-      to: $options.appendTarget,
-      disabled: $options.appendDisabled
-    }, [
-      vue.createVNode(vue.Transition, {
-        name: "p-connected-overlay",
-        onEnter: $options.onOverlayEnter,
-        onLeave: $options.onOverlayLeave,
-        onAfterLeave: $options.onOverlayAfterLeave
-      }, {
-        default: vue.withCtx(() => [
-          ($data.overlayVisible)
-            ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 0,
-                ref: $options.overlayRef,
-                class: vue.normalizeClass($options.panelStyleClass),
-                onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-              }, [
-                vue.createElementVNode("div", _hoisted_4, [
-                  vue.createVNode(_component_CascadeSelectSub, {
-                    options: $props.options,
-                    selectionPath: $data.selectionPath,
-                    optionLabel: $props.optionLabel,
-                    optionValue: $props.optionValue,
-                    level: 0,
-                    templates: _ctx.$slots,
-                    optionGroupLabel: $props.optionGroupLabel,
-                    optionGroupChildren: $props.optionGroupChildren,
-                    onOptionSelect: $options.onOptionSelect,
-                    onOptiongroupSelect: $options.onOptionGroupSelect,
-                    dirty: $data.dirty,
-                    root: true
-                  }, null, 8, ["options", "selectionPath", "optionLabel", "optionValue", "templates", "optionGroupLabel", "optionGroupChildren", "onOptionSelect", "onOptiongroupSelect", "dirty"])
-                ])
-              ], 2))
-            : vue.createCommentVNode("", true)
-        ]),
-        _: 1
-      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-    ], 8, ["to", "disabled"]))
+    vue.createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+      default: vue.withCtx(() => [
+        vue.createVNode(vue.Transition, {
+          name: "p-connected-overlay",
+          onEnter: $options.onOverlayEnter,
+          onLeave: $options.onOverlayLeave,
+          onAfterLeave: $options.onOverlayAfterLeave
+        }, {
+          default: vue.withCtx(() => [
+            ($data.overlayVisible)
+              ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 0,
+                  ref: $options.overlayRef,
+                  class: vue.normalizeClass($options.panelStyleClass),
+                  onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                }, [
+                  vue.createElementVNode("div", _hoisted_4, [
+                    vue.createVNode(_component_CascadeSelectSub, {
+                      options: $props.options,
+                      selectionPath: $data.selectionPath,
+                      optionLabel: $props.optionLabel,
+                      optionValue: $props.optionValue,
+                      level: 0,
+                      templates: _ctx.$slots,
+                      optionGroupLabel: $props.optionGroupLabel,
+                      optionGroupChildren: $props.optionGroupChildren,
+                      onOptionSelect: $options.onOptionSelect,
+                      onOptiongroupSelect: $options.onOptionGroupSelect,
+                      dirty: $data.dirty,
+                      root: true
+                    }, null, 8, ["options", "selectionPath", "optionLabel", "optionValue", "templates", "optionGroupLabel", "optionGroupChildren", "onOptionSelect", "onOptiongroupSelect", "dirty"])
+                  ])
+                ], 2))
+              : vue.createCommentVNode("", true)
+          ]),
+          _: 1
+        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+      ]),
+      _: 1
+    }, 8, ["appendTo"])
   ], 2))
 }
 

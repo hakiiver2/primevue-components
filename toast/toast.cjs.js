@@ -4,11 +4,13 @@ var ToastEventBus = require('primevue/toasteventbus');
 var Ripple = require('primevue/ripple');
 var vue = require('vue');
 var utils = require('primevue/utils');
+var Portal = require('primevue/portal');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var ToastEventBus__default = /*#__PURE__*/_interopDefaultLegacy(ToastEventBus);
 var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
 var script$1 = {
     name: 'ToastMessage',
@@ -62,7 +64,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -150,9 +152,9 @@ var script = {
     },
     styleElement: null,
     mounted() {
-        ToastEventBus__default["default"].on('add', this.onAdd);
-        ToastEventBus__default["default"].on('remove-group', this.onRemoveGroup);
-        ToastEventBus__default["default"].on('remove-all-groups', this.onRemoveAllGroups);
+        ToastEventBus__default['default'].on('add', this.onAdd);
+        ToastEventBus__default['default'].on('remove-group', this.onRemoveGroup);
+        ToastEventBus__default['default'].on('remove-all-groups', this.onRemoveAllGroups);
 
         if (this.breakpoints) {
             this.createStyle();
@@ -165,9 +167,9 @@ var script = {
             utils.ZIndexUtils.clear(this.$refs.container);
         }
 
-        ToastEventBus__default["default"].off('add', this.onAdd);
-        ToastEventBus__default["default"].off('remove-group', this.onRemoveGroup);
-        ToastEventBus__default["default"].off('remove-all-groups', this.onRemoveAllGroups);
+        ToastEventBus__default['default'].off('add', this.onAdd);
+        ToastEventBus__default['default'].off('remove-group', this.onRemoveGroup);
+        ToastEventBus__default['default'].off('remove-all-groups', this.onRemoveAllGroups);
     },
     methods: {
         add(message) {
@@ -245,7 +247,8 @@ var script = {
         }
     },
     components: {
-        'ToastMessage': script$1
+        'ToastMessage': script$1,
+        'Portal': Portal__default['default']
     },
     computed: {
         containerClass() {
@@ -262,32 +265,36 @@ var script = {
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_ToastMessage = vue.resolveComponent("ToastMessage");
+  const _component_Portal = vue.resolveComponent("Portal");
 
-  return (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
-    vue.createElementVNode("div", vue.mergeProps({
-      ref: "container",
-      class: $options.containerClass
-    }, _ctx.$attrs), [
-      vue.createVNode(vue.TransitionGroup, {
-        name: "p-toast-message",
-        tag: "div",
-        onEnter: $options.onEnter,
-        onLeave: $options.onLeave
-      }, {
-        default: vue.withCtx(() => [
-          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($data.messages, (msg) => {
-            return (vue.openBlock(), vue.createBlock(_component_ToastMessage, {
-              key: msg.id,
-              message: msg,
-              onClose: _cache[0] || (_cache[0] = $event => ($options.remove($event))),
-              template: _ctx.$slots.message
-            }, null, 8, ["message", "template"]))
-          }), 128))
-        ]),
-        _: 1
-      }, 8, ["onEnter", "onLeave"])
-    ], 16)
-  ]))
+  return (vue.openBlock(), vue.createBlock(_component_Portal, null, {
+    default: vue.withCtx(() => [
+      vue.createElementVNode("div", vue.mergeProps({
+        ref: "container",
+        class: $options.containerClass
+      }, _ctx.$attrs), [
+        vue.createVNode(vue.TransitionGroup, {
+          name: "p-toast-message",
+          tag: "div",
+          onEnter: $options.onEnter,
+          onLeave: $options.onLeave
+        }, {
+          default: vue.withCtx(() => [
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($data.messages, (msg) => {
+              return (vue.openBlock(), vue.createBlock(_component_ToastMessage, {
+                key: msg.id,
+                message: msg,
+                onClose: _cache[0] || (_cache[0] = $event => ($options.remove($event))),
+                template: _ctx.$slots.message
+              }, null, 8, ["message", "template"]))
+            }), 128))
+          ]),
+          _: 1
+        }, 8, ["onEnter", "onLeave"])
+      ], 16)
+    ]),
+    _: 1
+  }))
 }
 
 function styleInject(css, ref) {

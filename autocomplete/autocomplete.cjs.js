@@ -5,6 +5,7 @@ var OverlayEventBus = require('primevue/overlayeventbus');
 var Button = require('primevue/button');
 var Ripple = require('primevue/ripple');
 var VirtualScroller = require('primevue/virtualscroller');
+var Portal = require('primevue/portal');
 var vue = require('vue');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -13,6 +14,7 @@ var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBu
 var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
 var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
 var VirtualScroller__default = /*#__PURE__*/_interopDefaultLegacy(VirtualScroller);
+var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
 var script = {
     name: 'AutoComplete',
@@ -78,6 +80,10 @@ var script = {
         virtualScrollerOptions: {
             type: Object,
             default: null
+        },
+        loadingIcon: {
+            type: String,
+            default: 'pi pi-spinner'
         }
     },
     timeout: null,
@@ -164,7 +170,7 @@ var script = {
         },
         alignOverlay() {
             let target = this.multiple ? this.$refs.multiContainer : this.$refs.input;
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 utils.DomHandler.relativePosition(this.overlay, target);
             }
             else {
@@ -201,7 +207,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !utils.DomHandler.isTouchDevice()) {
                         this.hideOverlay();
                     }
                 };
@@ -513,7 +519,7 @@ var script = {
             this.virtualScroller = el;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default["default"].emit('overlay-click', {
+            OverlayEventBus__default['default'].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -547,6 +553,9 @@ var script = {
                 'p-ripple-disabled': this.$primevue.config.ripple === false
             }];
         },
+        loadingIconClass() {
+            return ['p-autocomplete-loader pi-spin', this.loadingIcon];
+        },
         inputValue() {
             if (this.modelValue) {
                 if (this.field && typeof this.modelValue === 'object') {
@@ -563,22 +572,17 @@ var script = {
         listId() {
             return utils.UniqueComponentId() + '_list';
         },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
-        },
         virtualScrollerDisabled() {
             return !this.virtualScrollerOptions;
         }
     },
     components: {
-        'Button': Button__default["default"],
-        'VirtualScroller': VirtualScroller__default["default"]
+        'Button': Button__default['default'],
+        'VirtualScroller': VirtualScroller__default['default'],
+        'Portal': Portal__default['default']
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -588,18 +592,15 @@ const _hoisted_3 = { class: "p-autocomplete-token-label" };
 const _hoisted_4 = ["onClick"];
 const _hoisted_5 = { class: "p-autocomplete-input-token" };
 const _hoisted_6 = ["aria-controls"];
-const _hoisted_7 = {
-  key: 2,
-  class: "p-autocomplete-loader pi pi-spinner pi-spin"
-};
-const _hoisted_8 = ["id"];
-const _hoisted_9 = ["onClick", "data-index"];
-const _hoisted_10 = { class: "p-autocomplete-item-group" };
-const _hoisted_11 = ["onClick", "data-group", "data-index"];
+const _hoisted_7 = ["id"];
+const _hoisted_8 = ["onClick", "data-index"];
+const _hoisted_9 = { class: "p-autocomplete-item-group" };
+const _hoisted_10 = ["onClick", "data-group", "data-index"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Button = vue.resolveComponent("Button");
   const _component_VirtualScroller = vue.resolveComponent("VirtualScroller");
+  const _component_Portal = vue.resolveComponent("Portal");
   const _directive_ripple = vue.resolveDirective("ripple");
 
   return (vue.openBlock(), vue.createElementBlock("span", {
@@ -671,7 +672,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ], 2))
       : vue.createCommentVNode("", true),
     ($data.searching)
-      ? (vue.openBlock(), vue.createElementBlock("i", _hoisted_7))
+      ? (vue.openBlock(), vue.createElementBlock("i", {
+          key: 2,
+          class: vue.normalizeClass($options.loadingIconClass)
+        }, null, 2))
       : vue.createCommentVNode("", true),
     ($props.dropdown)
       ? (vue.openBlock(), vue.createBlock(_component_Button, {
@@ -684,117 +688,117 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: $options.onDropdownClick
         }, null, 8, ["disabled", "onClick"]))
       : vue.createCommentVNode("", true),
-    (vue.openBlock(), vue.createBlock(vue.Teleport, {
-      to: $options.appendTarget,
-      disabled: $options.appendDisabled
-    }, [
-      vue.createVNode(vue.Transition, {
-        name: "p-connected-overlay",
-        onEnter: $options.onOverlayEnter,
-        onLeave: $options.onOverlayLeave,
-        onAfterLeave: $options.onOverlayAfterLeave
-      }, {
-        default: vue.withCtx(() => [
-          ($data.overlayVisible)
-            ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 0,
-                ref: $options.overlayRef,
-                class: vue.normalizeClass($options.panelStyleClass),
-                style: vue.normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}),
-                onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-              }, [
-                vue.renderSlot(_ctx.$slots, "header", {
-                  value: $props.modelValue,
-                  suggestions: $props.suggestions
-                }),
-                vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
-                  style: {'height': $props.scrollHeight},
-                  items: $props.suggestions,
-                  disabled: $options.virtualScrollerDisabled
-                }), vue.createSlots({
-                  content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
-                    vue.createElementVNode("ul", {
-                      id: $options.listId,
-                      ref: (el) => $options.listRef(el, contentRef),
-                      class: vue.normalizeClass(['p-autocomplete-items', styleClass]),
-                      style: vue.normalizeStyle(contentStyle),
-                      role: "listbox"
-                    }, [
-                      (!$props.optionGroupLabel)
-                        ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (item, i) => {
-                            return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
-                              class: "p-autocomplete-item",
-                              key: $options.getOptionRenderKey(item),
-                              onClick: $event => ($options.selectItem($event, item)),
-                              role: "option",
-                              "data-index": $options.getOptionIndex(i, getItemOptions)
-                            }, [
-                              vue.renderSlot(_ctx.$slots, "item", {
-                                item: item,
-                                index: $options.getOptionIndex(i, getItemOptions)
-                              }, () => [
-                                vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
-                              ])
-                            ], 8, _hoisted_9)), [
-                              [_directive_ripple]
-                            ])
-                          }), 128))
-                        : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
-                            return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
-                              key: $options.getOptionGroupRenderKey(optionGroup)
-                            }, [
-                              vue.createElementVNode("li", _hoisted_10, [
-                                vue.renderSlot(_ctx.$slots, "optiongroup", {
-                                  item: optionGroup,
+    vue.createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+      default: vue.withCtx(() => [
+        vue.createVNode(vue.Transition, {
+          name: "p-connected-overlay",
+          onEnter: $options.onOverlayEnter,
+          onLeave: $options.onOverlayLeave,
+          onAfterLeave: $options.onOverlayAfterLeave
+        }, {
+          default: vue.withCtx(() => [
+            ($data.overlayVisible)
+              ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 0,
+                  ref: $options.overlayRef,
+                  class: vue.normalizeClass($options.panelStyleClass),
+                  style: vue.normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}),
+                  onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                }, [
+                  vue.renderSlot(_ctx.$slots, "header", {
+                    value: $props.modelValue,
+                    suggestions: $props.suggestions
+                  }),
+                  vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
+                    style: {'height': $props.scrollHeight},
+                    items: $props.suggestions,
+                    disabled: $options.virtualScrollerDisabled
+                  }), vue.createSlots({
+                    content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
+                      vue.createElementVNode("ul", {
+                        id: $options.listId,
+                        ref: (el) => $options.listRef(el, contentRef),
+                        class: vue.normalizeClass(['p-autocomplete-items', styleClass]),
+                        style: vue.normalizeStyle(contentStyle),
+                        role: "listbox"
+                      }, [
+                        (!$props.optionGroupLabel)
+                          ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (item, i) => {
+                              return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                class: "p-autocomplete-item",
+                                key: $options.getOptionRenderKey(item),
+                                onClick: $event => ($options.selectItem($event, item)),
+                                role: "option",
+                                "data-index": $options.getOptionIndex(i, getItemOptions)
+                              }, [
+                                vue.renderSlot(_ctx.$slots, "item", {
+                                  item: item,
                                   index: $options.getOptionIndex(i, getItemOptions)
                                 }, () => [
-                                  vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                                  vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
                                 ])
-                              ]),
-                              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
-                                return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
-                                  class: "p-autocomplete-item",
-                                  key: j,
-                                  onClick: $event => ($options.selectItem($event, item)),
-                                  role: "option",
-                                  "data-group": i,
-                                  "data-index": $options.getOptionIndex(j, getItemOptions)
-                                }, [
-                                  vue.renderSlot(_ctx.$slots, "item", {
-                                    item: item,
-                                    index: $options.getOptionIndex(j, getItemOptions)
+                              ], 8, _hoisted_8)), [
+                                [_directive_ripple]
+                              ])
+                            }), 128))
+                          : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
+                              return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
+                                key: $options.getOptionGroupRenderKey(optionGroup)
+                              }, [
+                                vue.createElementVNode("li", _hoisted_9, [
+                                  vue.renderSlot(_ctx.$slots, "optiongroup", {
+                                    item: optionGroup,
+                                    index: $options.getOptionIndex(i, getItemOptions)
                                   }, () => [
-                                    vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
+                                    vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                   ])
-                                ], 8, _hoisted_11)), [
-                                  [_directive_ripple]
-                                ])
-                              }), 128))
-                            ], 64))
-                          }), 128))
-                    ], 14, _hoisted_8)
-                  ]),
-                  _: 2
-                }, [
-                  (_ctx.$slots.loader)
-                    ? {
-                        name: "loader",
-                        fn: vue.withCtx(({ options }) => [
-                          vue.renderSlot(_ctx.$slots, "loader", { options: options })
-                        ])
-                      }
-                    : undefined
-                ]), 1040, ["style", "items", "disabled"]),
-                vue.renderSlot(_ctx.$slots, "footer", {
-                  value: $props.modelValue,
-                  suggestions: $props.suggestions
-                })
-              ], 6))
-            : vue.createCommentVNode("", true)
-        ]),
-        _: 3
-      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-    ], 8, ["to", "disabled"]))
+                                ]),
+                                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
+                                  return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                    class: "p-autocomplete-item",
+                                    key: j,
+                                    onClick: $event => ($options.selectItem($event, item)),
+                                    role: "option",
+                                    "data-group": i,
+                                    "data-index": $options.getOptionIndex(j, getItemOptions)
+                                  }, [
+                                    vue.renderSlot(_ctx.$slots, "item", {
+                                      item: item,
+                                      index: $options.getOptionIndex(j, getItemOptions)
+                                    }, () => [
+                                      vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
+                                    ])
+                                  ], 8, _hoisted_10)), [
+                                    [_directive_ripple]
+                                  ])
+                                }), 128))
+                              ], 64))
+                            }), 128))
+                      ], 14, _hoisted_7)
+                    ]),
+                    _: 2
+                  }, [
+                    (_ctx.$slots.loader)
+                      ? {
+                          name: "loader",
+                          fn: vue.withCtx(({ options }) => [
+                            vue.renderSlot(_ctx.$slots, "loader", { options: options })
+                          ])
+                        }
+                      : undefined
+                  ]), 1040, ["style", "items", "disabled"]),
+                  vue.renderSlot(_ctx.$slots, "footer", {
+                    value: $props.modelValue,
+                    suggestions: $props.suggestions
+                  })
+                ], 6))
+              : vue.createCommentVNode("", true)
+          ]),
+          _: 3
+        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+      ]),
+      _: 3
+    }, 8, ["appendTo"])
   ], 14, _hoisted_1))
 }
 

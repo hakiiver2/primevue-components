@@ -41,7 +41,7 @@ this.primevue.steps = (function (utils, vue) {
                 }
             },
             isActive(item) {
-                return this.activeRoute === item.to || this.activeRoute === item.to + '/' ;
+                return item.to ? this.$router.resolve(item.to).path === this.$route.path : false;
             },
             getItemClass(item) {
                 return ['p-steps-item', item.class, {
@@ -69,9 +69,6 @@ this.primevue.steps = (function (utils, vue) {
             }
         },
         computed: {
-            activeRoute() {
-                return this.$route.path;
-            },
             containerClass() {
                 return ['p-steps p-component', {'p-readonly': this.readonly}];
             }
@@ -184,4 +181,4 @@ this.primevue.steps = (function (utils, vue) {
 
     return script;
 
-})(primevue.utils, Vue);
+}(primevue.utils, Vue));

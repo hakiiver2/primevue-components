@@ -41,12 +41,12 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
                 this.visible = false;
                 this.confirmation = null;
             };
-            ConfirmationEventBus__default["default"].on('confirm', this.confirmListener);
-            ConfirmationEventBus__default["default"].on('close', this.closeListener);
+            ConfirmationEventBus__default['default'].on('confirm', this.confirmListener);
+            ConfirmationEventBus__default['default'].on('close', this.closeListener);
         },
         beforeUnmount() {
-            ConfirmationEventBus__default["default"].off('confirm', this.confirmListener);
-            ConfirmationEventBus__default["default"].off('close', this.closeListener);
+            ConfirmationEventBus__default['default'].off('confirm', this.confirmListener);
+            ConfirmationEventBus__default['default'].off('close', this.closeListener);
         },
         methods: {
             accept() {
@@ -115,8 +115,8 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
             }
         },
         components: {
-            'CDialog': Dialog__default["default"],
-            'CDButton': Button__default["default"]
+            'CDialog': Dialog__default['default'],
+            'CDButton': Button__default['default']
         }
     };
 
@@ -172,4 +172,4 @@ this.primevue.confirmdialog = (function (ConfirmationEventBus, Dialog, Button, v
 
     return script;
 
-})(primevue.confirmationeventbus, primevue.dialog, primevue.button, Vue);
+}(primevue.confirmationeventbus, primevue.dialog, primevue.button, Vue));

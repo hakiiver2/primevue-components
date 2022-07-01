@@ -58,4 +58,4 @@ this.primevue.dataviewlayoutoptions = (function (vue) {
 
 	return script;
 
-})(Vue);
+}(Vue));

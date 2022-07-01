@@ -433,12 +433,12 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
             }
         },
         components: {
-            'FileUploadButton': Button__default["default"],
-            'FileUploadProgressBar': ProgressBar__default["default"],
-            'FileUploadMessage': Message__default["default"]
+            'FileUploadButton': Button__default['default'],
+            'FileUploadProgressBar': ProgressBar__default['default'],
+            'FileUploadMessage': Message__default['default']
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -663,4 +663,4 @@ this.primevue.fileupload = (function (Button, ProgressBar, Message, utils, Rippl
 
     return script;
 
-})(primevue.button, primevue.progressbar, primevue.message, primevue.utils, primevue.ripple, Vue);
+}(primevue.button, primevue.progressbar, primevue.message, primevue.utils, primevue.ripple, Vue));

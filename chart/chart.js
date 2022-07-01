@@ -150,4 +150,4 @@ this.primevue.chart = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

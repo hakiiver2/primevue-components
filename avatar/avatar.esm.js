@@ -24,6 +24,11 @@ var script = {
             default: "square"
         }
     },
+    methods: {
+        onError() {
+            this.$emit('error');
+        }
+    },
     computed: {
         containerClass() {
             return ['p-avatar p-component', {
@@ -60,8 +65,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           : ($props.image)
             ? (openBlock(), createElementBlock("img", {
                 key: 2,
-                src: $props.image
-              }, null, 8, _hoisted_2))
+                src: $props.image,
+                onError: _cache[0] || (_cache[0] = (...args) => ($options.onError && $options.onError(...args)))
+              }, null, 40, _hoisted_2))
             : createCommentVNode("", true)
     ])
   ], 2))

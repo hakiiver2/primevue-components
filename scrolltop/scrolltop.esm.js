@@ -26,6 +26,10 @@ var script = {
         behavior: {
             type: String,
             default: 'smooth'
+        },
+        reverse: {
+            type: Boolean,
+            default: false
         }
     },
     mounted() {
@@ -48,18 +52,34 @@ var script = {
     methods: {
         onClick() {
             let scrollElement = this.target === 'window' ? window : this.$el.parentElement;
-            scrollElement.scroll({
-                top: 0,
-                behavior: this.behavior
-            });
+            if(this.reverse) {
+                scrollElement.scroll({
+                    top: scrollElement.scrollHeight - scrollElement.clientHeight + this.$el.parentElement.scrollTop,
+                    behavior: this.behavior
+                });
+            } else {
+                scrollElement.scroll({
+                    top: 0,
+                    behavior: this.behavior
+                });
+            }
         },
         checkVisibility(scrollY) {
-            if (scrollY > this.threshold)
-                this.visible = true;
-            else
-                this.visible = false;
+            if(this.reverse) {
+                const scrollElement = this.target === 'window' ? window : this.$el.parentElement;
+                if (scrollElement.scrollHeight - scrollElement.clientHeight > scrollY && scrollY >= 0)
+                    this.visible = true;
+                else
+                    this.visible = false;
+            } else {
+                if (scrollY > this.threshold)
+                    this.visible = true;
+                else
+                    this.visible = false;
+            }
         },
         bindParentScrollListener() {
+            this.checkVisibility(this.$el.parentElement.scrollTop); // init
             this.scrollListener = () => {
                 this.checkVisibility(this.$el.parentElement.scrollTop);
             };

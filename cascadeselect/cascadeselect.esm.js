@@ -1,7 +1,8 @@
 import { ObjectUtils, DomHandler, ZIndexUtils, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createElementBlock, Fragment, renderList, normalizeClass, withDirectives, createBlock, resolveDynamicComponent, toDisplayString, createCommentVNode, createElementVNode, renderSlot, createTextVNode, Teleport, createVNode, Transition, withCtx } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, Fragment, renderList, normalizeClass, withDirectives, createBlock, resolveDynamicComponent, toDisplayString, createCommentVNode, createElementVNode, renderSlot, createTextVNode, createVNode, withCtx, Transition } from 'vue';
+import Portal from 'primevue/portal';
 
 var script$1 = {
     name: 'CascadeSelectSub',
@@ -395,7 +396,7 @@ var script = {
             ZIndexUtils.clear(el);
         },
         alignOverlay() {
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 DomHandler.relativePosition(this.overlay, this.$el);
             }
             else {
@@ -438,7 +439,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -519,18 +520,13 @@ var script = {
                 'p-ripple-disabled': this.$primevue.config.ripple === false
             }];
         },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
-        },
         dropdownIconClass() {
             return ['p-cascadeselect-trigger-icon', this.loading ? this.loadingIcon : 'pi pi-chevron-down'];
         }
     },
     components: {
-        'CascadeSelectSub': script$1
+        'CascadeSelectSub': script$1,
+        'Portal': Portal
     }
 };
 
@@ -541,6 +537,7 @@ const _hoisted_4 = { class: "p-cascadeselect-items-wrapper" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CascadeSelectSub = resolveComponent("CascadeSelectSub");
+  const _component_Portal = resolveComponent("Portal");
 
   return (openBlock(), createElementBlock("div", {
     ref: "container",
@@ -585,46 +582,46 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 2)
       ])
     ], 8, _hoisted_3),
-    (openBlock(), createBlock(Teleport, {
-      to: $options.appendTarget,
-      disabled: $options.appendDisabled
-    }, [
-      createVNode(Transition, {
-        name: "p-connected-overlay",
-        onEnter: $options.onOverlayEnter,
-        onLeave: $options.onOverlayLeave,
-        onAfterLeave: $options.onOverlayAfterLeave
-      }, {
-        default: withCtx(() => [
-          ($data.overlayVisible)
-            ? (openBlock(), createElementBlock("div", {
-                key: 0,
-                ref: $options.overlayRef,
-                class: normalizeClass($options.panelStyleClass),
-                onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-              }, [
-                createElementVNode("div", _hoisted_4, [
-                  createVNode(_component_CascadeSelectSub, {
-                    options: $props.options,
-                    selectionPath: $data.selectionPath,
-                    optionLabel: $props.optionLabel,
-                    optionValue: $props.optionValue,
-                    level: 0,
-                    templates: _ctx.$slots,
-                    optionGroupLabel: $props.optionGroupLabel,
-                    optionGroupChildren: $props.optionGroupChildren,
-                    onOptionSelect: $options.onOptionSelect,
-                    onOptiongroupSelect: $options.onOptionGroupSelect,
-                    dirty: $data.dirty,
-                    root: true
-                  }, null, 8, ["options", "selectionPath", "optionLabel", "optionValue", "templates", "optionGroupLabel", "optionGroupChildren", "onOptionSelect", "onOptiongroupSelect", "dirty"])
-                ])
-              ], 2))
-            : createCommentVNode("", true)
-        ]),
-        _: 1
-      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-    ], 8, ["to", "disabled"]))
+    createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+      default: withCtx(() => [
+        createVNode(Transition, {
+          name: "p-connected-overlay",
+          onEnter: $options.onOverlayEnter,
+          onLeave: $options.onOverlayLeave,
+          onAfterLeave: $options.onOverlayAfterLeave
+        }, {
+          default: withCtx(() => [
+            ($data.overlayVisible)
+              ? (openBlock(), createElementBlock("div", {
+                  key: 0,
+                  ref: $options.overlayRef,
+                  class: normalizeClass($options.panelStyleClass),
+                  onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                }, [
+                  createElementVNode("div", _hoisted_4, [
+                    createVNode(_component_CascadeSelectSub, {
+                      options: $props.options,
+                      selectionPath: $data.selectionPath,
+                      optionLabel: $props.optionLabel,
+                      optionValue: $props.optionValue,
+                      level: 0,
+                      templates: _ctx.$slots,
+                      optionGroupLabel: $props.optionGroupLabel,
+                      optionGroupChildren: $props.optionGroupChildren,
+                      onOptionSelect: $options.onOptionSelect,
+                      onOptiongroupSelect: $options.onOptionGroupSelect,
+                      dirty: $data.dirty,
+                      root: true
+                    }, null, 8, ["options", "selectionPath", "optionLabel", "optionValue", "templates", "optionGroupLabel", "optionGroupChildren", "onOptionSelect", "onOptiongroupSelect", "dirty"])
+                  ])
+                ], 2))
+              : createCommentVNode("", true)
+          ]),
+          _: 1
+        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+      ]),
+      _: 1
+    }, 8, ["appendTo"])
   ], 2))
 }
 

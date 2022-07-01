@@ -438,12 +438,12 @@ var script = {
         }
     },
     components: {
-        'FileUploadButton': Button__default["default"],
-        'FileUploadProgressBar': ProgressBar__default["default"],
-        'FileUploadMessage': Message__default["default"]
+        'FileUploadButton': Button__default['default'],
+        'FileUploadProgressBar': ProgressBar__default['default'],
+        'FileUploadMessage': Message__default['default']
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 

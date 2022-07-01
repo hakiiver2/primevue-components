@@ -425,7 +425,8 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                         }
                     break;
 
-                    //enter
+                    //tab and enter
+                    case 9:
                     case 13:
                         newValueStr = this.validateValue(this.parseValue(inputValue));
                         this.$refs.input.$el.value = this.formatValue(newValueStr);
@@ -984,8 +985,8 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
             }
         },
         components: {
-            'INInputText': InputText__default["default"],
-            'INButton': Button__default["default"]
+            'INInputText': InputText__default['default'],
+            'INButton': Button__default['default']
         }
     };
 
@@ -1090,4 +1091,4 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
 
     return script;
 
-})(primevue.inputtext, primevue.button, Vue);
+}(primevue.inputtext, primevue.button, Vue));

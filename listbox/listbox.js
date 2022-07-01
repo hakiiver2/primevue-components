@@ -282,10 +282,10 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         },
         components: {
-            'VirtualScroller': VirtualScroller__default["default"]
+            'VirtualScroller': VirtualScroller__default['default']
         }
     };
 
@@ -478,4 +478,4 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
 
     return script;
 
-})(primevue.utils, primevue.api, primevue.ripple, primevue.virtualscroller, Vue);
+}(primevue.utils, primevue.api, primevue.ripple, primevue.virtualscroller, Vue));

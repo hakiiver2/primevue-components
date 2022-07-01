@@ -427,7 +427,8 @@ var script = {
                     }
                 break;
 
-                //enter
+                //tab and enter
+                case 9:
                 case 13:
                     newValueStr = this.validateValue(this.parseValue(inputValue));
                     this.$refs.input.$el.value = this.formatValue(newValueStr);
@@ -986,8 +987,8 @@ var script = {
         }
     },
     components: {
-        'INInputText': InputText__default["default"],
-        'INButton': Button__default["default"]
+        'INInputText': InputText__default['default'],
+        'INButton': Button__default['default']
     }
 };
 

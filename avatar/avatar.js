@@ -26,6 +26,11 @@ this.primevue.avatar = (function (vue) {
                 default: "square"
             }
         },
+        methods: {
+            onError() {
+                this.$emit('error');
+            }
+        },
         computed: {
             containerClass() {
                 return ['p-avatar p-component', {
@@ -62,8 +67,9 @@ this.primevue.avatar = (function (vue) {
               : ($props.image)
                 ? (vue.openBlock(), vue.createElementBlock("img", {
                     key: 2,
-                    src: $props.image
-                  }, null, 8, _hoisted_2))
+                    src: $props.image,
+                    onError: _cache[0] || (_cache[0] = (...args) => ($options.onError && $options.onError(...args)))
+                  }, null, 40, _hoisted_2))
                 : vue.createCommentVNode("", true)
         ])
       ], 2))
@@ -103,4 +109,4 @@ this.primevue.avatar = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

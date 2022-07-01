@@ -1,10 +1,15 @@
 this.primevue = this.primevue || {};
-this.primevue.image = (function (utils, vue) {
+this.primevue.image = (function (utils, Portal, vue) {
     'use strict';
+
+    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script = {
         name: 'Image',
         inheritAttrs: false,
+        emits: ['show', 'hide', 'error'],
         props: {
             preview: {
                 type: Boolean,
@@ -71,6 +76,9 @@ this.primevue.image = (function (utils, vue) {
 
                 this.previewClick = false;
             },
+            onError() {
+                this.$emit('error');
+            },
             rotateRight() {
                 this.rotate += 90;
                 this.previewClick = true;
@@ -122,6 +130,9 @@ this.primevue.image = (function (utils, vue) {
             zoomDisabled() {
                 return this.scale <= 0.5 || this.scale >= 1.5;
             }
+        },
+        components: {
+            'Portal': Portal__default['default']
         }
     };
 
@@ -154,19 +165,22 @@ this.primevue.image = (function (utils, vue) {
     const _hoisted_17 = ["src"];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
+      const _component_Portal = vue.resolveComponent("Portal");
+
       return (vue.openBlock(), vue.createElementBlock("span", {
         class: vue.normalizeClass($options.containerClass),
         style: vue.normalizeStyle($props.style)
       }, [
         vue.createElementVNode("img", vue.mergeProps(_ctx.$attrs, {
           style: $props.imageStyle,
-          class: $props.imageClass
+          class: $props.imageClass,
+          onError: _cache[0] || (_cache[0] = (...args) => ($options.onError && $options.onError(...args)))
         }), null, 16),
         ($props.preview)
           ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
               class: "p-image-preview-indicator",
-              onClick: _cache[0] || (_cache[0] = (...args) => ($options.onImageClick && $options.onImageClick(...args))),
+              onClick: _cache[1] || (_cache[1] = (...args) => ($options.onImageClick && $options.onImageClick(...args))),
               showPreview: $props.showPreview
             }, [
               vue.renderSlot(_ctx.$slots, "indicator", {}, () => [
@@ -174,68 +188,71 @@ this.primevue.image = (function (utils, vue) {
               ])
             ], 8, _hoisted_1))
           : vue.createCommentVNode("", true),
-        (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
-          ($data.maskVisible)
-            ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 0,
-                ref: $options.maskRef,
-                class: vue.normalizeClass($options.maskClass),
-                onClick: _cache[7] || (_cache[7] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
-              }, [
-                vue.createElementVNode("div", _hoisted_3, [
-                  vue.createElementVNode("button", {
-                    class: "p-image-action p-link",
-                    onClick: _cache[1] || (_cache[1] = (...args) => ($options.rotateRight && $options.rotateRight(...args))),
-                    type: "button"
-                  }, _hoisted_5),
-                  vue.createElementVNode("button", {
-                    class: "p-image-action p-link",
-                    onClick: _cache[2] || (_cache[2] = (...args) => ($options.rotateLeft && $options.rotateLeft(...args))),
-                    type: "button"
-                  }, _hoisted_7),
-                  vue.createElementVNode("button", {
-                    class: "p-image-action p-link",
-                    onClick: _cache[3] || (_cache[3] = (...args) => ($options.zoomOut && $options.zoomOut(...args))),
-                    type: "button",
-                    disabled: $options.zoomDisabled
-                  }, _hoisted_10, 8, _hoisted_8),
-                  vue.createElementVNode("button", {
-                    class: "p-image-action p-link",
-                    onClick: _cache[4] || (_cache[4] = (...args) => ($options.zoomIn && $options.zoomIn(...args))),
-                    type: "button",
-                    disabled: $options.zoomDisabled
-                  }, _hoisted_13, 8, _hoisted_11),
-                  vue.createElementVNode("button", {
-                    class: "p-image-action p-link",
-                    type: "button",
-                    onClick: _cache[5] || (_cache[5] = (...args) => (_ctx.hidePreview && _ctx.hidePreview(...args)))
-                  }, _hoisted_15)
-                ]),
-                vue.createVNode(vue.Transition, {
-                  name: "p-image-preview",
-                  onBeforeEnter: $options.onBeforeEnter,
-                  onEnter: $options.onEnter,
-                  onLeave: $options.onLeave,
-                  onBeforeLeave: $options.onBeforeLeave,
-                  onAfterLeave: $options.onAfterLeave
-                }, {
-                  default: vue.withCtx(() => [
-                    ($data.previewVisible)
-                      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_16, [
-                          vue.createElementVNode("img", {
-                            src: _ctx.$attrs.src,
-                            class: "p-image-preview",
-                            style: vue.normalizeStyle($options.imagePreviewStyle),
-                            onClick: _cache[6] || (_cache[6] = (...args) => ($options.onPreviewImageClick && $options.onPreviewImageClick(...args)))
-                          }, null, 12, _hoisted_17)
-                        ]))
-                      : vue.createCommentVNode("", true)
+        vue.createVNode(_component_Portal, null, {
+          default: vue.withCtx(() => [
+            ($data.maskVisible)
+              ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 0,
+                  ref: $options.maskRef,
+                  class: vue.normalizeClass($options.maskClass),
+                  onClick: _cache[8] || (_cache[8] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
+                }, [
+                  vue.createElementVNode("div", _hoisted_3, [
+                    vue.createElementVNode("button", {
+                      class: "p-image-action p-link",
+                      onClick: _cache[2] || (_cache[2] = (...args) => ($options.rotateRight && $options.rotateRight(...args))),
+                      type: "button"
+                    }, _hoisted_5),
+                    vue.createElementVNode("button", {
+                      class: "p-image-action p-link",
+                      onClick: _cache[3] || (_cache[3] = (...args) => ($options.rotateLeft && $options.rotateLeft(...args))),
+                      type: "button"
+                    }, _hoisted_7),
+                    vue.createElementVNode("button", {
+                      class: "p-image-action p-link",
+                      onClick: _cache[4] || (_cache[4] = (...args) => ($options.zoomOut && $options.zoomOut(...args))),
+                      type: "button",
+                      disabled: $options.zoomDisabled
+                    }, _hoisted_10, 8, _hoisted_8),
+                    vue.createElementVNode("button", {
+                      class: "p-image-action p-link",
+                      onClick: _cache[5] || (_cache[5] = (...args) => ($options.zoomIn && $options.zoomIn(...args))),
+                      type: "button",
+                      disabled: $options.zoomDisabled
+                    }, _hoisted_13, 8, _hoisted_11),
+                    vue.createElementVNode("button", {
+                      class: "p-image-action p-link",
+                      type: "button",
+                      onClick: _cache[6] || (_cache[6] = (...args) => (_ctx.hidePreview && _ctx.hidePreview(...args)))
+                    }, _hoisted_15)
                   ]),
-                  _: 1
-                }, 8, ["onBeforeEnter", "onEnter", "onLeave", "onBeforeLeave", "onAfterLeave"])
-              ], 2))
-            : vue.createCommentVNode("", true)
-        ]))
+                  vue.createVNode(vue.Transition, {
+                    name: "p-image-preview",
+                    onBeforeEnter: $options.onBeforeEnter,
+                    onEnter: $options.onEnter,
+                    onLeave: $options.onLeave,
+                    onBeforeLeave: $options.onBeforeLeave,
+                    onAfterLeave: $options.onAfterLeave
+                  }, {
+                    default: vue.withCtx(() => [
+                      ($data.previewVisible)
+                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_16, [
+                            vue.createElementVNode("img", {
+                              src: _ctx.$attrs.src,
+                              class: "p-image-preview",
+                              style: vue.normalizeStyle($options.imagePreviewStyle),
+                              onClick: _cache[7] || (_cache[7] = (...args) => ($options.onPreviewImageClick && $options.onPreviewImageClick(...args)))
+                            }, null, 12, _hoisted_17)
+                          ]))
+                        : vue.createCommentVNode("", true)
+                    ]),
+                    _: 1
+                  }, 8, ["onBeforeEnter", "onEnter", "onLeave", "onBeforeLeave", "onAfterLeave"])
+                ], 2))
+              : vue.createCommentVNode("", true)
+          ]),
+          _: 1
+        })
       ], 6))
     }
 
@@ -273,4 +290,4 @@ this.primevue.image = (function (utils, vue) {
 
     return script;
 
-})(primevue.utils, Vue);
+}(primevue.utils, primevue.portal, Vue));

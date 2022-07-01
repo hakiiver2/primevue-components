@@ -2,13 +2,18 @@ import ConfirmationEventBus from 'primevue/confirmationeventbus';
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
-import { resolveComponent, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, createElementBlock, mergeProps, createElementVNode, normalizeClass, toDisplayString, resolveDynamicComponent, createCommentVNode } from 'vue';
+import Portal from 'primevue/portal';
+import { resolveComponent, openBlock, createBlock, withCtx, createVNode, Transition, createElementBlock, mergeProps, createElementVNode, normalizeClass, toDisplayString, resolveDynamicComponent, createCommentVNode } from 'vue';
 
 var script = {
     name: 'ConfirmPopup',
     inheritAttrs: false,
     props: {
-        group: String
+        group: String,
+        showReject: {
+            type: Boolean,
+            default: true
+        }
     },
     data() {
         return {
@@ -144,7 +149,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.visible) {
+                    if (this.visible && !DomHandler.isTouchDevice()) {
                         this.visible = false;
                     }
                 };
@@ -183,6 +188,9 @@ var script = {
         iconClass() {
             return ['p-confirm-popup-icon', this.confirmation ? this.confirmation.icon : null];
         },
+        flexFooterClass() {
+            return ['p-confirm-popup-flex-footer', this.confirmation ? this.confirmation.isFlexFooter : null];
+        },
         acceptLabel() {
             return this.confirmation ? (this.confirmation.acceptLabel || this.$primevue.config.locale.accept) : null;
         },
@@ -203,7 +211,8 @@ var script = {
         }
     },
     components: {
-        'CPButton': Button
+        'CPButton': Button,
+        'Portal': Portal
     }
 };
 
@@ -212,59 +221,74 @@ const _hoisted_1 = {
   class: "p-confirm-popup-content"
 };
 const _hoisted_2 = { class: "p-confirm-popup-message" };
-const _hoisted_3 = { class: "p-confirm-popup-footer" };
+const _hoisted_3 = {
+  key: 1,
+  style: {"flex":"1"}
+};
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CPButton = resolveComponent("CPButton");
+  const _component_Portal = resolveComponent("Portal");
 
-  return (openBlock(), createBlock(Teleport, { to: "body" }, [
-    createVNode(Transition, {
-      name: "p-confirm-popup",
-      onEnter: $options.onEnter,
-      onLeave: $options.onLeave,
-      onAfterLeave: $options.onAfterLeave
-    }, {
-      default: withCtx(() => [
-        ($data.visible)
-          ? (openBlock(), createElementBlock("div", mergeProps({
-              key: 0,
-              class: $options.containerClass,
-              ref: $options.containerRef
-            }, _ctx.$attrs, {
-              onClick: _cache[2] || (_cache[2] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-            }), [
-              (!_ctx.$slots.message)
-                ? (openBlock(), createElementBlock("div", _hoisted_1, [
-                    createElementVNode("i", {
-                      class: normalizeClass($options.iconClass)
-                    }, null, 2),
-                    createElementVNode("span", _hoisted_2, toDisplayString($data.confirmation.message), 1)
-                  ]))
-                : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.message), {
-                    key: 1,
-                    message: $data.confirmation
-                  }, null, 8, ["message"])),
-              createElementVNode("div", _hoisted_3, [
-                createVNode(_component_CPButton, {
-                  label: $options.rejectLabel,
-                  icon: $options.rejectIcon,
-                  class: normalizeClass($options.rejectClass),
-                  onClick: _cache[0] || (_cache[0] = $event => ($options.reject()))
-                }, null, 8, ["label", "icon", "class"]),
-                createVNode(_component_CPButton, {
-                  label: $options.acceptLabel,
-                  icon: $options.acceptIcon,
-                  class: normalizeClass($options.acceptClass),
-                  onClick: _cache[1] || (_cache[1] = $event => ($options.accept())),
-                  autofocus: ""
-                }, null, 8, ["label", "icon", "class"])
-              ])
-            ], 16))
-          : createCommentVNode("", true)
-      ]),
-      _: 1
-    }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-  ]))
+  return (openBlock(), createBlock(_component_Portal, null, {
+    default: withCtx(() => [
+      createVNode(Transition, {
+        name: "p-confirm-popup",
+        onEnter: $options.onEnter,
+        onLeave: $options.onLeave,
+        onAfterLeave: $options.onAfterLeave
+      }, {
+        default: withCtx(() => [
+          ($data.visible)
+            ? (openBlock(), createElementBlock("div", mergeProps({
+                key: 0,
+                class: $options.containerClass,
+                ref: $options.containerRef
+              }, _ctx.$attrs, {
+                onClick: _cache[2] || (_cache[2] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              }), [
+                (!_ctx.$slots.message)
+                  ? (openBlock(), createElementBlock("div", _hoisted_1, [
+                      createElementVNode("i", {
+                        class: normalizeClass($options.iconClass)
+                      }, null, 2),
+                      createElementVNode("span", _hoisted_2, toDisplayString($data.confirmation.message), 1)
+                    ]))
+                  : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.message), {
+                      key: 1,
+                      message: $data.confirmation
+                    }, null, 8, ["message"])),
+                createElementVNode("div", {
+                  class: normalizeClass(["p-confirm-popup-footer", $options.flexFooterClass])
+                }, [
+                  ($props.showReject)
+                    ? (openBlock(), createBlock(_component_CPButton, {
+                        key: 0,
+                        label: $options.rejectLabel,
+                        icon: $options.rejectIcon,
+                        class: normalizeClass($options.rejectClass),
+                        onClick: _cache[0] || (_cache[0] = $event => ($options.reject()))
+                      }, null, 8, ["label", "icon", "class"]))
+                    : createCommentVNode("", true),
+                  (_ctx.isFlexFooter)
+                    ? (openBlock(), createElementBlock("div", _hoisted_3))
+                    : createCommentVNode("", true),
+                  createVNode(_component_CPButton, {
+                    label: $options.acceptLabel,
+                    icon: $options.acceptIcon,
+                    class: normalizeClass($options.acceptClass),
+                    onClick: _cache[1] || (_cache[1] = $event => ($options.accept())),
+                    autofocus: ""
+                  }, null, 8, ["label", "icon", "class"])
+                ], 2)
+              ], 16))
+            : createCommentVNode("", true)
+        ]),
+        _: 1
+      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+    ]),
+    _: 1
+  }))
 }
 
 function styleInject(css, ref) {
@@ -294,7 +318,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "\n.p-confirm-popup {\n    position: absolute;\n    margin-top: 10px;\n    top: 0;\n    left: 0;\n}\n.p-confirm-popup-flipped {\n    margin-top: 0;\n    margin-bottom: 10px;\n}\n\n/* Animation */\n.p-confirm-popup-enter-from {\n    opacity: 0;\n    -webkit-transform: scaleY(0.8);\n            transform: scaleY(0.8);\n}\n.p-confirm-popup-leave-to {\n    opacity: 0;\n}\n.p-confirm-popup-enter-active {\n    -webkit-transition: opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n}\n.p-confirm-popup-leave-active {\n    -webkit-transition: opacity .1s linear;\n    transition: opacity .1s linear;\n}\n.p-confirm-popup:after, .p-confirm-popup:before {\n\tbottom: 100%;\n\tleft: calc(var(--overlayArrowLeft, 0) + 1.25rem);\n\tcontent: \" \";\n\theight: 0;\n\twidth: 0;\n\tposition: absolute;\n\tpointer-events: none;\n}\n.p-confirm-popup:after {\n\tborder-width: 8px;\n\tmargin-left: -8px;\n}\n.p-confirm-popup:before {\n\tborder-width: 10px;\n\tmargin-left: -10px;\n}\n.p-confirm-popup-flipped:after, .p-confirm-popup-flipped:before {\n    bottom: auto;\n    top: 100%;\n}\n.p-confirm-popup.p-confirm-popup-flipped:after {\n    border-bottom-color: transparent;\n}\n.p-confirm-popup.p-confirm-popup-flipped:before {\n    border-bottom-color: transparent\n}\n.p-confirm-popup .p-confirm-popup-content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n";
+var css_248z = "\n.p-confirm-popup {\n    position: absolute;\n    margin-top: 10px;\n    top: 0;\n    left: 0;\n}\n.p-confirm-popup-flipped {\n    margin-top: 0;\n    margin-bottom: 10px;\n}\n\n/* Animation */\n.p-confirm-popup-enter-from {\n    opacity: 0;\n    -webkit-transform: scaleY(0.8);\n            transform: scaleY(0.8);\n}\n.p-confirm-popup-leave-to {\n    opacity: 0;\n}\n.p-confirm-popup-enter-active {\n    -webkit-transition: opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1);\n    transition: transform .12s cubic-bezier(0, 0, 0.2, 1), opacity .12s cubic-bezier(0, 0, 0.2, 1), -webkit-transform .12s cubic-bezier(0, 0, 0.2, 1);\n}\n.p-confirm-popup-leave-active {\n    -webkit-transition: opacity .1s linear;\n    transition: opacity .1s linear;\n}\n.p-confirm-popup:after, .p-confirm-popup:before {\n\tbottom: 100%;\n\tleft: calc(var(--overlayArrowLeft, 0) + 1.25rem);\n\tcontent: \" \";\n\theight: 0;\n\twidth: 0;\n\tposition: absolute;\n\tpointer-events: none;\n}\n.p-confirm-popup:after {\n\tborder-width: 8px;\n\tmargin-left: -8px;\n}\n.p-confirm-popup:before {\n\tborder-width: 10px;\n\tmargin-left: -10px;\n}\n.p-confirm-popup-flipped:after, .p-confirm-popup-flipped:before {\n    bottom: auto;\n    top: 100%;\n}\n.p-confirm-popup.p-confirm-popup-flipped:after {\n    border-bottom-color: transparent;\n}\n.p-confirm-popup.p-confirm-popup-flipped:before {\n    border-bottom-color: transparent\n}\n.p-confirm-popup .p-confirm-popup-content {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-confirm-popup-flex-footer {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n";
 styleInject(css_248z);
 
 script.render = render;

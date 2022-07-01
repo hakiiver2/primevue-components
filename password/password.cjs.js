@@ -3,12 +3,14 @@
 var utils = require('primevue/utils');
 var OverlayEventBus = require('primevue/overlayeventbus');
 var InputText = require('primevue/inputtext');
+var Portal = require('primevue/portal');
 var vue = require('vue');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
 var InputText__default = /*#__PURE__*/_interopDefaultLegacy(InputText);
+var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
 var script = {
     name: 'Password',
@@ -113,7 +115,7 @@ var script = {
             utils.ZIndexUtils.clear(el);
         },
         alignOverlay() {
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 utils.DomHandler.relativePosition(this.overlay, this.$refs.input.$el);
             }
             else {
@@ -212,7 +214,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !utils.DomHandler.isTouchDevice()) {
                         this.overlayVisible = false;
                     }
                 };
@@ -232,7 +234,7 @@ var script = {
             this.unmasked = !this.unmasked;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default["default"].emit('overlay-click', {
+            OverlayEventBus__default['default'].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -280,16 +282,11 @@ var script = {
         },
         promptText() {
             return this.promptLabel || this.$primevue.config.locale.passwordPrompt;
-        },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
         }
     },
     components: {
-        'PInputText': InputText__default["default"]
+        'PInputText': InputText__default['default'],
+        'Portal': Portal__default['default']
     }
 };
 
@@ -298,6 +295,7 @@ const _hoisted_2 = { class: "p-password-info" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PInputText = vue.resolveComponent("PInputText");
+  const _component_Portal = vue.resolveComponent("Portal");
 
   return (vue.openBlock(), vue.createElementBlock("div", {
     class: vue.normalizeClass($options.containerClass),
@@ -321,41 +319,41 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: _cache[0] || (_cache[0] = (...args) => ($options.onMaskToggle && $options.onMaskToggle(...args)))
         }, null, 2))
       : vue.createCommentVNode("", true),
-    (vue.openBlock(), vue.createBlock(vue.Teleport, {
-      to: $options.appendTarget,
-      disabled: $options.appendDisabled
-    }, [
-      vue.createVNode(vue.Transition, {
-        name: "p-connected-overlay",
-        onEnter: $options.onOverlayEnter,
-        onLeave: $options.onOverlayLeave,
-        onAfterLeave: $options.onOverlayAfterLeave
-      }, {
-        default: vue.withCtx(() => [
-          ($data.overlayVisible)
-            ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 0,
-                ref: $options.overlayRef,
-                class: vue.normalizeClass($options.panelStyleClass),
-                onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-              }, [
-                vue.renderSlot(_ctx.$slots, "header"),
-                vue.renderSlot(_ctx.$slots, "content", {}, () => [
-                  vue.createElementVNode("div", _hoisted_1, [
-                    vue.createElementVNode("div", {
-                      class: vue.normalizeClass($options.strengthClass),
-                      style: vue.normalizeStyle({'width': $data.meter ? $data.meter.width : ''})
-                    }, null, 6)
+    vue.createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+      default: vue.withCtx(() => [
+        vue.createVNode(vue.Transition, {
+          name: "p-connected-overlay",
+          onEnter: $options.onOverlayEnter,
+          onLeave: $options.onOverlayLeave,
+          onAfterLeave: $options.onOverlayAfterLeave
+        }, {
+          default: vue.withCtx(() => [
+            ($data.overlayVisible)
+              ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 0,
+                  ref: $options.overlayRef,
+                  class: vue.normalizeClass($options.panelStyleClass),
+                  onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                }, [
+                  vue.renderSlot(_ctx.$slots, "header"),
+                  vue.renderSlot(_ctx.$slots, "content", {}, () => [
+                    vue.createElementVNode("div", _hoisted_1, [
+                      vue.createElementVNode("div", {
+                        class: vue.normalizeClass($options.strengthClass),
+                        style: vue.normalizeStyle({'width': $data.meter ? $data.meter.width : ''})
+                      }, null, 6)
+                    ]),
+                    vue.createElementVNode("div", _hoisted_2, vue.toDisplayString($data.infoText), 1)
                   ]),
-                  vue.createElementVNode("div", _hoisted_2, vue.toDisplayString($data.infoText), 1)
-                ]),
-                vue.renderSlot(_ctx.$slots, "footer")
-              ], 2))
-            : vue.createCommentVNode("", true)
-        ]),
-        _: 3
-      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-    ], 8, ["to", "disabled"]))
+                  vue.renderSlot(_ctx.$slots, "footer")
+                ], 2))
+              : vue.createCommentVNode("", true)
+          ]),
+          _: 3
+        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+      ]),
+      _: 3
+    }, 8, ["appendTo"])
   ], 6))
 }
 

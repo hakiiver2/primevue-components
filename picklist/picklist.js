@@ -513,10 +513,10 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
             }
         },
         components: {
-            'PLButton': Button__default["default"]
+            'PLButton': Button__default['default']
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -732,4 +732,4 @@ this.primevue.picklist = (function (Button, utils, Ripple, vue) {
 
     return script;
 
-})(primevue.button, primevue.utils, primevue.ripple, Vue);
+}(primevue.button, primevue.utils, primevue.ripple, Vue));

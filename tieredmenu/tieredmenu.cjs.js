@@ -2,12 +2,14 @@
 
 var utils = require('primevue/utils');
 var OverlayEventBus = require('primevue/overlayeventbus');
+var Portal = require('primevue/portal');
 var Ripple = require('primevue/ripple');
 var vue = require('vue');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
+var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
 
 var script$1 = {
@@ -222,7 +224,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -474,7 +476,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.visible) {
+                    if (this.visible && !utils.DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -499,7 +501,7 @@ var script = {
             this.container = el;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default["default"].emit('overlay-click', {
+            OverlayEventBus__default['default'].emit('overlay-click', {
                 originalEvent: event,
                 target: this.target
             });
@@ -515,46 +517,51 @@ var script = {
         }
     },
     components: {
-        'TieredMenuSub': script$1
+        'TieredMenuSub': script$1,
+        'Portal': Portal__default['default']
     }
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TieredMenuSub = vue.resolveComponent("TieredMenuSub");
+  const _component_Portal = vue.resolveComponent("Portal");
 
-  return (vue.openBlock(), vue.createBlock(vue.Teleport, {
-    to: $props.appendTo,
+  return (vue.openBlock(), vue.createBlock(_component_Portal, {
+    appendTo: $props.appendTo,
     disabled: !$props.popup
-  }, [
-    vue.createVNode(vue.Transition, {
-      name: "p-connected-overlay",
-      onEnter: $options.onEnter,
-      onLeave: $options.onLeave,
-      onAfterLeave: $options.onAfterLeave
-    }, {
-      default: vue.withCtx(() => [
-        ($props.popup ? $data.visible : true)
-          ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
-              key: 0,
-              ref: $options.containerRef,
-              class: $options.containerClass
-            }, _ctx.$attrs, {
-              onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-            }), [
-              vue.createVNode(_component_TieredMenuSub, {
-                model: $props.model,
-                root: true,
-                popup: $props.popup,
-                onLeafClick: $options.onLeafClick,
-                template: _ctx.$slots.item,
-                exact: $props.exact
-              }, null, 8, ["model", "popup", "onLeafClick", "template", "exact"])
-            ], 16))
-          : vue.createCommentVNode("", true)
-      ]),
-      _: 1
-    }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-  ], 8, ["to", "disabled"]))
+  }, {
+    default: vue.withCtx(() => [
+      vue.createVNode(vue.Transition, {
+        name: "p-connected-overlay",
+        onEnter: $options.onEnter,
+        onLeave: $options.onLeave,
+        onAfterLeave: $options.onAfterLeave
+      }, {
+        default: vue.withCtx(() => [
+          ($props.popup ? $data.visible : true)
+            ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
+                key: 0,
+                ref: $options.containerRef,
+                class: $options.containerClass
+              }, _ctx.$attrs, {
+                onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              }), [
+                vue.createVNode(_component_TieredMenuSub, {
+                  model: $props.model,
+                  root: true,
+                  popup: $props.popup,
+                  onLeafClick: $options.onLeafClick,
+                  template: _ctx.$slots.item,
+                  exact: $props.exact
+                }, null, 8, ["model", "popup", "onLeafClick", "template", "exact"])
+              ], 16))
+            : vue.createCommentVNode("", true)
+        ]),
+        _: 1
+      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+    ]),
+    _: 1
+  }, 8, ["appendTo", "disabled"]))
 }
 
 function styleInject(css, ref) {

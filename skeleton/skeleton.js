@@ -87,4 +87,4 @@ this.primevue.skeleton = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

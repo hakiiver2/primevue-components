@@ -2,7 +2,8 @@ import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Ripple from 'primevue/ripple';
 import Tooltip from 'primevue/tooltip';
-import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, normalizeStyle, Fragment, createBlock, withCtx, withDirectives, createElementVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, createTextVNode, Teleport, createVNode, Transition, mergeProps, renderList, renderSlot } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, normalizeStyle, Fragment, createBlock, withCtx, withDirectives, createElementVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, createTextVNode, createVNode, Transition, mergeProps, renderList, renderSlot } from 'vue';
+import Portal from 'primevue/portal';
 
 var script$1 = {
     name: 'Menuitem',
@@ -290,7 +291,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hide();
                     }
                 };
@@ -335,7 +336,8 @@ var script = {
         }
     },
     components: {
-        'Menuitem': script$1
+        'Menuitem': script$1,
+        'Portal': Portal
     }
 };
 
@@ -350,86 +352,90 @@ const _hoisted_2 = {
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Menuitem = resolveComponent("Menuitem");
+  const _component_Portal = resolveComponent("Portal");
 
-  return (openBlock(), createBlock(Teleport, {
-    to: $props.appendTo,
+  return (openBlock(), createBlock(_component_Portal, {
+    appendTo: $props.appendTo,
     disabled: !$props.popup
-  }, [
-    createVNode(Transition, {
-      name: "p-connected-overlay",
-      onEnter: $options.onEnter,
-      onLeave: $options.onLeave,
-      onAfterLeave: $options.onAfterLeave
-    }, {
-      default: withCtx(() => [
-        ($props.popup ? $data.overlayVisible : true)
-          ? (openBlock(), createElementBlock("div", mergeProps({
-              key: 0,
-              ref: $options.containerRef,
-              class: $options.containerClass
-            }, _ctx.$attrs, {
-              onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-            }), [
-              createElementVNode("ul", _hoisted_1, [
-                (openBlock(true), createElementBlock(Fragment, null, renderList($props.model, (item, i) => {
-                  return (openBlock(), createElementBlock(Fragment, {
-                    key: $options.label(item) + i.toString()
-                  }, [
-                    (item.items && $options.visible(item) && !item.separator)
-                      ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-                          (item.items)
-                            ? (openBlock(), createElementBlock("li", _hoisted_2, [
-                                renderSlot(_ctx.$slots, "item", { item: item }, () => [
-                                  createTextVNode(toDisplayString($options.label(item)), 1)
-                                ])
-                              ]))
-                            : createCommentVNode("", true),
-                          (openBlock(true), createElementBlock(Fragment, null, renderList(item.items, (child, j) => {
-                            return (openBlock(), createElementBlock(Fragment, {
-                              key: child.label + i + j
-                            }, [
-                              ($options.visible(child) && !child.separator)
-                                ? (openBlock(), createBlock(_component_Menuitem, {
-                                    key: 0,
-                                    item: child,
-                                    onClick: $options.itemClick,
-                                    template: _ctx.$slots.item,
-                                    exact: $props.exact
-                                  }, null, 8, ["item", "onClick", "template", "exact"]))
-                                : ($options.visible(child) && child.separator)
-                                  ? (openBlock(), createElementBlock("li", {
-                                      class: normalizeClass(['p-menu-separator', child.class]),
-                                      style: normalizeStyle(child.style),
-                                      key: 'separator' + i + j,
-                                      role: "separator"
-                                    }, null, 6))
-                                  : createCommentVNode("", true)
-                            ], 64))
-                          }), 128))
-                        ], 64))
-                      : ($options.visible(item) && item.separator)
-                        ? (openBlock(), createElementBlock("li", {
-                            class: normalizeClass(['p-menu-separator', item.class]),
-                            style: normalizeStyle(item.style),
-                            key: 'separator' + i.toString(),
-                            role: "separator"
-                          }, null, 6))
-                        : (openBlock(), createBlock(_component_Menuitem, {
-                            key: $options.label(item) + i.toString(),
-                            item: item,
-                            onClick: $options.itemClick,
-                            template: _ctx.$slots.item,
-                            exact: $props.exact
-                          }, null, 8, ["item", "onClick", "template", "exact"]))
-                  ], 64))
-                }), 128))
-              ])
-            ], 16))
-          : createCommentVNode("", true)
-      ]),
-      _: 3
-    }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-  ], 8, ["to", "disabled"]))
+  }, {
+    default: withCtx(() => [
+      createVNode(Transition, {
+        name: "p-connected-overlay",
+        onEnter: $options.onEnter,
+        onLeave: $options.onLeave,
+        onAfterLeave: $options.onAfterLeave
+      }, {
+        default: withCtx(() => [
+          ($props.popup ? $data.overlayVisible : true)
+            ? (openBlock(), createElementBlock("div", mergeProps({
+                key: 0,
+                ref: $options.containerRef,
+                class: $options.containerClass
+              }, _ctx.$attrs, {
+                onClick: _cache[0] || (_cache[0] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+              }), [
+                createElementVNode("ul", _hoisted_1, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList($props.model, (item, i) => {
+                    return (openBlock(), createElementBlock(Fragment, {
+                      key: $options.label(item) + i.toString()
+                    }, [
+                      (item.items && $options.visible(item) && !item.separator)
+                        ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+                            (item.items)
+                              ? (openBlock(), createElementBlock("li", _hoisted_2, [
+                                  renderSlot(_ctx.$slots, "item", { item: item }, () => [
+                                    createTextVNode(toDisplayString($options.label(item)), 1)
+                                  ])
+                                ]))
+                              : createCommentVNode("", true),
+                            (openBlock(true), createElementBlock(Fragment, null, renderList(item.items, (child, j) => {
+                              return (openBlock(), createElementBlock(Fragment, {
+                                key: child.label + i + j
+                              }, [
+                                ($options.visible(child) && !child.separator)
+                                  ? (openBlock(), createBlock(_component_Menuitem, {
+                                      key: 0,
+                                      item: child,
+                                      onClick: $options.itemClick,
+                                      template: _ctx.$slots.item,
+                                      exact: $props.exact
+                                    }, null, 8, ["item", "onClick", "template", "exact"]))
+                                  : ($options.visible(child) && child.separator)
+                                    ? (openBlock(), createElementBlock("li", {
+                                        class: normalizeClass(['p-menu-separator', child.class]),
+                                        style: normalizeStyle(child.style),
+                                        key: 'separator' + i + j,
+                                        role: "separator"
+                                      }, null, 6))
+                                    : createCommentVNode("", true)
+                              ], 64))
+                            }), 128))
+                          ], 64))
+                        : ($options.visible(item) && item.separator)
+                          ? (openBlock(), createElementBlock("li", {
+                              class: normalizeClass(['p-menu-separator', item.class]),
+                              style: normalizeStyle(item.style),
+                              key: 'separator' + i.toString(),
+                              role: "separator"
+                            }, null, 6))
+                          : (openBlock(), createBlock(_component_Menuitem, {
+                              key: $options.label(item) + i.toString(),
+                              item: item,
+                              onClick: $options.itemClick,
+                              template: _ctx.$slots.item,
+                              exact: $props.exact
+                            }, null, 8, ["item", "onClick", "template", "exact"]))
+                    ], 64))
+                  }), 128))
+                ])
+              ], 16))
+            : createCommentVNode("", true)
+        ]),
+        _: 3
+      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+    ]),
+    _: 3
+  }, 8, ["appendTo", "disabled"]))
 }
 
 function styleInject(css, ref) {

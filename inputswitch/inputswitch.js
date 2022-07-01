@@ -124,4 +124,4 @@ this.primevue.inputswitch = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

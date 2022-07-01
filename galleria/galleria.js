@@ -1,10 +1,11 @@
 this.primevue = this.primevue || {};
-this.primevue.galleria = (function (utils, Ripple, vue) {
+this.primevue.galleria = (function (utils, Ripple, vue, Portal) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script$4 = {
         name: 'GalleriaItem',
@@ -132,7 +133,7 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -618,7 +619,7 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -839,7 +840,7 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             'GalleriaItemSlot': script$2
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -1091,49 +1092,51 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
             }
         },
         components: {
-            'GalleriaContent': script$1
+            'GalleriaContent': script$1,
+            'Portal': Portal__default['default']
         }
     };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_GalleriaContent = vue.resolveComponent("GalleriaContent");
+      const _component_Portal = vue.resolveComponent("Portal");
 
       return ($props.fullScreen)
-        ? (vue.openBlock(), vue.createBlock(vue.Teleport, {
-            key: 0,
-            to: "body"
-          }, [
-            ($data.containerVisible)
-              ? (vue.openBlock(), vue.createElementBlock("div", {
-                  key: 0,
-                  ref: $options.maskRef,
-                  class: vue.normalizeClass($options.maskContentClass)
-                }, [
-                  vue.createVNode(vue.Transition, {
-                    name: "p-galleria",
-                    onBeforeEnter: $options.onBeforeEnter,
-                    onEnter: $options.onEnter,
-                    onBeforeLeave: $options.onBeforeLeave,
-                    onAfterLeave: $options.onAfterLeave,
-                    appear: ""
-                  }, {
-                    default: vue.withCtx(() => [
-                      ($props.visible)
-                        ? (vue.openBlock(), vue.createBlock(_component_GalleriaContent, vue.mergeProps({
-                            key: 0,
-                            ref: $options.containerRef
-                          }, _ctx.$props, {
-                            onMaskHide: $options.maskHide,
-                            templates: _ctx.$slots,
-                            onActiveitemChange: $options.onActiveItemChange
-                          }), null, 16, ["onMaskHide", "templates", "onActiveitemChange"]))
-                        : vue.createCommentVNode("", true)
-                    ]),
-                    _: 1
-                  }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onAfterLeave"])
-                ], 2))
-              : vue.createCommentVNode("", true)
-          ]))
+        ? (vue.openBlock(), vue.createBlock(_component_Portal, { key: 0 }, {
+            default: vue.withCtx(() => [
+              ($data.containerVisible)
+                ? (vue.openBlock(), vue.createElementBlock("div", {
+                    key: 0,
+                    ref: $options.maskRef,
+                    class: vue.normalizeClass($options.maskContentClass)
+                  }, [
+                    vue.createVNode(vue.Transition, {
+                      name: "p-galleria",
+                      onBeforeEnter: $options.onBeforeEnter,
+                      onEnter: $options.onEnter,
+                      onBeforeLeave: $options.onBeforeLeave,
+                      onAfterLeave: $options.onAfterLeave,
+                      appear: ""
+                    }, {
+                      default: vue.withCtx(() => [
+                        ($props.visible)
+                          ? (vue.openBlock(), vue.createBlock(_component_GalleriaContent, vue.mergeProps({
+                              key: 0,
+                              ref: $options.containerRef
+                            }, _ctx.$props, {
+                              onMaskHide: $options.maskHide,
+                              templates: _ctx.$slots,
+                              onActiveitemChange: $options.onActiveItemChange
+                            }), null, 16, ["onMaskHide", "templates", "onActiveitemChange"]))
+                          : vue.createCommentVNode("", true)
+                      ]),
+                      _: 1
+                    }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onAfterLeave"])
+                  ], 2))
+                : vue.createCommentVNode("", true)
+            ]),
+            _: 1
+          }))
         : (vue.openBlock(), vue.createBlock(_component_GalleriaContent, vue.mergeProps({ key: 1 }, _ctx.$props, {
             templates: _ctx.$slots,
             onActiveitemChange: $options.onActiveItemChange
@@ -1174,4 +1177,4 @@ this.primevue.galleria = (function (utils, Ripple, vue) {
 
     return script;
 
-})(primevue.utils, primevue.ripple, Vue);
+}(primevue.utils, primevue.ripple, Vue, primevue.portal));

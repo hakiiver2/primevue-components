@@ -71,4 +71,4 @@ this.primevue.deferredcontent = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

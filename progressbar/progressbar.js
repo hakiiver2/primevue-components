@@ -120,4 +120,4 @@ this.primevue.progressbar = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

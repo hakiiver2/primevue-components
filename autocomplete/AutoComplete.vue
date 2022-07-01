@@ -14,9 +14,9 @@
                     role="searchbox" aria-autocomplete="list" :aria-controls="listId">
             </li>
         </ul>
-        <i class="p-autocomplete-loader pi pi-spinner pi-spin" v-if="searching"></i>
+        <i :class="loadingIconClass" v-if="searching"></i>
         <Button ref="dropdownButton" type="button" icon="pi pi-chevron-down" class="p-autocomplete-dropdown" :disabled="$attrs.disabled" @click="onDropdownClick" v-if="dropdown"/>
-        <Teleport :to="appendTarget" :disabled="appendDisabled">
+        <Portal :appendTo="appendTo">
             <transition name="p-connected-overlay" @enter="onOverlayEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
                 <div :ref="overlayRef" :class="panelStyleClass" :style="{'max-height': virtualScrollerDisabled ? scrollHeight : ''}" v-if="overlayVisible" @click="onOverlayClick">
                     <slot name="header" :value="modelValue" :suggestions="suggestions"></slot>
@@ -47,7 +47,7 @@
                     <slot name="footer" :value="modelValue" :suggestions="suggestions"></slot>
                 </div>
             </transition>
-        </Teleport>
+        </Portal>
     </span>
 </template>
 
@@ -57,6 +57,7 @@ import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
 import Ripple from 'primevue/ripple';
 import VirtualScroller from 'primevue/virtualscroller';
+import Portal from 'primevue/portal';
 
 export default {
     name: 'AutoComplete',
@@ -122,6 +123,10 @@ export default {
         virtualScrollerOptions: {
             type: Object,
             default: null
+        },
+        loadingIcon: {
+            type: String,
+            default: 'pi pi-spinner'
         }
     },
     timeout: null,
@@ -208,7 +213,7 @@ export default {
         },
         alignOverlay() {
             let target = this.multiple ? this.$refs.multiContainer : this.$refs.input;
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 DomHandler.relativePosition(this.overlay, target);
             }
             else {
@@ -245,7 +250,7 @@ export default {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.hideOverlay();
                     }
                 };
@@ -597,6 +602,9 @@ export default {
                 'p-ripple-disabled': this.$primevue.config.ripple === false
             }];
         },
+        loadingIconClass() {
+            return ['p-autocomplete-loader pi-spin', this.loadingIcon];
+        },
         inputValue() {
             if (this.modelValue) {
                 if (this.field && typeof this.modelValue === 'object') {
@@ -613,19 +621,14 @@ export default {
         listId() {
             return UniqueComponentId() + '_list';
         },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
-        },
         virtualScrollerDisabled() {
             return !this.virtualScrollerOptions;
         }
     },
     components: {
         'Button': Button,
-        'VirtualScroller': VirtualScroller
+        'VirtualScroller': VirtualScroller,
+        'Portal': Portal
     },
     directives: {
         'ripple': Ripple

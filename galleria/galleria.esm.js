@@ -1,6 +1,7 @@
 import { DomHandler, UniqueComponentId, ZIndexUtils } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createElementBlock, createElementVNode, withDirectives, normalizeClass, createCommentVNode, createBlock, resolveDynamicComponent, Fragment, renderList, withKeys, normalizeStyle, resolveComponent, createVNode, Teleport, Transition, withCtx, mergeProps } from 'vue';
+import { resolveDirective, openBlock, createElementBlock, createElementVNode, withDirectives, normalizeClass, createCommentVNode, createBlock, resolveDynamicComponent, Fragment, renderList, withKeys, normalizeStyle, resolveComponent, createVNode, withCtx, Transition, mergeProps } from 'vue';
+import Portal from 'primevue/portal';
 
 var script$4 = {
     name: 'GalleriaItem',
@@ -1087,49 +1088,51 @@ var script = {
         }
     },
     components: {
-        'GalleriaContent': script$1
+        'GalleriaContent': script$1,
+        'Portal': Portal
     }
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_GalleriaContent = resolveComponent("GalleriaContent");
+  const _component_Portal = resolveComponent("Portal");
 
   return ($props.fullScreen)
-    ? (openBlock(), createBlock(Teleport, {
-        key: 0,
-        to: "body"
-      }, [
-        ($data.containerVisible)
-          ? (openBlock(), createElementBlock("div", {
-              key: 0,
-              ref: $options.maskRef,
-              class: normalizeClass($options.maskContentClass)
-            }, [
-              createVNode(Transition, {
-                name: "p-galleria",
-                onBeforeEnter: $options.onBeforeEnter,
-                onEnter: $options.onEnter,
-                onBeforeLeave: $options.onBeforeLeave,
-                onAfterLeave: $options.onAfterLeave,
-                appear: ""
-              }, {
-                default: withCtx(() => [
-                  ($props.visible)
-                    ? (openBlock(), createBlock(_component_GalleriaContent, mergeProps({
-                        key: 0,
-                        ref: $options.containerRef
-                      }, _ctx.$props, {
-                        onMaskHide: $options.maskHide,
-                        templates: _ctx.$slots,
-                        onActiveitemChange: $options.onActiveItemChange
-                      }), null, 16, ["onMaskHide", "templates", "onActiveitemChange"]))
-                    : createCommentVNode("", true)
-                ]),
-                _: 1
-              }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onAfterLeave"])
-            ], 2))
-          : createCommentVNode("", true)
-      ]))
+    ? (openBlock(), createBlock(_component_Portal, { key: 0 }, {
+        default: withCtx(() => [
+          ($data.containerVisible)
+            ? (openBlock(), createElementBlock("div", {
+                key: 0,
+                ref: $options.maskRef,
+                class: normalizeClass($options.maskContentClass)
+              }, [
+                createVNode(Transition, {
+                  name: "p-galleria",
+                  onBeforeEnter: $options.onBeforeEnter,
+                  onEnter: $options.onEnter,
+                  onBeforeLeave: $options.onBeforeLeave,
+                  onAfterLeave: $options.onAfterLeave,
+                  appear: ""
+                }, {
+                  default: withCtx(() => [
+                    ($props.visible)
+                      ? (openBlock(), createBlock(_component_GalleriaContent, mergeProps({
+                          key: 0,
+                          ref: $options.containerRef
+                        }, _ctx.$props, {
+                          onMaskHide: $options.maskHide,
+                          templates: _ctx.$slots,
+                          onActiveitemChange: $options.onActiveItemChange
+                        }), null, 16, ["onMaskHide", "templates", "onActiveitemChange"]))
+                      : createCommentVNode("", true)
+                  ]),
+                  _: 1
+                }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onAfterLeave"])
+              ], 2))
+            : createCommentVNode("", true)
+        ]),
+        _: 1
+      }))
     : (openBlock(), createBlock(_component_GalleriaContent, mergeProps({ key: 1 }, _ctx.$props, {
         templates: _ctx.$slots,
         onActiveitemChange: $options.onActiveItemChange

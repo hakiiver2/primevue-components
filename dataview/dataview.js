@@ -199,7 +199,7 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
             }
         },
         components: {
-            'DVPaginator': Paginator__default["default"]
+            'DVPaginator': Paginator__default['default']
         }
     };
 
@@ -341,4 +341,4 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
 
     return script;
 
-})(primevue.utils, primevue.paginator, Vue);
+}(primevue.utils, primevue.paginator, Vue));

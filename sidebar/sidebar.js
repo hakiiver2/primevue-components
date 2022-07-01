@@ -1,10 +1,11 @@
 this.primevue = this.primevue || {};
-this.primevue.sidebar = (function (utils, Ripple, vue) {
+this.primevue.sidebar = (function (utils, Ripple, Portal, vue) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script = {
         name: 'Sidebar',
@@ -147,7 +148,10 @@ this.primevue.sidebar = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
+        },
+        components: {
+            'Portal': Portal__default['default']
         }
     };
 
@@ -165,52 +169,56 @@ this.primevue.sidebar = (function (utils, Ripple, vue) {
     const _hoisted_7 = { class: "p-sidebar-content" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
+      const _component_Portal = vue.resolveComponent("Portal");
       const _directive_ripple = vue.resolveDirective("ripple");
 
-      return (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
-        vue.createVNode(vue.Transition, {
-          name: "p-sidebar",
-          onEnter: $options.onEnter,
-          onLeave: $options.onLeave,
-          onAfterLeave: $options.onAfterLeave,
-          appear: ""
-        }, {
-          default: vue.withCtx(() => [
-            ($props.visible)
-              ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
-                  key: 0,
-                  class: $options.containerClass,
-                  ref: $options.containerRef,
-                  role: "complementary",
-                  "aria-modal": $props.modal
-                }, _ctx.$attrs), [
-                  vue.createElementVNode("div", _hoisted_2, [
-                    (_ctx.$slots.header)
-                      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
-                          vue.renderSlot(_ctx.$slots, "header")
-                        ]))
-                      : vue.createCommentVNode("", true),
-                    ($props.showCloseIcon)
-                      ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
-                          key: 1,
-                          class: "p-sidebar-close p-sidebar-icon p-link",
-                          onClick: _cache[0] || (_cache[0] = (...args) => ($options.hide && $options.hide(...args))),
-                          "aria-label": $props.ariaCloseLabel,
-                          type: "button"
-                        }, _hoisted_6, 8, _hoisted_4)), [
-                          [_directive_ripple]
-                        ])
-                      : vue.createCommentVNode("", true)
-                  ]),
-                  vue.createElementVNode("div", _hoisted_7, [
-                    vue.renderSlot(_ctx.$slots, "default")
-                  ])
-                ], 16, _hoisted_1))
-              : vue.createCommentVNode("", true)
-          ]),
-          _: 3
-        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-      ]))
+      return (vue.openBlock(), vue.createBlock(_component_Portal, null, {
+        default: vue.withCtx(() => [
+          vue.createVNode(vue.Transition, {
+            name: "p-sidebar",
+            onEnter: $options.onEnter,
+            onLeave: $options.onLeave,
+            onAfterLeave: $options.onAfterLeave,
+            appear: ""
+          }, {
+            default: vue.withCtx(() => [
+              ($props.visible)
+                ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
+                    key: 0,
+                    class: $options.containerClass,
+                    ref: $options.containerRef,
+                    role: "complementary",
+                    "aria-modal": $props.modal
+                  }, _ctx.$attrs), [
+                    vue.createElementVNode("div", _hoisted_2, [
+                      (_ctx.$slots.header)
+                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
+                            vue.renderSlot(_ctx.$slots, "header")
+                          ]))
+                        : vue.createCommentVNode("", true),
+                      ($props.showCloseIcon)
+                        ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
+                            key: 1,
+                            class: "p-sidebar-close p-sidebar-icon p-link",
+                            onClick: _cache[0] || (_cache[0] = (...args) => ($options.hide && $options.hide(...args))),
+                            "aria-label": $props.ariaCloseLabel,
+                            type: "button"
+                          }, _hoisted_6, 8, _hoisted_4)), [
+                            [_directive_ripple]
+                          ])
+                        : vue.createCommentVNode("", true)
+                    ]),
+                    vue.createElementVNode("div", _hoisted_7, [
+                      vue.renderSlot(_ctx.$slots, "default")
+                    ])
+                  ], 16, _hoisted_1))
+                : vue.createCommentVNode("", true)
+            ]),
+            _: 3
+          }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+        ]),
+        _: 3
+      }))
     }
 
     function styleInject(css, ref) {
@@ -247,4 +255,4 @@ this.primevue.sidebar = (function (utils, Ripple, vue) {
 
     return script;
 
-})(primevue.utils, primevue.ripple, Vue);
+}(primevue.utils, primevue.ripple, primevue.portal, Vue));

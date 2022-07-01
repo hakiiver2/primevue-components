@@ -82,7 +82,7 @@ this.primevue.tabmenu = (function (utils, Ripple, vue) {
             },
             getRouteItemClass(item, isActive, isExactActive) {
                 return ['p-tabmenuitem', item.class, {
-                     'p-highlight': this.exact ? isExactActive : isActive,
+                    'p-highlight': this.exact ? isExactActive : isActive,
                     'p-disabled': this.disabled(item)
                 }];
             },
@@ -117,7 +117,7 @@ this.primevue.tabmenu = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -260,4 +260,4 @@ this.primevue.tabmenu = (function (utils, Ripple, vue) {
 
     return script;
 
-})(primevue.utils, primevue.ripple, Vue);
+}(primevue.utils, primevue.ripple, Vue));

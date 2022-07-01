@@ -2,6 +2,7 @@ import { openBlock, createElementBlock, mergeProps } from 'vue';
 
 var script = {
     name: 'InputText',
+    inheritAttrs: false,
     emits: ['update:modelValue'],
     props: {
         modelValue: null

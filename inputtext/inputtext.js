@@ -4,6 +4,7 @@ this.primevue.inputtext = (function (vue) {
 
     var script = {
         name: 'InputText',
+        inheritAttrs: false,
         emits: ['update:modelValue'],
         props: {
             modelValue: null
@@ -34,4 +35,4 @@ this.primevue.inputtext = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

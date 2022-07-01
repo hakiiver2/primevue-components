@@ -15,7 +15,7 @@
                 <span :class="dropdownIconClass"></span>
             </slot>
         </div>
-        <Teleport :to="appendTarget" :disabled="appendDisabled">
+        <Portal :appendTo="appendTo">
             <transition name="p-connected-overlay" @enter="onOverlayEnter" @after-enter="onOverlayAfterEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
                 <div :ref="overlayRef" :class="panelStyleClass" v-if="overlayVisible" @click="onOverlayClick">
                     <slot name="header" :value="modelValue" :options="visibleOptions"></slot>
@@ -31,7 +31,7 @@
                                 <ul :ref="contentRef" :class="['p-dropdown-items', styleClass]" :style="contentStyle" role="listbox">
                                     <template v-if="!optionGroupLabel">
                                         <li v-for="(option, i) of items" :class="['p-dropdown-item', {'p-highlight': isSelected(option), 'p-disabled': isOptionDisabled(option)}]" v-ripple
-                                            :key="getOptionRenderKey(option)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
+                                            :key="getOptionRenderKey(option, i)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
                                             <slot name="option" :option="option" :index="getOptionIndex(i, getItemOptions)">{{getOptionLabel(option)}}</slot>
                                         </li>
                                     </template>
@@ -41,7 +41,7 @@
                                                 <slot name="optiongroup" :option="optionGroup" :index="getOptionIndex(i, getItemOptions)">{{getOptionGroupLabel(optionGroup)}}</slot>
                                             </li>
                                             <li v-for="(option, i) of getOptionGroupChildren(optionGroup)" :class="['p-dropdown-item', {'p-highlight': isSelected(option), 'p-disabled': isOptionDisabled(option)}]" v-ripple
-                                                :key="getOptionRenderKey(option)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
+                                                :key="getOptionRenderKey(option, i)" @click="onOptionSelect($event, option)" role="option" :aria-label="getOptionLabel(option)" :aria-selected="isSelected(option)">
                                                 <slot name="option" :option="option" :index="getOptionIndex(i, getItemOptions)">{{getOptionLabel(option)}}</slot>
                                             </li>
                                         </template>
@@ -62,7 +62,7 @@
                     <slot name="footer" :value="modelValue" :options="visibleOptions"></slot>
                 </div>
             </transition>
-        </Teleport>
+        </Portal>
     </div>
 </template>
 
@@ -72,6 +72,7 @@ import OverlayEventBus from 'primevue/overlayeventbus';
 import {FilterService} from 'primevue/api';
 import Ripple from 'primevue/ripple';
 import VirtualScroller from 'primevue/virtualscroller';
+import Portal from 'primevue/portal';
 
 export default {
     name: 'Dropdown',
@@ -193,8 +194,8 @@ export default {
         getOptionValue(option) {
             return this.optionValue ? ObjectUtils.resolveFieldData(option, this.optionValue) : option;
         },
-        getOptionRenderKey(option) {
-            return this.dataKey ? ObjectUtils.resolveFieldData(option, this.dataKey) : this.getOptionLabel(option);
+        getOptionRenderKey(option, index) {
+            return this.dataKey ? ObjectUtils.resolveFieldData(option, this.dataKey) : this.getOptionLabel(option) + '_' + index.toString();
         },
         isOptionDisabled(option) {
             return this.optionDisabled ? ObjectUtils.resolveFieldData(option, this.optionDisabled) : false;
@@ -241,9 +242,11 @@ export default {
         isSelected(option) {
             return ObjectUtils.equals(this.modelValue, this.getOptionValue(option), this.equalityKey);
         },
-        show() {
+        show(isFocus) {
             this.$emit('before-show');
             this.overlayVisible = true;
+
+            isFocus && this.$refs.focusInput.focus();
         },
         hide() {
             this.$emit('before-hide');
@@ -475,7 +478,7 @@ export default {
             ZIndexUtils.clear(el);
         },
         alignOverlay() {
-            if (this.appendDisabled) {
+            if (this.appendTo === 'self') {
                 DomHandler.relativePosition(this.overlay, this.$el);
             }
             else {
@@ -727,14 +730,8 @@ export default {
         emptyMessageText() {
             return this.emptyMessage || this.$primevue.config.locale.emptyMessage;
         },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
         virtualScrollerDisabled() {
             return !this.virtualScrollerOptions;
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
         },
         dropdownIconClass() {
             return ['p-dropdown-trigger-icon', this.loading ? this.loadingIcon : 'pi pi-chevron-down'];
@@ -744,7 +741,8 @@ export default {
         'ripple': Ripple
     },
     components: {
-        'VirtualScroller': VirtualScroller
+        'VirtualScroller': VirtualScroller,
+        'Portal': Portal
     }
 }
 </script>

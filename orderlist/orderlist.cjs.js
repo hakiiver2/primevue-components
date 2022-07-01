@@ -340,10 +340,10 @@ var script = {
         }
     },
     components: {
-        'OLButton': Button__default["default"]
+        'OLButton': Button__default['default']
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 

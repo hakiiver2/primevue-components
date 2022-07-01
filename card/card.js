@@ -90,4 +90,4 @@ this.primevue.card = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

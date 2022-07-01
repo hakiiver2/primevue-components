@@ -286,10 +286,10 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     },
     components: {
-        'VirtualScroller': VirtualScroller__default["default"]
+        'VirtualScroller': VirtualScroller__default['default']
     }
 };
 

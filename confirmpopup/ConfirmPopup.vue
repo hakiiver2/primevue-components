@@ -1,5 +1,5 @@
 <template>
-    <Teleport to="body">
+    <Portal>
         <transition name="p-confirm-popup" @enter="onEnter" @leave="onLeave" @after-leave="onAfterLeave">
             <div :class="containerClass" v-if="visible" :ref="containerRef" v-bind="$attrs" @click="onOverlayClick">
                 <template v-if="!$slots.message">
@@ -9,13 +9,14 @@
                     </div>
                 </template>
                 <component v-else :is="$slots.message" :message="confirmation"></component>
-                <div class="p-confirm-popup-footer">
-                    <CPButton :label="rejectLabel" :icon="rejectIcon" :class="rejectClass" @click="reject()"/>
+                <div class="p-confirm-popup-footer" :class="flexFooterClass">
+                    <CPButton :label="rejectLabel" :icon="rejectIcon" :class="rejectClass" @click="reject()" v-if="showReject"/>
+                    <div v-if="isFlexFooter" style="flex: 1" />
                     <CPButton :label="acceptLabel" :icon="acceptIcon" :class="acceptClass" @click="accept()" autofocus />
                 </div>
             </div>
         </transition>
-    </Teleport>
+    </Portal>
 </template>
 
 <script>
@@ -23,12 +24,17 @@ import ConfirmationEventBus from 'primevue/confirmationeventbus';
 import {ConnectedOverlayScrollHandler,DomHandler,ZIndexUtils} from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Button from 'primevue/button';
+import Portal from 'primevue/portal';
 
 export default {
     name: 'ConfirmPopup',
     inheritAttrs: false,
     props: {
-        group: String
+        group: String,
+        showReject: {
+            type: Boolean,
+            default: true
+        }
     },
     data() {
         return {
@@ -164,7 +170,7 @@ export default {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.visible) {
+                    if (this.visible && !DomHandler.isTouchDevice()) {
                         this.visible = false;
                     }
                 };
@@ -203,6 +209,9 @@ export default {
         iconClass() {
             return ['p-confirm-popup-icon', this.confirmation ? this.confirmation.icon : null];
         },
+        flexFooterClass() {
+            return ['p-confirm-popup-flex-footer', this.confirmation ? this.confirmation.isFlexFooter : null];
+        },
         acceptLabel() {
             return this.confirmation ? (this.confirmation.acceptLabel || this.$primevue.config.locale.accept) : null;
         },
@@ -223,7 +232,8 @@ export default {
         }
     },
     components: {
-        'CPButton': Button
+        'CPButton': Button,
+        'Portal': Portal
     }
 }
 </script>
@@ -295,5 +305,8 @@ export default {
 .p-confirm-popup .p-confirm-popup-content {
     display: flex;
     align-items: center;
+}
+.p-confirm-popup-flex-footer {
+    display: flex;
 }
 </style>

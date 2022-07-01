@@ -84,4 +84,4 @@ this.primevue.divider = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

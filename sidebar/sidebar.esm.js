@@ -1,6 +1,7 @@
 import { ZIndexUtils, DomHandler } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveDirective, openBlock, createBlock, Teleport, createVNode, Transition, withCtx, createElementBlock, mergeProps, createElementVNode, renderSlot, createCommentVNode, withDirectives } from 'vue';
+import Portal from 'primevue/portal';
+import { resolveComponent, resolveDirective, openBlock, createBlock, withCtx, createVNode, Transition, createElementBlock, mergeProps, createElementVNode, renderSlot, createCommentVNode, withDirectives } from 'vue';
 
 var script = {
     name: 'Sidebar',
@@ -144,6 +145,9 @@ var script = {
     },
     directives: {
         'ripple': Ripple
+    },
+    components: {
+        'Portal': Portal
     }
 };
 
@@ -161,52 +165,56 @@ const _hoisted_6 = [
 const _hoisted_7 = { class: "p-sidebar-content" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_Portal = resolveComponent("Portal");
   const _directive_ripple = resolveDirective("ripple");
 
-  return (openBlock(), createBlock(Teleport, { to: "body" }, [
-    createVNode(Transition, {
-      name: "p-sidebar",
-      onEnter: $options.onEnter,
-      onLeave: $options.onLeave,
-      onAfterLeave: $options.onAfterLeave,
-      appear: ""
-    }, {
-      default: withCtx(() => [
-        ($props.visible)
-          ? (openBlock(), createElementBlock("div", mergeProps({
-              key: 0,
-              class: $options.containerClass,
-              ref: $options.containerRef,
-              role: "complementary",
-              "aria-modal": $props.modal
-            }, _ctx.$attrs), [
-              createElementVNode("div", _hoisted_2, [
-                (_ctx.$slots.header)
-                  ? (openBlock(), createElementBlock("div", _hoisted_3, [
-                      renderSlot(_ctx.$slots, "header")
-                    ]))
-                  : createCommentVNode("", true),
-                ($props.showCloseIcon)
-                  ? withDirectives((openBlock(), createElementBlock("button", {
-                      key: 1,
-                      class: "p-sidebar-close p-sidebar-icon p-link",
-                      onClick: _cache[0] || (_cache[0] = (...args) => ($options.hide && $options.hide(...args))),
-                      "aria-label": $props.ariaCloseLabel,
-                      type: "button"
-                    }, _hoisted_6, 8, _hoisted_4)), [
-                      [_directive_ripple]
-                    ])
-                  : createCommentVNode("", true)
-              ]),
-              createElementVNode("div", _hoisted_7, [
-                renderSlot(_ctx.$slots, "default")
-              ])
-            ], 16, _hoisted_1))
-          : createCommentVNode("", true)
-      ]),
-      _: 3
-    }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-  ]))
+  return (openBlock(), createBlock(_component_Portal, null, {
+    default: withCtx(() => [
+      createVNode(Transition, {
+        name: "p-sidebar",
+        onEnter: $options.onEnter,
+        onLeave: $options.onLeave,
+        onAfterLeave: $options.onAfterLeave,
+        appear: ""
+      }, {
+        default: withCtx(() => [
+          ($props.visible)
+            ? (openBlock(), createElementBlock("div", mergeProps({
+                key: 0,
+                class: $options.containerClass,
+                ref: $options.containerRef,
+                role: "complementary",
+                "aria-modal": $props.modal
+              }, _ctx.$attrs), [
+                createElementVNode("div", _hoisted_2, [
+                  (_ctx.$slots.header)
+                    ? (openBlock(), createElementBlock("div", _hoisted_3, [
+                        renderSlot(_ctx.$slots, "header")
+                      ]))
+                    : createCommentVNode("", true),
+                  ($props.showCloseIcon)
+                    ? withDirectives((openBlock(), createElementBlock("button", {
+                        key: 1,
+                        class: "p-sidebar-close p-sidebar-icon p-link",
+                        onClick: _cache[0] || (_cache[0] = (...args) => ($options.hide && $options.hide(...args))),
+                        "aria-label": $props.ariaCloseLabel,
+                        type: "button"
+                      }, _hoisted_6, 8, _hoisted_4)), [
+                        [_directive_ripple]
+                      ])
+                    : createCommentVNode("", true)
+                ]),
+                createElementVNode("div", _hoisted_7, [
+                  renderSlot(_ctx.$slots, "default")
+                ])
+              ], 16, _hoisted_1))
+            : createCommentVNode("", true)
+        ]),
+        _: 3
+      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+    ]),
+    _: 3
+  }))
 }
 
 function styleInject(css, ref) {

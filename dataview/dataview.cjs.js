@@ -201,7 +201,7 @@ var script = {
         }
     },
     components: {
-        'DVPaginator': Paginator__default["default"]
+        'DVPaginator': Paginator__default['default']
     }
 };
 

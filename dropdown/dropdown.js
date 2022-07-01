@@ -1,5 +1,5 @@
 this.primevue = this.primevue || {};
-this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, VirtualScroller, vue) {
+this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, VirtualScroller, Portal, vue) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -7,6 +7,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
     var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
     var VirtualScroller__default = /*#__PURE__*/_interopDefaultLegacy(VirtualScroller);
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script = {
         name: 'Dropdown',
@@ -128,8 +129,8 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             getOptionValue(option) {
                 return this.optionValue ? utils.ObjectUtils.resolveFieldData(option, this.optionValue) : option;
             },
-            getOptionRenderKey(option) {
-                return this.dataKey ? utils.ObjectUtils.resolveFieldData(option, this.dataKey) : this.getOptionLabel(option);
+            getOptionRenderKey(option, index) {
+                return this.dataKey ? utils.ObjectUtils.resolveFieldData(option, this.dataKey) : this.getOptionLabel(option) + '_' + index.toString();
             },
             isOptionDisabled(option) {
                 return this.optionDisabled ? utils.ObjectUtils.resolveFieldData(option, this.optionDisabled) : false;
@@ -176,9 +177,11 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             isSelected(option) {
                 return utils.ObjectUtils.equals(this.modelValue, this.getOptionValue(option), this.equalityKey);
             },
-            show() {
+            show(isFocus) {
                 this.$emit('before-show');
                 this.overlayVisible = true;
+
+                isFocus && this.$refs.focusInput.focus();
             },
             hide() {
                 this.$emit('before-hide');
@@ -407,7 +410,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 utils.ZIndexUtils.clear(el);
             },
             alignOverlay() {
-                if (this.appendDisabled) {
+                if (this.appendTo === 'self') {
                     utils.DomHandler.relativePosition(this.overlay, this.$el);
                 }
                 else {
@@ -577,7 +580,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 }
             },
             onOverlayClick(event) {
-                OverlayEventBus__default["default"].emit('overlay-click', {
+                OverlayEventBus__default['default'].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -659,24 +662,19 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             emptyMessageText() {
                 return this.emptyMessage || this.$primevue.config.locale.emptyMessage;
             },
-            appendDisabled() {
-                return this.appendTo === 'self';
-            },
             virtualScrollerDisabled() {
                 return !this.virtualScrollerOptions;
-            },
-            appendTarget() {
-                return this.appendDisabled ? null : this.appendTo;
             },
             dropdownIconClass() {
                 return ['p-dropdown-trigger-icon', this.loading ? this.loadingIcon : 'pi pi-chevron-down'];
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         },
         components: {
-            'VirtualScroller': VirtualScroller__default["default"]
+            'VirtualScroller': VirtualScroller__default['default'],
+            'Portal': Portal__default['default']
         }
     };
 
@@ -705,6 +703,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_VirtualScroller = vue.resolveComponent("VirtualScroller");
+      const _component_Portal = vue.resolveComponent("Portal");
       const _directive_ripple = vue.resolveDirective("ripple");
 
       return (vue.openBlock(), vue.createElementBlock("div", {
@@ -775,154 +774,154 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             }, null, 2)
           ])
         ], 8, _hoisted_4),
-        (vue.openBlock(), vue.createBlock(vue.Teleport, {
-          to: $options.appendTarget,
-          disabled: $options.appendDisabled
-        }, [
-          vue.createVNode(vue.Transition, {
-            name: "p-connected-overlay",
-            onEnter: $options.onOverlayEnter,
-            onAfterEnter: $options.onOverlayAfterEnter,
-            onLeave: $options.onOverlayLeave,
-            onAfterLeave: $options.onOverlayAfterLeave
-          }, {
-            default: vue.withCtx(() => [
-              ($data.overlayVisible)
-                ? (vue.openBlock(), vue.createElementBlock("div", {
-                    key: 0,
-                    ref: $options.overlayRef,
-                    class: vue.normalizeClass($options.panelStyleClass),
-                    onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-                  }, [
-                    vue.renderSlot(_ctx.$slots, "header", {
-                      value: $props.modelValue,
-                      options: $options.visibleOptions
-                    }),
-                    ($props.filter)
-                      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_5, [
-                          vue.createElementVNode("div", _hoisted_6, [
-                            vue.createElementVNode("input", {
-                              type: "text",
-                              ref: "filterInput",
-                              value: $data.filterValue,
-                              onVnodeUpdated: _cache[7] || (_cache[7] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
-                              autoComplete: "off",
-                              class: "p-dropdown-filter p-inputtext p-component",
-                              placeholder: $props.filterPlaceholder,
-                              onKeydown: _cache[8] || (_cache[8] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
-                              onInput: _cache[9] || (_cache[9] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
-                            }, null, 40, _hoisted_7),
-                            _hoisted_8
-                          ])
-                        ]))
-                      : vue.createCommentVNode("", true),
-                    vue.createElementVNode("div", {
-                      ref: $options.itemsWrapperRef,
-                      class: "p-dropdown-items-wrapper",
-                      style: vue.normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''})
+        vue.createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+          default: vue.withCtx(() => [
+            vue.createVNode(vue.Transition, {
+              name: "p-connected-overlay",
+              onEnter: $options.onOverlayEnter,
+              onAfterEnter: $options.onOverlayAfterEnter,
+              onLeave: $options.onOverlayLeave,
+              onAfterLeave: $options.onOverlayAfterLeave
+            }, {
+              default: vue.withCtx(() => [
+                ($data.overlayVisible)
+                  ? (vue.openBlock(), vue.createElementBlock("div", {
+                      key: 0,
+                      ref: $options.overlayRef,
+                      class: vue.normalizeClass($options.panelStyleClass),
+                      onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
                     }, [
-                      vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
-                        items: $options.visibleOptions,
-                        style: {'height': $props.scrollHeight},
-                        disabled: $options.virtualScrollerDisabled
-                      }), vue.createSlots({
-                        content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
-                          vue.createElementVNode("ul", {
-                            ref: contentRef,
-                            class: vue.normalizeClass(['p-dropdown-items', styleClass]),
-                            style: vue.normalizeStyle(contentStyle),
-                            role: "listbox"
-                          }, [
-                            (!$props.optionGroupLabel)
-                              ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (option, i) => {
-                                  return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
-                                    class: vue.normalizeClass(['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
-                                    key: $options.getOptionRenderKey(option),
-                                    onClick: $event => ($options.onOptionSelect($event, option)),
-                                    role: "option",
-                                    "aria-label": $options.getOptionLabel(option),
-                                    "aria-selected": $options.isSelected(option)
-                                  }, [
-                                    vue.renderSlot(_ctx.$slots, "option", {
-                                      option: option,
-                                      index: $options.getOptionIndex(i, getItemOptions)
-                                    }, () => [
-                                      vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
-                                    ])
-                                  ], 10, _hoisted_9)), [
-                                    [_directive_ripple]
-                                  ])
-                                }), 128))
-                              : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
-                                  return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
-                                    key: $options.getOptionGroupRenderKey(optionGroup)
-                                  }, [
-                                    vue.createElementVNode("li", _hoisted_10, [
-                                      vue.renderSlot(_ctx.$slots, "optiongroup", {
-                                        option: optionGroup,
+                      vue.renderSlot(_ctx.$slots, "header", {
+                        value: $props.modelValue,
+                        options: $options.visibleOptions
+                      }),
+                      ($props.filter)
+                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_5, [
+                            vue.createElementVNode("div", _hoisted_6, [
+                              vue.createElementVNode("input", {
+                                type: "text",
+                                ref: "filterInput",
+                                value: $data.filterValue,
+                                onVnodeUpdated: _cache[7] || (_cache[7] = (...args) => ($options.onFilterUpdated && $options.onFilterUpdated(...args))),
+                                autoComplete: "off",
+                                class: "p-dropdown-filter p-inputtext p-component",
+                                placeholder: $props.filterPlaceholder,
+                                onKeydown: _cache[8] || (_cache[8] = (...args) => ($options.onFilterKeyDown && $options.onFilterKeyDown(...args))),
+                                onInput: _cache[9] || (_cache[9] = (...args) => ($options.onFilterChange && $options.onFilterChange(...args)))
+                              }, null, 40, _hoisted_7),
+                              _hoisted_8
+                            ])
+                          ]))
+                        : vue.createCommentVNode("", true),
+                      vue.createElementVNode("div", {
+                        ref: $options.itemsWrapperRef,
+                        class: "p-dropdown-items-wrapper",
+                        style: vue.normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''})
+                      }, [
+                        vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
+                          items: $options.visibleOptions,
+                          style: {'height': $props.scrollHeight},
+                          disabled: $options.virtualScrollerDisabled
+                        }), vue.createSlots({
+                          content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
+                            vue.createElementVNode("ul", {
+                              ref: contentRef,
+                              class: vue.normalizeClass(['p-dropdown-items', styleClass]),
+                              style: vue.normalizeStyle(contentStyle),
+                              role: "listbox"
+                            }, [
+                              (!$props.optionGroupLabel)
+                                ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (option, i) => {
+                                    return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                      class: vue.normalizeClass(['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
+                                      key: $options.getOptionRenderKey(option, i),
+                                      onClick: $event => ($options.onOptionSelect($event, option)),
+                                      role: "option",
+                                      "aria-label": $options.getOptionLabel(option),
+                                      "aria-selected": $options.isSelected(option)
+                                    }, [
+                                      vue.renderSlot(_ctx.$slots, "option", {
+                                        option: option,
                                         index: $options.getOptionIndex(i, getItemOptions)
                                       }, () => [
-                                        vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                                        vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
                                       ])
-                                    ]),
-                                    (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
-                                      return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
-                                        class: vue.normalizeClass(['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
-                                        key: $options.getOptionRenderKey(option),
-                                        onClick: $event => ($options.onOptionSelect($event, option)),
-                                        role: "option",
-                                        "aria-label": $options.getOptionLabel(option),
-                                        "aria-selected": $options.isSelected(option)
-                                      }, [
-                                        vue.renderSlot(_ctx.$slots, "option", {
-                                          option: option,
+                                    ], 10, _hoisted_9)), [
+                                      [_directive_ripple]
+                                    ])
+                                  }), 128))
+                                : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
+                                    return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
+                                      key: $options.getOptionGroupRenderKey(optionGroup)
+                                    }, [
+                                      vue.createElementVNode("li", _hoisted_10, [
+                                        vue.renderSlot(_ctx.$slots, "optiongroup", {
+                                          option: optionGroup,
                                           index: $options.getOptionIndex(i, getItemOptions)
                                         }, () => [
-                                          vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
+                                          vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
                                         ])
-                                      ], 10, _hoisted_11)), [
-                                        [_directive_ripple]
-                                      ])
-                                    }), 128))
-                                  ], 64))
-                                }), 128)),
-                            ($data.filterValue && (!items || (items && items.length === 0)))
-                              ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_12, [
-                                  vue.renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
-                                    vue.createTextVNode(vue.toDisplayString($options.emptyFilterMessageText), 1)
-                                  ])
-                                ]))
-                              : ((!$props.options || ($props.options && $props.options.length === 0)))
-                                ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_13, [
-                                    vue.renderSlot(_ctx.$slots, "empty", {}, () => [
-                                      vue.createTextVNode(vue.toDisplayString($options.emptyMessageText), 1)
+                                      ]),
+                                      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (option, i) => {
+                                        return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                          class: vue.normalizeClass(['p-dropdown-item', {'p-highlight': $options.isSelected(option), 'p-disabled': $options.isOptionDisabled(option)}]),
+                                          key: $options.getOptionRenderKey(option, i),
+                                          onClick: $event => ($options.onOptionSelect($event, option)),
+                                          role: "option",
+                                          "aria-label": $options.getOptionLabel(option),
+                                          "aria-selected": $options.isSelected(option)
+                                        }, [
+                                          vue.renderSlot(_ctx.$slots, "option", {
+                                            option: option,
+                                            index: $options.getOptionIndex(i, getItemOptions)
+                                          }, () => [
+                                            vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
+                                          ])
+                                        ], 10, _hoisted_11)), [
+                                          [_directive_ripple]
+                                        ])
+                                      }), 128))
+                                    ], 64))
+                                  }), 128)),
+                              ($data.filterValue && (!items || (items && items.length === 0)))
+                                ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_12, [
+                                    vue.renderSlot(_ctx.$slots, "emptyfilter", {}, () => [
+                                      vue.createTextVNode(vue.toDisplayString($options.emptyFilterMessageText), 1)
                                     ])
                                   ]))
-                                : vue.createCommentVNode("", true)
-                          ], 6)
-                        ]),
-                        _: 2
-                      }, [
-                        (_ctx.$slots.loader)
-                          ? {
-                              name: "loader",
-                              fn: vue.withCtx(({ options }) => [
-                                vue.renderSlot(_ctx.$slots, "loader", { options: options })
-                              ])
-                            }
-                          : undefined
-                      ]), 1040, ["items", "style", "disabled"])
-                    ], 4),
-                    vue.renderSlot(_ctx.$slots, "footer", {
-                      value: $props.modelValue,
-                      options: $options.visibleOptions
-                    })
-                  ], 2))
-                : vue.createCommentVNode("", true)
-            ]),
-            _: 3
-          }, 8, ["onEnter", "onAfterEnter", "onLeave", "onAfterLeave"])
-        ], 8, ["to", "disabled"]))
+                                : ((!$props.options || ($props.options && $props.options.length === 0)))
+                                  ? (vue.openBlock(), vue.createElementBlock("li", _hoisted_13, [
+                                      vue.renderSlot(_ctx.$slots, "empty", {}, () => [
+                                        vue.createTextVNode(vue.toDisplayString($options.emptyMessageText), 1)
+                                      ])
+                                    ]))
+                                  : vue.createCommentVNode("", true)
+                            ], 6)
+                          ]),
+                          _: 2
+                        }, [
+                          (_ctx.$slots.loader)
+                            ? {
+                                name: "loader",
+                                fn: vue.withCtx(({ options }) => [
+                                  vue.renderSlot(_ctx.$slots, "loader", { options: options })
+                                ])
+                              }
+                            : undefined
+                        ]), 1040, ["items", "style", "disabled"])
+                      ], 4),
+                      vue.renderSlot(_ctx.$slots, "footer", {
+                        value: $props.modelValue,
+                        options: $options.visibleOptions
+                      })
+                    ], 2))
+                  : vue.createCommentVNode("", true)
+              ]),
+              _: 3
+            }, 8, ["onEnter", "onAfterEnter", "onLeave", "onAfterLeave"])
+          ]),
+          _: 3
+        }, 8, ["appendTo"])
       ], 2))
     }
 
@@ -960,4 +959,4 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
 
     return script;
 
-})(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, Vue);
+}(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue));

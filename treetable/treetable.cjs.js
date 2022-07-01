@@ -141,7 +141,7 @@ var script$4 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -1612,7 +1612,7 @@ var script = {
     },
     components: {
         'TTRow': script$3,
-        'TTPaginator': Paginator__default["default"],
+        'TTPaginator': Paginator__default['default'],
         'TTHeaderCell': script$2,
         'TTFooterCell': script$1
     }

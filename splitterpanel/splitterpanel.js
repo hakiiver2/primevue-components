@@ -39,4 +39,4 @@ this.primevue.splitterpanel = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

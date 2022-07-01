@@ -23,18 +23,22 @@ this.primevue.splitter = (function (utils, vue) {
                 default: 'session'
             },
         },
-        dragging: false,
-        mouseMoveListener: null,
-        mouseUpListener: null,
-        size: null,
-        gutterElement: null,
-        startPos: null,
-        prevPanelElement: null,
-        nextPanelElement: null,
-        nextPanelSize: null,
-        prevPanelSize: null,
-        panelSizes: null,
-        prevPanelIndex: null,
+        data() {
+            return {
+                dragging: false,
+                mouseMoveListener: null,
+                mouseUpListener: null,
+                size: null,
+                gutterElement: null,
+                startPos: null,
+                prevPanelElement: null,
+                nextPanelElement: null,
+                nextPanelSize: null,
+                prevPanelSize: null,
+                panelSizes: null,
+                prevPanelIndex: null,
+            }
+        },
         mounted() {
             if (this.panels && this.panels.length) {
                 let initialized = false;
@@ -303,4 +307,4 @@ this.primevue.splitter = (function (utils, vue) {
 
     return script;
 
-})(primevue.utils, Vue);
+}(primevue.utils, Vue));

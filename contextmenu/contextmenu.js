@@ -1,10 +1,11 @@
 this.primevue = this.primevue || {};
-this.primevue.contextmenu = (function (utils, Ripple, vue) {
+this.primevue.contextmenu = (function (utils, Ripple, vue, Portal) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script$1 = {
         name: 'ContextMenuSub',
@@ -133,7 +134,7 @@ this.primevue.contextmenu = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -414,7 +415,7 @@ this.primevue.contextmenu = (function (utils, Ripple, vue) {
             bindResizeListener() {
                 if (!this.resizeListener) {
                     this.resizeListener = () => {
-                        if (this.visible) {
+                        if (this.visible && !utils.DomHandler.isTouchDevice()) {
                             this.hide();
                         }
                     };
@@ -455,40 +456,45 @@ this.primevue.contextmenu = (function (utils, Ripple, vue) {
             }
         },
         components: {
-            'ContextMenuSub': script$1
+            'ContextMenuSub': script$1,
+            'Portal': Portal__default['default']
         }
     };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_ContextMenuSub = vue.resolveComponent("ContextMenuSub");
+      const _component_Portal = vue.resolveComponent("Portal");
 
-      return (vue.openBlock(), vue.createBlock(vue.Teleport, { to: $props.appendTo }, [
-        vue.createVNode(vue.Transition, {
-          name: "p-contextmenu",
-          onEnter: $options.onEnter,
-          onLeave: $options.onLeave,
-          onAfterLeave: $options.onAfterLeave
-        }, {
-          default: vue.withCtx(() => [
-            ($data.visible)
-              ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
-                  key: 0,
-                  ref: $options.containerRef,
-                  class: $options.containerClass
-                }, _ctx.$attrs), [
-                  vue.createVNode(_component_ContextMenuSub, {
-                    model: $props.model,
-                    root: true,
-                    onLeafClick: $options.onLeafClick,
-                    template: _ctx.$slots.item,
-                    exact: $props.exact
-                  }, null, 8, ["model", "onLeafClick", "template", "exact"])
-                ], 16))
-              : vue.createCommentVNode("", true)
-          ]),
-          _: 1
-        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-      ], 8, ["to"]))
+      return (vue.openBlock(), vue.createBlock(_component_Portal, { appendTo: $props.appendTo }, {
+        default: vue.withCtx(() => [
+          vue.createVNode(vue.Transition, {
+            name: "p-contextmenu",
+            onEnter: $options.onEnter,
+            onLeave: $options.onLeave,
+            onAfterLeave: $options.onAfterLeave
+          }, {
+            default: vue.withCtx(() => [
+              ($data.visible)
+                ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
+                    key: 0,
+                    ref: $options.containerRef,
+                    class: $options.containerClass
+                  }, _ctx.$attrs), [
+                    vue.createVNode(_component_ContextMenuSub, {
+                      model: $props.model,
+                      root: true,
+                      onLeafClick: $options.onLeafClick,
+                      template: _ctx.$slots.item,
+                      exact: $props.exact
+                    }, null, 8, ["model", "onLeafClick", "template", "exact"])
+                  ], 16))
+                : vue.createCommentVNode("", true)
+            ]),
+            _: 1
+          }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+        ]),
+        _: 1
+      }, 8, ["appendTo"]))
     }
 
     function styleInject(css, ref) {
@@ -525,4 +531,4 @@ this.primevue.contextmenu = (function (utils, Ripple, vue) {
 
     return script;
 
-})(primevue.utils, primevue.ripple, Vue);
+}(primevue.utils, primevue.ripple, Vue, primevue.portal));

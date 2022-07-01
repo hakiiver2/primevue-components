@@ -25,14 +25,14 @@ this.primevue.terminal = (function (TerminalService, vue) {
             }
         },
         mounted() {
-            TerminalService__default["default"].on('response', this.responseListener);
+            TerminalService__default['default'].on('response', this.responseListener);
             this.$refs.input.focus();
         },
         updated() {
             this.$el.scrollTop = this.$el.scrollHeight;
         },
         beforeUnmount() {
-            TerminalService__default["default"].off('response', this.responseListener);
+            TerminalService__default['default'].off('response', this.responseListener);
         },
         methods: {
             onClick() {
@@ -41,7 +41,7 @@ this.primevue.terminal = (function (TerminalService, vue) {
             onKeydown(event) {
                 if (event.keyCode === 13 && this.commandText) {
                     this.commands.push({text: this.commandText});
-                    TerminalService__default["default"].emit('command', this.commandText);
+                    TerminalService__default['default'].emit('command', this.commandText);
                     this.commandText = '';
                 }
             },
@@ -128,4 +128,4 @@ this.primevue.terminal = (function (TerminalService, vue) {
 
     return script;
 
-})(primevue.terminalservice, Vue);
+}(primevue.terminalservice, Vue));

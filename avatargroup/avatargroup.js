@@ -48,4 +48,4 @@ this.primevue.avatargroup = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

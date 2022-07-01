@@ -655,4 +655,4 @@ this.primevue.virtualscroller = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

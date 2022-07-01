@@ -77,7 +77,7 @@ var script$8 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -109,7 +109,7 @@ var script$7 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -141,7 +141,7 @@ var script$6 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -180,7 +180,7 @@ var script$5 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -218,7 +218,7 @@ var script$4 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple__default['default']
     }
 };
 
@@ -266,7 +266,7 @@ var script$3 = {
         }
     },
     components: {
-        'RPPDropdown': Dropdown__default["default"]
+        'RPPDropdown': Dropdown__default['default']
     }
 };
 
@@ -310,7 +310,7 @@ var script$2 = {
         }
     },
     components: {
-        'JTPDropdown': Dropdown__default["default"]
+        'JTPDropdown': Dropdown__default['default']
     }
 };
 
@@ -345,7 +345,7 @@ var script$1 = {
         }
     },
     components: {
-        'JTPInput': InputNumber__default["default"]
+        'JTPInput': InputNumber__default['default']
     }
 };
 

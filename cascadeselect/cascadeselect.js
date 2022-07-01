@@ -1,11 +1,12 @@
 this.primevue = this.primevue || {};
-this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
+this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Portal) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
     var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
+    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
     var script$1 = {
         name: 'CascadeSelectSub',
@@ -161,7 +162,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple__default['default']
         }
     };
 
@@ -399,7 +400,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
                 utils.ZIndexUtils.clear(el);
             },
             alignOverlay() {
-                if (this.appendDisabled) {
+                if (this.appendTo === 'self') {
                     utils.DomHandler.relativePosition(this.overlay, this.$el);
                 }
                 else {
@@ -442,7 +443,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
             bindResizeListener() {
                 if (!this.resizeListener) {
                     this.resizeListener = () => {
-                        if (this.overlayVisible) {
+                        if (this.overlayVisible && !utils.DomHandler.isTouchDevice()) {
                             this.hide();
                         }
                     };
@@ -484,7 +485,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
                 }
             },
             onOverlayClick(event) {
-                OverlayEventBus__default["default"].emit('overlay-click', {
+                OverlayEventBus__default['default'].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -523,18 +524,13 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
                     'p-ripple-disabled': this.$primevue.config.ripple === false
                 }];
             },
-            appendDisabled() {
-                return this.appendTo === 'self';
-            },
-            appendTarget() {
-                return this.appendDisabled ? null : this.appendTo;
-            },
             dropdownIconClass() {
                 return ['p-cascadeselect-trigger-icon', this.loading ? this.loadingIcon : 'pi pi-chevron-down'];
             }
         },
         components: {
-            'CascadeSelectSub': script$1
+            'CascadeSelectSub': script$1,
+            'Portal': Portal__default['default']
         }
     };
 
@@ -545,6 +541,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_CascadeSelectSub = vue.resolveComponent("CascadeSelectSub");
+      const _component_Portal = vue.resolveComponent("Portal");
 
       return (vue.openBlock(), vue.createElementBlock("div", {
         ref: "container",
@@ -589,46 +586,46 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
             }, null, 2)
           ])
         ], 8, _hoisted_3),
-        (vue.openBlock(), vue.createBlock(vue.Teleport, {
-          to: $options.appendTarget,
-          disabled: $options.appendDisabled
-        }, [
-          vue.createVNode(vue.Transition, {
-            name: "p-connected-overlay",
-            onEnter: $options.onOverlayEnter,
-            onLeave: $options.onOverlayLeave,
-            onAfterLeave: $options.onOverlayAfterLeave
-          }, {
-            default: vue.withCtx(() => [
-              ($data.overlayVisible)
-                ? (vue.openBlock(), vue.createElementBlock("div", {
-                    key: 0,
-                    ref: $options.overlayRef,
-                    class: vue.normalizeClass($options.panelStyleClass),
-                    onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-                  }, [
-                    vue.createElementVNode("div", _hoisted_4, [
-                      vue.createVNode(_component_CascadeSelectSub, {
-                        options: $props.options,
-                        selectionPath: $data.selectionPath,
-                        optionLabel: $props.optionLabel,
-                        optionValue: $props.optionValue,
-                        level: 0,
-                        templates: _ctx.$slots,
-                        optionGroupLabel: $props.optionGroupLabel,
-                        optionGroupChildren: $props.optionGroupChildren,
-                        onOptionSelect: $options.onOptionSelect,
-                        onOptiongroupSelect: $options.onOptionGroupSelect,
-                        dirty: $data.dirty,
-                        root: true
-                      }, null, 8, ["options", "selectionPath", "optionLabel", "optionValue", "templates", "optionGroupLabel", "optionGroupChildren", "onOptionSelect", "onOptiongroupSelect", "dirty"])
-                    ])
-                  ], 2))
-                : vue.createCommentVNode("", true)
-            ]),
-            _: 1
-          }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-        ], 8, ["to", "disabled"]))
+        vue.createVNode(_component_Portal, { appendTo: $props.appendTo }, {
+          default: vue.withCtx(() => [
+            vue.createVNode(vue.Transition, {
+              name: "p-connected-overlay",
+              onEnter: $options.onOverlayEnter,
+              onLeave: $options.onOverlayLeave,
+              onAfterLeave: $options.onOverlayAfterLeave
+            }, {
+              default: vue.withCtx(() => [
+                ($data.overlayVisible)
+                  ? (vue.openBlock(), vue.createElementBlock("div", {
+                      key: 0,
+                      ref: $options.overlayRef,
+                      class: vue.normalizeClass($options.panelStyleClass),
+                      onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                    }, [
+                      vue.createElementVNode("div", _hoisted_4, [
+                        vue.createVNode(_component_CascadeSelectSub, {
+                          options: $props.options,
+                          selectionPath: $data.selectionPath,
+                          optionLabel: $props.optionLabel,
+                          optionValue: $props.optionValue,
+                          level: 0,
+                          templates: _ctx.$slots,
+                          optionGroupLabel: $props.optionGroupLabel,
+                          optionGroupChildren: $props.optionGroupChildren,
+                          onOptionSelect: $options.onOptionSelect,
+                          onOptiongroupSelect: $options.onOptionGroupSelect,
+                          dirty: $data.dirty,
+                          root: true
+                        }, null, 8, ["options", "selectionPath", "optionLabel", "optionValue", "templates", "optionGroupLabel", "optionGroupChildren", "onOptionSelect", "onOptiongroupSelect", "dirty"])
+                      ])
+                    ], 2))
+                  : vue.createCommentVNode("", true)
+              ]),
+              _: 1
+            }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+          ]),
+          _: 1
+        }, 8, ["appendTo"])
       ], 2))
     }
 
@@ -666,4 +663,4 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue) {
 
     return script;
 
-})(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue);
+}(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue, primevue.portal));

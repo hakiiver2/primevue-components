@@ -58,4 +58,4 @@ this.primevue.toolbar = (function (vue) {
 
     return script;
 
-})(Vue);
+}(Vue));

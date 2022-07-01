@@ -1,5 +1,5 @@
 <template>
-    <Teleport :to="appendTarget" :disabled="appendDisabled">
+    <Portal :appendTo="appendTo">
         <div :ref="maskRef" :class="maskClass" v-if="containerVisible" @click="onMaskClick">
             <transition name="p-dialog" @before-enter="onBeforeEnter" @enter="onEnter" @before-leave="onBeforeLeave" @leave="onLeave" @after-leave="onAfterLeave" appear>
                 <div :ref="containerRef" :class="dialogClass" v-if="visible" v-bind="$attrs" role="dialog" :aria-labelledby="ariaLabelledById" :aria-modal="modal">
@@ -25,17 +25,19 @@
                 </div>
             </transition>
         </div>
-    </Teleport>
+    </Portal>
 </template>
 
 <script>
-import {UniqueComponentId,DomHandler,ZIndexUtils} from 'primevue/utils';
+import { computed } from 'vue';
+import { UniqueComponentId,DomHandler,ZIndexUtils } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
+import Portal from 'primevue/portal';
 
 export default {
     name: 'Dialog',
     inheritAttrs: false,
-    emits: ['update:visible','show','hide','maximize','unmaximize','dragend'],
+    emits: ['update:visible','show','hide', 'after-hide', 'maximize','unmaximize','dragend'],
     props: {
         header: null,
         footer: null,
@@ -97,6 +99,12 @@ export default {
         appendTo: {
             type: String,
             default: 'body'
+        },
+        _instance: null
+    },
+    provide() {
+        return {
+            dialogRef: computed(() => this._instance)
         }
     },
     data() {
@@ -124,12 +132,11 @@ export default {
         this.unbindGlobalListeners();
         this.destroyStyle();
 
-        this.mask = null;
-
-        if (this.container && this.autoZIndex) {
-            ZIndexUtils.clear(this.container);
+        if (this.mask && this.autoZIndex) {
+            ZIndexUtils.clear(this.mask);
         }
         this.container = null;
+        this.mask = null;
     },
     mounted() {
         if (this.breakpoints) {
@@ -141,19 +148,17 @@ export default {
             this.$emit('update:visible', false);
         },
         onBeforeEnter(el) {
-            if (this.autoZIndex) {
-                ZIndexUtils.set('modal', el, this.baseZIndex + this.$primevue.config.zIndex.modal);
-            }
-
             el.setAttribute(this.attributeSelector, '');
         },
         onEnter() {
-            this.mask.style.zIndex = String(parseInt(this.container.style.zIndex, 10) - 1);
-
             this.$emit('show');
             this.focus();
             this.enableDocumentSettings();
             this.bindGlobalListeners();
+
+            if (this.autoZIndex) {
+                ZIndexUtils.set('modal', this.mask, this.baseZIndex + this.$primevue.config.zIndex.modal);
+            }
         },
         onBeforeLeave() {
             if (this.modal) {
@@ -161,16 +166,16 @@ export default {
             }
         },
         onLeave() {
-
             this.$emit('hide');
         },
-        onAfterLeave(el) {
+        onAfterLeave() {
             if (this.autoZIndex) {
-                ZIndexUtils.clear(el);
+                ZIndexUtils.clear(this.mask);
             }
             this.containerVisible = false;
             this.unbindDocumentState();
             this.unbindGlobalListeners();
+            this.$emit('after-hide');
         },
         onMaskClick(event) {
             if (this.dismissableMask && this.closable && this.modal && this.mask === event.target) {
@@ -405,16 +410,13 @@ export default {
         },
         contentStyleClass() {
             return ['p-dialog-content', this.contentClass];
-        },
-        appendDisabled() {
-            return this.appendTo === 'self';
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
         }
     },
     directives: {
         'ripple': Ripple
+    },
+    components: {
+        'Portal': Portal
     }
 }
 </script>

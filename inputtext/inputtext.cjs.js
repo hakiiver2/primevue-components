@@ -4,6 +4,7 @@ var vue = require('vue');
 
 var script = {
     name: 'InputText',
+    inheritAttrs: false,
     emits: ['update:modelValue'],
     props: {
         modelValue: null

@@ -40,7 +40,7 @@ var script = {
             }
         },
         isActive(item) {
-            return this.activeRoute === item.to || this.activeRoute === item.to + '/' ;
+            return item.to ? this.$router.resolve(item.to).path === this.$route.path : false;
         },
         getItemClass(item) {
             return ['p-steps-item', item.class, {
@@ -68,9 +68,6 @@ var script = {
         }
     },
     computed: {
-        activeRoute() {
-            return this.$route.path;
-        },
         containerClass() {
             return ['p-steps p-component', {'p-readonly': this.readonly}];
         }

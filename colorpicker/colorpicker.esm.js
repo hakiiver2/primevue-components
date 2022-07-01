@@ -1,6 +1,7 @@
 import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
-import { openBlock, createElementBlock, normalizeClass, createCommentVNode, createBlock, Teleport, createVNode, Transition, withCtx, createElementVNode } from 'vue';
+import Portal from 'primevue/portal';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, createCommentVNode, createVNode, withCtx, Transition, createElementVNode } from 'vue';
 
 var script = {
     name: 'ColorPicker',
@@ -324,7 +325,7 @@ var script = {
             if (this.autoZIndex) {
                 ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
             }
-            
+
             this.$emit('show');
         },
         onOverlayLeave() {
@@ -340,7 +341,7 @@ var script = {
             }
         },
         alignOverlay() {
-            if (this.appendDisabled)
+            if (this.appendTo === 'self')
                 DomHandler.relativePosition(this.picker, this.$refs.input);
             else
                 DomHandler.absolutePosition(this.picker, this.$refs.input);
@@ -465,7 +466,7 @@ var script = {
         bindResizeListener() {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible && !DomHandler.isTouchDevice()) {
                         this.overlayVisible = false;
                     }
                 };
@@ -544,13 +545,10 @@ var script = {
                 'p-input-filled': this.$primevue.config.inputStyle === 'filled',
                 'p-ripple-disabled': this.$primevue.config.ripple === false
             }];
-        },
-        appendDisabled() {
-            return this.appendTo === 'self' || this.inline;
-        },
-        appendTarget() {
-            return this.appendDisabled ? null : this.appendTo;
         }
+    },
+    components: {
+        'Portal': Portal
     }
 };
 
@@ -559,6 +557,8 @@ const _hoisted_2 = { class: "p-colorpicker-content" };
 const _hoisted_3 = { class: "p-colorpicker-color" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_Portal = resolveComponent("Portal");
+
   return (openBlock(), createElementBlock("div", {
     ref: "container",
     class: normalizeClass($options.containerClass)
@@ -577,60 +577,63 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           "aria-labelledby": $props.ariaLabelledBy
         }, null, 42, _hoisted_1))
       : createCommentVNode("", true),
-    (openBlock(), createBlock(Teleport, {
-      to: $options.appendTarget,
-      disabled: $options.appendDisabled
-    }, [
-      createVNode(Transition, {
-        name: "p-connected-overlay",
-        onEnter: $options.onOverlayEnter,
-        onLeave: $options.onOverlayLeave,
-        onAfterLeave: $options.onOverlayAfterLeave
-      }, {
-        default: withCtx(() => [
-          ($props.inline ? true : $data.overlayVisible)
-            ? (openBlock(), createElementBlock("div", {
-                key: 0,
-                ref: $options.pickerRef,
-                class: normalizeClass($options.pickerClass),
-                onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-              }, [
-                createElementVNode("div", _hoisted_2, [
-                  createElementVNode("div", {
-                    ref: $options.colorSelectorRef,
-                    class: "p-colorpicker-color-selector",
-                    onMousedown: _cache[2] || (_cache[2] = $event => ($options.onColorMousedown($event))),
-                    onTouchstart: _cache[3] || (_cache[3] = $event => ($options.onColorDragStart($event))),
-                    onTouchmove: _cache[4] || (_cache[4] = $event => ($options.onDrag($event))),
-                    onTouchend: _cache[5] || (_cache[5] = $event => ($options.onDragEnd()))
-                  }, [
-                    createElementVNode("div", _hoisted_3, [
-                      createElementVNode("div", {
-                        ref: $options.colorHandleRef,
-                        class: "p-colorpicker-color-handle"
-                      }, null, 512)
-                    ])
-                  ], 544),
-                  createElementVNode("div", {
-                    ref: $options.hueViewRef,
-                    class: "p-colorpicker-hue",
-                    onMousedown: _cache[6] || (_cache[6] = $event => ($options.onHueMousedown($event))),
-                    onTouchstart: _cache[7] || (_cache[7] = $event => ($options.onHueDragStart($event))),
-                    onTouchmove: _cache[8] || (_cache[8] = $event => ($options.onDrag($event))),
-                    onTouchend: _cache[9] || (_cache[9] = $event => ($options.onDragEnd()))
-                  }, [
+    createVNode(_component_Portal, {
+      appendTo: $props.appendTo,
+      disabled: $props.inline
+    }, {
+      default: withCtx(() => [
+        createVNode(Transition, {
+          name: "p-connected-overlay",
+          onEnter: $options.onOverlayEnter,
+          onLeave: $options.onOverlayLeave,
+          onAfterLeave: $options.onOverlayAfterLeave
+        }, {
+          default: withCtx(() => [
+            ($props.inline ? true : $data.overlayVisible)
+              ? (openBlock(), createElementBlock("div", {
+                  key: 0,
+                  ref: $options.pickerRef,
+                  class: normalizeClass($options.pickerClass),
+                  onClick: _cache[10] || (_cache[10] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                }, [
+                  createElementVNode("div", _hoisted_2, [
                     createElementVNode("div", {
-                      ref: $options.hueHandleRef,
-                      class: "p-colorpicker-hue-handle"
-                    }, null, 512)
-                  ], 544)
-                ])
-              ], 2))
-            : createCommentVNode("", true)
-        ]),
-        _: 1
-      }, 8, ["onEnter", "onLeave", "onAfterLeave"])
-    ], 8, ["to", "disabled"]))
+                      ref: $options.colorSelectorRef,
+                      class: "p-colorpicker-color-selector",
+                      onMousedown: _cache[2] || (_cache[2] = $event => ($options.onColorMousedown($event))),
+                      onTouchstart: _cache[3] || (_cache[3] = $event => ($options.onColorDragStart($event))),
+                      onTouchmove: _cache[4] || (_cache[4] = $event => ($options.onDrag($event))),
+                      onTouchend: _cache[5] || (_cache[5] = $event => ($options.onDragEnd()))
+                    }, [
+                      createElementVNode("div", _hoisted_3, [
+                        createElementVNode("div", {
+                          ref: $options.colorHandleRef,
+                          class: "p-colorpicker-color-handle"
+                        }, null, 512)
+                      ])
+                    ], 544),
+                    createElementVNode("div", {
+                      ref: $options.hueViewRef,
+                      class: "p-colorpicker-hue",
+                      onMousedown: _cache[6] || (_cache[6] = $event => ($options.onHueMousedown($event))),
+                      onTouchstart: _cache[7] || (_cache[7] = $event => ($options.onHueDragStart($event))),
+                      onTouchmove: _cache[8] || (_cache[8] = $event => ($options.onDrag($event))),
+                      onTouchend: _cache[9] || (_cache[9] = $event => ($options.onDragEnd()))
+                    }, [
+                      createElementVNode("div", {
+                        ref: $options.hueHandleRef,
+                        class: "p-colorpicker-hue-handle"
+                      }, null, 512)
+                    ], 544)
+                  ])
+                ], 2))
+              : createCommentVNode("", true)
+          ]),
+          _: 1
+        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+      ]),
+      _: 1
+    }, 8, ["appendTo", "disabled"])
   ], 2))
 }
 

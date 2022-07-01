@@ -97,7 +97,7 @@ var script$1 = {
         }
     },
     directives: {
-        "tooltip": Tooltip__default["default"]                                                                                                                                                                            
+        "tooltip": Tooltip__default['default']                                                                                                                                                                            
     }
 };
 
@@ -149,7 +149,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           default: vue.withCtx(({navigate, href, isActive:isRouterActive, isExactActive}) => [
                             vue.createElementVNode("a", {
                               href: href,
-                              class: vue.normalizeClass($options.linkClass(item, {isRouterActive, isExactActive})),
+                              class: vue.normalizeClass($options.linkClass(item, {isActive:isRouterActive, isExactActive})),
                               onClick: $event => ($options.onItemClick($event, item, navigate)),
                               role: "treeitem",
                               "aria-expanded": $options.isActive(item)
@@ -345,7 +345,7 @@ var script = {
         }
     },
     directives: {
-        "tooltip": Tooltip__default["default"]                                                                                                                                                                            
+        "tooltip": Tooltip__default['default']                                                                                                                                                                            
     }
 };
 
