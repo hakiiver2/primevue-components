@@ -1,6 +1,6 @@
 import { DomHandler, ZIndexUtils } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, Fragment, renderList, normalizeStyle, createBlock, withCtx, withDirectives, createElementVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, renderSlot, createVNode } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, Fragment, renderList, normalizeStyle, createBlock, withCtx, withDirectives, createCommentVNode, createElementVNode, toDisplayString, resolveDynamicComponent, renderSlot, createVNode } from 'vue';
 
 var script$1 = {
     name: 'MenubarSub',
@@ -89,7 +89,7 @@ var script$1 = {
                 if (this.activeItem && item === this.activeItem)
                     this.activeItem = null;
                 else
-                   this.activeItem = item;
+                    this.activeItem = item;
             }
 
             if (!item.items) {
@@ -317,9 +317,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                               onKeydown: $event => ($options.onItemKeyDown($event, item)),
                               role: "menuitem"
                             }, [
-                              createElementVNode("span", {
-                                class: normalizeClass(['p-menuitem-icon', item.icon])
-                              }, null, 2),
+                              (item.icon)
+                                ? (openBlock(), createElementBlock("span", {
+                                    key: 0,
+                                    class: normalizeClass(['p-menuitem-icon', item.icon])
+                                  }, null, 2))
+                                : createCommentVNode("", true),
                               createElementVNode("span", _hoisted_4$1, toDisplayString($options.label(item)), 1)
                             ], 42, _hoisted_3$1)), [
                               [_directive_ripple]
@@ -339,13 +342,16 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           role: "menuitem",
                           tabindex: $options.disabled(item) ? null : '0'
                         }, [
-                          createElementVNode("span", {
-                            class: normalizeClass(['p-menuitem-icon', item.icon])
-                          }, null, 2),
+                          (item.icon)
+                            ? (openBlock(), createElementBlock("span", {
+                                key: 0,
+                                class: normalizeClass(['p-menuitem-icon', item.icon])
+                              }, null, 2))
+                            : createCommentVNode("", true),
                           createElementVNode("span", _hoisted_6, toDisplayString($options.label(item)), 1),
                           (item.items)
                             ? (openBlock(), createElementBlock("span", {
-                                key: 0,
+                                key: 1,
                                 class: normalizeClass($options.getSubmenuIcon())
                               }, null, 2))
                             : createCommentVNode("", true)

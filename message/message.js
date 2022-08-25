@@ -64,7 +64,7 @@ this.primevue.message = (function (Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -147,4 +147,4 @@ this.primevue.message = (function (Ripple, vue) {
 
     return script;
 
-}(primevue.ripple, Vue));
+})(primevue.ripple, Vue);

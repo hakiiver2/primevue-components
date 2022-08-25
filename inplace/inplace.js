@@ -58,7 +58,7 @@ this.primevue.inplace = (function (Button, vue) {
             }
         },
         components: {
-            'IPButton': Button__default['default']
+            'IPButton': Button__default["default"]
         }
     };
 
@@ -131,4 +131,4 @@ this.primevue.inplace = (function (Button, vue) {
 
     return script;
 
-}(primevue.button, Vue));
+})(primevue.button, Vue);

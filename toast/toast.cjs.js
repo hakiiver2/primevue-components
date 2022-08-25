@@ -64,7 +64,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
@@ -152,9 +152,9 @@ var script = {
     },
     styleElement: null,
     mounted() {
-        ToastEventBus__default['default'].on('add', this.onAdd);
-        ToastEventBus__default['default'].on('remove-group', this.onRemoveGroup);
-        ToastEventBus__default['default'].on('remove-all-groups', this.onRemoveAllGroups);
+        ToastEventBus__default["default"].on('add', this.onAdd);
+        ToastEventBus__default["default"].on('remove-group', this.onRemoveGroup);
+        ToastEventBus__default["default"].on('remove-all-groups', this.onRemoveAllGroups);
 
         if (this.breakpoints) {
             this.createStyle();
@@ -167,9 +167,9 @@ var script = {
             utils.ZIndexUtils.clear(this.$refs.container);
         }
 
-        ToastEventBus__default['default'].off('add', this.onAdd);
-        ToastEventBus__default['default'].off('remove-group', this.onRemoveGroup);
-        ToastEventBus__default['default'].off('remove-all-groups', this.onRemoveAllGroups);
+        ToastEventBus__default["default"].off('add', this.onAdd);
+        ToastEventBus__default["default"].off('remove-group', this.onRemoveGroup);
+        ToastEventBus__default["default"].off('remove-all-groups', this.onRemoveAllGroups);
     },
     methods: {
         add(message) {
@@ -248,7 +248,7 @@ var script = {
     },
     components: {
         'ToastMessage': script$1,
-        'Portal': Portal__default['default']
+        'Portal': Portal__default["default"]
     },
     computed: {
         containerClass() {

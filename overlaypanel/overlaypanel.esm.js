@@ -7,6 +7,7 @@ import { resolveComponent, resolveDirective, openBlock, createBlock, withCtx, cr
 var script = {
     name: 'OverlayPanel',
     inheritAttrs: false,
+    emits: ['show', 'hide'],
     props: {
 		dismissable: {
 			type: Boolean,
@@ -37,10 +38,21 @@ var script = {
             default: null
         }
     },
-    emits: ['show', 'hide'],
     data() {
         return {
             visible: false
+        }
+    },
+    watch: {
+        dismissable: {
+            immediate: true,
+            handler(newValue) {
+                if (newValue) {
+                    this.bindOutsideClickListener();
+                } else {
+                    this.unbindOutsideClickListener();
+                }
+            }
         }
     },
     selfClick: false,

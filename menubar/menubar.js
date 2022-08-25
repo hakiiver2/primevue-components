@@ -93,7 +93,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                     if (this.activeItem && item === this.activeItem)
                         this.activeItem = null;
                     else
-                       this.activeItem = item;
+                        this.activeItem = item;
                 }
 
                 if (!item.items) {
@@ -273,7 +273,7 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -321,9 +321,12 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                                   onKeydown: $event => ($options.onItemKeyDown($event, item)),
                                   role: "menuitem"
                                 }, [
-                                  vue.createElementVNode("span", {
-                                    class: vue.normalizeClass(['p-menuitem-icon', item.icon])
-                                  }, null, 2),
+                                  (item.icon)
+                                    ? (vue.openBlock(), vue.createElementBlock("span", {
+                                        key: 0,
+                                        class: vue.normalizeClass(['p-menuitem-icon', item.icon])
+                                      }, null, 2))
+                                    : vue.createCommentVNode("", true),
                                   vue.createElementVNode("span", _hoisted_4$1, vue.toDisplayString($options.label(item)), 1)
                                 ], 42, _hoisted_3$1)), [
                                   [_directive_ripple]
@@ -343,13 +346,16 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
                               role: "menuitem",
                               tabindex: $options.disabled(item) ? null : '0'
                             }, [
-                              vue.createElementVNode("span", {
-                                class: vue.normalizeClass(['p-menuitem-icon', item.icon])
-                              }, null, 2),
+                              (item.icon)
+                                ? (vue.openBlock(), vue.createElementBlock("span", {
+                                    key: 0,
+                                    class: vue.normalizeClass(['p-menuitem-icon', item.icon])
+                                  }, null, 2))
+                                : vue.createCommentVNode("", true),
                               vue.createElementVNode("span", _hoisted_6, vue.toDisplayString($options.label(item)), 1),
                               (item.items)
                                 ? (vue.openBlock(), vue.createElementBlock("span", {
-                                    key: 0,
+                                    key: 1,
                                     class: vue.normalizeClass($options.getSubmenuIcon())
                                   }, null, 2))
                                 : vue.createCommentVNode("", true)
@@ -541,4 +547,4 @@ this.primevue.menubar = (function (utils, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);

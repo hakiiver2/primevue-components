@@ -17,11 +17,11 @@ var DialogService = {
                     options: options || {},
                     data: options && options.data,
                     close: (params) => {
-                        DynamicDialogEventBus__default['default'].emit('close', { instance, params });
+                        DynamicDialogEventBus__default["default"].emit('close', { instance, params });
                     }
                 };
 
-                DynamicDialogEventBus__default['default'].emit('open', { instance });
+                DynamicDialogEventBus__default["default"].emit('open', { instance });
 
                 return instance;
             }

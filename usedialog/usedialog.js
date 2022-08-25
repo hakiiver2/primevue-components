@@ -20,4 +20,4 @@ this.primevue.usedialog = (function (exports, vue) {
 
     return exports;
 
-}({}, Vue));
+})({}, Vue);

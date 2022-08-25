@@ -2,7 +2,7 @@ import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Ripple from 'primevue/ripple';
 import Tooltip from 'primevue/tooltip';
-import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, normalizeStyle, Fragment, createBlock, withCtx, withDirectives, createElementVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, createTextVNode, createVNode, Transition, mergeProps, renderList, renderSlot } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, normalizeStyle, Fragment, createBlock, withCtx, withDirectives, createCommentVNode, createElementVNode, toDisplayString, resolveDynamicComponent, createTextVNode, createVNode, Transition, mergeProps, renderList, renderSlot } from 'vue';
 import Portal from 'primevue/portal';
 
 var script$1 = {
@@ -54,7 +54,7 @@ const _hoisted_1$1 = ["href", "onClick"];
 const _hoisted_2$1 = { class: "p-menuitem-text" };
 const _hoisted_3 = /*#__PURE__*/createTextVNode("    ");
 const _hoisted_4 = {
-  key: 0,
+  key: 1,
   class: "pi pi-info-circle",
   style: {}
 };
@@ -62,7 +62,7 @@ const _hoisted_5 = ["href", "target", "tabindex"];
 const _hoisted_6 = { class: "p-menuitem-text" };
 const _hoisted_7 = /*#__PURE__*/createTextVNode("    ");
 const _hoisted_8 = {
-  key: 0,
+  key: 1,
   class: "pi pi-info-circle",
   style: {}
 };
@@ -94,9 +94,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                         class: normalizeClass($options.linkClass($props.item, {isActive, isExactActive})),
                         role: "menuitem"
                       }, [
-                        createElementVNode("span", {
-                          class: normalizeClass(['p-menuitem-icon', $props.item.icon])
-                        }, null, 2),
+                        ($props.item.icon)
+                          ? (openBlock(), createElementBlock("span", {
+                              key: 0,
+                              class: normalizeClass(['p-menuitem-icon', $props.item.icon])
+                            }, null, 2))
+                          : createCommentVNode("", true),
                         createElementVNode("span", _hoisted_2$1, toDisplayString($options.label()), 1),
                         _hoisted_3,
                         ($props.item.info)
@@ -119,9 +122,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     role: "menuitem",
                     tabindex: $options.disabled($props.item) ? null : '0'
                   }, [
-                    createElementVNode("span", {
-                      class: normalizeClass(['p-menuitem-icon', $props.item.icon])
-                    }, null, 2),
+                    ($props.item.icon)
+                      ? (openBlock(), createElementBlock("span", {
+                          key: 0,
+                          class: normalizeClass(['p-menuitem-icon', $props.item.icon])
+                        }, null, 2))
+                      : createCommentVNode("", true),
                     createElementVNode("span", _hoisted_6, toDisplayString($options.label()), 1),
                     _hoisted_7,
                     ($props.item.info)

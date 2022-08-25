@@ -54,8 +54,8 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default'],
-        'tooltip': Tooltip__default['default']
+        'ripple': Ripple__default["default"],
+        'tooltip': Tooltip__default["default"]
     }
 };
 
@@ -63,7 +63,7 @@ const _hoisted_1$1 = ["href", "onClick"];
 const _hoisted_2$1 = { class: "p-menuitem-text" };
 const _hoisted_3 = /*#__PURE__*/vue.createTextVNode("    ");
 const _hoisted_4 = {
-  key: 0,
+  key: 1,
   class: "pi pi-info-circle",
   style: {}
 };
@@ -71,7 +71,7 @@ const _hoisted_5 = ["href", "target", "tabindex"];
 const _hoisted_6 = { class: "p-menuitem-text" };
 const _hoisted_7 = /*#__PURE__*/vue.createTextVNode("    ");
 const _hoisted_8 = {
-  key: 0,
+  key: 1,
   class: "pi pi-info-circle",
   style: {}
 };
@@ -103,9 +103,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                         class: vue.normalizeClass($options.linkClass($props.item, {isActive, isExactActive})),
                         role: "menuitem"
                       }, [
-                        vue.createElementVNode("span", {
-                          class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
-                        }, null, 2),
+                        ($props.item.icon)
+                          ? (vue.openBlock(), vue.createElementBlock("span", {
+                              key: 0,
+                              class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
+                            }, null, 2))
+                          : vue.createCommentVNode("", true),
                         vue.createElementVNode("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1),
                         _hoisted_3,
                         ($props.item.info)
@@ -128,9 +131,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                     role: "menuitem",
                     tabindex: $options.disabled($props.item) ? null : '0'
                   }, [
-                    vue.createElementVNode("span", {
-                      class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
-                    }, null, 2),
+                    ($props.item.icon)
+                      ? (vue.openBlock(), vue.createElementBlock("span", {
+                          key: 0,
+                          class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
+                        }, null, 2))
+                      : vue.createCommentVNode("", true),
                     vue.createElementVNode("span", _hoisted_6, vue.toDisplayString($options.label()), 1),
                     _hoisted_7,
                     ($props.item.info)
@@ -329,7 +335,7 @@ var script = {
             this.container = el;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.target
             });
@@ -346,7 +352,7 @@ var script = {
     },
     components: {
         'Menuitem': script$1,
-        'Portal': Portal__default['default']
+        'Portal': Portal__default["default"]
     }
 };
 

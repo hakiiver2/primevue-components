@@ -97,7 +97,7 @@ var script$1 = {
         }
     },
     directives: {
-        "tooltip": Tooltip__default['default']                                                                                                                                                                            
+        "tooltip": Tooltip__default["default"]                                                                                                                                                                            
     }
 };
 
@@ -345,7 +345,7 @@ var script = {
         }
     },
     directives: {
-        "tooltip": Tooltip__default['default']                                                                                                                                                                            
+        "tooltip": Tooltip__default["default"]                                                                                                                                                                            
     }
 };
 

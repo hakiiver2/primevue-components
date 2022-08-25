@@ -7,7 +7,7 @@ this.primevue.editor = (function (Quill, QuillImageDropAndPaste, vue) {
     var Quill__default = /*#__PURE__*/_interopDefaultLegacy(Quill);
     var QuillImageDropAndPaste__default = /*#__PURE__*/_interopDefaultLegacy(QuillImageDropAndPaste);
 
-    Quill__default['default'].register('modules/imageDropAndPaste', QuillImageDropAndPaste__default['default']);
+    Quill__default["default"].register('modules/imageDropAndPaste', QuillImageDropAndPaste__default["default"]);
 
 
     var script = {
@@ -65,7 +65,7 @@ this.primevue.editor = (function (Quill, QuillImageDropAndPaste, vue) {
                     handler: this.quillImageDropAndPaste
                 };
             }
-            this.quill = new Quill__default['default'](this.$refs.editorElement, {
+            this.quill = new Quill__default["default"](this.$refs.editorElement, {
                 modules: modules,
                 readOnly: this.readonly,
                 theme: 'snow',
@@ -99,7 +99,7 @@ this.primevue.editor = (function (Quill, QuillImageDropAndPaste, vue) {
                 var range = this.quill.getSelection();
                 var value = prompt('please copy paste the image url here.');
                 if(value){
-                    this.quill.insertEmbed(range.index, 'image', value, Quill__default['default'].sources.USER);
+                    this.quill.insertEmbed(range.index, 'image', value, Quill__default["default"].sources.USER);
                 }
 
             },
@@ -211,4 +211,4 @@ this.primevue.editor = (function (Quill, QuillImageDropAndPaste, vue) {
 
     return script;
 
-}(Quill, QuillImageDropAndPaste, Vue));
+})(Quill, QuillImageDropAndPaste, Vue);

@@ -1,8 +1,7 @@
-import { openBlock, createElementBlock, mergeProps } from 'vue';
+import { openBlock, createElementBlock, normalizeClass } from 'vue';
 
 var script = {
     name: 'Textarea',
-    inheritAttrs: false,
     emits: ['update:modelValue'],
     props: {
         modelValue: null,
@@ -50,12 +49,11 @@ var script = {
 const _hoisted_1 = ["value"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createElementBlock("textarea", mergeProps({
-    class: ['p-inputtextarea p-inputtext p-component', {'p-filled': $options.filled, 'p-inputtextarea-resizable ': $props.autoResize}]
-  }, _ctx.$attrs, {
+  return (openBlock(), createElementBlock("textarea", {
+    class: normalizeClass(['p-inputtextarea p-inputtext p-component', {'p-filled': $options.filled, 'p-inputtextarea-resizable ': $props.autoResize}]),
     value: $props.modelValue,
     onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args)))
-  }), null, 16, _hoisted_1))
+  }, null, 42, _hoisted_1))
 }
 
 function styleInject(css, ref) {

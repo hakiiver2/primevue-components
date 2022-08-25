@@ -60,7 +60,7 @@ this.primevue.toast = (function (ToastEventBus, Ripple, vue, utils, Portal) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -148,9 +148,9 @@ this.primevue.toast = (function (ToastEventBus, Ripple, vue, utils, Portal) {
         },
         styleElement: null,
         mounted() {
-            ToastEventBus__default['default'].on('add', this.onAdd);
-            ToastEventBus__default['default'].on('remove-group', this.onRemoveGroup);
-            ToastEventBus__default['default'].on('remove-all-groups', this.onRemoveAllGroups);
+            ToastEventBus__default["default"].on('add', this.onAdd);
+            ToastEventBus__default["default"].on('remove-group', this.onRemoveGroup);
+            ToastEventBus__default["default"].on('remove-all-groups', this.onRemoveAllGroups);
 
             if (this.breakpoints) {
                 this.createStyle();
@@ -163,9 +163,9 @@ this.primevue.toast = (function (ToastEventBus, Ripple, vue, utils, Portal) {
                 utils.ZIndexUtils.clear(this.$refs.container);
             }
 
-            ToastEventBus__default['default'].off('add', this.onAdd);
-            ToastEventBus__default['default'].off('remove-group', this.onRemoveGroup);
-            ToastEventBus__default['default'].off('remove-all-groups', this.onRemoveAllGroups);
+            ToastEventBus__default["default"].off('add', this.onAdd);
+            ToastEventBus__default["default"].off('remove-group', this.onRemoveGroup);
+            ToastEventBus__default["default"].off('remove-all-groups', this.onRemoveAllGroups);
         },
         methods: {
             add(message) {
@@ -244,7 +244,7 @@ this.primevue.toast = (function (ToastEventBus, Ripple, vue, utils, Portal) {
         },
         components: {
             'ToastMessage': script$1,
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         },
         computed: {
             containerClass() {
@@ -327,4 +327,4 @@ this.primevue.toast = (function (ToastEventBus, Ripple, vue, utils, Portal) {
 
     return script;
 
-}(primevue.toasteventbus, primevue.ripple, Vue, primevue.utils, primevue.portal));
+})(primevue.toasteventbus, primevue.ripple, Vue, primevue.utils, primevue.portal);

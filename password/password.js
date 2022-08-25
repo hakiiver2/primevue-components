@@ -10,10 +10,13 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
 
     var script = {
         name: 'Password',
-        emits: ['update:modelValue'],
-        inheritAttrs: false,
+        emits: ['update:modelValue', 'change', 'focus', 'blur'],
         props: {
             modelValue: String,
+            inputId: {
+                type: String,
+                default: null
+            },
             promptLabel: {
                 type: String,
                 default: null
@@ -58,11 +61,12 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
                 type: String,
                 default: 'pi pi-eye'
             },
-            inputClass: null,
-            inputStyle: null,
-            style: null,
-            class: String,
-            panelClass: String
+            panelClass: String,
+            disabled: {
+                type: Boolean,
+                default: false
+            },
+            inputProps: null
         },
         data() {
             return {
@@ -134,17 +138,21 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
             onInput(event)  {
                 this.$emit('update:modelValue', event.target.value);
             },
-            onFocus() {
+            onFocus(event) {
                 this.focused = true;
                 if (this.feedback) {
                     this.overlayVisible = true;
                 }
+
+                this.$emit('focus', event);
             },
-            onBlur() {
+            onBlur(event) {
                 this.focused = false;
                 if (this.feedback) {
                     this.overlayVisible = false;
                 }
+
+                this.$emit('blur', event);
             },
             onKeyUp(event) {
                 if (this.feedback) {
@@ -185,6 +193,12 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
 
                     this.meter = meter;
                     this.infoText = label;
+
+                    //escape
+                    if (event.which === 27) {
+                        this.overlayVisible && (this.overlayVisible = false);
+                        return;
+                    }
 
                     if (!this.overlayVisible) {
                         this.overlayVisible = true;
@@ -230,7 +244,7 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
                 this.unmasked = !this.unmasked;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -238,15 +252,15 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
         },
         computed: {
             containerClass() {
-                return ['p-password p-component p-inputwrapper', this.class, {
+                return ['p-password p-component p-inputwrapper', {
                     'p-inputwrapper-filled': this.filled,
                     'p-inputwrapper-focus': this.focused,
                     'p-input-icon-right': this.toggleMask
                 }];
             },
             inputFieldClass() {
-                return ['p-password-input', this.inputClass, {
-                    'p-disabled': this.$attrs.disabled
+                return ['p-password-input', {
+                    'p-disabled': this.disabled
                 }];
             },
             panelStyleClass() {
@@ -281,33 +295,35 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
             }
         },
         components: {
-            'PInputText': InputText__default['default'],
-            'Portal': Portal__default['default']
+            'PInputText': InputText__default["default"],
+            'Portal': Portal__default["default"]
         }
     };
 
-    const _hoisted_1 = { class: "p-password-meter" };
-    const _hoisted_2 = { class: "p-password-info" };
+    const _hoisted_1 = {
+      class: "p-hidden-accessible",
+      "aria-live": "polite"
+    };
+    const _hoisted_2 = { class: "p-password-meter" };
+    const _hoisted_3 = { class: "p-password-info" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_PInputText = vue.resolveComponent("PInputText");
       const _component_Portal = vue.resolveComponent("Portal");
 
       return (vue.openBlock(), vue.createElementBlock("div", {
-        class: vue.normalizeClass($options.containerClass),
-        style: vue.normalizeStyle($props.style)
+        class: vue.normalizeClass($options.containerClass)
       }, [
         vue.createVNode(_component_PInputText, vue.mergeProps({
           ref: "input",
-          class: $options.inputFieldClass,
-          style: $props.inputStyle,
+          id: $props.inputId,
           type: $options.inputType,
           value: $props.modelValue,
           onInput: $options.onInput,
           onFocus: $options.onFocus,
           onBlur: $options.onBlur,
           onKeyup: $options.onKeyUp
-        }, _ctx.$attrs), null, 16, ["class", "style", "type", "value", "onInput", "onFocus", "onBlur", "onKeyup"]),
+        }, $props.inputProps), null, 16, ["id", "type", "value", "onInput", "onFocus", "onBlur", "onKeyup"]),
         ($props.toggleMask)
           ? (vue.openBlock(), vue.createElementBlock("i", {
               key: 0,
@@ -315,6 +331,7 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
               onClick: _cache[0] || (_cache[0] = (...args) => ($options.onMaskToggle && $options.onMaskToggle(...args)))
             }, null, 2))
           : vue.createCommentVNode("", true),
+        vue.createElementVNode("span", _hoisted_1, vue.toDisplayString($data.infoText), 1),
         vue.createVNode(_component_Portal, { appendTo: $props.appendTo }, {
           default: vue.withCtx(() => [
             vue.createVNode(vue.Transition, {
@@ -333,13 +350,13 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
                     }, [
                       vue.renderSlot(_ctx.$slots, "header"),
                       vue.renderSlot(_ctx.$slots, "content", {}, () => [
-                        vue.createElementVNode("div", _hoisted_1, [
+                        vue.createElementVNode("div", _hoisted_2, [
                           vue.createElementVNode("div", {
                             class: vue.normalizeClass($options.strengthClass),
                             style: vue.normalizeStyle({'width': $data.meter ? $data.meter.width : ''})
                           }, null, 6)
                         ]),
-                        vue.createElementVNode("div", _hoisted_2, vue.toDisplayString($data.infoText), 1)
+                        vue.createElementVNode("div", _hoisted_3, vue.toDisplayString($data.infoText), 1)
                       ]),
                       vue.renderSlot(_ctx.$slots, "footer")
                     ], 2))
@@ -350,7 +367,7 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
           ]),
           _: 3
         }, 8, ["appendTo"])
-      ], 6))
+      ], 2))
     }
 
     function styleInject(css, ref) {
@@ -387,4 +404,4 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.inputtext, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.inputtext, primevue.portal, Vue);

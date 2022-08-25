@@ -42,12 +42,12 @@ var script = {
             }
         };
 
-        DynamicDialogEventBus__default['default'].on('open', this.openListener);
-        DynamicDialogEventBus__default['default'].on('close', this.closeListener);
+        DynamicDialogEventBus__default["default"].on('open', this.openListener);
+        DynamicDialogEventBus__default["default"].on('close', this.closeListener);
     },
     beforeUnmount() {
-        DynamicDialogEventBus__default['default'].off('open', this.openListener);
-        DynamicDialogEventBus__default['default'].off('close', this.closeListener);
+        DynamicDialogEventBus__default["default"].off('open', this.openListener);
+        DynamicDialogEventBus__default["default"].off('close', this.closeListener);
     },
     methods: {
         onDialogHide(instance) {
@@ -62,7 +62,7 @@ var script = {
         }
     },
     components: {
-        'DDialog': Dialog__default['default']
+        'DDialog': Dialog__default["default"]
     }
 };
 

@@ -10,10 +10,10 @@ this.primevue.confirmationservice = (function (ConfirmationEventBus, useconfirm)
         install: (app) => {
             const ConfirmationService = {
                 require: (options) => {
-                    ConfirmationEventBus__default['default'].emit('confirm', options);
+                    ConfirmationEventBus__default["default"].emit('confirm', options);
                 },
                 close: () => {
-                    ConfirmationEventBus__default['default'].emit('close');
+                    ConfirmationEventBus__default["default"].emit('close');
                 }
             };
             app.config.globalProperties.$confirm = ConfirmationService;
@@ -23,4 +23,4 @@ this.primevue.confirmationservice = (function (ConfirmationEventBus, useconfirm)
 
     return ConfirmationService;
 
-}(primevue.confirmationeventbus, primevue.useconfirm));
+})(primevue.confirmationeventbus, primevue.useconfirm);

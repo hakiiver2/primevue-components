@@ -49,8 +49,8 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
             }
         },
         directives: {
-            'ripple': Ripple__default['default'],
-            'tooltip': Tooltip__default['default']
+            'ripple': Ripple__default["default"],
+            'tooltip': Tooltip__default["default"]
         }
     };
 
@@ -58,7 +58,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
     const _hoisted_2$1 = { class: "p-menuitem-text" };
     const _hoisted_3 = /*#__PURE__*/vue.createTextVNode("    ");
     const _hoisted_4 = {
-      key: 0,
+      key: 1,
       class: "pi pi-info-circle",
       style: {}
     };
@@ -66,7 +66,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
     const _hoisted_6 = { class: "p-menuitem-text" };
     const _hoisted_7 = /*#__PURE__*/vue.createTextVNode("    ");
     const _hoisted_8 = {
-      key: 0,
+      key: 1,
       class: "pi pi-info-circle",
       style: {}
     };
@@ -98,9 +98,12 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
                             class: vue.normalizeClass($options.linkClass($props.item, {isActive, isExactActive})),
                             role: "menuitem"
                           }, [
-                            vue.createElementVNode("span", {
-                              class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
-                            }, null, 2),
+                            ($props.item.icon)
+                              ? (vue.openBlock(), vue.createElementBlock("span", {
+                                  key: 0,
+                                  class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
+                                }, null, 2))
+                              : vue.createCommentVNode("", true),
                             vue.createElementVNode("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1),
                             _hoisted_3,
                             ($props.item.info)
@@ -123,9 +126,12 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
                         role: "menuitem",
                         tabindex: $options.disabled($props.item) ? null : '0'
                       }, [
-                        vue.createElementVNode("span", {
-                          class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
-                        }, null, 2),
+                        ($props.item.icon)
+                          ? (vue.openBlock(), vue.createElementBlock("span", {
+                              key: 0,
+                              class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
+                            }, null, 2))
+                          : vue.createCommentVNode("", true),
                         vue.createElementVNode("span", _hoisted_6, vue.toDisplayString($options.label()), 1),
                         _hoisted_7,
                         ($props.item.info)
@@ -324,7 +330,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -341,7 +347,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
         },
         components: {
             'Menuitem': script$1,
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -476,4 +482,4 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue, primevue.portal));
+})(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue, primevue.portal);

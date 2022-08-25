@@ -62,7 +62,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             _hoisted_3
           ]),
           (index !== ($props.value.length - 1))
-            ? vue.renderSlot(_ctx.$slots, "connector", { key: 0 }, () => [
+            ? vue.renderSlot(_ctx.$slots, "connector", {
+                key: 0,
+                item: item,
+                index: index
+              }, () => [
                 _hoisted_4
               ])
             : vue.createCommentVNode("", true)

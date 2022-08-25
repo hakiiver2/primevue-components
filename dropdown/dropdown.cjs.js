@@ -562,6 +562,8 @@ var script = {
         onFilterChange(event) {
             this.filterValue = event.target.value;
             this.$emit('filter', {originalEvent: event, value: event.target.value});
+
+            !this.virtualScrollerDisabled && this.virtualScroller.scrollToIndex(0);
         },
         onFilterUpdated() {
             if (this.overlayVisible) {
@@ -586,7 +588,7 @@ var script = {
             }
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -676,11 +678,11 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     },
     components: {
-        'VirtualScroller': VirtualScroller__default['default'],
-        'Portal': Portal__default['default']
+        'VirtualScroller': VirtualScroller__default["default"],
+        'Portal': Portal__default["default"]
     }
 };
 
@@ -757,7 +759,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             value: $props.modelValue,
             placeholder: $props.placeholder
           }, () => [
-            vue.createTextVNode(vue.toDisplayString($options.label||'empty'), 1)
+            vue.createTextVNode(vue.toDisplayString($options.label === 'p-emptylabel' ? ' ' : $options.label ||'empty'), 1)
           ])
         ], 2))
       : vue.createCommentVNode("", true),

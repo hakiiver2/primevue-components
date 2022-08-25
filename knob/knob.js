@@ -280,4 +280,4 @@ this.primevue.knob = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

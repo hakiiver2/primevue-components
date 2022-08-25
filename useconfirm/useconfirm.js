@@ -20,4 +20,4 @@ this.primevue.useconfirm = (function (exports, vue) {
 
     return exports;
 
-}({}, Vue));
+})({}, Vue);

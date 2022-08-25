@@ -137,7 +137,7 @@ this.primevue.treetable = (function (utils, api, Ripple, vue, Paginator) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -1608,7 +1608,7 @@ this.primevue.treetable = (function (utils, api, Ripple, vue, Paginator) {
         },
         components: {
             'TTRow': script$3,
-            'TTPaginator': Paginator__default['default'],
+            'TTPaginator': Paginator__default["default"],
             'TTHeaderCell': script$2,
             'TTFooterCell': script$1
         }
@@ -1874,4 +1874,4 @@ this.primevue.treetable = (function (utils, api, Ripple, vue, Paginator) {
 
     return script;
 
-}(primevue.utils, primevue.api, primevue.ripple, Vue, primevue.paginator));
+})(primevue.utils, primevue.api, primevue.ripple, Vue, primevue.paginator);

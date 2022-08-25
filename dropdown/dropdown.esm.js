@@ -553,6 +553,8 @@ var script = {
         onFilterChange(event) {
             this.filterValue = event.target.value;
             this.$emit('filter', {originalEvent: event, value: event.target.value});
+
+            !this.virtualScrollerDisabled && this.virtualScroller.scrollToIndex(0);
         },
         onFilterUpdated() {
             if (this.overlayVisible) {
@@ -748,7 +750,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             value: $props.modelValue,
             placeholder: $props.placeholder
           }, () => [
-            createTextVNode(toDisplayString($options.label||'empty'), 1)
+            createTextVNode(toDisplayString($options.label === 'p-emptylabel' ? ' ' : $options.label ||'empty'), 1)
           ])
         ], 2))
       : createCommentVNode("", true),

@@ -44,12 +44,12 @@ var script = {
             this.visible = false;
             this.confirmation = null;
         };
-        ConfirmationEventBus__default['default'].on('confirm', this.confirmListener);
-        ConfirmationEventBus__default['default'].on('close', this.closeListener);
+        ConfirmationEventBus__default["default"].on('confirm', this.confirmListener);
+        ConfirmationEventBus__default["default"].on('close', this.closeListener);
     },
     beforeUnmount() {
-        ConfirmationEventBus__default['default'].off('confirm', this.confirmListener);
-        ConfirmationEventBus__default['default'].off('close', this.closeListener);
+        ConfirmationEventBus__default["default"].off('confirm', this.confirmListener);
+        ConfirmationEventBus__default["default"].off('close', this.closeListener);
     },
     methods: {
         accept() {
@@ -115,11 +115,14 @@ var script = {
         },
         autoFocusReject() {
             return this.confirmation.defaultFocus === 'reject' ? true : false;
+        },
+        closeOnEscape() {
+            return this.confirmation ? this.confirmation.closeOnEscape : true;
         }
     },
     components: {
-        'CDialog': Dialog__default['default'],
-        'CDButton': Button__default['default']
+        'CDialog': Dialog__default["default"],
+        'CDButton': Button__default["default"]
     }
 };
 
@@ -137,7 +140,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     blockScroll: $options.blockScroll,
     position: $options.position,
     class: "p-confirm-dialog",
-    breakpoints: $props.breakpoints
+    breakpoints: $props.breakpoints,
+    closeOnEscape: $options.closeOnEscape
   }, {
     footer: vue.withCtx(() => [
       ($options.isShowRejectButton)
@@ -168,7 +172,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       vue.createElementVNode("span", _hoisted_1, vue.toDisplayString($options.message), 1)
     ]),
     _: 1
-  }, 8, ["visible", "header", "blockScroll", "position", "breakpoints"]))
+  }, 8, ["visible", "header", "blockScroll", "position", "breakpoints", "closeOnEscape"]))
 }
 
 script.render = render;

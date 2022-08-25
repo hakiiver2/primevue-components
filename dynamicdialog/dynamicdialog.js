@@ -39,12 +39,12 @@ this.primevue.dynamicdialog = (function (utils, DynamicDialogEventBus, Dialog, v
                 }
             };
 
-            DynamicDialogEventBus__default['default'].on('open', this.openListener);
-            DynamicDialogEventBus__default['default'].on('close', this.closeListener);
+            DynamicDialogEventBus__default["default"].on('open', this.openListener);
+            DynamicDialogEventBus__default["default"].on('close', this.closeListener);
         },
         beforeUnmount() {
-            DynamicDialogEventBus__default['default'].off('open', this.openListener);
-            DynamicDialogEventBus__default['default'].off('close', this.closeListener);
+            DynamicDialogEventBus__default["default"].off('open', this.openListener);
+            DynamicDialogEventBus__default["default"].off('close', this.closeListener);
         },
         methods: {
             onDialogHide(instance) {
@@ -59,7 +59,7 @@ this.primevue.dynamicdialog = (function (utils, DynamicDialogEventBus, Dialog, v
             }
         },
         components: {
-            'DDialog': Dialog__default['default']
+            'DDialog': Dialog__default["default"]
         }
     };
 
@@ -113,4 +113,4 @@ this.primevue.dynamicdialog = (function (utils, DynamicDialogEventBus, Dialog, v
 
     return script;
 
-}(primevue.utils, primevue.dynamicdialogeventbus, primevue.dialog, Vue));
+})(primevue.utils, primevue.dynamicdialogeventbus, primevue.dialog, Vue);

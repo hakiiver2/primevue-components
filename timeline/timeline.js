@@ -61,7 +61,11 @@ this.primevue.timeline = (function (utils, vue) {
                 _hoisted_3
               ]),
               (index !== ($props.value.length - 1))
-                ? vue.renderSlot(_ctx.$slots, "connector", { key: 0 }, () => [
+                ? vue.renderSlot(_ctx.$slots, "connector", {
+                    key: 0,
+                    item: item,
+                    index: index
+                  }, () => [
                     _hoisted_4
                   ])
                 : vue.createCommentVNode("", true)
@@ -111,4 +115,4 @@ this.primevue.timeline = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

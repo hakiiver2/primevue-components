@@ -513,7 +513,7 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
                 this.virtualScroller = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -571,12 +571,12 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
             }
         },
         components: {
-            'Button': Button__default['default'],
-            'VirtualScroller': VirtualScroller__default['default'],
-            'Portal': Portal__default['default']
+            'Button': Button__default["default"],
+            'VirtualScroller': VirtualScroller__default["default"],
+            'Portal': Portal__default["default"]
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -830,4 +830,4 @@ this.primevue.autocomplete = (function (utils, OverlayEventBus, Button, Ripple, 
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.button, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.button, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue);

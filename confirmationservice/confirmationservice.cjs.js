@@ -11,10 +11,10 @@ var ConfirmationService = {
     install: (app) => {
         const ConfirmationService = {
             require: (options) => {
-                ConfirmationEventBus__default['default'].emit('confirm', options);
+                ConfirmationEventBus__default["default"].emit('confirm', options);
             },
             close: () => {
-                ConfirmationEventBus__default['default'].emit('close');
+                ConfirmationEventBus__default["default"].emit('close');
             }
         };
         app.config.globalProperties.$confirm = ConfirmationService;

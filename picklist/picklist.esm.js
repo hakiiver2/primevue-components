@@ -1,7 +1,7 @@
 import Button from 'primevue/button';
 import { ObjectUtils, DomHandler, UniqueComponentId } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, createVNode, createCommentVNode, TransitionGroup, normalizeStyle, withCtx, Fragment, renderList, withDirectives } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, renderSlot, createVNode, createCommentVNode, createElementVNode, TransitionGroup, normalizeStyle, withCtx, Fragment, renderList, withDirectives } from 'vue';
 
 var script = {
     name: 'PickList',
@@ -38,6 +38,14 @@ var script = {
         stripedRows: {
             type: Boolean,
             default: false
+        },
+        showSourceControls: {
+            type: Boolean,
+            default: true
+        },
+        showTargetControls: {
+            type: Boolean,
+            default: true
         }
     },
     itemTouched: false,
@@ -516,7 +524,10 @@ var script = {
     }
 };
 
-const _hoisted_1 = { class: "p-picklist-buttons p-picklist-source-controls" };
+const _hoisted_1 = {
+  key: 0,
+  class: "p-picklist-buttons p-picklist-source-controls"
+};
 const _hoisted_2 = { class: "p-picklist-list-wrapper p-picklist-source-wrapper" };
 const _hoisted_3 = {
   key: 0,
@@ -530,7 +541,10 @@ const _hoisted_7 = {
   class: "p-picklist-header"
 };
 const _hoisted_8 = ["onClick", "onDblclick", "onKeydown", "aria-selected"];
-const _hoisted_9 = { class: "p-picklist-buttons p-picklist-target-controls" };
+const _hoisted_9 = {
+  key: 1,
+  class: "p-picklist-buttons p-picklist-target-controls"
+};
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PLButton = resolveComponent("PLButton");
@@ -539,30 +553,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock("div", {
     class: normalizeClass($options.containerClass)
   }, [
-    createElementVNode("div", _hoisted_1, [
-      renderSlot(_ctx.$slots, "sourcecontrolsstart"),
-      createVNode(_component_PLButton, {
-        type: "button",
-        icon: "pi pi-angle-up",
-        onClick: _cache[0] || (_cache[0] = $event => ($options.moveUp($event, 0)))
-      }),
-      createVNode(_component_PLButton, {
-        type: "button",
-        icon: "pi pi-angle-double-up",
-        onClick: _cache[1] || (_cache[1] = $event => ($options.moveTop($event, 0)))
-      }),
-      createVNode(_component_PLButton, {
-        type: "button",
-        icon: "pi pi-angle-down",
-        onClick: _cache[2] || (_cache[2] = $event => ($options.moveDown($event, 0)))
-      }),
-      createVNode(_component_PLButton, {
-        type: "button",
-        icon: "pi pi-angle-double-down",
-        onClick: _cache[3] || (_cache[3] = $event => ($options.moveBottom($event, 0)))
-      }),
-      renderSlot(_ctx.$slots, "sourcecontrolsend")
-    ]),
+    ($props.showSourceControls)
+      ? (openBlock(), createElementBlock("div", _hoisted_1, [
+          renderSlot(_ctx.$slots, "sourcecontrolsstart"),
+          createVNode(_component_PLButton, {
+            type: "button",
+            icon: "pi pi-angle-up",
+            onClick: _cache[0] || (_cache[0] = $event => ($options.moveUp($event, 0)))
+          }),
+          createVNode(_component_PLButton, {
+            type: "button",
+            icon: "pi pi-angle-double-up",
+            onClick: _cache[1] || (_cache[1] = $event => ($options.moveTop($event, 0)))
+          }),
+          createVNode(_component_PLButton, {
+            type: "button",
+            icon: "pi pi-angle-down",
+            onClick: _cache[2] || (_cache[2] = $event => ($options.moveDown($event, 0)))
+          }),
+          createVNode(_component_PLButton, {
+            type: "button",
+            icon: "pi pi-angle-double-down",
+            onClick: _cache[3] || (_cache[3] = $event => ($options.moveBottom($event, 0)))
+          }),
+          renderSlot(_ctx.$slots, "sourcecontrolsend")
+        ]))
+      : createCommentVNode("", true),
     createElementVNode("div", _hoisted_2, [
       (_ctx.$slots.sourceheader)
         ? (openBlock(), createElementBlock("div", _hoisted_3, [
@@ -667,30 +683,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 3
       }, 8, ["style"])
     ]),
-    createElementVNode("div", _hoisted_9, [
-      renderSlot(_ctx.$slots, "targetcontrolsstart"),
-      createVNode(_component_PLButton, {
-        type: "button",
-        icon: "pi pi-angle-up",
-        onClick: _cache[6] || (_cache[6] = $event => ($options.moveUp($event, 1)))
-      }),
-      createVNode(_component_PLButton, {
-        type: "button",
-        icon: "pi pi-angle-double-up",
-        onClick: _cache[7] || (_cache[7] = $event => ($options.moveTop($event, 1)))
-      }),
-      createVNode(_component_PLButton, {
-        type: "button",
-        icon: "pi pi-angle-down",
-        onClick: _cache[8] || (_cache[8] = $event => ($options.moveDown($event, 1)))
-      }),
-      createVNode(_component_PLButton, {
-        type: "button",
-        icon: "pi pi-angle-double-down",
-        onClick: _cache[9] || (_cache[9] = $event => ($options.moveBottom($event, 1)))
-      }),
-      renderSlot(_ctx.$slots, "targetcontrolsend")
-    ])
+    ($props.showTargetControls)
+      ? (openBlock(), createElementBlock("div", _hoisted_9, [
+          renderSlot(_ctx.$slots, "targetcontrolsstart"),
+          createVNode(_component_PLButton, {
+            type: "button",
+            icon: "pi pi-angle-up",
+            onClick: _cache[6] || (_cache[6] = $event => ($options.moveUp($event, 1)))
+          }),
+          createVNode(_component_PLButton, {
+            type: "button",
+            icon: "pi pi-angle-double-up",
+            onClick: _cache[7] || (_cache[7] = $event => ($options.moveTop($event, 1)))
+          }),
+          createVNode(_component_PLButton, {
+            type: "button",
+            icon: "pi pi-angle-down",
+            onClick: _cache[8] || (_cache[8] = $event => ($options.moveDown($event, 1)))
+          }),
+          createVNode(_component_PLButton, {
+            type: "button",
+            icon: "pi pi-angle-double-down",
+            onClick: _cache[9] || (_cache[9] = $event => ($options.moveBottom($event, 1)))
+          }),
+          renderSlot(_ctx.$slots, "targetcontrolsend")
+        ]))
+      : createCommentVNode("", true)
   ], 2))
 }
 

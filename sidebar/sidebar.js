@@ -148,10 +148,10 @@ this.primevue.sidebar = (function (utils, Ripple, Portal, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         },
         components: {
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -255,4 +255,4 @@ this.primevue.sidebar = (function (utils, Ripple, Portal, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, primevue.portal, Vue));
+})(primevue.utils, primevue.ripple, primevue.portal, Vue);

@@ -155,7 +155,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
         overlayEventListener: null,
         beforeUnmount() {
             if (this.overlayEventListener) {
-                OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+                OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
                 this.overlayEventListener = null;
             }
 
@@ -358,7 +358,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
             onContentClick(event) {
                 this.selfClick = true;
 
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.overlay
                 });
@@ -381,7 +381,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                         this.selfClick = true;
                     }
                 };
-                OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+                OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
             },
             onOverlayLeave() {
                 this.onOverlayHide();
@@ -394,7 +394,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                 this.unbindResizeListener();
                 this.unbindScrollListener();
                 this.overlay = null;
-                OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+                OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
                 this.overlayEventListener = null;
             },
             overlayRef(el) {
@@ -522,9 +522,9 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
             }
         },
         components: {
-            'CFDropdown': Dropdown__default['default'],
-            'CFButton': Button__default['default'],
-            'Portal': Portal__default['default']
+            'CFDropdown': Dropdown__default["default"],
+            'CFButton': Button__default["default"],
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -1573,7 +1573,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
         },
         beforeUnmount() {
             if (this.overlayEventListener) {
-                OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+                OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
                 this.overlayEventListener = null;
             }
         },
@@ -1621,7 +1621,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
             switchCellToViewMode() {
                 this.d_editing = false;
                 this.unbindDocumentEditListener();
-                OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+                OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
                 this.overlayEventListener = null;
             },
             onClick(event) {
@@ -1638,7 +1638,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                                 this.selfClick = true;
                             }
                         };
-                        OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+                        OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
                     }
                 }
             },
@@ -1774,10 +1774,19 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                 this.$emit('row-edit-init', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
             },
             editorSaveCallback(event) {
-                this.$emit('row-edit-save', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+                if (this.editMode === 'row') {
+                    this.$emit('row-edit-save', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+                } else {
+                    this.completeEdit(event, 'enter');
+                }
             },
             editorCancelCallback(event) {
-                this.$emit('row-edit-cancel', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+                if (this.editMode === 'row') {
+                    this.$emit('row-edit-cancel', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+                } else {
+                    this.switchCellToViewMode();
+                    this.$emit('cell-edit-cancel', {originalEvent: event, data: this.rowData, field: this.field, index: this.rowIndex});
+                }
             },
             updateStickyPosition() {
                 if (this.columnProp('frozen')) {
@@ -1846,7 +1855,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
             'DTCheckbox': script$5
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -4565,6 +4574,9 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                 }
 
                 return _data;
+            },
+            getVirtualScrollerRef() {
+                return this.$refs.virtualScroller;
             }
         },
         computed: {
@@ -4704,11 +4716,11 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
             }
         },
         components: {
-            'DTPaginator': Paginator__default['default'],
+            'DTPaginator': Paginator__default["default"],
             'DTTableHeader': script$7,
             'DTTableBody': script$3,
             'DTTableFooter': script$1,
-            'DTVirtualScroller': VirtualScroller__default['default']
+            'DTVirtualScroller': VirtualScroller__default["default"]
         }
     };
 
@@ -4805,7 +4817,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
           class: "p-datatable-wrapper",
           style: vue.normalizeStyle({ maxHeight: $options.virtualScrollerDisabled ? $props.scrollHeight : '' })
         }, [
-          vue.createVNode(_component_DTVirtualScroller, vue.mergeProps($props.virtualScrollerOptions, {
+          vue.createVNode(_component_DTVirtualScroller, vue.mergeProps({ ref: "virtualScroller" }, $props.virtualScrollerOptions, {
             items: $options.processedData,
             columns: $options.columns,
             style: { height: $props.scrollHeight },
@@ -5055,4 +5067,4 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
 
     return script;
 
-}(primevue.utils, primevue.api, primevue.paginator, primevue.virtualscroller, Vue, primevue.overlayeventbus, primevue.dropdown, primevue.button, primevue.portal, primevue.ripple));
+})(primevue.utils, primevue.api, primevue.paginator, primevue.virtualscroller, Vue, primevue.overlayeventbus, primevue.dropdown, primevue.button, primevue.portal, primevue.ripple);

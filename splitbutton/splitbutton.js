@@ -55,8 +55,8 @@ this.primevue.splitbutton = (function (Button, TieredMenu, utils, vue) {
             }
         },
         components: {
-            'PVSButton': Button__default['default'],
-            'PVSMenu': TieredMenu__default['default']
+            'PVSButton': Button__default["default"],
+            'PVSMenu': TieredMenu__default["default"]
         }
     };
 
@@ -134,4 +134,4 @@ this.primevue.splitbutton = (function (Button, TieredMenu, utils, vue) {
 
     return script;
 
-}(primevue.button, primevue.tieredmenu, primevue.utils, Vue));
+})(primevue.button, primevue.tieredmenu, primevue.utils, Vue);

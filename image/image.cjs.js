@@ -134,7 +134,7 @@ var script = {
         }
     },
     components: {
-        'Portal': Portal__default['default']
+        'Portal': Portal__default["default"]
     }
 };
 

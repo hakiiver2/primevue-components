@@ -109,4 +109,4 @@ this.primevue.avatar = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

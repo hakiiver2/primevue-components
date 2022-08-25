@@ -15,11 +15,11 @@ this.primevue.dialogservice = (function (vue, usedialog, DynamicDialogEventBus) 
                         options: options || {},
                         data: options && options.data,
                         close: (params) => {
-                            DynamicDialogEventBus__default['default'].emit('close', { instance, params });
+                            DynamicDialogEventBus__default["default"].emit('close', { instance, params });
                         }
                     };
 
-                    DynamicDialogEventBus__default['default'].emit('open', { instance });
+                    DynamicDialogEventBus__default["default"].emit('open', { instance });
 
                     return instance;
                 }
@@ -33,4 +33,4 @@ this.primevue.dialogservice = (function (vue, usedialog, DynamicDialogEventBus) 
 
     return DialogService;
 
-}(Vue, primevue.usedialog, primevue.dynamicdialogeventbus));
+})(Vue, primevue.usedialog, primevue.dynamicdialogeventbus);

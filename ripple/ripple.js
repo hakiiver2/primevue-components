@@ -13,6 +13,7 @@ this.primevue.ripple = (function (utils) {
     function create(el) {
         let ink = document.createElement('span');
         ink.className = 'p-ink';
+        ink.setAttribute("role", "presentation");
         el.appendChild(ink);
 
         ink.addEventListener('animationend', onAnimationEnd);
@@ -77,4 +78,4 @@ this.primevue.ripple = (function (utils) {
 
     return Ripple;
 
-}(primevue.utils));
+})(primevue.utils);

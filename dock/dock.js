@@ -74,8 +74,8 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default'],
-            'tooltip': Tooltip__default['default']
+            'ripple': Ripple__default["default"],
+            'tooltip': Tooltip__default["default"]
         }
     };
 
@@ -248,4 +248,4 @@ this.primevue.dock = (function (Ripple, Tooltip, vue) {
 
     return script;
 
-}(primevue.ripple, primevue.tooltip, Vue));
+})(primevue.ripple, primevue.tooltip, Vue);

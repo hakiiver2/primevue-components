@@ -19,8 +19,7 @@ var script = {
         optionDisabled: null,
 		multiple: Boolean,
         disabled: Boolean,
-        dataKey: null,
-        ariaLabelledBy: null
+        dataKey: null
     },
     methods: {
         getOptionLabel(option) {
@@ -51,11 +50,18 @@ var script = {
                     newValue = this.modelValue ? [...this.modelValue, optionValue]: [optionValue];
             }
             else {
-                newValue = optionValue;
+                newValue = selected ? null : optionValue;
             }
 
             this.$emit('update:modelValue', newValue);
             this.$emit('change', {event: event, value: newValue});
+        },
+        onKeydown(event, option) {
+            //space
+            if (event.which === 32) {
+                this.onOptionSelect(event, option);
+                event.preventDefault();
+            }
         },
         isSelected(option) {
             let selected = false;
@@ -101,11 +107,11 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
-const _hoisted_1 = ["aria-label", "aria-pressed", "onClick", "onKeydown", "tabindex", "aria-labelledby"];
+const _hoisted_1 = ["aria-label", "aria-pressed", "tabindex", "onClick", "onKeydown"];
 const _hoisted_2 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -121,16 +127,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "aria-label": $options.getOptionLabel(option),
         role: "button",
         "aria-pressed": $options.isSelected(option),
-        onClick: $event => ($options.onOptionSelect($event, option, i)),
-        onKeydown: [
-          vue.withKeys(vue.withModifiers($event => ($options.onOptionSelect($event, option, i)), ["prevent"]), ["enter"]),
-          vue.withKeys(vue.withModifiers($event => ($options.onOptionSelect($event, option)), ["prevent"]), ["space"])
-        ],
+        class: vue.normalizeClass($options.getButtonClass(option)),
         tabindex: $options.isOptionDisabled(option) ? null : '0',
+        onClick: $event => ($options.onOptionSelect($event, option)),
+        onKeydown: $event => ($options.onKeydown($event, option)),
         onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
-        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event))),
-        "aria-labelledby": $props.ariaLabelledBy,
-        class: vue.normalizeClass($options.getButtonClass(option))
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event)))
       }, [
         vue.renderSlot(_ctx.$slots, "option", {
           option: option,

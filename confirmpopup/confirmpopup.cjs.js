@@ -53,12 +53,12 @@ var script = {
             this.visible = false;
             this.confirmation = null;
         };
-        ConfirmationEventBus__default['default'].on('confirm', this.confirmListener);
-        ConfirmationEventBus__default['default'].on('close', this.closeListener);
+        ConfirmationEventBus__default["default"].on('confirm', this.confirmListener);
+        ConfirmationEventBus__default["default"].on('close', this.closeListener);
     },
     beforeUnmount() {
-        ConfirmationEventBus__default['default'].off('confirm', this.confirmListener);
-        ConfirmationEventBus__default['default'].off('close', this.closeListener);
+        ConfirmationEventBus__default["default"].off('confirm', this.confirmListener);
+        ConfirmationEventBus__default["default"].off('close', this.closeListener);
 
         this.unbindOutsideClickListener();
         if (this.scrollHandler) {
@@ -178,7 +178,7 @@ var script = {
             this.container = el;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.target
             });
@@ -220,8 +220,8 @@ var script = {
         }
     },
     components: {
-        'CPButton': Button__default['default'],
-        'Portal': Portal__default['default']
+        'CPButton': Button__default["default"],
+        'Portal': Portal__default["default"]
     }
 };
 

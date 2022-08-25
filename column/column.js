@@ -185,4 +185,4 @@ this.primevue.column = (function () {
 
     return script;
 
-}());
+})();

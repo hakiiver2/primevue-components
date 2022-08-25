@@ -126,6 +126,7 @@
       "stepSeconds",
       "showSeconds",
       "hideOnDateTimeSelect",
+      "hideOnRangeSelection",
       "timeSeparator",
       "showWeek",
       "manualInput",
@@ -167,7 +168,6 @@
       "dataKey",
       "tabindex",
       "inputId",
-      "ariaLabelledBy",
       "appendTo",
       "panelClass",
       "loading",
@@ -816,6 +816,7 @@
     "description": "Password displays strength indicator for password fields.",
     "attributes": [
       "modelValue",
+      "inputId",
       "promptLabel",
       "mediumRegex",
       "strongRegex",
@@ -844,7 +845,9 @@
       "listStyle",
       "responsive",
       "breakpoint",
-      "stripedRows"
+      "stripedRows",
+      "showSourceControls",
+      "showTargetControls"
     ]
   },
   "Portal": {
@@ -908,8 +911,7 @@
       "optionDisabled",
       "multiple",
       "disabled",
-      "dataKey",
-      "ariaLabelledBy"
+      "dataKey"
     ]
   },
   "Sidebar": {
@@ -946,7 +948,9 @@
       "step",
       "range",
       "disabled",
-      "ariaLabelledBy"
+      "tabindex",
+      "aria-labelledby",
+      "aria-label"
     ]
   },
   "SpeedDial": {

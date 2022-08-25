@@ -530,7 +530,7 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, Portal, vue) {
                 this.hueHandle = null;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -552,7 +552,7 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, Portal, vue) {
             }
         },
         components: {
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -675,4 +675,4 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, Portal, vue) {
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.portal, Vue);

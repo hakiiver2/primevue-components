@@ -7,7 +7,7 @@
         <input v-if="editable" type="text" class="p-dropdown-label p-inputtext" :disabled="disabled" @focus="onFocus" @blur="onBlur" :placeholder="placeholder" :value="editableInputValue" @input="onEditableInput"
             aria-haspopup="listbox" :aria-expanded="overlayVisible">
         <span v-if="!editable" :class="labelClass">
-            <slot name="value" :value="modelValue" :placeholder="placeholder">{{label||'empty'}}</slot>
+            <slot name="value" :value="modelValue" :placeholder="placeholder">{{label === 'p-emptylabel' ? '&nbsp;' : label ||'empty'}}</slot>
         </span>
         <i v-if="showClear && modelValue != null" class="p-dropdown-clear-icon pi pi-times" @click="onClearClick($event)"></i>
         <div class="p-dropdown-trigger" role="button" aria-haspopup="listbox" :aria-expanded="overlayVisible">
@@ -624,6 +624,8 @@ export default {
         onFilterChange(event) {
             this.filterValue = event.target.value;
             this.$emit('filter', {originalEvent: event, value: event.target.value});
+
+            !this.virtualScrollerDisabled && this.virtualScroller.scrollToIndex(0);
         },
         onFilterUpdated() {
             if (this.overlayVisible) {

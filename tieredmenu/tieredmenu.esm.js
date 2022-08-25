@@ -2,7 +2,7 @@ import { DomHandler, ZIndexUtils, ConnectedOverlayScrollHandler } from 'primevue
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Portal from 'primevue/portal';
 import Ripple from 'primevue/ripple';
-import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, Fragment, renderList, normalizeStyle, createBlock, withCtx, withDirectives, createElementVNode, toDisplayString, createCommentVNode, resolveDynamicComponent, createVNode, Transition, mergeProps } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createElementBlock, normalizeClass, Fragment, renderList, normalizeStyle, createBlock, withCtx, withDirectives, createCommentVNode, createElementVNode, toDisplayString, resolveDynamicComponent, createVNode, Transition, mergeProps } from 'vue';
 
 var script$1 = {
     name: 'TieredMenuSub',
@@ -87,7 +87,7 @@ var script$1 = {
                 if (this.activeItem && item === this.activeItem)
                     this.activeItem = null;
                 else
-                   this.activeItem = item;
+                    this.activeItem = item;
             }
 
             if (!item.items) {
@@ -226,7 +226,7 @@ const _hoisted_3 = { class: "p-menuitem-text" };
 const _hoisted_4 = ["href", "target", "aria-haspopup", "aria-expanded", "onClick", "onKeydown", "tabindex"];
 const _hoisted_5 = { class: "p-menuitem-text" };
 const _hoisted_6 = {
-  key: 0,
+  key: 1,
   class: "p-submenu-icon pi pi-angle-right"
 };
 
@@ -269,9 +269,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                               onKeydown: $event => ($options.onItemKeyDown($event, item)),
                               role: "menuitem"
                             }, [
-                              createElementVNode("span", {
-                                class: normalizeClass(['p-menuitem-icon', item.icon])
-                              }, null, 2),
+                              (item.icon)
+                                ? (openBlock(), createElementBlock("span", {
+                                    key: 0,
+                                    class: normalizeClass(['p-menuitem-icon', item.icon])
+                                  }, null, 2))
+                                : createCommentVNode("", true),
                               createElementVNode("span", _hoisted_3, toDisplayString($options.label(item)), 1)
                             ], 42, _hoisted_2)), [
                               [_directive_ripple]
@@ -291,9 +294,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                           role: "menuitem",
                           tabindex: $options.disabled(item) ? null : '0'
                         }, [
-                          createElementVNode("span", {
-                            class: normalizeClass(['p-menuitem-icon', item.icon])
-                          }, null, 2),
+                          (item.icon)
+                            ? (openBlock(), createElementBlock("span", {
+                                key: 0,
+                                class: normalizeClass(['p-menuitem-icon', item.icon])
+                              }, null, 2))
+                            : createCommentVNode("", true),
                           createElementVNode("span", _hoisted_5, toDisplayString($options.label(item)), 1),
                           (item.items)
                             ? (openBlock(), createElementBlock("span", _hoisted_6))

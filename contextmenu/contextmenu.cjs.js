@@ -73,7 +73,7 @@ var script$1 = {
                 if (this.activeItem && item === this.activeItem)
                     this.activeItem = null;
                 else
-                   this.activeItem = item;
+                    this.activeItem = item;
             }
 
             if (!item.items) {
@@ -137,7 +137,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
@@ -147,7 +147,7 @@ const _hoisted_3 = { class: "p-menuitem-text" };
 const _hoisted_4 = ["href", "target", "onClick", "aria-haspopup", "aria-expanded", "tabindex"];
 const _hoisted_5 = { class: "p-menuitem-text" };
 const _hoisted_6 = {
-  key: 0,
+  key: 1,
   class: "p-submenu-icon pi pi-angle-right"
 };
 
@@ -195,9 +195,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                                       class: vue.normalizeClass($options.linkClass(item, {isActive, isExactActive})),
                                       role: "menuitem"
                                     }, [
-                                      vue.createElementVNode("span", {
-                                        class: vue.normalizeClass(['p-menuitem-icon', item.icon])
-                                      }, null, 2),
+                                      (item.icon)
+                                        ? (vue.openBlock(), vue.createElementBlock("span", {
+                                            key: 0,
+                                            class: vue.normalizeClass(['p-menuitem-icon', item.icon])
+                                          }, null, 2))
+                                        : vue.createCommentVNode("", true),
                                       vue.createElementVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
                                     ], 10, _hoisted_2)), [
                                       [_directive_ripple]
@@ -216,9 +219,12 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                                   role: "menuitem",
                                   tabindex: $options.disabled(item) ? null : '0'
                                 }, [
-                                  vue.createElementVNode("span", {
-                                    class: vue.normalizeClass(['p-menuitem-icon', item.icon])
-                                  }, null, 2),
+                                  (item.icon)
+                                    ? (vue.openBlock(), vue.createElementBlock("span", {
+                                        key: 0,
+                                        class: vue.normalizeClass(['p-menuitem-icon', item.icon])
+                                      }, null, 2))
+                                    : vue.createCommentVNode("", true),
                                   vue.createElementVNode("span", _hoisted_5, vue.toDisplayString($options.label(item)), 1),
                                   (item.items)
                                     ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_6))
@@ -460,7 +466,7 @@ var script = {
     },
     components: {
         'ContextMenuSub': script$1,
-        'Portal': Portal__default['default']
+        'Portal': Portal__default["default"]
     }
 };
 

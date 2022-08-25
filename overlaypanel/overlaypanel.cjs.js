@@ -15,6 +15,7 @@ var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 var script = {
     name: 'OverlayPanel',
     inheritAttrs: false,
+    emits: ['show', 'hide'],
     props: {
 		dismissable: {
 			type: Boolean,
@@ -45,10 +46,21 @@ var script = {
             default: null
         }
     },
-    emits: ['show', 'hide'],
     data() {
         return {
             visible: false
+        }
+    },
+    watch: {
+        dismissable: {
+            immediate: true,
+            handler(newValue) {
+                if (newValue) {
+                    this.bindOutsideClickListener();
+                } else {
+                    this.unbindOutsideClickListener();
+                }
+            }
         }
     },
     selfClick: false,
@@ -78,7 +90,7 @@ var script = {
         }
 
         if (this.overlayEventListener) {
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         }
 
@@ -127,14 +139,14 @@ var script = {
                 }
             };
 
-            OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
             this.$emit('show');
         },
         onLeave() {
             this.unbindOutsideClickListener();
             this.unbindScrollListener();
             this.unbindResizeListener();
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
             this.$emit('hide');
         },
@@ -242,7 +254,7 @@ var script = {
             }
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.target
             });
@@ -260,10 +272,10 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     },
     components: {
-        'Portal': Portal__default['default']
+        'Portal': Portal__default["default"]
     }
 };
 

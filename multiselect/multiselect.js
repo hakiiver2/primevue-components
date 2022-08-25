@@ -494,7 +494,7 @@ this.primevue.multiselect = (function (utils, OverlayEventBus, api, Ripple, Virt
                 this.$emit('change', {originalEvent: event, value: value});
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -636,11 +636,11 @@ this.primevue.multiselect = (function (utils, OverlayEventBus, api, Ripple, Virt
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         },
         components: {
-            'VirtualScroller': VirtualScroller__default['default'],
-            'Portal': Portal__default['default']
+            'VirtualScroller': VirtualScroller__default["default"],
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -999,4 +999,4 @@ this.primevue.multiselect = (function (utils, OverlayEventBus, api, Ripple, Virt
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue);

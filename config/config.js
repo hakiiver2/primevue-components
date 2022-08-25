@@ -105,11 +105,11 @@ this.primevue.config = (function (exports, vue, api) {
         }
     };
 
-    exports['default'] = PrimeVue;
+    exports["default"] = PrimeVue;
     exports.usePrimeVue = usePrimeVue;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
     return exports;
 
-}({}, Vue, primevue.api));
+})({}, Vue, primevue.api);

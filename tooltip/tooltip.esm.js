@@ -267,7 +267,7 @@ function isOutOfBounds(el) {
 }
 
 function getTarget(el) {
-    return DomHandler.hasClass(el, 'p-inputwrapper') ? DomHandler.findSingle(el, 'input'): el;
+    return DomHandler.hasClass(el, 'p-inputwrapper') && !DomHandler.hasClass(el, 'p-dropdown') ? DomHandler.findSingle(el, 'input'): el;
 }
 
 function getModifiers(options) {

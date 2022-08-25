@@ -110,4 +110,4 @@ this.primevue.tristatecheckbox = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

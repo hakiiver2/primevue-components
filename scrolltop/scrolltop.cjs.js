@@ -32,6 +32,10 @@ var script = {
         reverse: {
             type: Boolean,
             default: false
+        },
+        sticky: {
+            type: Boolean,
+            default: true
         }
     },
     mounted() {
@@ -119,7 +123,7 @@ var script = {
     },
     computed: {
         containerClass() {
-            return ['p-scrolltop p-link p-component', {'p-scrolltop-sticky': this.target !== 'window'}];
+            return ['p-scrolltop p-link p-component', {'p-scrolltop-sticky': this.target !== 'window' && this.sticky == true}];
         },
         iconClass() {
             return ['p-scrolltop-icon', this.icon];

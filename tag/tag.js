@@ -76,4 +76,4 @@ this.primevue.tag = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

@@ -11,7 +11,6 @@ var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
 
 var script = {
     name: 'InputNumber',
-    inheritAttrs: false,
     emits: ['update:modelValue', 'input', 'focus', 'blur'],
     props: {
         modelValue: {
@@ -106,10 +105,14 @@ var script = {
             type: Boolean,
             default: false
         },
-        style: null,
-        class: null,
-        inputStyle: null,
-        inputClass: null
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        inputId: null,
+        inputProps: null,
+        incrementButtonProps: null,
+        decrementButtonProps: null
     },
     numberFormat: null,
     _numeral: null,
@@ -321,24 +324,24 @@ var script = {
             }
         },
         onUpButtonMouseDown(event) {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.$refs.input.$el.focus();
                 this.repeat(event, null, 1);
                 event.preventDefault();
             }
         },
         onUpButtonMouseUp() {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.clearTimer();
             }
         },
         onUpButtonMouseLeave() {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.clearTimer();
             }
         },
         onUpButtonKeyUp() {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.clearTimer();
             }
         },
@@ -348,24 +351,24 @@ var script = {
             }
         },
         onDownButtonMouseDown(event) {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.$refs.input.$el.focus();
                 this.repeat(event, null, -1);
                 event.preventDefault();
             }
         },
         onDownButtonMouseUp() {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.clearTimer();
             }
         },
         onDownButtonMouseLeave() {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.clearTimer();
             }
         },
         onDownButtonKeyUp() {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.clearTimer();
             }
         },
@@ -527,6 +530,22 @@ var script = {
                     else {
                         newValueStr = this.deleteRange(inputValue, selectionStart, selectionEnd);
                         this.updateValue(event, newValueStr, null, 'delete-range');
+                    }
+                break;
+
+                //home
+                case 36:
+                    if (this.min) {
+                        this.updateModel(event, this.min);
+                        event.preventDefault();
+                    }
+                break;
+
+                //end
+                case 35:
+                    if (this.max) {
+                        this.updateModel(event, this.max);
+                        event.preventDefault();
                     }
                 break;
             }
@@ -938,7 +957,7 @@ var script = {
     },
     computed: {
         containerClass() {
-            return ['p-inputnumber p-component p-inputwrapper', this.class, {
+            return ['p-inputnumber p-component p-inputwrapper', {
                 'p-inputwrapper-filled': this.filled,
                 'p-inputwrapper-focus': this.focused,
                 'p-inputnumber-buttons-stacked': this.showButtons && this.buttonLayout === 'stacked',
@@ -948,7 +967,7 @@ var script = {
         },
         
         upButtonClass() {
-            return ['p-inputnumber-button p-inputnumber-button-up', this.incrementButtonClass, {
+            return ['p-inputnumber-button p-inputnumber-button-up', {
                 'p-disabled': this.showButtons && this.max !== null && this.maxBoundry()
             }];
         },
@@ -987,8 +1006,8 @@ var script = {
         }
     },
     components: {
-        'INInputText': InputText__default['default'],
-        'INButton': Button__default['default']
+        'INInputText': InputText__default["default"],
+        'INButton': Button__default["default"]
     }
 };
 
@@ -1002,17 +1021,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_INButton = vue.resolveComponent("INButton");
 
   return (vue.openBlock(), vue.createElementBlock("span", {
-    class: vue.normalizeClass($options.containerClass),
-    style: vue.normalizeStyle($props.style)
+    class: vue.normalizeClass($options.containerClass)
   }, [
     vue.createVNode(_component_INInputText, vue.mergeProps({
       ref: "input",
-      class: ['p-inputnumber-input', $props.inputClass],
-      style: $props.inputStyle,
-      value: $options.formattedValue
-    }, _ctx.$attrs, {
-      "aria-valumin": $props.min,
+      class: "p-inputnumber-input",
+      role: "spinbutton",
+      id: $props.inputId,
+      value: $options.formattedValue,
+      "aria-valuemin": $props.min,
       "aria-valuemax": $props.max,
+      "aria-valuenow": $props.modelValue,
       readonly: $props.readonly,
       onInput: $options.onUserInput,
       onKeydown: $options.onInputKeyDown,
@@ -1021,21 +1040,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: $options.onInputClick,
       onFocus: $options.onInputFocus,
       onBlur: $options.onInputBlur
-    }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
+    }, $props.inputProps), null, 16, ["id", "value", "aria-valuemin", "aria-valuemax", "aria-valuenow", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
     ($props.showButtons && $props.buttonLayout === 'stacked')
       ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_1, [
           vue.createVNode(_component_INButton, vue.mergeProps({
             class: $options.upButtonClass,
             icon: $props.incrementButtonIcon
-          }, vue.toHandlers($options.upButtonListeners), {
-            disabled: _ctx.$attrs.disabled
-          }), null, 16, ["class", "icon", "disabled"]),
+          }, vue.toHandlers($options.upButtonListeners), { disabled: $props.disabled }, $props.incrementButtonProps), null, 16, ["class", "icon", "disabled"]),
           vue.createVNode(_component_INButton, vue.mergeProps({
             class: $options.downButtonClass,
             icon: $props.decrementButtonIcon
-          }, vue.toHandlers($options.downButtonListeners), {
-            disabled: _ctx.$attrs.disabled
-          }), null, 16, ["class", "icon", "disabled"])
+          }, vue.toHandlers($options.downButtonListeners), { disabled: $props.disabled }, $props.decrementButtonProps), null, 16, ["class", "icon", "disabled"])
         ]))
       : vue.createCommentVNode("", true),
     ($props.showButtons && $props.buttonLayout !== 'stacked')
@@ -1043,20 +1058,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           key: 1,
           class: $options.upButtonClass,
           icon: $props.incrementButtonIcon
-        }, vue.toHandlers($options.upButtonListeners), {
-          disabled: _ctx.$attrs.disabled
-        }), null, 16, ["class", "icon", "disabled"]))
+        }, vue.toHandlers($options.upButtonListeners), { disabled: $props.disabled }, $props.incrementButtonProps), null, 16, ["class", "icon", "disabled"]))
       : vue.createCommentVNode("", true),
     ($props.showButtons && $props.buttonLayout !== 'stacked')
       ? (vue.openBlock(), vue.createBlock(_component_INButton, vue.mergeProps({
           key: 2,
           class: $options.downButtonClass,
           icon: $props.decrementButtonIcon
-        }, vue.toHandlers($options.downButtonListeners), {
-          disabled: _ctx.$attrs.disabled
-        }), null, 16, ["class", "icon", "disabled"]))
+        }, vue.toHandlers($options.downButtonListeners), { disabled: $props.disabled }, $props.decrementButtonProps), null, 16, ["class", "icon", "disabled"]))
       : vue.createCommentVNode("", true)
-  ], 6))
+  ], 2))
 }
 
 function styleInject(css, ref) {

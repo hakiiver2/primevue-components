@@ -151,10 +151,10 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     },
     components: {
-        'Portal': Portal__default['default']
+        'Portal': Portal__default["default"]
     }
 };
 

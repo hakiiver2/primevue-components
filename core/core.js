@@ -887,7 +887,7 @@ this.primevue.utils = (function (exports) {
 
     return exports;
 
-}({}));
+})({});
 
 this.primevue = this.primevue || {};
 this.primevue.api = (function (exports, utils) {
@@ -1476,7 +1476,7 @@ this.primevue.api = (function (exports, utils) {
 
     return exports;
 
-}({}, primevue.utils));
+})({}, primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.config = (function (exports, vue, api) {
@@ -1585,14 +1585,14 @@ this.primevue.config = (function (exports, vue, api) {
         }
     };
 
-    exports['default'] = PrimeVue;
+    exports["default"] = PrimeVue;
     exports.usePrimeVue = usePrimeVue;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
     return exports;
 
-}({}, Vue, primevue.api));
+})({}, Vue, primevue.api);
 
 this.primevue = this.primevue || {};
 this.primevue.ripple = (function (utils) {
@@ -1609,6 +1609,7 @@ this.primevue.ripple = (function (utils) {
     function create(el) {
         let ink = document.createElement('span');
         ink.className = 'p-ink';
+        ink.setAttribute("role", "presentation");
         el.appendChild(ink);
 
         ink.addEventListener('animationend', onAnimationEnd);
@@ -1673,7 +1674,7 @@ this.primevue.ripple = (function (utils) {
 
     return Ripple;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.portal = (function (utils, vue) {
@@ -1718,7 +1719,7 @@ this.primevue.portal = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.tooltip = (function (utils) {
@@ -1991,7 +1992,7 @@ this.primevue.tooltip = (function (utils) {
     }
 
     function getTarget(el) {
-        return utils.DomHandler.hasClass(el, 'p-inputwrapper') ? utils.DomHandler.findSingle(el, 'input'): el;
+        return utils.DomHandler.hasClass(el, 'p-inputwrapper') && !utils.DomHandler.hasClass(el, 'p-dropdown') ? utils.DomHandler.findSingle(el, 'input'): el;
     }
 
     function getModifiers(options) {
@@ -2069,7 +2070,7 @@ this.primevue.tooltip = (function (utils) {
 
     return Tooltip;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.virtualscroller = (function (vue) {
@@ -2198,24 +2199,20 @@ this.primevue.virtualscroller = (function (vue) {
                 const first = this.first;
                 const { numToleratedItems } = this.calculateNumItems();
                 const itemSize = this.itemSize;
-                const contentPos = this.getContentPosition();
                 const calculateFirst = (_index = 0, _numT) => (_index <= _numT ? 0 : _index);
-                const calculateCoord = (_first, _size, _cpos) => (_first * _size) + _cpos;
+                const calculateCoord = (_first, _size) => (_first * _size);
                 const scrollTo = (left = 0, top = 0) => this.scrollTo({ left, top, behavior });
 
                 if (both) {
                     const newFirst = { rows: calculateFirst(index[0], numToleratedItems[0]), cols: calculateFirst(index[1], numToleratedItems[1]) };
                     if (newFirst.rows !== first.rows || newFirst.cols !== first.cols) {
-                        scrollTo(calculateCoord(newFirst.cols, itemSize[1], contentPos.left), calculateCoord(newFirst.rows, itemSize[0], contentPos.top));
-                        this.first = newFirst;
+                        scrollTo(calculateCoord(newFirst.cols, itemSize[1]), calculateCoord(newFirst.rows, itemSize[0]));
                     }
                 }
                 else {
                     const newFirst = calculateFirst(index, numToleratedItems);
-
                     if (newFirst !== first) {
-                        horizontal ? scrollTo(calculateCoord(newFirst, itemSize, contentPos.left), 0) : scrollTo(0, calculateCoord(newFirst, itemSize, contentPos.top));
-                        this.first = newFirst;
+                        horizontal ? scrollTo(calculateCoord(newFirst, itemSize), 0) : scrollTo(0, calculateCoord(newFirst, itemSize));
                     }
                 }
             },
@@ -2446,9 +2443,10 @@ this.primevue.virtualscroller = (function (vue) {
                 const scrollTop = calculateScrollPos(target.scrollTop, contentPos.top);
                 const scrollLeft = calculateScrollPos(target.scrollLeft, contentPos.left);
 
-                let newFirst = 0;
+                let newFirst = both ? { rows: 0, cols: 0 } : 0;
                 let newLast = this.last;
                 let isRangeChanged = false;
+                let newScrollPos = this.lastScrollPos;
 
                 if (both) {
                     const isScrollDown = this.lastScrollPos.top <= scrollTop;
@@ -2468,9 +2466,8 @@ this.primevue.virtualscroller = (function (vue) {
                         cols: calculateLast(currentIndex.cols, newFirst.cols, this.last.cols, this.numItemsInViewport.cols, this.d_numToleratedItems[1], true)
                     };
 
-                    isRangeChanged = (newFirst.rows !== this.first.rows && newLast.rows !== this.last.rows) || (newFirst.cols !== this.first.cols && newLast.cols !== this.last.cols);
-
-                    this.lastScrollPos = { top: scrollTop, left: scrollLeft };
+                    isRangeChanged = (newFirst.rows !== this.first.rows || newLast.rows !== this.last.rows) || (newFirst.cols !== this.first.cols || newLast.cols !== this.last.cols);
+                    newScrollPos = { top: scrollTop, left: scrollLeft };
                 }
                 else {
                     const scrollPos = horizontal ? scrollLeft : scrollTop;
@@ -2480,19 +2477,19 @@ this.primevue.virtualscroller = (function (vue) {
 
                     newFirst = calculateFirst(currentIndex, triggerIndex, this.first, this.last, this.numItemsInViewport, this.d_numToleratedItems, isScrollDownOrRight);
                     newLast = calculateLast(currentIndex, newFirst, this.last, this.numItemsInViewport, this.d_numToleratedItems);
-                    isRangeChanged = newFirst !== this.first && newLast !== this.last;
-
-                    this.lastScrollPos = scrollPos;
+                    isRangeChanged = newFirst !== this.first || newLast !== this.last;
+                    newScrollPos = scrollPos;
                 }
 
                 return {
                     first: newFirst,
                     last: newLast,
-                    isRangeChanged
+                    isRangeChanged,
+                    scrollPos: newScrollPos
                 }
             },
             onScrollChange(event) {
-                const { first, last, isRangeChanged } = this.onScrollPositionChange(event);
+                const { first, last, isRangeChanged, scrollPos } = this.onScrollPositionChange(event);
 
                 if (isRangeChanged) {
                     const newState = { first, last };
@@ -2501,6 +2498,7 @@ this.primevue.virtualscroller = (function (vue) {
 
                     this.first = first;
                     this.last = last;
+                    this.lastScrollPos = scrollPos;
 
                     this.$emit('scroll-index-change', newState);
 
@@ -2728,7 +2726,7 @@ this.primevue.virtualscroller = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.confirmationeventbus = (function (utils) {
@@ -2738,7 +2736,7 @@ this.primevue.confirmationeventbus = (function (utils) {
 
 	return ConfirmationEventBus;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.toasteventbus = (function (utils) {
@@ -2748,7 +2746,7 @@ this.primevue.toasteventbus = (function (utils) {
 
 	return ToastEventBus;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.overlayeventbus = (function (utils) {
@@ -2758,7 +2756,7 @@ this.primevue.overlayeventbus = (function (utils) {
 
 	return OverlayEventBus;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.dynamicdialogeventbus = (function (utils) {
@@ -2768,7 +2766,7 @@ this.primevue.dynamicdialogeventbus = (function (utils) {
 
 	return DynamicDialogEventBus;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.terminalservice = (function (utils) {
@@ -2778,7 +2776,7 @@ this.primevue.terminalservice = (function (utils) {
 
 	return TerminalService;
 
-}(primevue.utils));
+})(primevue.utils);
 
 this.primevue = this.primevue || {};
 this.primevue.useconfirm = (function (exports, vue) {
@@ -2802,7 +2800,7 @@ this.primevue.useconfirm = (function (exports, vue) {
 
     return exports;
 
-}({}, Vue));
+})({}, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.usetoast = (function (exports, vue) {
@@ -2826,7 +2824,7 @@ this.primevue.usetoast = (function (exports, vue) {
 
     return exports;
 
-}({}, Vue));
+})({}, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.usedialog = (function (exports, vue) {
@@ -2850,7 +2848,7 @@ this.primevue.usedialog = (function (exports, vue) {
 
     return exports;
 
-}({}, Vue));
+})({}, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.button = (function (Ripple, vue) {
@@ -2920,14 +2918,17 @@ this.primevue.button = (function (Ripple, vue) {
             },
             disabled() {
                 return this.$attrs.disabled || this.loading;
+            },
+            defaultAriaLabel() {
+                return (this.label ? this.label + (this.badge ? ' ' + this.badge : '') : this.$attrs['aria-label']);
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
-    const _hoisted_1 = ["disabled"];
+    const _hoisted_1 = ["aria-label", "disabled"];
     const _hoisted_2 = { class: "p-button-label" };
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -2936,6 +2937,7 @@ this.primevue.button = (function (Ripple, vue) {
       return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
         class: vue.normalizeClass($options.buttonClass),
         type: "button",
+        "aria-label": $options.defaultAriaLabel,
         disabled: $options.disabled
       }, [
         vue.renderSlot(_ctx.$slots, "default", {}, () => [
@@ -2968,7 +2970,7 @@ this.primevue.button = (function (Ripple, vue) {
 
     return script;
 
-}(primevue.ripple, Vue));
+})(primevue.ripple, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.inputtext = (function (vue) {
@@ -2976,7 +2978,6 @@ this.primevue.inputtext = (function (vue) {
 
     var script = {
         name: 'InputText',
-        inheritAttrs: false,
         emits: ['update:modelValue'],
         props: {
             modelValue: null
@@ -2996,18 +2997,18 @@ this.primevue.inputtext = (function (vue) {
     const _hoisted_1 = ["value"];
 
     function render(_ctx, _cache, $props, $setup, $data, $options) {
-      return (vue.openBlock(), vue.createElementBlock("input", vue.mergeProps({
-        class: ['p-inputtext p-component', {'p-filled': $options.filled}],
+      return (vue.openBlock(), vue.createElementBlock("input", {
+        class: vue.normalizeClass(['p-inputtext p-component', {'p-filled': $options.filled}]),
         value: $props.modelValue,
         onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args)))
-      }, _ctx.$attrs), null, 16, _hoisted_1))
+      }, null, 42, _hoisted_1))
     }
 
     script.render = render;
 
     return script;
 
-}(Vue));
+})(Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.inputnumber = (function (InputText, Button, vue) {
@@ -3020,7 +3021,6 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
 
     var script = {
         name: 'InputNumber',
-        inheritAttrs: false,
         emits: ['update:modelValue', 'input', 'focus', 'blur'],
         props: {
             modelValue: {
@@ -3115,10 +3115,14 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 type: Boolean,
                 default: false
             },
-            style: null,
-            class: null,
-            inputStyle: null,
-            inputClass: null
+            disabled: {
+                type: Boolean,
+                default: false
+            },
+            inputId: null,
+            inputProps: null,
+            incrementButtonProps: null,
+            decrementButtonProps: null
         },
         numberFormat: null,
         _numeral: null,
@@ -3330,24 +3334,24 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 }
             },
             onUpButtonMouseDown(event) {
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.$refs.input.$el.focus();
                     this.repeat(event, null, 1);
                     event.preventDefault();
                 }
             },
             onUpButtonMouseUp() {
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.clearTimer();
                 }
             },
             onUpButtonMouseLeave() {
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.clearTimer();
                 }
             },
             onUpButtonKeyUp() {
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.clearTimer();
                 }
             },
@@ -3357,24 +3361,24 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                 }
             },
             onDownButtonMouseDown(event) {
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.$refs.input.$el.focus();
                     this.repeat(event, null, -1);
                     event.preventDefault();
                 }
             },
             onDownButtonMouseUp() {
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.clearTimer();
                 }
             },
             onDownButtonMouseLeave() {
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.clearTimer();
                 }
             },
             onDownButtonKeyUp() {
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.clearTimer();
                 }
             },
@@ -3536,6 +3540,22 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
                         else {
                             newValueStr = this.deleteRange(inputValue, selectionStart, selectionEnd);
                             this.updateValue(event, newValueStr, null, 'delete-range');
+                        }
+                    break;
+
+                    //home
+                    case 36:
+                        if (this.min) {
+                            this.updateModel(event, this.min);
+                            event.preventDefault();
+                        }
+                    break;
+
+                    //end
+                    case 35:
+                        if (this.max) {
+                            this.updateModel(event, this.max);
+                            event.preventDefault();
                         }
                     break;
                 }
@@ -3947,7 +3967,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
         },
         computed: {
             containerClass() {
-                return ['p-inputnumber p-component p-inputwrapper', this.class, {
+                return ['p-inputnumber p-component p-inputwrapper', {
                     'p-inputwrapper-filled': this.filled,
                     'p-inputwrapper-focus': this.focused,
                     'p-inputnumber-buttons-stacked': this.showButtons && this.buttonLayout === 'stacked',
@@ -3957,7 +3977,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
             },
             
             upButtonClass() {
-                return ['p-inputnumber-button p-inputnumber-button-up', this.incrementButtonClass, {
+                return ['p-inputnumber-button p-inputnumber-button-up', {
                     'p-disabled': this.showButtons && this.max !== null && this.maxBoundry()
                 }];
             },
@@ -3996,8 +4016,8 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
             }
         },
         components: {
-            'INInputText': InputText__default['default'],
-            'INButton': Button__default['default']
+            'INInputText': InputText__default["default"],
+            'INButton': Button__default["default"]
         }
     };
 
@@ -4011,17 +4031,17 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
       const _component_INButton = vue.resolveComponent("INButton");
 
       return (vue.openBlock(), vue.createElementBlock("span", {
-        class: vue.normalizeClass($options.containerClass),
-        style: vue.normalizeStyle($props.style)
+        class: vue.normalizeClass($options.containerClass)
       }, [
         vue.createVNode(_component_INInputText, vue.mergeProps({
           ref: "input",
-          class: ['p-inputnumber-input', $props.inputClass],
-          style: $props.inputStyle,
-          value: $options.formattedValue
-        }, _ctx.$attrs, {
-          "aria-valumin": $props.min,
+          class: "p-inputnumber-input",
+          role: "spinbutton",
+          id: $props.inputId,
+          value: $options.formattedValue,
+          "aria-valuemin": $props.min,
           "aria-valuemax": $props.max,
+          "aria-valuenow": $props.modelValue,
           readonly: $props.readonly,
           onInput: $options.onUserInput,
           onKeydown: $options.onInputKeyDown,
@@ -4030,21 +4050,17 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
           onClick: $options.onInputClick,
           onFocus: $options.onInputFocus,
           onBlur: $options.onInputBlur
-        }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
+        }, $props.inputProps), null, 16, ["id", "value", "aria-valuemin", "aria-valuemax", "aria-valuenow", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
         ($props.showButtons && $props.buttonLayout === 'stacked')
           ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_1, [
               vue.createVNode(_component_INButton, vue.mergeProps({
                 class: $options.upButtonClass,
                 icon: $props.incrementButtonIcon
-              }, vue.toHandlers($options.upButtonListeners), {
-                disabled: _ctx.$attrs.disabled
-              }), null, 16, ["class", "icon", "disabled"]),
+              }, vue.toHandlers($options.upButtonListeners), { disabled: $props.disabled }, $props.incrementButtonProps), null, 16, ["class", "icon", "disabled"]),
               vue.createVNode(_component_INButton, vue.mergeProps({
                 class: $options.downButtonClass,
                 icon: $props.decrementButtonIcon
-              }, vue.toHandlers($options.downButtonListeners), {
-                disabled: _ctx.$attrs.disabled
-              }), null, 16, ["class", "icon", "disabled"])
+              }, vue.toHandlers($options.downButtonListeners), { disabled: $props.disabled }, $props.decrementButtonProps), null, 16, ["class", "icon", "disabled"])
             ]))
           : vue.createCommentVNode("", true),
         ($props.showButtons && $props.buttonLayout !== 'stacked')
@@ -4052,20 +4068,16 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
               key: 1,
               class: $options.upButtonClass,
               icon: $props.incrementButtonIcon
-            }, vue.toHandlers($options.upButtonListeners), {
-              disabled: _ctx.$attrs.disabled
-            }), null, 16, ["class", "icon", "disabled"]))
+            }, vue.toHandlers($options.upButtonListeners), { disabled: $props.disabled }, $props.incrementButtonProps), null, 16, ["class", "icon", "disabled"]))
           : vue.createCommentVNode("", true),
         ($props.showButtons && $props.buttonLayout !== 'stacked')
           ? (vue.openBlock(), vue.createBlock(_component_INButton, vue.mergeProps({
               key: 2,
               class: $options.downButtonClass,
               icon: $props.decrementButtonIcon
-            }, vue.toHandlers($options.downButtonListeners), {
-              disabled: _ctx.$attrs.disabled
-            }), null, 16, ["class", "icon", "disabled"]))
+            }, vue.toHandlers($options.downButtonListeners), { disabled: $props.disabled }, $props.decrementButtonProps), null, 16, ["class", "icon", "disabled"]))
           : vue.createCommentVNode("", true)
-      ], 6))
+      ], 2))
     }
 
     function styleInject(css, ref) {
@@ -4102,7 +4114,7 @@ this.primevue.inputnumber = (function (InputText, Button, vue) {
 
     return script;
 
-}(primevue.inputtext, primevue.button, Vue));
+})(primevue.inputtext, primevue.button, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.message = (function (Ripple, vue) {
@@ -4170,7 +4182,7 @@ this.primevue.message = (function (Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -4253,7 +4265,7 @@ this.primevue.message = (function (Ripple, vue) {
 
     return script;
 
-}(primevue.ripple, Vue));
+})(primevue.ripple, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.progressbar = (function (vue) {
@@ -4377,7 +4389,7 @@ this.primevue.progressbar = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, VirtualScroller, Portal, vue) {
@@ -4937,6 +4949,8 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             onFilterChange(event) {
                 this.filterValue = event.target.value;
                 this.$emit('filter', {originalEvent: event, value: event.target.value});
+
+                !this.virtualScrollerDisabled && this.virtualScroller.scrollToIndex(0);
             },
             onFilterUpdated() {
                 if (this.overlayVisible) {
@@ -4961,7 +4975,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 }
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -5051,11 +5065,11 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         },
         components: {
-            'VirtualScroller': VirtualScroller__default['default'],
-            'Portal': Portal__default['default']
+            'VirtualScroller': VirtualScroller__default["default"],
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -5132,7 +5146,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 value: $props.modelValue,
                 placeholder: $props.placeholder
               }, () => [
-                vue.createTextVNode(vue.toDisplayString($options.label||'empty'), 1)
+                vue.createTextVNode(vue.toDisplayString($options.label === 'p-emptylabel' ? ' ' : $options.label ||'empty'), 1)
               ])
             ], 2))
           : vue.createCommentVNode("", true),
@@ -5340,7 +5354,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.dialog = (function (vue, utils, Ripple, Portal) {
@@ -5730,10 +5744,10 @@ this.primevue.dialog = (function (vue, utils, Ripple, Portal) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         },
         components: {
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -5887,7 +5901,7 @@ this.primevue.dialog = (function (vue, utils, Ripple, Portal) {
 
     return script;
 
-}(Vue, primevue.utils, primevue.ripple, primevue.portal));
+})(Vue, primevue.utils, primevue.ripple, primevue.portal);
 
 this.primevue = this.primevue || {};
 this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
@@ -5965,7 +5979,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -5997,7 +6011,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -6029,7 +6043,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -6068,7 +6082,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -6106,7 +6120,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -6154,7 +6168,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'RPPDropdown': Dropdown__default['default']
+                'RPPDropdown': Dropdown__default["default"]
             }
         };
 
@@ -6198,7 +6212,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'JTPDropdown': Dropdown__default['default']
+                'JTPDropdown': Dropdown__default["default"]
             }
         };
 
@@ -6233,7 +6247,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'JTPInput': InputNumber__default['default']
+                'JTPInput': InputNumber__default["default"]
             }
         };
 
@@ -6572,7 +6586,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
 
         return script;
 
-}(Vue, primevue.ripple, primevue.dropdown, primevue.inputnumber));
+})(Vue, primevue.ripple, primevue.dropdown, primevue.inputnumber);
 
 this.primevue = this.primevue || {};
 this.primevue.tree = (function (utils, Ripple, vue) {
@@ -6841,7 +6855,7 @@ this.primevue.tree = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -7298,7 +7312,7 @@ this.primevue.tree = (function (utils, Ripple, vue) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue));
+})(primevue.utils, primevue.ripple, Vue);
 
 this.primevue = this.primevue || {};
 this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Portal) {
@@ -7351,8 +7365,8 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
             }
         },
         directives: {
-            'ripple': Ripple__default['default'],
-            'tooltip': Tooltip__default['default']
+            'ripple': Ripple__default["default"],
+            'tooltip': Tooltip__default["default"]
         }
     };
 
@@ -7360,7 +7374,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
     const _hoisted_2$1 = { class: "p-menuitem-text" };
     const _hoisted_3 = /*#__PURE__*/vue.createTextVNode("    ");
     const _hoisted_4 = {
-      key: 0,
+      key: 1,
       class: "pi pi-info-circle",
       style: {}
     };
@@ -7368,7 +7382,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
     const _hoisted_6 = { class: "p-menuitem-text" };
     const _hoisted_7 = /*#__PURE__*/vue.createTextVNode("    ");
     const _hoisted_8 = {
-      key: 0,
+      key: 1,
       class: "pi pi-info-circle",
       style: {}
     };
@@ -7400,9 +7414,12 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
                             class: vue.normalizeClass($options.linkClass($props.item, {isActive, isExactActive})),
                             role: "menuitem"
                           }, [
-                            vue.createElementVNode("span", {
-                              class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
-                            }, null, 2),
+                            ($props.item.icon)
+                              ? (vue.openBlock(), vue.createElementBlock("span", {
+                                  key: 0,
+                                  class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
+                                }, null, 2))
+                              : vue.createCommentVNode("", true),
                             vue.createElementVNode("span", _hoisted_2$1, vue.toDisplayString($options.label()), 1),
                             _hoisted_3,
                             ($props.item.info)
@@ -7425,9 +7442,12 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
                         role: "menuitem",
                         tabindex: $options.disabled($props.item) ? null : '0'
                       }, [
-                        vue.createElementVNode("span", {
-                          class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
-                        }, null, 2),
+                        ($props.item.icon)
+                          ? (vue.openBlock(), vue.createElementBlock("span", {
+                              key: 0,
+                              class: vue.normalizeClass(['p-menuitem-icon', $props.item.icon])
+                            }, null, 2))
+                          : vue.createCommentVNode("", true),
                         vue.createElementVNode("span", _hoisted_6, vue.toDisplayString($options.label()), 1),
                         _hoisted_7,
                         ($props.item.info)
@@ -7626,7 +7646,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -7643,7 +7663,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
         },
         components: {
             'Menuitem': script$1,
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -7778,7 +7798,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue, primevue.portal));
+})(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.tooltip, Vue, primevue.portal);
 
 this.primevue = this.primevue || {};
 this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vue) {
@@ -7873,7 +7893,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vu
                     if (this.activeItem && item === this.activeItem)
                         this.activeItem = null;
                     else
-                       this.activeItem = item;
+                        this.activeItem = item;
                 }
 
                 if (!item.items) {
@@ -8002,7 +8022,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vu
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -8012,7 +8032,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vu
     const _hoisted_4 = ["href", "target", "aria-haspopup", "aria-expanded", "onClick", "onKeydown", "tabindex"];
     const _hoisted_5 = { class: "p-menuitem-text" };
     const _hoisted_6 = {
-      key: 0,
+      key: 1,
       class: "p-submenu-icon pi pi-angle-right"
     };
 
@@ -8055,9 +8075,12 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vu
                                   onKeydown: $event => ($options.onItemKeyDown($event, item)),
                                   role: "menuitem"
                                 }, [
-                                  vue.createElementVNode("span", {
-                                    class: vue.normalizeClass(['p-menuitem-icon', item.icon])
-                                  }, null, 2),
+                                  (item.icon)
+                                    ? (vue.openBlock(), vue.createElementBlock("span", {
+                                        key: 0,
+                                        class: vue.normalizeClass(['p-menuitem-icon', item.icon])
+                                      }, null, 2))
+                                    : vue.createCommentVNode("", true),
                                   vue.createElementVNode("span", _hoisted_3, vue.toDisplayString($options.label(item)), 1)
                                 ], 42, _hoisted_2)), [
                                   [_directive_ripple]
@@ -8077,9 +8100,12 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vu
                               role: "menuitem",
                               tabindex: $options.disabled(item) ? null : '0'
                             }, [
-                              vue.createElementVNode("span", {
-                                class: vue.normalizeClass(['p-menuitem-icon', item.icon])
-                              }, null, 2),
+                              (item.icon)
+                                ? (vue.openBlock(), vue.createElementBlock("span", {
+                                    key: 0,
+                                    class: vue.normalizeClass(['p-menuitem-icon', item.icon])
+                                  }, null, 2))
+                                : vue.createCommentVNode("", true),
                               vue.createElementVNode("span", _hoisted_5, vue.toDisplayString($options.label(item)), 1),
                               (item.items)
                                 ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_6))
@@ -8279,7 +8305,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vu
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -8296,7 +8322,7 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vu
         },
         components: {
             'TieredMenuSub': script$1,
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -8376,5 +8402,5 @@ this.primevue.tieredmenu = (function (utils, OverlayEventBus, Portal, Ripple, vu
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.portal, primevue.ripple, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.portal, primevue.ripple, Vue);
 

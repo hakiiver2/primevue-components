@@ -556,6 +556,8 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             onFilterChange(event) {
                 this.filterValue = event.target.value;
                 this.$emit('filter', {originalEvent: event, value: event.target.value});
+
+                !this.virtualScrollerDisabled && this.virtualScroller.scrollToIndex(0);
             },
             onFilterUpdated() {
                 if (this.overlayVisible) {
@@ -580,7 +582,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 }
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -670,11 +672,11 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         },
         components: {
-            'VirtualScroller': VirtualScroller__default['default'],
-            'Portal': Portal__default['default']
+            'VirtualScroller': VirtualScroller__default["default"],
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -751,7 +753,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 value: $props.modelValue,
                 placeholder: $props.placeholder
               }, () => [
-                vue.createTextVNode(vue.toDisplayString($options.label||'empty'), 1)
+                vue.createTextVNode(vue.toDisplayString($options.label === 'p-emptylabel' ? ' ' : $options.label ||'empty'), 1)
               ])
             ], 2))
           : vue.createCommentVNode("", true),
@@ -959,4 +961,4 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.api, primevue.ripple, primevue.virtualscroller, primevue.portal, Vue);

@@ -123,4 +123,4 @@ this.primevue.rating = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

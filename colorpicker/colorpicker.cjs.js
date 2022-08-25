@@ -533,7 +533,7 @@ var script = {
             this.hueHandle = null;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -555,7 +555,7 @@ var script = {
         }
     },
     components: {
-        'Portal': Portal__default['default']
+        'Portal': Portal__default["default"]
     }
 };
 

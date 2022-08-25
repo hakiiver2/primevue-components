@@ -67,14 +67,17 @@ var script = {
         },
         disabled() {
             return this.$attrs.disabled || this.loading;
+        },
+        defaultAriaLabel() {
+            return (this.label ? this.label + (this.badge ? ' ' + this.badge : '') : this.$attrs['aria-label']);
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
-const _hoisted_1 = ["disabled"];
+const _hoisted_1 = ["aria-label", "disabled"];
 const _hoisted_2 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -83,6 +86,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
     class: vue.normalizeClass($options.buttonClass),
     type: "button",
+    "aria-label": $options.defaultAriaLabel,
     disabled: $options.disabled
   }, [
     vue.renderSlot(_ctx.$slots, "default", {}, () => [

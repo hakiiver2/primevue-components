@@ -95,7 +95,7 @@ this.primevue.panelmenu = (function (Tooltip, vue, utils) {
             }
         },
         directives: {
-            "tooltip": Tooltip__default['default']                                                                                                                                                                            
+            "tooltip": Tooltip__default["default"]                                                                                                                                                                            
         }
     };
 
@@ -343,7 +343,7 @@ this.primevue.panelmenu = (function (Tooltip, vue, utils) {
             }
         },
         directives: {
-            "tooltip": Tooltip__default['default']                                                                                                                                                                            
+            "tooltip": Tooltip__default["default"]                                                                                                                                                                            
         }
     };
 
@@ -522,4 +522,4 @@ this.primevue.panelmenu = (function (Tooltip, vue, utils) {
 
     return script;
 
-}(primevue.tooltip, Vue, primevue.utils));
+})(primevue.tooltip, Vue, primevue.utils);

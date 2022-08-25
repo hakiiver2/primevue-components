@@ -140,6 +140,10 @@ var script = {
             type: Boolean,
             default: false
         },
+        hideOnRangeSelection: {
+            type: Boolean,
+            default: false
+        },
         timeSeparator: {
             type: String,
             default: ':'
@@ -521,7 +525,7 @@ var script = {
                     this.currentMonth--;
                 }
 
-                this.$emit('month-change', {month: this.currentMonth, year: this.currentYear});
+                this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
             }
         },
         navForward(event) {
@@ -546,7 +550,7 @@ var script = {
                     this.currentMonth++;
                 }
 
-                this.$emit('month-change', {month: this.currentMonth , year: this.currentYear});
+                this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
             }
         },
         decrementYear() {
@@ -795,6 +799,12 @@ var script = {
 
             if (modelVal !== null) {
                 this.updateModel(modelVal);
+            }
+
+            if (this.isRangeSelection() && this.hideOnRangeSelection && modelVal[1] !== null) {
+                setTimeout(() => {
+                    this.overlayVisible = false;
+                }, 150);
             }
             this.$emit('date-select', date);
         },

@@ -164,7 +164,7 @@ var script$9 = {
     overlayEventListener: null,
     beforeUnmount() {
         if (this.overlayEventListener) {
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         }
 
@@ -367,7 +367,7 @@ var script$9 = {
         onContentClick(event) {
             this.selfClick = true;
 
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.overlay
             });
@@ -390,7 +390,7 @@ var script$9 = {
                     this.selfClick = true;
                 }
             };
-            OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
         },
         onOverlayLeave() {
             this.onOverlayHide();
@@ -403,7 +403,7 @@ var script$9 = {
             this.unbindResizeListener();
             this.unbindScrollListener();
             this.overlay = null;
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         },
         overlayRef(el) {
@@ -531,9 +531,9 @@ var script$9 = {
         }
     },
     components: {
-        'CFDropdown': Dropdown__default['default'],
-        'CFButton': Button__default['default'],
-        'Portal': Portal__default['default']
+        'CFDropdown': Dropdown__default["default"],
+        'CFButton': Button__default["default"],
+        'Portal': Portal__default["default"]
     }
 };
 
@@ -1582,7 +1582,7 @@ var script$4 = {
     },
     beforeUnmount() {
         if (this.overlayEventListener) {
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         }
     },
@@ -1630,7 +1630,7 @@ var script$4 = {
         switchCellToViewMode() {
             this.d_editing = false;
             this.unbindDocumentEditListener();
-            OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+            OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
             this.overlayEventListener = null;
         },
         onClick(event) {
@@ -1647,7 +1647,7 @@ var script$4 = {
                             this.selfClick = true;
                         }
                     };
-                    OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+                    OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
                 }
             }
         },
@@ -1783,10 +1783,19 @@ var script$4 = {
             this.$emit('row-edit-init', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
         },
         editorSaveCallback(event) {
-            this.$emit('row-edit-save', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+            if (this.editMode === 'row') {
+                this.$emit('row-edit-save', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+            } else {
+                this.completeEdit(event, 'enter');
+            }
         },
         editorCancelCallback(event) {
-            this.$emit('row-edit-cancel', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+            if (this.editMode === 'row') {
+                this.$emit('row-edit-cancel', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+            } else {
+                this.switchCellToViewMode();
+                this.$emit('cell-edit-cancel', {originalEvent: event, data: this.rowData, field: this.field, index: this.rowIndex});
+            }
         },
         updateStickyPosition() {
             if (this.columnProp('frozen')) {
@@ -1855,7 +1864,7 @@ var script$4 = {
         'DTCheckbox': script$5
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
@@ -4574,6 +4583,9 @@ var script = {
             }
 
             return _data;
+        },
+        getVirtualScrollerRef() {
+            return this.$refs.virtualScroller;
         }
     },
     computed: {
@@ -4713,11 +4725,11 @@ var script = {
         }
     },
     components: {
-        'DTPaginator': Paginator__default['default'],
+        'DTPaginator': Paginator__default["default"],
         'DTTableHeader': script$7,
         'DTTableBody': script$3,
         'DTTableFooter': script$1,
-        'DTVirtualScroller': VirtualScroller__default['default']
+        'DTVirtualScroller': VirtualScroller__default["default"]
     }
 };
 
@@ -4814,7 +4826,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       class: "p-datatable-wrapper",
       style: vue.normalizeStyle({ maxHeight: $options.virtualScrollerDisabled ? $props.scrollHeight : '' })
     }, [
-      vue.createVNode(_component_DTVirtualScroller, vue.mergeProps($props.virtualScrollerOptions, {
+      vue.createVNode(_component_DTVirtualScroller, vue.mergeProps({ ref: "virtualScroller" }, $props.virtualScrollerOptions, {
         items: $options.processedData,
         columns: $options.columns,
         style: { height: $props.scrollHeight },

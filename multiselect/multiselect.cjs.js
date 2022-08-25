@@ -500,7 +500,7 @@ var script = {
             this.$emit('change', {originalEvent: event, value: value});
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -642,11 +642,11 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     },
     components: {
-        'VirtualScroller': VirtualScroller__default['default'],
-        'Portal': Portal__default['default']
+        'VirtualScroller': VirtualScroller__default["default"],
+        'Portal': Portal__default["default"]
     }
 };
 

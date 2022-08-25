@@ -59,7 +59,7 @@ var script = {
         }
     },
     components: {
-        'IPButton': Button__default['default']
+        'IPButton': Button__default["default"]
     }
 };
 

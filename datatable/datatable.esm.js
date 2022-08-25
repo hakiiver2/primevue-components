@@ -1771,10 +1771,19 @@ var script$4 = {
             this.$emit('row-edit-init', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
         },
         editorSaveCallback(event) {
-            this.$emit('row-edit-save', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+            if (this.editMode === 'row') {
+                this.$emit('row-edit-save', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+            } else {
+                this.completeEdit(event, 'enter');
+            }
         },
         editorCancelCallback(event) {
-            this.$emit('row-edit-cancel', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+            if (this.editMode === 'row') {
+                this.$emit('row-edit-cancel', {originalEvent: event, data: this.rowData, newData: this.editingRowData, field: this.field, index: this.rowIndex});
+            } else {
+                this.switchCellToViewMode();
+                this.$emit('cell-edit-cancel', {originalEvent: event, data: this.rowData, field: this.field, index: this.rowIndex});
+            }
         },
         updateStickyPosition() {
             if (this.columnProp('frozen')) {
@@ -4562,6 +4571,9 @@ var script = {
             }
 
             return _data;
+        },
+        getVirtualScrollerRef() {
+            return this.$refs.virtualScroller;
         }
     },
     computed: {
@@ -4802,7 +4814,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       class: "p-datatable-wrapper",
       style: normalizeStyle({ maxHeight: $options.virtualScrollerDisabled ? $props.scrollHeight : '' })
     }, [
-      createVNode(_component_DTVirtualScroller, mergeProps($props.virtualScrollerOptions, {
+      createVNode(_component_DTVirtualScroller, mergeProps({ ref: "virtualScroller" }, $props.virtualScrollerOptions, {
         items: $options.processedData,
         columns: $options.columns,
         style: { height: $props.scrollHeight },

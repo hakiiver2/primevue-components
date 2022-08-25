@@ -251,7 +251,7 @@ this.primevue.treeselect = (function (utils, OverlayEventBus, Tree, Ripple, Port
                 this.overlay = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -373,11 +373,11 @@ this.primevue.treeselect = (function (utils, OverlayEventBus, Tree, Ripple, Port
             }
         },
         components: {
-            'TSTree': Tree__default['default'],
-            'Portal': Portal__default['default']
+            'TSTree': Tree__default["default"],
+            'Portal': Portal__default["default"]
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -549,4 +549,4 @@ this.primevue.treeselect = (function (utils, OverlayEventBus, Tree, Ripple, Port
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.tree, primevue.ripple, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.tree, primevue.ripple, primevue.portal, Vue);

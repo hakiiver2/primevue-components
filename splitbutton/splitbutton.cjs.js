@@ -58,8 +58,8 @@ var script = {
         }
     },
     components: {
-        'PVSButton': Button__default['default'],
-        'PVSMenu': TieredMenu__default['default']
+        'PVSButton': Button__default["default"],
+        'PVSMenu': TieredMenu__default["default"]
     }
 };
 

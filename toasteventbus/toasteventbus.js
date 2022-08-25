@@ -6,4 +6,4 @@ this.primevue.toasteventbus = (function (utils) {
 
 	return ToastEventBus;
 
-}(primevue.utils));
+})(primevue.utils);

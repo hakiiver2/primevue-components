@@ -1150,6 +1150,16 @@
               }
             },
             {
+              "name": "hideOnRangeSelection",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Whether to hide the overlay on date selection is completed when selectionMode is range.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
               "name": "timeSeparator",
               "default": ":",
               "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
@@ -1698,16 +1708,6 @@
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
               "description": "Identifier of the underlying input element.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "ariaLabelledBy",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
-              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -9105,6 +9105,16 @@
               }
             },
             {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/password",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "promptLabel",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/password",
@@ -9367,6 +9377,26 @@
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
               "description": "Whether to displays rows with alternating colors.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "showSourceControls",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Whether to show buttons of source list.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "showTargetControls",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/picklist",
+              "description": "Whether to show buttons of target list.",
               "value": {
                 "kind": "expression",
                 "type": "boolean"
@@ -9991,16 +10021,6 @@
                 "kind": "expression",
                 "type": "string"
               }
-            },
-            {
-              "name": "ariaLabelledBy",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/selectbutton",
-              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
             }
           ],
           "events": [
@@ -10319,10 +10339,30 @@
               }
             },
             {
-              "name": "ariaLabelledBy",
+              "name": "tabindex",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/slider",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "aria-labelledby",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/slider",
               "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/slider",
+              "description": "Used to define a string that labels the element.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -11456,6 +11496,32 @@
               "name": "change",
               "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
               "description": "Callback to invoke on value change.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "focus",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+              "description": "Callback to invoke when the component receives focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "blur",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+              "description": "Callback to invoke when the component loses focus.",
               "arguments": [
                 {
                   "name": "event",

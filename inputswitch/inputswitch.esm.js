@@ -1,16 +1,13 @@
-import { openBlock, createElementBlock, normalizeClass, normalizeStyle, createElementVNode, mergeProps, withKeys, withModifiers } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, createElementVNode, mergeProps } from 'vue';
 
 var script = {
     name: 'InputSwitch',
-    inheritAttrs: false,
-    emits: ['click', 'update:modelValue', 'change', 'input'],
+    emits: ['click', 'update:modelValue', 'change', 'input', 'focus', 'blur'],
     props: {
         modelValue: {
             type: null,
             default: false
         },
-        class: null,
-        style: null,
         trueValue: {
             type: null,
             default: true
@@ -18,7 +15,13 @@ var script = {
         falseValue: {
             type: null,
             default: false
-        }
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        inputId: null,
+        inputProps: null
     },
     data() {
         return {
@@ -27,7 +30,7 @@ var script = {
     },
     methods: {
         onClick(event) {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 const newValue = this.checked ? this.falseValue : this.trueValue;
                 this.$emit('click', event);
                 this.$emit('update:modelValue', newValue);
@@ -37,20 +40,22 @@ var script = {
             }
             event.preventDefault();
         },
-        onFocus() {
+        onFocus(event) {
             this.focused = true;
+            this.$emit('focus', event);
         },
-        onBlur() {
+        onBlur(event) {
             this.focused = false;
+            this.$emit('blur', event);
         }
     },
     computed: {
         containerClass() {
             return [
-                'p-inputswitch p-component', this.class,
+                'p-inputswitch p-component',
                 {
                     'p-inputswitch-checked': this.checked,
-					'p-disabled': this.$attrs.disabled,
+					'p-disabled': this.disabled,
                     'p-focus': this.focused
                 }
             ];
@@ -62,30 +67,28 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = ["checked", "aria-checked"];
+const _hoisted_2 = ["id", "checked", "disabled"];
 const _hoisted_3 = /*#__PURE__*/createElementVNode("span", { class: "p-inputswitch-slider" }, null, -1);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock("div", {
     class: normalizeClass($options.containerClass),
-    onClick: _cache[3] || (_cache[3] = $event => ($options.onClick($event))),
-    style: normalizeStyle($props.style)
+    onClick: _cache[2] || (_cache[2] = $event => ($options.onClick($event)))
   }, [
     createElementVNode("div", _hoisted_1, [
       createElementVNode("input", mergeProps({
+        id: $props.inputId,
         ref: "input",
         type: "checkbox",
-        checked: $options.checked
-      }, _ctx.$attrs, {
-        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
-        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event))),
-        onKeydown: _cache[2] || (_cache[2] = withKeys(withModifiers($event => ($options.onClick($event)), ["prevent"]), ["enter"])),
         role: "switch",
-        "aria-checked": $options.checked
-      }), null, 16, _hoisted_2)
+        checked: $options.checked,
+        disabled: $props.disabled,
+        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event)))
+      }, $props.inputProps), null, 16, _hoisted_2)
     ]),
     _hoisted_3
-  ], 6))
+  ], 2))
 }
 
 function styleInject(css, ref) {

@@ -103,7 +103,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                 return this.activeOption === option;
             },
             onKeyDown(event, option, index) {
-                switch (event.key) {
+                switch (event.code) {
                     case 'Down':
                     case 'ArrowDown':
                         var nextItem = this.$el.children[index + 1];
@@ -143,6 +143,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                     break;
 
                     case 'Enter':
+                    case 'Space':
                         this.onOptionClick(event, option);
                     break;
                 }
@@ -162,21 +163,21 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
     const _hoisted_1$1 = {
       class: "p-cascadeselect-panel p-cascadeselect-items",
-      role: "listbox",
       "aria-orientation": "horizontal"
     };
-    const _hoisted_2$1 = ["onClick", "onKeydown"];
-    const _hoisted_3$1 = {
+    const _hoisted_2$1 = ["aria-label", "aria-selected", "aria-expanded", "aria-setsize", "aria-posinset", "aria-level"];
+    const _hoisted_3$1 = ["onClick", "onKeydown"];
+    const _hoisted_4$1 = {
       key: 1,
       class: "p-cascadeselect-item-text"
     };
-    const _hoisted_4$1 = {
+    const _hoisted_5 = {
       key: 2,
       class: "p-cascadeselect-group-icon pi pi-angle-right"
     };
@@ -186,28 +187,34 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
       const _directive_ripple = vue.resolveDirective("ripple");
 
       return (vue.openBlock(), vue.createElementBlock("ul", _hoisted_1$1, [
-        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.options, (option, i) => {
+        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.options, (option, index) => {
           return (vue.openBlock(), vue.createElementBlock("li", {
             key: $options.getOptionLabelToRender(option),
             class: vue.normalizeClass($options.getItemClass(option)),
-            role: "none"
+            role: "treeitem",
+            "aria-label": $options.getOptionLabelToRender(option),
+            "aria-selected": $options.isOptionActive(option),
+            "aria-expanded": $options.isOptionActive(option),
+            "aria-setsize": $props.options.length,
+            "aria-posinset": index + 1,
+            "aria-level": $props.level + 1
           }, [
             vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", {
               class: "p-cascadeselect-item-content",
               onClick: $event => ($options.onOptionClick($event, option)),
               tabindex: "0",
-              onKeydown: $event => ($options.onKeyDown($event, option, i))
+              onKeydown: $event => ($options.onKeyDown($event, option, index))
             }, [
               ($props.templates['option'])
                 ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates['option']), {
                     key: 0,
                     option: option
                   }, null, 8, ["option"]))
-                : (vue.openBlock(), vue.createElementBlock("span", _hoisted_3$1, vue.toDisplayString($options.getOptionLabelToRender(option)), 1)),
+                : (vue.openBlock(), vue.createElementBlock("span", _hoisted_4$1, vue.toDisplayString($options.getOptionLabelToRender(option)), 1)),
               ($options.isOptionGroup(option))
-                ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_4$1))
+                ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_5))
                 : vue.createCommentVNode("", true)
-            ], 40, _hoisted_2$1)), [
+            ], 40, _hoisted_3$1)), [
               [_directive_ripple]
             ]),
             ($options.isOptionGroup(option) && $options.isOptionActive(option))
@@ -225,10 +232,11 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                   optionGroupChildren: $props.optionGroupChildren,
                   parentActive: $options.isOptionActive(option),
                   dirty: $props.dirty,
-                  templates: $props.templates
-                }, null, 8, ["selectionPath", "options", "optionLabel", "optionValue", "level", "onOptionSelect", "onOptiongroupSelect", "optionGroupLabel", "optionGroupChildren", "parentActive", "dirty", "templates"]))
+                  templates: $props.templates,
+                  "aria-level": $props.level + 2
+                }, null, 8, ["selectionPath", "options", "optionLabel", "optionValue", "level", "onOptionSelect", "onOptiongroupSelect", "optionGroupLabel", "optionGroupChildren", "parentActive", "dirty", "templates", "aria-level"]))
               : vue.createCommentVNode("", true)
-          ], 2))
+          ], 10, _hoisted_2$1))
         }), 128))
       ]))
     }
@@ -237,7 +245,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
 
     var script = {
         name: 'CascadeSelect',
-        emits: ['update:modelValue','change','group-change', 'before-show','before-hide','hide','show'],
+        emits: ['update:modelValue','change','group-change', 'before-show','before-hide','hide','show','focus','blur'],
         data() {
             return {
                 selectionPath: null,
@@ -258,7 +266,6 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
             dataKey: null,
             inputId: String,
             tabindex: String,
-            ariaLabelledBy: null,
             appendTo: {
                 type: String,
                 default: 'body'
@@ -271,7 +278,8 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
             loadingIcon: {
                 type: String,
                 default: 'pi pi-spinner pi-spin'
-            }
+            },
+            inputProps: null
         },
         outsideClickListener: null,
         scrollHandler: null,
@@ -360,11 +368,13 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                 this.$emit('before-hide');
                 this.overlayVisible = false;
             },
-            onFocus() {
+            onFocus(event) {
                 this.focused = true;
+                this.$emit('focus', event);
             },
-            onBlur() {
+            onBlur(event) {
                 this.focused = false;
+                this.$emit('blur', event);
             },
             onClick(event) {
                 if (this.disabled || this.loading) {
@@ -460,7 +470,12 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                 this.overlay = el;
             },
             onKeyDown(event) {
-                switch(event.key) {
+                if (this.disabled || this.loading) {
+                    event.preventDefault();
+                    return;
+                }
+
+                switch(event.code) {
                     case 'Down':
                     case 'ArrowDown':
                         if (this.overlayVisible) {
@@ -472,11 +487,14 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                         event.preventDefault();
                     break;
 
-                    case 'Escape':
+                    case 'Space':
                         if (this.overlayVisible) {
                             this.hide();
-                            event.preventDefault();
                         }
+                        else {
+                            this.show();
+                        }
+                        event.preventDefault();
                     break;
 
                     case 'Tab':
@@ -485,7 +503,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                 }
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -526,16 +544,19 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
             },
             dropdownIconClass() {
                 return ['p-cascadeselect-trigger-icon', this.loading ? this.loadingIcon : 'pi pi-chevron-down'];
+            },
+            listId() {
+                return utils.UniqueComponentId() + '_list';
             }
         },
         components: {
             'CascadeSelectSub': script$1,
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
     const _hoisted_1 = { class: "p-hidden-accessible" };
-    const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"];
+    const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-controls"];
     const _hoisted_3 = ["aria-expanded"];
     const _hoisted_4 = { class: "p-cascadeselect-items-wrapper" };
 
@@ -549,8 +570,9 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
         onClick: _cache[4] || (_cache[4] = $event => ($options.onClick($event)))
       }, [
         vue.createElementVNode("div", _hoisted_1, [
-          vue.createElementVNode("input", {
+          vue.createElementVNode("input", vue.mergeProps({
             ref: "focusInput",
+            role: "combobox",
             type: "text",
             id: $props.inputId,
             readonly: "",
@@ -561,8 +583,8 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
             tabindex: $props.tabindex,
             "aria-haspopup": "listbox",
             "aria-expanded": $data.overlayVisible,
-            "aria-labelledby": $props.ariaLabelledBy
-          }, null, 40, _hoisted_2)
+            "aria-controls": $options.listId
+          }, $props.inputProps), null, 16, _hoisted_2)
         ]),
         vue.createElementVNode("span", {
           class: vue.normalizeClass($options.labelClass)
@@ -600,10 +622,13 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                       key: 0,
                       ref: $options.overlayRef,
                       class: vue.normalizeClass($options.panelStyleClass),
-                      onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
+                      onClick: _cache[3] || (_cache[3] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                      role: "group"
                     }, [
                       vue.createElementVNode("div", _hoisted_4, [
                         vue.createVNode(_component_CascadeSelectSub, {
+                          id: $options.listId,
+                          role: "tree",
                           options: $props.options,
                           selectionPath: $data.selectionPath,
                           optionLabel: $props.optionLabel,
@@ -616,7 +641,7 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
                           onOptiongroupSelect: $options.onOptionGroupSelect,
                           dirty: $data.dirty,
                           root: true
-                        }, null, 8, ["options", "selectionPath", "optionLabel", "optionValue", "templates", "optionGroupLabel", "optionGroupChildren", "onOptionSelect", "onOptiongroupSelect", "dirty"])
+                        }, null, 8, ["id", "options", "selectionPath", "optionLabel", "optionValue", "templates", "optionGroupLabel", "optionGroupChildren", "onOptionSelect", "onOptiongroupSelect", "dirty"])
                       ])
                     ], 2))
                   : vue.createCommentVNode("", true)
@@ -663,4 +688,4 @@ this.primevue.cascadeselect = (function (utils, OverlayEventBus, Ripple, vue, Po
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue, primevue.portal));
+})(primevue.utils, primevue.overlayeventbus, primevue.ripple, Vue, primevue.portal);

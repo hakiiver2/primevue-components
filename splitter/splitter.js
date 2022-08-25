@@ -73,7 +73,7 @@ this.primevue.splitter = (function (utils, vue) {
                 this.gutterElement = event.currentTarget;
                 this.size = this.horizontal ? utils.DomHandler.getWidth(this.$el) : utils.DomHandler.getHeight(this.$el);
                 this.dragging = true;
-                this.startPos = this.layout === 'horizontal' ? event.pageX : event.pageY;
+                this.startPos = this.layout === 'horizontal' ? (event.pageX || event.changedTouches[0].pageX) : (event.pageY || event.changedTouches[0].pageY);
                 this.prevPanelElement = this.gutterElement.previousElementSibling;
                 this.nextPanelElement = this.gutterElement.nextElementSibling;
                 this.prevPanelSize = 100 * (this.horizontal ? utils.DomHandler.getOuterWidth(this.prevPanelElement, true): utils.DomHandler.getOuterHeight(this.prevPanelElement, true)) / this.size;
@@ -115,6 +115,7 @@ this.primevue.splitter = (function (utils, vue) {
             },
             onGutterTouchStart(event, index) {
                 this.onResizeStart(event, index);
+                this.bindTouchListeners();
                 event.preventDefault();
             },
             onGutterTouchMove(event) {
@@ -123,6 +124,7 @@ this.primevue.splitter = (function (utils, vue) {
             },
             onGutterTouchEnd(event) {
                 this.onResizeEnd(event);
+                this.unbindTouchListeners();
                 event.preventDefault();
             },
             bindMouseListeners() {
@@ -137,6 +139,20 @@ this.primevue.splitter = (function (utils, vue) {
                         this.unbindMouseListeners();
                     };
                     document.addEventListener('mouseup', this.mouseUpListener);
+                }
+            },
+            bindTouchListeners() {
+                if (!this.touchMoveListener) {
+                    this.touchMoveListener = event => this.onResize(event.changedTouches[0]);
+                    document.addEventListener('touchmove', this.touchMoveListener);
+                }
+
+                if (!this.touchEndListener) {
+                    this.touchEndListener = event => {
+                        this.resizeEnd(event);
+                        this.unbindTouchListeners();
+                    };
+                    document.addEventListener('touchend', this.touchEndListener);
                 }
             },
             validateResize(newPrevPanelSize, newNextPanelSize) {
@@ -161,6 +177,17 @@ this.primevue.splitter = (function (utils, vue) {
                 if (this.mouseUpListener) {
                     document.removeEventListener('mouseup', this.mouseUpListener);
                     this.mouseUpListener = null;
+                }
+            },
+            unbindTouchListeners() {
+                if (this.touchMoveListener) {
+                    document.removeEventListener('touchmove', this.touchMoveListener);
+                    this.touchMoveListener = null;
+                }
+
+                if (this.touchEndListener) {
+                    document.removeEventListener('touchend', this.touchEndListener);
+                    this.touchEndListener = null;
                 }
             },
             clear() {
@@ -307,4 +334,4 @@ this.primevue.splitter = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

@@ -133,7 +133,7 @@ this.primevue.galleria = (function (utils, Ripple, vue, Portal) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -619,7 +619,7 @@ this.primevue.galleria = (function (utils, Ripple, vue, Portal) {
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -840,7 +840,7 @@ this.primevue.galleria = (function (utils, Ripple, vue, Portal) {
             'GalleriaItemSlot': script$2
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -1093,7 +1093,7 @@ this.primevue.galleria = (function (utils, Ripple, vue, Portal) {
         },
         components: {
             'GalleriaContent': script$1,
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -1177,4 +1177,4 @@ this.primevue.galleria = (function (utils, Ripple, vue, Portal) {
 
     return script;
 
-}(primevue.utils, primevue.ripple, Vue, primevue.portal));
+})(primevue.utils, primevue.ripple, Vue, primevue.portal);

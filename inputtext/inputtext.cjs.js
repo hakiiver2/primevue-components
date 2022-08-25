@@ -4,7 +4,6 @@ var vue = require('vue');
 
 var script = {
     name: 'InputText',
-    inheritAttrs: false,
     emits: ['update:modelValue'],
     props: {
         modelValue: null
@@ -24,11 +23,11 @@ var script = {
 const _hoisted_1 = ["value"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (vue.openBlock(), vue.createElementBlock("input", vue.mergeProps({
-    class: ['p-inputtext p-component', {'p-filled': $options.filled}],
+  return (vue.openBlock(), vue.createElementBlock("input", {
+    class: vue.normalizeClass(['p-inputtext p-component', {'p-filled': $options.filled}]),
     value: $props.modelValue,
     onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args)))
-  }, _ctx.$attrs), null, 16, _hoisted_1))
+  }, null, 42, _hoisted_1))
 }
 
 script.render = render;

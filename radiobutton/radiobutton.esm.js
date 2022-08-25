@@ -1,15 +1,24 @@
 import { ObjectUtils } from 'primevue/utils';
-import { openBlock, createElementBlock, normalizeClass, normalizeStyle, createElementVNode, mergeProps } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, createElementVNode, mergeProps } from 'vue';
 
 var script = {
     name: 'RadioButton',
-    inheritAttrs: false,
-    emits: ['click', 'update:modelValue', 'change'],
+    emits: ['click', 'update:modelValue', 'change', 'focus', 'blur'],
     props: {
 		value: null,
         modelValue: null,
-        class: null,
-        style: null
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        inputId: {
+            type: String,
+            default: null
+        },
+        inputProps: {
+            type: Object,
+            default: null
+        }
     },
     data() {
         return {
@@ -18,7 +27,7 @@ var script = {
     },
     methods: {
         onClick(event) {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.$emit('click', event);
                 this.$emit('update:modelValue', this.value);
                 this.$refs.input.focus();
@@ -28,11 +37,13 @@ var script = {
                 }
             }
         },
-        onFocus() {
+        onFocus(event) {
             this.focused = true;
+            this.$emit('focus', event);
         },
-        onBlur() {
+        onBlur(event) {
             this.focused = false;
+            this.$emit('blur', event);
         }
     },
     computed: {
@@ -40,43 +51,44 @@ var script = {
             return this.modelValue != null && ObjectUtils.equals(this.modelValue, this.value);
         },
         containerClass() {
-            return ['p-radiobutton p-component', this.class, {'p-radiobutton-checked': this.checked, 'p-radiobutton-disabled': this.$attrs.disabled, 'p-radiobutton-focused': this.focused}];
+            return [
+                'p-radiobutton p-component', {
+                    'p-radiobutton-checked': this.checked,
+                    'p-radiobutton-disabled': this.disabled,
+                    'p-radiobutton-focused': this.focused
+                }];
         }
     }
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = ["checked", "value"];
-const _hoisted_3 = ["aria-checked"];
-const _hoisted_4 = /*#__PURE__*/createElementVNode("div", { class: "p-radiobutton-icon" }, null, -1);
-const _hoisted_5 = [
-  _hoisted_4
+const _hoisted_2 = ["id", "checked", "value"];
+const _hoisted_3 = /*#__PURE__*/createElementVNode("div", { class: "p-radiobutton-icon" }, null, -1);
+const _hoisted_4 = [
+  _hoisted_3
 ];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock("div", {
     class: normalizeClass($options.containerClass),
-    onClick: _cache[2] || (_cache[2] = $event => ($options.onClick($event))),
-    style: normalizeStyle($props.style)
+    onClick: _cache[2] || (_cache[2] = $event => ($options.onClick($event)))
   }, [
     createElementVNode("div", _hoisted_1, [
       createElementVNode("input", mergeProps({
         ref: "input",
         type: "radio",
+        id: $props.inputId,
         checked: $options.checked,
-        value: $props.value
-      }, _ctx.$attrs, {
+        value: $props.value,
         onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
         onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args)))
-      }), null, 16, _hoisted_2)
+      }, $props.inputProps), null, 16, _hoisted_2)
     ]),
     createElementVNode("div", {
       ref: "box",
-      class: normalizeClass(['p-radiobutton-box', {'p-highlight': $options.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
-      role: "radio",
-      "aria-checked": $options.checked
-    }, _hoisted_5, 10, _hoisted_3)
-  ], 6))
+      class: normalizeClass(['p-radiobutton-box', {'p-highlight': $options.checked, 'p-disabled': $props.disabled, 'p-focus': $data.focused}])
+    }, _hoisted_4, 2)
+  ], 2))
 }
 
 script.render = render;

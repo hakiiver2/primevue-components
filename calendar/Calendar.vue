@@ -284,6 +284,10 @@ export default {
             type: Boolean,
             default: false
         },
+        hideOnRangeSelection: {
+            type: Boolean,
+            default: false
+        },
         timeSeparator: {
             type: String,
             default: ':'
@@ -665,7 +669,7 @@ export default {
                     this.currentMonth--;
                 }
 
-                this.$emit('month-change', {month: this.currentMonth, year: this.currentYear});
+                this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
             }
         },
         navForward(event) {
@@ -690,7 +694,7 @@ export default {
                     this.currentMonth++;
                 }
 
-                this.$emit('month-change', {month: this.currentMonth , year: this.currentYear});
+                this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
             }
         },
         decrementYear() {
@@ -939,6 +943,12 @@ export default {
 
             if (modelVal !== null) {
                 this.updateModel(modelVal);
+            }
+
+            if (this.isRangeSelection() && this.hideOnRangeSelection && modelVal[1] !== null) {
+                setTimeout(() => {
+                    this.overlayVisible = false;
+                }, 150);
             }
             this.$emit('date-select', date);
         },

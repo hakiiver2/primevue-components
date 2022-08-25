@@ -136,7 +136,7 @@ var script$4 = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
@@ -622,7 +622,7 @@ var script$3 = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
@@ -843,7 +843,7 @@ var script$1 = {
         'GalleriaItemSlot': script$2
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 
@@ -1096,7 +1096,7 @@ var script = {
     },
     components: {
         'GalleriaContent': script$1,
-        'Portal': Portal__default['default']
+        'Portal': Portal__default["default"]
     }
 };
 

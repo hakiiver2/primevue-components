@@ -6,4 +6,4 @@ this.primevue.dynamicdialogeventbus = (function (utils) {
 
 	return DynamicDialogEventBus;
 
-}(primevue.utils));
+})(primevue.utils);

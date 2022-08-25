@@ -269,7 +269,7 @@ function isOutOfBounds(el) {
 }
 
 function getTarget(el) {
-    return utils.DomHandler.hasClass(el, 'p-inputwrapper') ? utils.DomHandler.findSingle(el, 'input'): el;
+    return utils.DomHandler.hasClass(el, 'p-inputwrapper') && !utils.DomHandler.hasClass(el, 'p-dropdown') ? utils.DomHandler.findSingle(el, 'input'): el;
 }
 
 function getModifiers(options) {

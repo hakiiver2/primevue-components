@@ -128,4 +128,4 @@ this.primevue.chip = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

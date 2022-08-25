@@ -1,5 +1,5 @@
 import { DomHandler } from 'primevue/utils';
-import { openBlock, createElementBlock, mergeProps } from 'vue';
+import { openBlock, createElementBlock, normalizeClass } from 'vue';
 
 var script = {
     name: 'InputMask',
@@ -21,6 +21,10 @@ var script = {
         unmask: {
             type: Boolean,
             default: false
+        },
+        readonly: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {
@@ -33,7 +37,7 @@ var script = {
             this.$emit('update:modelValue', event.target.value);
         },
         onFocus(event) {
-            if (this.$attrs.readonly) {
+            if (this.readonly) {
                 return;
             }
 
@@ -74,7 +78,7 @@ var script = {
             this.$emit('blur', event);
         },
         onKeyDown(event) {
-            if (this.$attrs.readonly) {
+            if (this.readonly) {
                 return;
             }
 
@@ -115,7 +119,7 @@ var script = {
             this.$emit('keydown', event);
         },
         onKeyPress(event) {
-            if (this.$attrs.readonly) {
+            if (this.readonly) {
                 return;
             }
 
@@ -360,7 +364,7 @@ var script = {
             return (this.partialPosition ? i : this.firstNonMaskPos);
         },
         handleInputChange(event) {
-            if (this.$attrs.readonly) {
+            if (this.readonly) {
                 return;
             }
 
@@ -484,15 +488,19 @@ var script = {
     }
 };
 
+const _hoisted_1 = ["readonly"];
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createElementBlock("input", mergeProps({ class: $options.inputClass }, _ctx.$attrs, {
+  return (openBlock(), createElementBlock("input", {
+    class: normalizeClass($options.inputClass),
+    readonly: $props.readonly,
     onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args))),
     onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
     onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
     onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
     onKeypress: _cache[4] || (_cache[4] = (...args) => ($options.onKeyPress && $options.onKeyPress(...args))),
     onPaste: _cache[5] || (_cache[5] = (...args) => ($options.onPaste && $options.onPaste(...args)))
-  }), null, 16))
+  }, null, 42, _hoisted_1))
 }
 
 script.render = render;

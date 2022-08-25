@@ -6,4 +6,4 @@ this.primevue.terminalservice = (function (utils) {
 
 	return TerminalService;
 
-}(primevue.utils));
+})(primevue.utils);

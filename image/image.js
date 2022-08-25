@@ -132,7 +132,7 @@ this.primevue.image = (function (utils, Portal, vue) {
             }
         },
         components: {
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -290,4 +290,4 @@ this.primevue.image = (function (utils, Portal, vue) {
 
     return script;
 
-}(primevue.utils, primevue.portal, Vue));
+})(primevue.utils, primevue.portal, Vue);

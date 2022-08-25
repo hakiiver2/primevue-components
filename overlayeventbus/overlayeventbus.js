@@ -6,4 +6,4 @@ this.primevue.overlayeventbus = (function (utils) {
 
 	return OverlayEventBus;
 
-}(primevue.utils));
+})(primevue.utils);

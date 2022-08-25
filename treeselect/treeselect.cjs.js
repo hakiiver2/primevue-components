@@ -256,7 +256,7 @@ var script = {
             this.overlay = el;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default['default'].emit('overlay-click', {
+            OverlayEventBus__default["default"].emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -378,11 +378,11 @@ var script = {
         }
     },
     components: {
-        'TSTree': Tree__default['default'],
-        'Portal': Portal__default['default']
+        'TSTree': Tree__default["default"],
+        'Portal': Portal__default["default"]
     },
     directives: {
-        'ripple': Ripple__default['default']
+        'ripple': Ripple__default["default"]
     }
 };
 

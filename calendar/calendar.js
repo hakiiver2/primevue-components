@@ -144,6 +144,10 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 type: Boolean,
                 default: false
             },
+            hideOnRangeSelection: {
+                type: Boolean,
+                default: false
+            },
             timeSeparator: {
                 type: String,
                 default: ':'
@@ -525,7 +529,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         this.currentMonth--;
                     }
 
-                    this.$emit('month-change', {month: this.currentMonth, year: this.currentYear});
+                    this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
                 }
             },
             navForward(event) {
@@ -550,7 +554,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         this.currentMonth++;
                     }
 
-                    this.$emit('month-change', {month: this.currentMonth , year: this.currentYear});
+                    this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
                 }
             },
             decrementYear() {
@@ -799,6 +803,12 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
 
                 if (modelVal !== null) {
                     this.updateModel(modelVal);
+                }
+
+                if (this.isRangeSelection() && this.hideOnRangeSelection && modelVal[1] !== null) {
+                    setTimeout(() => {
+                        this.overlayVisible = false;
+                    }, 150);
                 }
                 this.$emit('date-select', date);
             },
@@ -2082,7 +2092,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             },
             onOverlayClick(event) {
                 if (!this.inline) {
-                    OverlayEventBus__default['default'].emit('overlay-click', {
+                    OverlayEventBus__default["default"].emit('overlay-click', {
                         originalEvent: event,
                         target: this.$el
                     });
@@ -2359,11 +2369,11 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             }
         },
         components: {
-            'CalendarButton': Button__default['default'],
-            'Portal': Portal__default['default']
+            'CalendarButton': Button__default["default"],
+            'Portal': Portal__default["default"]
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         }
     };
 
@@ -2936,4 +2946,4 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.button, primevue.ripple, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.button, primevue.ripple, primevue.portal, Vue);

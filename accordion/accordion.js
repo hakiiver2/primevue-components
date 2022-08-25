@@ -225,4 +225,4 @@ this.primevue.accordion = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

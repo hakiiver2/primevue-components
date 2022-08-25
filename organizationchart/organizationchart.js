@@ -316,4 +316,4 @@ this.primevue.organizationchart = (function (utils, vue) {
 
     return script;
 
-}(primevue.utils, Vue));
+})(primevue.utils, Vue);

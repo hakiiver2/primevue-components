@@ -335,6 +335,10 @@
     "description": "Whether to hide the overlay on date selection when showTime is enabled.",
     "type": "boolean"
   },
+  "calendar/hideOnRangeSelection": {
+    "description": "Whether to hide the overlay on date selection is completed when selectionMode is range.",
+    "type": "boolean"
+  },
   "calendar/timeSeparator": {
     "description": "Separator of time selector.",
     "type": "string"
@@ -457,10 +461,6 @@
   },
   "cascadeselect/inputId": {
     "description": "Identifier of the underlying input element.",
-    "type": "string"
-  },
-  "cascadeselect/ariaLabelledBy": {
-    "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
     "type": "string"
   },
   "cascadeselect/appendTo": {
@@ -2235,6 +2235,10 @@
     "description": "Value of the component.",
     "type": "any"
   },
+  "password/inputId": {
+    "description": "Identifier of the underlying input element.",
+    "type": "string"
+  },
   "password/promptLabel": {
     "description": "Text to prompt password entry. Defaults to PrimeVue Locale configuration.",
     "type": "string"
@@ -2329,6 +2333,14 @@
   },
   "picklist/stripedRows": {
     "description": "Whether to displays rows with alternating colors.",
+    "type": "boolean"
+  },
+  "picklist/showSourceControls": {
+    "description": "Whether to show buttons of source list.",
+    "type": "boolean"
+  },
+  "picklist/showTargetControls": {
+    "description": "Whether to show buttons of target list.",
     "type": "boolean"
   },
   "portal/appendTo": {
@@ -2447,10 +2459,6 @@
     "description": "A property to uniquely identify an option.",
     "type": "string"
   },
-  "selectbutton/ariaLabelledBy": {
-    "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
-    "type": "string"
-  },
   "sidebar/visible": {
     "description": "Specifies the visibility of the dialog.",
     "type": "boolean"
@@ -2535,8 +2543,16 @@
     "description": "When present, it specifies that the component should be disabled.",
     "type": "boolean"
   },
-  "slider/ariaLabelledBy": {
+  "slider/tabindex": {
+    "description": "Index of the element in tabbing order.",
+    "type": "number"
+  },
+  "slider/aria-labelledby": {
     "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+    "type": "string"
+  },
+  "slider/aria-label": {
+    "description": "Used to define a string that labels the element.",
     "type": "string"
   },
   "speeddial/model": {

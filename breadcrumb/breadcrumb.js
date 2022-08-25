@@ -213,4 +213,4 @@ this.primevue.breadcrumb = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

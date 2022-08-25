@@ -91,4 +91,4 @@ this.primevue.inlinemessage = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

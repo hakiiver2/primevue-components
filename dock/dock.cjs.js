@@ -76,8 +76,8 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default['default'],
-        'tooltip': Tooltip__default['default']
+        'ripple': Ripple__default["default"],
+        'tooltip': Tooltip__default["default"]
     }
 };
 

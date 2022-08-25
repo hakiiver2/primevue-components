@@ -17,4 +17,4 @@ this.primevue.columngroup = (function () {
 
     return script;
 
-}());
+})();

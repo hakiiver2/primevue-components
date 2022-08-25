@@ -275,6 +275,10 @@ button {
     position: relative;
 }
 
+.p-checkbox.p-checkbox-disabled {
+    cursor: default;
+}
+
 .p-checkbox-box {
     display: flex;
     justify-content: center;
@@ -381,6 +385,10 @@ button {
     cursor: pointer;
     user-select: none;
     vertical-align: bottom;
+}
+
+.p-radiobutton.p-radiobutton-disabled {
+    cursor: default;
 }
 
 .p-radiobutton-box {

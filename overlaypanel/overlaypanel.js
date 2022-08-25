@@ -11,6 +11,7 @@ this.primevue.overlaypanel = (function (utils, OverlayEventBus, Ripple, Portal, 
     var script = {
         name: 'OverlayPanel',
         inheritAttrs: false,
+        emits: ['show', 'hide'],
         props: {
     		dismissable: {
     			type: Boolean,
@@ -41,10 +42,21 @@ this.primevue.overlaypanel = (function (utils, OverlayEventBus, Ripple, Portal, 
                 default: null
             }
         },
-        emits: ['show', 'hide'],
         data() {
             return {
                 visible: false
+            }
+        },
+        watch: {
+            dismissable: {
+                immediate: true,
+                handler(newValue) {
+                    if (newValue) {
+                        this.bindOutsideClickListener();
+                    } else {
+                        this.unbindOutsideClickListener();
+                    }
+                }
             }
         },
         selfClick: false,
@@ -74,7 +86,7 @@ this.primevue.overlaypanel = (function (utils, OverlayEventBus, Ripple, Portal, 
             }
 
             if (this.overlayEventListener) {
-                OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+                OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
                 this.overlayEventListener = null;
             }
 
@@ -123,14 +135,14 @@ this.primevue.overlaypanel = (function (utils, OverlayEventBus, Ripple, Portal, 
                     }
                 };
 
-                OverlayEventBus__default['default'].on('overlay-click', this.overlayEventListener);
+                OverlayEventBus__default["default"].on('overlay-click', this.overlayEventListener);
                 this.$emit('show');
             },
             onLeave() {
                 this.unbindOutsideClickListener();
                 this.unbindScrollListener();
                 this.unbindResizeListener();
-                OverlayEventBus__default['default'].off('overlay-click', this.overlayEventListener);
+                OverlayEventBus__default["default"].off('overlay-click', this.overlayEventListener);
                 this.overlayEventListener = null;
                 this.$emit('hide');
             },
@@ -238,7 +250,7 @@ this.primevue.overlaypanel = (function (utils, OverlayEventBus, Ripple, Portal, 
                 }
             },
             onOverlayClick(event) {
-                OverlayEventBus__default['default'].emit('overlay-click', {
+                OverlayEventBus__default["default"].emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -256,10 +268,10 @@ this.primevue.overlaypanel = (function (utils, OverlayEventBus, Ripple, Portal, 
             }
         },
         directives: {
-            'ripple': Ripple__default['default']
+            'ripple': Ripple__default["default"]
         },
         components: {
-            'Portal': Portal__default['default']
+            'Portal': Portal__default["default"]
         }
     };
 
@@ -352,4 +364,4 @@ this.primevue.overlaypanel = (function (utils, OverlayEventBus, Ripple, Portal, 
 
     return script;
 
-}(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.portal, Vue));
+})(primevue.utils, primevue.overlayeventbus, primevue.ripple, primevue.portal, Vue);

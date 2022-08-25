@@ -9,6 +9,10 @@ export interface PasswordProps extends InputHTMLAttributes {
      */
     modelValue?: Nullable<string>;
     /**
+     * Identifier of the underlying input element.
+     */
+    inputId?: string | undefined;
+    /**
      * Text to prompt password entry. Defaults to PrimeVue Locale configuration.
      */
     promptLabel?: string | undefined;

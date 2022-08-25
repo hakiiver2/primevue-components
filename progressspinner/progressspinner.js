@@ -88,4 +88,4 @@ this.primevue.progressspinner = (function (vue) {
 
     return script;
 
-}(Vue));
+})(Vue);

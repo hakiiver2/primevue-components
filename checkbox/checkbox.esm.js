@@ -1,16 +1,13 @@
 import { ObjectUtils } from 'primevue/utils';
-import { openBlock, createElementBlock, normalizeClass, normalizeStyle, createElementVNode, mergeProps } from 'vue';
+import { openBlock, createElementBlock, normalizeClass, createElementVNode, mergeProps } from 'vue';
 
 var script = {
     name: 'Checkbox',
-    inheritAttrs: false,
-    emits: ['click', 'update:modelValue', 'change', 'input'],
+    emits: ['click', 'update:modelValue', 'change', 'input', 'focus', 'blur'],
     props: {
         value: null,
         modelValue: null,
         binary: Boolean,
-        class: null,
-        style: null,
         trueValue: {
             type: null,
             default: true
@@ -18,16 +15,22 @@ var script = {
         falseValue: {
             type: null,
             default: false
-        }
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        inputId: null,
+        inputProps: null
     },
     data() {
         return {
             focused: false
-        };
+        }
     },
     methods: {
         onClick(event) {
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 let newModelValue;
 
                 if (this.binary) {
@@ -47,11 +50,13 @@ var script = {
                 this.$refs.input.focus();
             }
         },
-        onFocus() {
+        onFocus(event) {
             this.focused = true;
+            this.$emit('focus', event);
         },
-        onBlur() {
+        onBlur(event) {
             this.focused = false;
+            this.$emit('blur', event);
         }
     },
     computed: {
@@ -59,43 +64,45 @@ var script = {
             return this.binary ? this.modelValue === this.trueValue : ObjectUtils.contains(this.value, this.modelValue);
         },
         containerClass() {
-            return ['p-checkbox p-component', this.class, {'p-checkbox-checked': this.checked, 'p-checkbox-disabled': this.$attrs.disabled, 'p-checkbox-focused': this.focused}];
+            return [
+                'p-checkbox p-component', {
+                    'p-checkbox-checked': this.checked,
+                    'p-checkbox-disabled': this.disabled,
+                    'p-checkbox-focused': this.focused
+                }];
         }
     }
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = ["checked", "value"];
-const _hoisted_3 = ["aria-checked"];
+const _hoisted_2 = ["id", "value", "checked", "disabled"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock("div", {
     class: normalizeClass($options.containerClass),
-    onClick: _cache[2] || (_cache[2] = $event => ($options.onClick($event))),
-    style: normalizeStyle($props.style)
+    onClick: _cache[2] || (_cache[2] = $event => ($options.onClick($event)))
   }, [
     createElementVNode("div", _hoisted_1, [
       createElementVNode("input", mergeProps({
+        id: $props.inputId,
         ref: "input",
         type: "checkbox",
+        value: $props.value,
         checked: $options.checked,
-        value: $props.value
-      }, _ctx.$attrs, {
-        onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args)))
-      }), null, 16, _hoisted_2)
+        disabled: $props.disabled,
+        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event)))
+      }, $props.inputProps), null, 16, _hoisted_2)
     ]),
     createElementVNode("div", {
       ref: "box",
-      class: normalizeClass(['p-checkbox-box', {'p-highlight': $options.checked, 'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
-      role: "checkbox",
-      "aria-checked": $options.checked
+      class: normalizeClass(['p-checkbox-box', {'p-highlight': $options.checked, 'p-disabled': $props.disabled, 'p-focus': $data.focused}])
     }, [
       createElementVNode("span", {
         class: normalizeClass(['p-checkbox-icon', {'pi pi-check': $options.checked}])
       }, null, 2)
-    ], 10, _hoisted_3)
-  ], 6))
+    ], 2)
+  ], 2))
 }
 
 script.render = render;

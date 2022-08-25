@@ -74,7 +74,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -106,7 +106,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -138,7 +138,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -177,7 +177,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -215,7 +215,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             directives: {
-                'ripple': Ripple__default['default']
+                'ripple': Ripple__default["default"]
             }
         };
 
@@ -263,7 +263,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'RPPDropdown': Dropdown__default['default']
+                'RPPDropdown': Dropdown__default["default"]
             }
         };
 
@@ -307,7 +307,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'JTPDropdown': Dropdown__default['default']
+                'JTPDropdown': Dropdown__default["default"]
             }
         };
 
@@ -342,7 +342,7 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
                 }
             },
             components: {
-                'JTPInput': InputNumber__default['default']
+                'JTPInput': InputNumber__default["default"]
             }
         };
 
@@ -681,4 +681,4 @@ this.primevue.paginator = (function (vue, Ripple, Dropdown, InputNumber) {
 
         return script;
 
-}(Vue, primevue.ripple, primevue.dropdown, primevue.inputnumber));
+})(Vue, primevue.ripple, primevue.dropdown, primevue.inputnumber);

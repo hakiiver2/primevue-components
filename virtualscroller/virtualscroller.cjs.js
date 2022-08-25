@@ -125,24 +125,20 @@ var script = {
             const first = this.first;
             const { numToleratedItems } = this.calculateNumItems();
             const itemSize = this.itemSize;
-            const contentPos = this.getContentPosition();
             const calculateFirst = (_index = 0, _numT) => (_index <= _numT ? 0 : _index);
-            const calculateCoord = (_first, _size, _cpos) => (_first * _size) + _cpos;
+            const calculateCoord = (_first, _size) => (_first * _size);
             const scrollTo = (left = 0, top = 0) => this.scrollTo({ left, top, behavior });
 
             if (both) {
                 const newFirst = { rows: calculateFirst(index[0], numToleratedItems[0]), cols: calculateFirst(index[1], numToleratedItems[1]) };
                 if (newFirst.rows !== first.rows || newFirst.cols !== first.cols) {
-                    scrollTo(calculateCoord(newFirst.cols, itemSize[1], contentPos.left), calculateCoord(newFirst.rows, itemSize[0], contentPos.top));
-                    this.first = newFirst;
+                    scrollTo(calculateCoord(newFirst.cols, itemSize[1]), calculateCoord(newFirst.rows, itemSize[0]));
                 }
             }
             else {
                 const newFirst = calculateFirst(index, numToleratedItems);
-
                 if (newFirst !== first) {
-                    horizontal ? scrollTo(calculateCoord(newFirst, itemSize, contentPos.left), 0) : scrollTo(0, calculateCoord(newFirst, itemSize, contentPos.top));
-                    this.first = newFirst;
+                    horizontal ? scrollTo(calculateCoord(newFirst, itemSize), 0) : scrollTo(0, calculateCoord(newFirst, itemSize));
                 }
             }
         },
@@ -373,9 +369,10 @@ var script = {
             const scrollTop = calculateScrollPos(target.scrollTop, contentPos.top);
             const scrollLeft = calculateScrollPos(target.scrollLeft, contentPos.left);
 
-            let newFirst = 0;
+            let newFirst = both ? { rows: 0, cols: 0 } : 0;
             let newLast = this.last;
             let isRangeChanged = false;
+            let newScrollPos = this.lastScrollPos;
 
             if (both) {
                 const isScrollDown = this.lastScrollPos.top <= scrollTop;
@@ -395,9 +392,8 @@ var script = {
                     cols: calculateLast(currentIndex.cols, newFirst.cols, this.last.cols, this.numItemsInViewport.cols, this.d_numToleratedItems[1], true)
                 };
 
-                isRangeChanged = (newFirst.rows !== this.first.rows && newLast.rows !== this.last.rows) || (newFirst.cols !== this.first.cols && newLast.cols !== this.last.cols);
-
-                this.lastScrollPos = { top: scrollTop, left: scrollLeft };
+                isRangeChanged = (newFirst.rows !== this.first.rows || newLast.rows !== this.last.rows) || (newFirst.cols !== this.first.cols || newLast.cols !== this.last.cols);
+                newScrollPos = { top: scrollTop, left: scrollLeft };
             }
             else {
                 const scrollPos = horizontal ? scrollLeft : scrollTop;
@@ -407,19 +403,19 @@ var script = {
 
                 newFirst = calculateFirst(currentIndex, triggerIndex, this.first, this.last, this.numItemsInViewport, this.d_numToleratedItems, isScrollDownOrRight);
                 newLast = calculateLast(currentIndex, newFirst, this.last, this.numItemsInViewport, this.d_numToleratedItems);
-                isRangeChanged = newFirst !== this.first && newLast !== this.last;
-
-                this.lastScrollPos = scrollPos;
+                isRangeChanged = newFirst !== this.first || newLast !== this.last;
+                newScrollPos = scrollPos;
             }
 
             return {
                 first: newFirst,
                 last: newLast,
-                isRangeChanged
+                isRangeChanged,
+                scrollPos: newScrollPos
             }
         },
         onScrollChange(event) {
-            const { first, last, isRangeChanged } = this.onScrollPositionChange(event);
+            const { first, last, isRangeChanged, scrollPos } = this.onScrollPositionChange(event);
 
             if (isRangeChanged) {
                 const newState = { first, last };
@@ -428,6 +424,7 @@ var script = {
 
                 this.first = first;
                 this.last = last;
+                this.lastScrollPos = scrollPos;
 
                 this.$emit('scroll-index-change', newState);
 
