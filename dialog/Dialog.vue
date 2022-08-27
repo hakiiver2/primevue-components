@@ -1,6 +1,6 @@
 <template>
     <Portal :appendTo="appendTo">
-        <div :ref="maskRef" :class="maskClass" v-if="containerVisible" @click="onMaskClick">
+        <div :ref="maskRef" :class="maskClass" v-if="containerVisible" @click="onMaskClick" @contextmenu="onMaskContextMenu">
             <transition name="p-dialog" @before-enter="onBeforeEnter" @enter="onEnter" @before-leave="onBeforeLeave" @leave="onLeave" @after-leave="onAfterLeave" appear>
                 <div :ref="containerRef" :class="dialogClass" v-if="visible" v-bind="$attrs" role="dialog" :aria-labelledby="ariaLabelledById" :aria-modal="modal">
                     <div class="p-dialog-header" v-if="showHeader" @mousedown="initDrag">
@@ -48,6 +48,10 @@ export default {
         rtl: Boolean,
         maximizable: Boolean,
         dismissableMask: Boolean,
+        contextmenuNone: {
+            type: Boolean,
+            default: false
+        },
         closable: {
             type: Boolean,
             default: true
@@ -180,6 +184,11 @@ export default {
         onMaskClick(event) {
             if (this.dismissableMask && this.closable && this.modal && this.mask === event.target) {
                 this.close();
+            }
+        },
+        onMaskContextMenu(event) {
+            if (this.dismissableMask && this.closable && this.modal && this.mask === event.target && this.contextmenuNone) {
+                event.preventDefault();
             }
         },
         focus() {

@@ -24,6 +24,10 @@ var script = {
         rtl: Boolean,
         maximizable: Boolean,
         dismissableMask: Boolean,
+        contextmenuNone: {
+            type: Boolean,
+            default: false
+        },
         closable: {
             type: Boolean,
             default: true
@@ -156,6 +160,11 @@ var script = {
         onMaskClick(event) {
             if (this.dismissableMask && this.closable && this.modal && this.mask === event.target) {
                 this.close();
+            }
+        },
+        onMaskContextMenu(event) {
+            if (this.dismissableMask && this.closable && this.modal && this.mask === event.target && this.contextmenuNone) {
+                event.preventDefault();
             }
         },
         focus() {
@@ -420,7 +429,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             key: 0,
             ref: $options.maskRef,
             class: vue.normalizeClass($options.maskClass),
-            onClick: _cache[3] || (_cache[3] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args)))
+            onClick: _cache[3] || (_cache[3] = (...args) => ($options.onMaskClick && $options.onMaskClick(...args))),
+            onContextmenu: _cache[4] || (_cache[4] = (...args) => ($options.onMaskContextMenu && $options.onMaskContextMenu(...args)))
           }, [
             vue.createVNode(vue.Transition, {
               name: "p-dialog",
@@ -505,7 +515,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               ]),
               _: 3
             }, 8, ["onBeforeEnter", "onEnter", "onBeforeLeave", "onLeave", "onAfterLeave"])
-          ], 2))
+          ], 34))
         : vue.createCommentVNode("", true)
     ]),
     _: 3

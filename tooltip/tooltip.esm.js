@@ -1,4 +1,4 @@
-import { DomHandler, ZIndexUtils, UniqueComponentId, ConnectedOverlayScrollHandler } from 'primevue/utils';
+import { ZIndexUtils, DomHandler, UniqueComponentId, ConnectedOverlayScrollHandler } from 'primevue/utils';
 
 function bindEvents(el) {
     const modifiers = el.$_ptooltipModifiers;
