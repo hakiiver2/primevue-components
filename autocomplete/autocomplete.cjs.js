@@ -18,18 +18,19 @@ var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
 
 var script = {
     name: 'AutoComplete',
-    inheritAttrs: false,
-    emits: ['update:modelValue', 'item-select', 'item-unselect', 'dropdown-click', 'clear', 'complete'],
+    emits: ['update:modelValue', 'change', 'focus', 'blur', 'item-select', 'item-unselect', 'dropdown-click', 'clear', 'complete', 'before-show', 'before-hide', 'show', 'hide'],
     props: {
         modelValue: null,
         suggestions: {
             type: Array,
             default: null
         },
-        field: {
+        field: { // TODO: Deprecated since v3.16.0
             type: [String,Function],
             default: null
         },
+        optionLabel: null,
+        optionDisabled: null,
         optionGroupLabel: null,
         optionGroupChildren: null,
         scrollHeight: {
@@ -44,13 +45,25 @@ var script = {
             type: String,
             default: 'blank'
         },
-        autoHighlight: {
+        autoHighlight: { // TODO: Deprecated since v3.16.0. Use selectOnFocus property instead.
             type: Boolean,
             default: false
         },
         multiple: {
             type: Boolean,
             default: false
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        placeholder: {
+            type: String,
+            default: null
+        },
+        dataKey: {
+            type: String,
+            default: null
         },
         minLength: {
             type: Number,
@@ -72,45 +85,99 @@ var script = {
             type: Boolean,
             default: false
         },
-        inputClass: null,
+        inputId: String,
         inputStyle: null,
-        class: null,
-        style: null,
+        inputClass: null,
+        inputProps: null,
+        panelStyle: null,
         panelClass: null,
+        panelProps: null,
+        loadingIcon: {
+            type: String,
+            default: 'pi pi-spinner'
+        },
         virtualScrollerOptions: {
             type: Object,
             default: null
         },
-        loadingIcon: {
+        autoOptionFocus: {
+            type: Boolean,
+            default: true
+        },
+        selectOnFocus: {
+            type: Boolean,
+            default: false
+        },
+        searchLocale: {
             type: String,
-            default: 'pi pi-spinner'
+            default: undefined
+        },
+        searchMessage: {
+            type: String,
+            default: null
+        },
+        selectionMessage: {
+            type: String,
+            default: null
+        },
+        emptySelectionMessage: {
+            type: String,
+            default: null
+        },
+        emptySearchMessage: {
+            type: String,
+            default: null
+        },
+        tabindex: {
+            type: Number,
+            default: 0
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        },
+        'aria-labelledby': {
+            type: String,
+            default: null
         }
     },
-    timeout: null,
     outsideClickListener: null,
     resizeListener: null,
     scrollHandler: null,
     overlay: null,
     virtualScroller: null,
+    searchTimeout: null,
+    focusOnHover: false,
+    dirty: false,
     data() {
         return {
-            searching: false,
+            id: utils.UniqueComponentId(),
             focused: false,
+            focusedOptionIndex: -1,
+            focusedMultipleOptionIndex: -1,
             overlayVisible: false,
-            inputTextValue: null,
-            highlightItem: null
-        };
+            searching: false
+        }
     },
     watch: {
         suggestions() {
             if (this.searching) {
-                if (this.suggestions && this.suggestions.length)
-                    this.showOverlay();
-                else
-                    this.hideOverlay();
-
+                utils.ObjectUtils.isNotEmpty(this.suggestions) ? this.show() : this.hide();
+                this.focusedOptionIndex = this.overlayVisible && this.autoOptionFocus ? this.findFirstFocusedOptionIndex() : -1;
                 this.searching = false;
             }
+
+            this.autoUpdateModel();
+        }
+    },
+    mounted() {
+        this.id = this.$attrs.id || this.id;
+
+        this.autoUpdateModel();
+    },
+    updated() {
+        if (this.overlayVisible) {
+            this.alignOverlay();
         }
     },
     beforeUnmount() {
@@ -127,20 +194,24 @@ var script = {
             this.overlay = null;
         }
     },
-    updated() {
-        if (this.overlayVisible) {
-            this.alignOverlay();
-        }
-    },
     methods: {
         getOptionIndex(index, fn) {
             return this.virtualScrollerDisabled ? index : (fn && fn(index)['index']);
         },
-        getOptionRenderKey(option) {
-            return this.getItemContent(option);
+        getOptionLabel(option) {
+            return this.field || this.optionLabel ? utils.ObjectUtils.resolveFieldData(option, this.field || this.optionLabel) : option;
         },
-        getOptionGroupRenderKey(optionGroup) {
-            return utils.ObjectUtils.resolveFieldData(optionGroup, this.optionGroupLabel);
+        getOptionValue(option) {
+            return option; // TODO: The 'optionValue' properties can be added.
+        },
+        getOptionRenderKey(option, index) {
+            return (this.dataKey ? utils.ObjectUtils.resolveFieldData(option, this.dataKey) : this.getOptionLabel(option)) + '_' + index;
+        },
+        isOptionDisabled(option) {
+            return this.optionDisabled ? utils.ObjectUtils.resolveFieldData(option, this.optionDisabled) : false;
+        },
+        isOptionGroup(option) {
+            return this.optionGroupLabel && option.optionGroup && option.group;
         },
         getOptionGroupLabel(optionGroup) {
             return utils.ObjectUtils.resolveFieldData(optionGroup, this.optionGroupLabel);
@@ -148,28 +219,380 @@ var script = {
         getOptionGroupChildren(optionGroup) {
             return utils.ObjectUtils.resolveFieldData(optionGroup, this.optionGroupChildren);
         },
+        getAriaPosInset(index) {
+            return (this.optionGroupLabel ? index - this.visibleOptions.slice(0, index).filter(option => this.isOptionGroup(option)).length : index) + 1;
+        },
+        show(isFocus) {
+            this.$emit('before-show');
+            this.dirty = true;
+            this.overlayVisible = true;
+            this.focusedOptionIndex = this.focusedOptionIndex !== -1 ? this.focusedOptionIndex : (this.autoOptionFocus ? this.findFirstFocusedOptionIndex() : -1);
+
+            isFocus && this.$refs.focusInput.focus();
+        },
+        hide(isFocus) {
+            const _hide = () => {
+                this.$emit('before-hide');
+                this.dirty = isFocus;
+                this.overlayVisible = false;
+                this.focusedOptionIndex = -1;
+
+                isFocus && this.$refs.focusInput && this.$refs.focusInput.focus();
+            };
+
+            setTimeout(() => { _hide(); }, 0); // For ScreenReaders
+        },
+        onFocus(event) {
+            if (!this.dirty && this.completeOnFocus) {
+                this.search(event, event.target.value, 'focus');
+            }
+
+            this.dirty = true;
+            this.focused = true;
+            this.focusedOptionIndex = this.overlayVisible && this.autoOptionFocus ? this.findFirstFocusedOptionIndex() : -1;
+            this.overlayVisible && this.scrollInView(this.focusedOptionIndex);
+            this.$emit('focus', event);
+        },
+        onBlur(event) {
+            this.dirty = false;
+            this.focused = false;
+            this.focusedOptionIndex = -1;
+            this.$emit('blur', event);
+        },
+        onKeyDown(event) {
+            switch (event.code) {
+                case 'ArrowDown':
+                    this.onArrowDownKey(event);
+                    break;
+
+                case 'ArrowUp':
+                    this.onArrowUpKey(event);
+                    break;
+
+                case 'ArrowLeft':
+                    this.onArrowLeftKey(event);
+                    break;
+
+                case 'ArrowRight':
+                    this.onArrowRightKey(event);
+                    break;
+
+                case 'Home':
+                    this.onHomeKey(event);
+                    break;
+
+                case 'End':
+                    this.onEndKey(event);
+                    break;
+
+                case 'PageDown':
+                    this.onPageDownKey(event);
+                    break;
+
+                case 'PageUp':
+                    this.onPageUpKey(event);
+                    break;
+
+                case 'Enter':
+                    this.onEnterKey(event);
+                    break;
+
+                case 'Escape':
+                    this.onEscapeKey(event);
+                    break;
+
+                case 'Tab':
+                    this.onTabKey(event);
+                    break;
+
+                case 'Backspace':
+                    this.onBackspaceKey(event);
+                    break;
+            }
+        },
+        onInput(event) {
+            if (this.searchTimeout) {
+                clearTimeout(this.searchTimeout);
+            }
+
+            let query = event.target.value;
+            if (!this.multiple) {
+                this.updateModel(event, query);
+            }
+
+            if (query.length === 0) {
+                this.hide();
+                this.$emit('clear');
+            }
+            else {
+                if (query.length >= this.minLength) {
+                    this.focusedOptionIndex = -1;
+
+                    this.searchTimeout = setTimeout(() => {
+                        this.search(event, query, 'input');
+                    }, this.delay);
+                }
+                else {
+                    this.hide();
+                }
+            }
+        },
+        onChange(event) {
+            if (this.forceSelection) {
+                let valid = false;
+
+                if (this.visibleOptions)  {
+                    const matchedValue = this.visibleOptions.find(option => this.isOptionMatched(option, event.target.value));
+
+                    if (matchedValue !== undefined) {
+                        valid = true;
+                        !this.isSelected(matchedValue) && this.onOptionSelect(event, matchedValue);
+                    }
+                }
+
+                if (!valid) {
+                    this.$refs.focusInput.value = '';
+                    this.$emit('clear');
+                    !this.multiple && this.updateModel(event, null);
+                }
+            }
+        },
+        onMultipleContainerFocus() {
+            this.focused = true;
+        },
+        onMultipleContainerBlur() {
+            this.focusedMultipleOptionIndex = -1;
+            this.focused = false;
+        },
+        onMultipleContainerKeyDown(event) {
+            switch (event.code) {
+                case 'ArrowLeft':
+                    this.onArrowLeftKeyOnMultiple(event);
+                    break;
+
+                case 'ArrowRight':
+                    this.onArrowRightKeyOnMultiple(event);
+                    break;
+
+                case 'Backspace':
+                    this.onBackspaceKeyOnMultiple(event);
+                    break;
+            }
+        },
+        onContainerClick(event) {
+            if (this.disabled || this.searching || this.isInputClicked(event) || this.isDropdownClicked(event)) {
+                return;
+            }
+
+            if (!this.overlay || !this.overlay.contains(event.target)) {
+                this.$refs.focusInput.focus();
+            }
+        },
+        onDropdownClick(event) {
+            let query = undefined;
+
+            if (this.overlayVisible) {
+                this.hide(true);
+            }
+            else {
+                this.$refs.focusInput.focus();
+                query = this.$refs.focusInput.value;
+
+                if (this.dropdownMode === 'blank')
+                    this.search(event, '', 'dropdown');
+                else if (this.dropdownMode === 'current')
+                    this.search(event, query, 'dropdown');
+            }
+
+            this.$emit('dropdown-click', { originalEvent: event, query });
+        },
+        onOptionSelect(event, option, isHide = true) {
+            const value = this.getOptionValue(option);
+
+            if (this.multiple) {
+                this.$refs.focusInput.value = '';
+
+                if (!this.isSelected(option)) {
+                    this.updateModel(event, [...(this.modelValue || []), value]);
+                }
+            }
+            else {
+                this.updateModel(event, value);
+            }
+
+            this.$emit('item-select', { originalEvent: event, value: option });
+
+            isHide && this.hide(true);
+        },
+        onOptionMouseMove(event, index) {
+            if (this.focusOnHover) {
+                this.changeFocusedOptionIndex(event, index);
+            }
+        },
+        onOverlayClick(event) {
+            OverlayEventBus__default["default"].emit('overlay-click', {
+                originalEvent: event,
+                target: this.$el
+            });
+        },
+        onOverlayKeyDown(event) {
+            switch (event.code) {
+                case 'Escape':
+                    this.onEscapeKey(event);
+                    break;
+            }
+        },
+        onArrowDownKey(event) {
+            if (!this.overlayVisible) {
+                return;
+            }
+
+            const optionIndex = this.focusedOptionIndex !== -1 ? this.findNextOptionIndex(this.focusedOptionIndex) : this.findFirstFocusedOptionIndex();
+
+            this.changeFocusedOptionIndex(event, optionIndex);
+
+            event.preventDefault();
+        },
+        onArrowUpKey(event) {
+            if (!this.overlayVisible) {
+                return;
+            }
+
+            if (event.altKey) {
+                if (this.focusedOptionIndex !== -1) {
+                    this.onOptionSelect(event, this.visibleOptions[this.focusedOptionIndex]);
+                }
+
+                this.overlayVisible && this.hide();
+                event.preventDefault();
+            }
+            else {
+                const optionIndex = this.focusedOptionIndex !== -1 ? this.findPrevOptionIndex(this.focusedOptionIndex) : this.findLastFocusedOptionIndex();
+
+                this.changeFocusedOptionIndex(event, optionIndex);
+
+                event.preventDefault();
+            }
+        },
+        onArrowLeftKey(event) {
+            const target = event.currentTarget;
+            this.focusedOptionIndex = -1;
+
+            if (this.multiple) {
+                if (utils.ObjectUtils.isEmpty(target.value) && this.hasSelectedOption) {
+                    this.$refs.multiContainer.focus();
+                    this.focusedMultipleOptionIndex = this.modelValue.length;
+                }
+                else {
+                    event.stopPropagation(); // To prevent onArrowLeftKeyOnMultiple method
+                }
+            }
+        },
+        onArrowRightKey(event) {
+            this.focusedOptionIndex = -1;
+
+            this.multiple && event.stopPropagation(); // To prevent onArrowRightKeyOnMultiple method
+        },
+        onHomeKey(event) {
+            event.currentTarget.setSelectionRange(0, 0);
+            this.focusedOptionIndex = -1;
+
+            event.preventDefault();
+        },
+        onEndKey(event) {
+            const target = event.currentTarget;
+            const len = target.value.length;
+            target.setSelectionRange(len, len);
+            this.focusedOptionIndex = -1;
+
+            event.preventDefault();
+        },
+        onPageUpKey(event) {
+            this.scrollInView(0);
+            event.preventDefault();
+        },
+        onPageDownKey(event) {
+            this.scrollInView(this.visibleOptions.length - 1);
+            event.preventDefault();
+        },
+        onEnterKey(event) {
+            if (!this.overlayVisible) {
+                this.onArrowDownKey(event);
+            }
+            else {
+                if (this.focusedOptionIndex !== -1) {
+                    this.onOptionSelect(event, this.visibleOptions[this.focusedOptionIndex]);
+                }
+
+                this.hide();
+            }
+
+            event.preventDefault();
+        },
+        onEscapeKey(event) {
+            this.overlayVisible && this.hide(true);
+            event.preventDefault();
+        },
+        onTabKey(event) {
+            if (this.focusedOptionIndex !== -1) {
+                this.onOptionSelect(event, this.visibleOptions[this.focusedOptionIndex]);
+            }
+
+            this.overlayVisible && this.hide();
+        },
+        onBackspaceKey(event) {
+            if (this.multiple) {
+                if (utils.ObjectUtils.isNotEmpty(this.modelValue) && !this.$refs.focusInput.value) {
+                    const removedValue = this.modelValue[this.modelValue.length - 1];
+                    const newValue = this.modelValue.slice(0, -1);
+
+                    this.$emit('update:modelValue', newValue);
+                    this.$emit('item-unselect', { originalEvent: event, value: removedValue });
+                }
+
+                event.stopPropagation(); // To prevent onBackspaceKeyOnMultiple method
+            }
+        },
+        onArrowLeftKeyOnMultiple() {
+            this.focusedMultipleOptionIndex = this.focusedMultipleOptionIndex < 1 ? 0 : this.focusedMultipleOptionIndex - 1;
+        },
+        onArrowRightKeyOnMultiple() {
+            this.focusedMultipleOptionIndex++;
+
+            if (this.focusedMultipleOptionIndex > (this.modelValue.length - 1)) {
+                this.focusedMultipleOptionIndex = -1;
+                this.$refs.focusInput.focus();
+            }
+        },
+        onBackspaceKeyOnMultiple(event) {
+            if (this.focusedMultipleOptionIndex !== -1) {
+                this.removeOption(event, this.focusedMultipleOptionIndex);
+            }
+        },
         onOverlayEnter(el) {
             utils.ZIndexUtils.set('overlay', el, this.$primevue.config.zIndex.overlay);
             this.alignOverlay();
+        },
+        onOverlayAfterEnter() {
             this.bindOutsideClickListener();
             this.bindScrollListener();
             this.bindResizeListener();
 
-            if (this.autoHighlight && this.suggestions && this.suggestions.length) {
-                utils.DomHandler.addClass(this.list.firstElementChild, 'p-highlight');
-            }
+            this.$emit('show');
         },
         onOverlayLeave() {
             this.unbindOutsideClickListener();
             this.unbindScrollListener();
             this.unbindResizeListener();
+
+            this.$emit('hide');
             this.overlay = null;
         },
         onOverlayAfterLeave(el) {
             utils.ZIndexUtils.clear(el);
         },
         alignOverlay() {
-            let target = this.multiple ? this.$refs.multiContainer : this.$refs.input;
+            let target = this.multiple ? this.$refs.multiContainer : this.$refs.focusInput;
             if (this.appendTo === 'self') {
                 utils.DomHandler.relativePosition(this.overlay, target);
             }
@@ -182,17 +605,23 @@ var script = {
             if (!this.outsideClickListener) {
                 this.outsideClickListener = (event) => {
                     if (this.overlayVisible && this.overlay && this.isOutsideClicked(event)) {
-                        this.hideOverlay();
+                        this.hide();
                     }
                 };
                 document.addEventListener('click', this.outsideClickListener);
+            }
+        },
+        unbindOutsideClickListener() {
+            if (this.outsideClickListener) {
+                document.removeEventListener('click', this.outsideClickListener);
+                this.outsideClickListener = null;
             }
         },
         bindScrollListener() {
             if (!this.scrollHandler) {
                 this.scrollHandler = new utils.ConnectedOverlayScrollHandler(this.$refs.container, () => {
                     if (this.overlayVisible) {
-                        this.hideOverlay();
+                        this.hide();
                     }
                 });
             }
@@ -208,7 +637,7 @@ var script = {
             if (!this.resizeListener) {
                 this.resizeListener = () => {
                     if (this.overlayVisible && !utils.DomHandler.isTouchDevice()) {
-                        this.hideOverlay();
+                        this.hide();
                     }
                 };
                 window.addEventListener('resize', this.resizeListener);
@@ -227,79 +656,47 @@ var script = {
             if (this.multiple)
                 return event.target === this.$refs.multiContainer || this.$refs.multiContainer.contains(event.target);
             else
-                return event.target === this.$refs.input;
+                return event.target === this.$refs.focusInput;
         },
         isDropdownClicked(event) {
             return this.$refs.dropdownButton ? (event.target === this.$refs.dropdownButton || this.$refs.dropdownButton.$el.contains(event.target)) : false;
         },
-        unbindOutsideClickListener() {
-            if (this.outsideClickListener) {
-                document.removeEventListener('click', this.outsideClickListener);
-                this.outsideClickListener = null;
-            }
+        isOptionMatched(option, value) {
+            return this.isValidOption(option) && this.getOptionLabel(option).toLocaleLowerCase(this.searchLocale) === value.toLocaleLowerCase(this.searchLocale);
         },
-        selectItem(event, item) {
-            if (this.multiple) {
-                this.$refs.input.value = '';
-                this.inputTextValue = '';
-
-                if (!this.isSelected(item)) {
-                    let newValue = this.modelValue ? [...this.modelValue, item] : [item];
-                    this.$emit('update:modelValue', newValue);
-                }
-            }
-            else {
-                this.$emit('update:modelValue', item);
-            }
-
-            this.$emit('item-select', {
-                originalEvent: event,
-                value: item
-            });
-
-            this.focus();
-            this.hideOverlay();
+        isValidOption(option) {
+            return option && !(this.isOptionDisabled(option) || this.isOptionGroup(option));
         },
-        onMultiContainerClick(event) {
-            this.focus();
-            if(this.completeOnFocus) {
-                this.search(event, '', 'click');
-            }
+        isValidSelectedOption(option) {
+            return this.isValidOption(option) && this.isSelected(option);
         },
-        removeItem(event, index) {
-            let removedValue = this.modelValue[index];
-            let newValue = this.modelValue.filter((val, i) => (index !== i));
-            this.$emit('update:modelValue', newValue);
-            this.$emit('item-unselect', {
-                originalEvent: event,
-                value: removedValue
-            });
+        isSelected(option) {
+            return utils.ObjectUtils.equals(this.modelValue, this.getOptionValue(option), this.equalityKey);
         },
-        onDropdownClick(event) {
-            this.focus();
-            const query = this.$refs.input.value;
-
-            if (this.dropdownMode === 'blank')
-                this.search(event, '', 'dropdown');
-            else if (this.dropdownMode === 'current')
-                this.search(event, query, 'dropdown');
-
-            this.$emit('dropdown-click', {
-                originalEvent: event,
-                query: query
-            });
+        findFirstOptionIndex() {
+            return this.visibleOptions.findIndex(option => this.isValidOption(option));
         },
-        getItemContent(item) {
-            return this.field ? utils.ObjectUtils.resolveFieldData(item, this.field) : item;
+        findLastOptionIndex() {
+            return utils.ObjectUtils.findLastIndex(this.visibleOptions, option => this.isValidOption(option));
         },
-        showOverlay() {
-            this.overlayVisible = true;
+        findNextOptionIndex(index) {
+            const matchedOptionIndex = index < (this.visibleOptions.length - 1) ? this.visibleOptions.slice(index + 1).findIndex(option => this.isValidOption(option)) : -1;
+            return matchedOptionIndex > -1 ? matchedOptionIndex + index + 1 : index;
         },
-        hideOverlay() {
-            this.overlayVisible = false;
+        findPrevOptionIndex(index) {
+            const matchedOptionIndex = index > 0 ? utils.ObjectUtils.findLastIndex(this.visibleOptions.slice(0, index), option => this.isValidOption(option)) : -1;
+            return matchedOptionIndex > -1 ? matchedOptionIndex : index;
         },
-        focus() {
-            this.$refs.input.focus();
+        findSelectedOptionIndex() {
+            return this.hasSelectedOption ? this.visibleOptions.findIndex(option => this.isValidSelectedOption(option)) : -1;
+        },
+        findFirstFocusedOptionIndex() {
+            const selectedIndex = this.findSelectedOptionIndex();
+            return selectedIndex < 0 ? this.findFirstOptionIndex() : selectedIndex;
+        },
+        findLastFocusedOptionIndex() {
+            const selectedIndex = this.findSelectedOptionIndex();
+            return selectedIndex < 0 ? this.findLastOptionIndex() : selectedIndex;
         },
         search(event, query, source) {
             //allow empty string but not undefined or null
@@ -313,242 +710,92 @@ var script = {
             }
 
             this.searching = true;
-            this.$emit('complete', {
-                originalEvent: event,
-                query: query
-            });
+            this.$emit('complete', { originalEvent: event, query });
         },
-        onInputClicked(event) {
-            if(this.completeOnFocus) {
-                this.search(event, '', 'click');
-            }
+        removeOption(event, index) {
+            const removedOption = this.modelValue[index];
+            const value = this.modelValue.filter((_, i) => i !== index).map(option => this.getOptionValue(option));
+
+            this.updateModel(event, value);
+            this.$emit('item-unselect', { originalEvent: event, value: removedOption });
+            this.dirty = true;
+            this.$refs.focusInput.focus();
         },
-        onInput(event) {
-            this.inputTextValue = event.target.value;
+        changeFocusedOptionIndex(event, index) {
+            if (this.focusedOptionIndex !== index) {
+                this.focusedOptionIndex = index;
+                this.scrollInView();
 
-            if (this.timeout) {
-                clearTimeout(this.timeout);
-            }
-
-            let query = event.target.value;
-            if (!this.multiple) {
-                this.$emit('update:modelValue', query);
-            }
-
-            if (query.length === 0) {
-                this.hideOverlay();
-                this.$emit('clear');
-            }
-            else {
-                if (query.length >= this.minLength) {
-                    this.timeout = setTimeout(() => {
-                        this.search(event, query, 'input');
-                    }, this.delay);
-                }
-                else {
-                    this.hideOverlay();
+                if (this.selectOnFocus || this.autoHighlight) {
+                    this.onOptionSelect(event, this.visibleOptions[index], false);
                 }
             }
         },
-        onFocus() {
-            this.focused = true;
-        },
-        onBlur() {
-            this.focused = false;
-        },
-        onKeyDown(event) {
-            if (this.overlayVisible) {
-                let highlightItem = utils.DomHandler.findSingle(this.list, 'li.p-highlight');
-
-                switch(event.which) {
-                    //down
-                    case 40:
-                        if (highlightItem) {
-                            let nextElement = this.findNextItem(highlightItem);
-                            if (nextElement) {
-                                utils.DomHandler.addClass(nextElement, 'p-highlight');
-                                utils.DomHandler.removeClass(highlightItem, 'p-highlight');
-                                nextElement.scrollIntoView({ block: 'nearest', inline: 'start' });
-                            }
-                        }
-                        else {
-                            highlightItem = this.list.firstElementChild;
-                            if (utils.DomHandler.hasClass(highlightItem, 'p-autocomplete-item-group')) {
-                                highlightItem = this.findNextItem(highlightItem);
-                            }
-
-                            if (highlightItem) {
-                                utils.DomHandler.addClass(highlightItem, 'p-highlight');
-                            }
-                        }
-
-                        event.preventDefault();
-                    break;
-
-                    //up
-                    case 38:
-                        if (highlightItem) {
-                            let previousElement = this.findPrevItem(highlightItem);
-                            if (previousElement) {
-                                utils.DomHandler.addClass(previousElement, 'p-highlight');
-                                utils.DomHandler.removeClass(highlightItem, 'p-highlight');
-                                previousElement.scrollIntoView({ block: 'nearest', inline: 'start' });
-                            }
-                        }
-
-                        event.preventDefault();
-                    break;
-
-                    //enter
-                    case 13:
-                        if (highlightItem) {
-                            this.selectHighlightItem(event, highlightItem);
-                            this.hideOverlay();
-                        }
-
-                        event.preventDefault();
-                    break;
-
-                    //escape
-                    case 27:
-                        this.hideOverlay();
-                        event.preventDefault();
-                    break;
-
-                    //tab
-                    case 9:
-                        if (highlightItem) {
-                            this.selectHighlightItem(event, highlightItem);
-                        }
-
-                        this.hideOverlay();
-                    break;
-                }
+        scrollInView(index = -1) {
+            const id = index !== -1 ? `${this.id}_${index}` : this.focusedOptionId;
+            const element = utils.DomHandler.findSingle(this.list, `li[id="${id}"]`);
+            if (element) {
+                element.scrollIntoView && element.scrollIntoView({ block: 'nearest', inline: 'start' });
             }
-
-            if (this.multiple) {
-                switch(event.which) {
-                    //backspace
-                    case 8:
-                        if (this.modelValue && this.modelValue.length && !this.$refs.input.value) {
-                            let removedValue = this.modelValue[this.modelValue.length - 1];
-                            let newValue = this.modelValue.slice(0, -1);
-
-                            this.$emit('update:modelValue', newValue);
-                            this.$emit('item-unselect', {
-                                originalEvent: event,
-                                value: removedValue
-                            });
-                        }
-                    break;
-                }
+            else if (!this.virtualScrollerDisabled) {
+                setTimeout(() => {
+                    this.virtualScroller && this.virtualScroller.scrollToIndex(index !== -1 ? index : this.focusedOptionIndex);
+                }, 0);
             }
         },
-        selectHighlightItem(event, item) {
-            if (this.optionGroupLabel) {
-                let optionGroup = this.suggestions[item.dataset.group];
-                this.selectItem(event, this.getOptionGroupChildren(optionGroup)[item.dataset.index]);
-            }
-            else {
-                this.selectItem(event, this.suggestions[item.dataset.index]);
+        autoUpdateModel() {
+            if ((this.selectOnFocus || this.autoHighlight) && this.autoOptionFocus && !this.hasSelectedOption) {
+                this.focusedOptionIndex = this.findFirstFocusedOptionIndex();
+                this.onOptionSelect(null, this.visibleOptions[this.focusedOptionIndex], false);
             }
         },
-        findNextItem(item) {
-            let nextItem = item.nextElementSibling;
-
-            if (nextItem)
-                return utils.DomHandler.hasClass(nextItem, 'p-autocomplete-item-group') ? this.findNextItem(nextItem) : nextItem;
-            else
-                return null;
+        updateModel(event, value) {
+            this.$emit('update:modelValue', value);
+            this.$emit('change', { originalEvent: event, value });
         },
-        findPrevItem(item) {
-            let prevItem = item.previousElementSibling;
+        flatOptions(options) {
+            return (options || []).reduce((result, option, index) => {
+                result.push({ optionGroup: option, group: true, index });
 
-            if (prevItem)
-                return utils.DomHandler.hasClass(prevItem, 'p-autocomplete-item-group') ? this.findPrevItem(prevItem) : prevItem;
-            else
-                return null;
-        },
-        onChange(event) {
-            if (this.forceSelection) {
-                let valid = false;
-                let inputValue = event.target.value.trim();
+                const optionGroupChildren = this.getOptionGroupChildren(option);
+                optionGroupChildren && optionGroupChildren.forEach(o => result.push(o));
 
-                if (this.suggestions)  {
-                    for (let item of this.suggestions) {
-                        let itemValue = this.field ? utils.ObjectUtils.resolveFieldData(item, this.field) : item;
-                        if (itemValue && inputValue === itemValue.trim()) {
-                            valid = true;
-                            this.selectItem(event, item);
-                            break;
-                        }
-                    }
-                }
-
-                if (!valid) {
-                    this.$refs.input.value = '';
-                    this.inputTextValue = '';
-                    this.$emit('clear');
-                    if (!this.multiple) {
-                        this.$emit('update:modelValue', null);
-                    }
-                }
-            }
-        },
-        isSelected(val) {
-            let selected = false;
-            if (this.modelValue && this.modelValue.length) {
-                for (let i = 0; i < this.modelValue.length; i++) {
-                    if (utils.ObjectUtils.equals(this.modelValue[i], val)) {
-                        selected = true;
-                        break;
-                    }
-                }
-            }
-
-            return selected;
+                return result;
+            }, []);
         },
         overlayRef(el) {
             this.overlay = el;
         },
         listRef(el, contentRef) {
             this.list = el;
-            contentRef && contentRef(el); // for virtualScroller
+            contentRef && contentRef(el); // For VirtualScroller
         },
         virtualScrollerRef(el) {
             this.virtualScroller = el;
-        },
-        onOverlayClick(event) {
-            OverlayEventBus__default["default"].emit('overlay-click', {
-                originalEvent: event,
-                target: this.$el
-            });
         }
     },
     computed: {
         containerClass() {
-            return ['p-autocomplete p-component p-inputwrapper', this.class, {
+            return ['p-autocomplete p-component p-inputwrapper', {
+                'p-disabled': this.disabled,
+                'p-focus': this.focused,
                 'p-autocomplete-dd': this.dropdown,
                 'p-autocomplete-multiple': this.multiple,
-                'p-inputwrapper-filled': ((this.modelValue) || (this.inputTextValue && this.inputTextValue.length)),
-                'p-inputwrapper-focus': this.focused
+                'p-inputwrapper-filled': this.modelValue || utils.ObjectUtils.isNotEmpty(this.inputValue),
+                'p-inputwrapper-focus': this.focused,
+                'p-overlay-open': this.overlayVisible
             }];
         },
-        inputFieldClass() {
+        inputStyleClass() {
             return ['p-autocomplete-input p-inputtext p-component', this.inputClass, {
-                'p-autocomplete-dd-input': this.dropdown,
-                'p-disabled': this.$attrs.disabled
+                'p-autocomplete-dd-input': this.dropdown
             }];
         },
         multiContainerClass() {
-            return ['p-autocomplete-multiple-container p-component p-inputtext', {
-                'p-disabled': this.$attrs.disabled,
-                'p-focus': this.focused
-            }];
+            return ['p-autocomplete-multiple-container p-component p-inputtext'];
         },
         panelStyleClass() {
-            return [
-                'p-autocomplete-panel p-component', this.panelClass, {
+            return ['p-autocomplete-panel p-component', this.panelClass, {
                 'p-input-filled': this.$primevue.config.inputStyle === 'filled',
                 'p-ripple-disabled': this.$primevue.config.ripple === false
             }];
@@ -556,21 +803,55 @@ var script = {
         loadingIconClass() {
             return ['p-autocomplete-loader pi-spin', this.loadingIcon];
         },
+        visibleOptions() {
+            return this.optionGroupLabel ? this.flatOptions(this.suggestions) : (this.suggestions || []);
+        },
         inputValue() {
             if (this.modelValue) {
-                if (this.field && typeof this.modelValue === 'object') {
-                    const resolvedFieldData = utils.ObjectUtils.resolveFieldData(this.modelValue, this.field);
-                    return resolvedFieldData != null ? resolvedFieldData : this.modelValue;
+                if (typeof this.modelValue === 'object') {
+                    const label = this.getOptionLabel(this.modelValue);
+                    return label != null ? label : this.modelValue;
                 }
-                else
+                else {
                     return this.modelValue;
+                }
             }
             else {
                 return '';
             }
         },
-        listId() {
-            return utils.UniqueComponentId() + '_list';
+        hasSelectedOption() {
+            return utils.ObjectUtils.isNotEmpty(this.modelValue);
+        },
+        equalityKey() {
+            return this.dataKey; // TODO: The 'optionValue' properties can be added.
+        },
+        searchResultMessageText() {
+            return utils.ObjectUtils.isNotEmpty(this.visibleOptions) && this.overlayVisible ? this.searchMessageText.replaceAll('{0}', this.visibleOptions.length) : this.emptySearchMessageText;
+        },
+        searchMessageText() {
+            return this.searchMessage || this.$primevue.config.locale.searchMessage || '';
+        },
+        emptySearchMessageText() {
+            return this.emptySearchMessage || this.$primevue.config.locale.emptySearchMessage || '';
+        },
+        selectionMessageText() {
+            return this.selectionMessage || this.$primevue.config.locale.selectionMessage || '';
+        },
+        emptySelectionMessageText() {
+            return this.emptySelectionMessage || this.$primevue.config.locale.emptySelectionMessage || '';
+        },
+        selectedMessageText() {
+            return this.hasSelectedOption ? this.selectionMessageText.replaceAll('{0}', this.multiple ? this.modelValue.length : '1') : this.emptySelectionMessageText;
+        },
+        focusedOptionId() {
+            return this.focusedOptionIndex !== -1 ? `${this.id}_${this.focusedOptionIndex}` : null;
+        },
+        focusedMultipleOptionId() {
+            return this.focusedMultipleOptionIndex !== -1 ? `${this.id}_multiple_option_${this.focusedMultipleOptionIndex}` : null;
+        },
+        ariaSetSize() {
+            return this.visibleOptions.filter(option => !this.isOptionGroup(option)).length;
         },
         virtualScrollerDisabled() {
             return !this.virtualScrollerOptions;
@@ -586,16 +867,29 @@ var script = {
     }
 };
 
-const _hoisted_1 = ["aria-owns", "aria-expanded"];
-const _hoisted_2 = ["value", "aria-controls"];
-const _hoisted_3 = { class: "p-autocomplete-token-label" };
-const _hoisted_4 = ["onClick"];
-const _hoisted_5 = { class: "p-autocomplete-input-token" };
-const _hoisted_6 = ["aria-controls"];
-const _hoisted_7 = ["id"];
-const _hoisted_8 = ["onClick", "data-index"];
-const _hoisted_9 = { class: "p-autocomplete-item-group" };
-const _hoisted_10 = ["onClick", "data-group", "data-index"];
+const _hoisted_1 = ["id", "value", "placeholder", "tabindex", "disabled", "aria-label", "aria-labelledby", "aria-expanded", "aria-controls", "aria-activedescendant"];
+const _hoisted_2 = ["aria-activedescendant"];
+const _hoisted_3 = ["id", "aria-label", "aria-setsize", "aria-posinset"];
+const _hoisted_4 = { class: "p-autocomplete-token-label" };
+const _hoisted_5 = ["onClick"];
+const _hoisted_6 = {
+  class: "p-autocomplete-input-token",
+  role: "option"
+};
+const _hoisted_7 = ["id", "placeholder", "tabindex", "disabled", "aria-label", "aria-labelledby", "aria-expanded", "aria-controls", "aria-activedescendant"];
+const _hoisted_8 = {
+  role: "status",
+  "aria-live": "polite",
+  class: "p-hidden-accessible"
+};
+const _hoisted_9 = ["id"];
+const _hoisted_10 = ["id"];
+const _hoisted_11 = ["id", "aria-label", "aria-selected", "aria-disabled", "aria-setsize", "aria-posinset", "onClick", "onMousemove"];
+const _hoisted_12 = {
+  role: "status",
+  "aria-live": "polite",
+  class: "p-hidden-accessible"
+};
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Button = vue.resolveComponent("Button");
@@ -603,78 +897,106 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Portal = vue.resolveComponent("Portal");
   const _directive_ripple = vue.resolveDirective("ripple");
 
-  return (vue.openBlock(), vue.createElementBlock("span", {
+  return (vue.openBlock(), vue.createElementBlock("div", {
     ref: "container",
     class: vue.normalizeClass($options.containerClass),
-    "aria-haspopup": "listbox",
-    "aria-owns": $options.listId,
-    "aria-expanded": $data.overlayVisible,
-    style: vue.normalizeStyle($props.style)
+    onClick: _cache[15] || (_cache[15] = (...args) => ($options.onContainerClick && $options.onContainerClick(...args)))
   }, [
     (!$props.multiple)
       ? (vue.openBlock(), vue.createElementBlock("input", vue.mergeProps({
           key: 0,
-          ref: "input",
-          class: $options.inputFieldClass,
-          style: $props.inputStyle
-        }, _ctx.$attrs, {
-          value: $options.inputValue,
-          onClick: _cache[0] || (_cache[0] = (...args) => ($options.onInputClicked && $options.onInputClicked(...args))),
-          onInput: _cache[1] || (_cache[1] = (...args) => ($options.onInput && $options.onInput(...args))),
-          onFocus: _cache[2] || (_cache[2] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-          onBlur: _cache[3] || (_cache[3] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-          onKeydown: _cache[4] || (_cache[4] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-          onChange: _cache[5] || (_cache[5] = (...args) => ($options.onChange && $options.onChange(...args))),
+          ref: "focusInput",
+          id: $props.inputId,
           type: "text",
-          autoComplete: "off",
-          role: "searchbox",
+          style: $props.inputStyle,
+          class: $options.inputStyleClass,
+          value: $options.inputValue,
+          placeholder: $props.placeholder,
+          tabindex: !$props.disabled ? $props.tabindex : -1,
+          disabled: $props.disabled,
+          autocomplete: "off",
+          role: "combobox",
+          "aria-label": _ctx.ariaLabel,
+          "aria-labelledby": _ctx.ariaLabelledby,
+          "aria-haspopup": "listbox",
           "aria-autocomplete": "list",
-          "aria-controls": $options.listId
-        }), null, 16, _hoisted_2))
+          "aria-expanded": $data.overlayVisible,
+          "aria-controls": $data.id + '_list',
+          "aria-activedescendant": $data.focused ? $options.focusedOptionId : undefined,
+          onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+          onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+          onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+          onInput: _cache[3] || (_cache[3] = (...args) => ($options.onInput && $options.onInput(...args))),
+          onChange: _cache[4] || (_cache[4] = (...args) => ($options.onChange && $options.onChange(...args)))
+        }, $props.inputProps), null, 16, _hoisted_1))
       : vue.createCommentVNode("", true),
     ($props.multiple)
       ? (vue.openBlock(), vue.createElementBlock("ul", {
           key: 1,
           ref: "multiContainer",
           class: vue.normalizeClass($options.multiContainerClass),
-          onClick: _cache[11] || (_cache[11] = (...args) => ($options.onMultiContainerClick && $options.onMultiContainerClick(...args)))
+          tabindex: "-1",
+          role: "listbox",
+          "aria-orientation": "horizontal",
+          "aria-activedescendant": $data.focused ? $options.focusedMultipleOptionId : undefined,
+          onFocus: _cache[10] || (_cache[10] = (...args) => ($options.onMultipleContainerFocus && $options.onMultipleContainerFocus(...args))),
+          onBlur: _cache[11] || (_cache[11] = (...args) => ($options.onMultipleContainerBlur && $options.onMultipleContainerBlur(...args))),
+          onKeydown: _cache[12] || (_cache[12] = (...args) => ($options.onMultipleContainerKeyDown && $options.onMultipleContainerKeyDown(...args)))
         }, [
-          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.modelValue, (item, i) => {
+          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.modelValue, (option, i) => {
             return (vue.openBlock(), vue.createElementBlock("li", {
               key: i,
-              class: "p-autocomplete-token"
+              id: $data.id + '_multiple_option_' + i,
+              class: vue.normalizeClass(['p-autocomplete-token', {'p-focus': $data.focusedMultipleOptionIndex === i}]),
+              role: "option",
+              "aria-label": $options.getOptionLabel(option),
+              "aria-selected": true,
+              "aria-setsize": $props.modelValue.length,
+              "aria-posinset": i + 1
             }, [
-              vue.renderSlot(_ctx.$slots, "chip", { value: item }, () => [
-                vue.createElementVNode("span", _hoisted_3, vue.toDisplayString($options.getItemContent(item)), 1)
+              vue.renderSlot(_ctx.$slots, "chip", { value: option }, () => [
+                vue.createElementVNode("span", _hoisted_4, vue.toDisplayString($options.getOptionLabel(option)), 1)
               ]),
               vue.createElementVNode("span", {
                 class: "p-autocomplete-token-icon pi pi-times-circle",
-                onClick: $event => ($options.removeItem($event, i))
-              }, null, 8, _hoisted_4)
-            ]))
+                onClick: $event => ($options.removeOption($event, i)),
+                "aria-hidden": "true"
+              }, null, 8, _hoisted_5)
+            ], 10, _hoisted_3))
           }), 128)),
-          vue.createElementVNode("li", _hoisted_5, [
+          vue.createElementVNode("li", _hoisted_6, [
             vue.createElementVNode("input", vue.mergeProps({
-              ref: "input",
+              ref: "focusInput",
+              id: $props.inputId,
               type: "text",
-              autoComplete: "off"
-            }, _ctx.$attrs, {
-              onInput: _cache[6] || (_cache[6] = (...args) => ($options.onInput && $options.onInput(...args))),
-              onFocus: _cache[7] || (_cache[7] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-              onBlur: _cache[8] || (_cache[8] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-              onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-              onChange: _cache[10] || (_cache[10] = (...args) => ($options.onChange && $options.onChange(...args))),
-              role: "searchbox",
+              style: $props.inputStyle,
+              class: $props.inputClass,
+              placeholder: $props.placeholder,
+              tabindex: !$props.disabled ? $props.tabindex : -1,
+              disabled: $props.disabled,
+              autocomplete: "off",
+              role: "combobox",
+              "aria-label": _ctx.ariaLabel,
+              "aria-labelledby": _ctx.ariaLabelledby,
+              "aria-haspopup": "listbox",
               "aria-autocomplete": "list",
-              "aria-controls": $options.listId
-            }), null, 16, _hoisted_6)
+              "aria-expanded": $data.overlayVisible,
+              "aria-controls": $data.id + '_list',
+              "aria-activedescendant": $data.focused ? $options.focusedOptionId : undefined,
+              onFocus: _cache[5] || (_cache[5] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+              onBlur: _cache[6] || (_cache[6] = (...args) => ($options.onBlur && $options.onBlur(...args))),
+              onKeydown: _cache[7] || (_cache[7] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+              onInput: _cache[8] || (_cache[8] = (...args) => ($options.onInput && $options.onInput(...args))),
+              onChange: _cache[9] || (_cache[9] = (...args) => ($options.onChange && $options.onChange(...args)))
+            }, $props.inputProps), null, 16, _hoisted_7)
           ])
-        ], 2))
+        ], 42, _hoisted_2))
       : vue.createCommentVNode("", true),
     ($data.searching)
       ? (vue.openBlock(), vue.createElementBlock("i", {
           key: 2,
-          class: vue.normalizeClass($options.loadingIconClass)
+          class: vue.normalizeClass($options.loadingIconClass),
+          "aria-hidden": "true"
         }, null, 2))
       : vue.createCommentVNode("", true),
     ($props.dropdown)
@@ -684,97 +1006,106 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           type: "button",
           icon: "pi pi-chevron-down",
           class: "p-autocomplete-dropdown",
-          disabled: _ctx.$attrs.disabled,
+          tabindex: "-1",
+          disabled: $props.disabled,
+          "aria-hidden": "true",
           onClick: $options.onDropdownClick
         }, null, 8, ["disabled", "onClick"]))
       : vue.createCommentVNode("", true),
+    vue.createElementVNode("span", _hoisted_8, vue.toDisplayString($options.searchResultMessageText), 1),
     vue.createVNode(_component_Portal, { appendTo: $props.appendTo }, {
       default: vue.withCtx(() => [
         vue.createVNode(vue.Transition, {
           name: "p-connected-overlay",
           onEnter: $options.onOverlayEnter,
+          onAfterEnter: $options.onOverlayAfterEnter,
           onLeave: $options.onOverlayLeave,
           onAfterLeave: $options.onOverlayAfterLeave
         }, {
           default: vue.withCtx(() => [
             ($data.overlayVisible)
-              ? (vue.openBlock(), vue.createElementBlock("div", {
+              ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
                   key: 0,
                   ref: $options.overlayRef,
-                  class: vue.normalizeClass($options.panelStyleClass),
-                  style: vue.normalizeStyle({'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''}),
-                  onClick: _cache[12] || (_cache[12] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-                }, [
+                  class: $options.panelStyleClass,
+                  style: {...$props.panelStyle, 'max-height': $options.virtualScrollerDisabled ? $props.scrollHeight : ''},
+                  onClick: _cache[13] || (_cache[13] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                  onKeydown: _cache[14] || (_cache[14] = (...args) => ($options.onOverlayKeyDown && $options.onOverlayKeyDown(...args)))
+                }, $props.panelProps), [
                   vue.renderSlot(_ctx.$slots, "header", {
                     value: $props.modelValue,
-                    suggestions: $props.suggestions
+                    suggestions: $options.visibleOptions
                   }),
                   vue.createVNode(_component_VirtualScroller, vue.mergeProps({ ref: $options.virtualScrollerRef }, $props.virtualScrollerOptions, {
                     style: {'height': $props.scrollHeight},
-                    items: $props.suggestions,
+                    items: $options.visibleOptions,
+                    tabindex: -1,
                     disabled: $options.virtualScrollerDisabled
                   }), vue.createSlots({
-                    content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle }) => [
+                    content: vue.withCtx(({ styleClass, contentRef, items, getItemOptions, contentStyle, itemSize }) => [
                       vue.createElementVNode("ul", {
-                        id: $options.listId,
                         ref: (el) => $options.listRef(el, contentRef),
+                        id: $data.id + '_list',
                         class: vue.normalizeClass(['p-autocomplete-items', styleClass]),
                         style: vue.normalizeStyle(contentStyle),
                         role: "listbox"
                       }, [
-                        (!$props.optionGroupLabel)
-                          ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(items, (item, i) => {
-                              return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
-                                class: "p-autocomplete-item",
-                                key: $options.getOptionRenderKey(item),
-                                onClick: $event => ($options.selectItem($event, item)),
-                                role: "option",
-                                "data-index": $options.getOptionIndex(i, getItemOptions)
-                              }, [
-                                vue.renderSlot(_ctx.$slots, "item", {
-                                  item: item,
-                                  index: $options.getOptionIndex(i, getItemOptions)
-                                }, () => [
-                                  vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
-                                ])
-                              ], 8, _hoisted_8)), [
-                                [_directive_ripple]
-                              ])
-                            }), 128))
-                          : (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 1 }, vue.renderList(items, (optionGroup, i) => {
-                              return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
-                                key: $options.getOptionGroupRenderKey(optionGroup)
-                              }, [
-                                vue.createElementVNode("li", _hoisted_9, [
+                        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(items, (option, i) => {
+                          return (vue.openBlock(), vue.createElementBlock(vue.Fragment, {
+                            key: $options.getOptionRenderKey(option, $options.getOptionIndex(i, getItemOptions))
+                          }, [
+                            ($options.isOptionGroup(option))
+                              ? (vue.openBlock(), vue.createElementBlock("li", {
+                                  key: 0,
+                                  id: $data.id + '_' + $options.getOptionIndex(i, getItemOptions),
+                                  style: vue.normalizeStyle({height: itemSize ? itemSize + 'px' : undefined}),
+                                  class: "p-autocomplete-item-group",
+                                  role: "option"
+                                }, [
                                   vue.renderSlot(_ctx.$slots, "optiongroup", {
-                                    item: optionGroup,
+                                    option: option.optionGroup,
+                                    item: option.optionGroup,
                                     index: $options.getOptionIndex(i, getItemOptions)
                                   }, () => [
-                                    vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(optionGroup)), 1)
+                                    vue.createTextVNode(vue.toDisplayString($options.getOptionGroupLabel(option.optionGroup)), 1)
                                   ])
-                                ]),
-                                (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.getOptionGroupChildren(optionGroup), (item, j) => {
-                                  return vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
-                                    class: "p-autocomplete-item",
-                                    key: j,
-                                    onClick: $event => ($options.selectItem($event, item)),
-                                    role: "option",
-                                    "data-group": i,
-                                    "data-index": $options.getOptionIndex(j, getItemOptions)
-                                  }, [
-                                    vue.renderSlot(_ctx.$slots, "item", {
-                                      item: item,
-                                      index: $options.getOptionIndex(j, getItemOptions)
-                                    }, () => [
-                                      vue.createTextVNode(vue.toDisplayString($options.getItemContent(item)), 1)
-                                    ])
-                                  ], 8, _hoisted_10)), [
-                                    [_directive_ripple]
-                                  ])
-                                }), 128))
-                              ], 64))
-                            }), 128))
-                      ], 14, _hoisted_7)
+                                ], 12, _hoisted_10))
+                              : vue.withDirectives((vue.openBlock(), vue.createElementBlock("li", {
+                                  key: 1,
+                                  id: $data.id + '_' + $options.getOptionIndex(i, getItemOptions),
+                                  style: vue.normalizeStyle({height: itemSize ? itemSize + 'px' : undefined}),
+                                  class: vue.normalizeClass(['p-autocomplete-item', {'p-highlight': $options.isSelected(option), 'p-focus': $data.focusedOptionIndex === $options.getOptionIndex(i, getItemOptions), 'p-disabled': $options.isOptionDisabled(option)}]),
+                                  role: "option",
+                                  "aria-label": $options.getOptionLabel(option),
+                                  "aria-selected": $options.isSelected(option),
+                                  "aria-disabled": $options.isOptionDisabled(option),
+                                  "aria-setsize": $options.ariaSetSize,
+                                  "aria-posinset": $options.getAriaPosInset($options.getOptionIndex(i, getItemOptions)),
+                                  onClick: $event => ($options.onOptionSelect($event, option)),
+                                  onMousemove: $event => ($options.onOptionMouseMove($event, $options.getOptionIndex(i, getItemOptions)))
+                                }, [
+                                  (_ctx.$slots.option)
+                                    ? vue.renderSlot(_ctx.$slots, "option", {
+                                        key: 0,
+                                        option: option,
+                                        index: $options.getOptionIndex(i, getItemOptions)
+                                      }, () => [
+                                        vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
+                                      ])
+                                    : vue.renderSlot(_ctx.$slots, "item", {
+                                        key: 1,
+                                        item: option,
+                                        index: $options.getOptionIndex(i, getItemOptions)
+                                      }, () => [
+                                        vue.createTextVNode(vue.toDisplayString($options.getOptionLabel(option)), 1)
+                                      ])
+                                ], 46, _hoisted_11)), [
+                                  [_directive_ripple]
+                                ])
+                          ], 64))
+                        }), 128))
+                      ], 14, _hoisted_9),
+                      vue.createElementVNode("span", _hoisted_12, vue.toDisplayString($options.selectedMessageText), 1)
                     ]),
                     _: 2
                   }, [
@@ -789,17 +1120,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   ]), 1040, ["style", "items", "disabled"]),
                   vue.renderSlot(_ctx.$slots, "footer", {
                     value: $props.modelValue,
-                    suggestions: $props.suggestions
+                    suggestions: $options.visibleOptions
                   })
-                ], 6))
+                ], 16))
               : vue.createCommentVNode("", true)
           ]),
           _: 3
-        }, 8, ["onEnter", "onLeave", "onAfterLeave"])
+        }, 8, ["onEnter", "onAfterEnter", "onLeave", "onAfterLeave"])
       ]),
       _: 3
     }, 8, ["appendTo"])
-  ], 14, _hoisted_1))
+  ], 2))
 }
 
 function styleInject(css, ref) {

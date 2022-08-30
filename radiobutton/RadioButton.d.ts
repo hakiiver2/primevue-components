@@ -1,3 +1,4 @@
+import { InputHTMLAttributes } from 'vue';
 import { ClassComponent, GlobalComponentConstructor } from '../ts-helpers';
 
 export interface RadioButtonProps {
@@ -10,13 +11,37 @@ export interface RadioButtonProps {
      */
     modelValue?: any;
     /**
-     * Style class of the component input field.
+     * Name of the input element.
      */
-    class?: any;
+    name?: string | undefined;
     /**
-     * Inline style of the component.
+     * When present, it specifies that the component should be disabled.
      */
-    style?: any;
+    disabled?: boolean | undefined;
+    /**
+     * Identifier of the underlying input element.
+     */
+    inputId?: string | undefined;
+    /**
+     * Inline style of the input field.
+     */
+    inputStyle?: any;
+    /**
+     * Style class of the input field.
+     */
+    inputClass?: any;
+    /**
+     * Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.
+     */
+    inputProps?: InputHTMLAttributes | undefined;
+    /**
+     * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
+     */
+    'aria-labelledby'?: string | undefined;
+    /**
+     * Establishes a string value that labels the component.
+     */
+    'aria-label'?: string | undefined;
 }
 
 export interface RadioButtonSlots {

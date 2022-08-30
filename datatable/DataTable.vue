@@ -1103,6 +1103,24 @@ export default {
                 });
             }
 
+
+            //footers
+            let footerInitiated = false;
+            for (let i = 0; i < this.columns.length; i++) {
+                let column = this.columns[i];
+
+                if (i === 0) csv += '\n';
+
+                if (this.columnProp(column, 'exportable') !== false && this.columnProp(column, 'field')) {
+                    if (footerInitiated)
+                        csv += this.csvSeparator;
+                    else
+                        footerInitiated = true;
+
+                    csv += '"' + (this.columnProp(column, 'exportFooter') || this.columnProp(column, 'footer') || this.columnProp(column, 'field')) + '"';
+                }
+            }
+
             DomHandler.exportCSV(csv, this.exportFilename);
         },
         resetPage() {
@@ -2063,7 +2081,7 @@ export default {
 .p-datatable-scrollable-horizontal .p-datatable-thead > tr > th
 .p-datatable-scrollable-horizontal .p-datatable-tbody > tr > td,
 .p-datatable-scrollable-horizontal .p-datatable-tfoot > tr > td {
-    flex: 0 0 auto;
+    flex: 1 0 auto;
 }
 
 .p-datatable-flex-scrollable {

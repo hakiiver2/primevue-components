@@ -29,6 +29,14 @@ this.primevue.tree = (function (utils, Ripple, vue) {
             templates: {
                 type: null,
                 default: null
+            },
+            level: {
+                type: Number,
+                default: null
+            },
+            index: {
+                type: Number,
+                default: null
             }
         },
         nodeTouched: false,
@@ -69,9 +77,8 @@ this.primevue.tree = (function (utils, Ripple, vue) {
             onKeyDown(event) {
                 const nodeElement = event.target.parentElement;
 
-                switch (event.which) {
-                    //down arrow
-                    case 40:
+                switch (event.code) {
+                    case 'ArrowDown':
                         var listElement = nodeElement.children[1];
                         if (listElement) {
                             this.focusNode(listElement.children[0]);
@@ -88,12 +95,9 @@ this.primevue.tree = (function (utils, Ripple, vue) {
                                 }
                             }
                         }
-
-                        event.preventDefault();
                     break;
 
-                    //up arrow
-                    case 38:
+                    case 'ArrowUp':
                         if (nodeElement.previousElementSibling) {
                             this.focusNode(this.findLastVisibleDescendant(nodeElement.previousElementSibling));
                         }
@@ -103,24 +107,20 @@ this.primevue.tree = (function (utils, Ripple, vue) {
                                 this.focusNode(parentNodeElement);
                             }
                         }
-
-                        event.preventDefault();
                     break;
 
-                    //right-left arrows
-                    case 37:
-                    case 39:
+                    case 'ArrowRight':
+                    case 'ArrowLeft':
                         this.$emit('node-toggle', this.node);
-
-                        event.preventDefault();
                     break;
 
-                    //enter
-                    case 13:
+                    case 'Enter':
+                    case 'Space':
                         this.onClick(event);
-                        event.preventDefault();
                     break;
                 }
+
+                event.preventDefault();
             },
             toggleCheckbox() {
                 let _selectionKeys = this.selectionKeys ? {...this.selectionKeys} : {};
@@ -269,14 +269,15 @@ this.primevue.tree = (function (utils, Ripple, vue) {
         }
     };
 
-    const _hoisted_1$1 = ["aria-expanded"];
-    const _hoisted_2$1 = {
+    const _hoisted_1$1 = ["aria-label", "aria-selected", "aria-expanded", "aria-setsize", "aria-posinset", "aria-level"];
+    const _hoisted_2$1 = ["aria-expanded"];
+    const _hoisted_3$1 = {
       key: 0,
       class: "p-checkbox p-component"
     };
-    const _hoisted_3$1 = ["aria-checked"];
-    const _hoisted_4$1 = { class: "p-treenode-label" };
-    const _hoisted_5$1 = {
+    const _hoisted_4$1 = ["aria-checked"];
+    const _hoisted_5$1 = { class: "p-treenode-label" };
+    const _hoisted_6 = {
       key: 0,
       class: "p-treenode-children",
       role: "group"
@@ -287,7 +288,14 @@ this.primevue.tree = (function (utils, Ripple, vue) {
       const _directive_ripple = vue.resolveDirective("ripple");
 
       return (vue.openBlock(), vue.createElementBlock("li", {
-        class: vue.normalizeClass($options.containerClass)
+        class: vue.normalizeClass($options.containerClass),
+        role: "treeitem",
+        "aria-label": $options.label($props.node),
+        "aria-selected": $options.selected,
+        "aria-expanded": $options.expanded,
+        "aria-setsize": $props.node.children ? $props.node.children.length : 0,
+        "aria-posinset": $props.index + 1,
+        "aria-level": $props.level
       }, [
         vue.createElementVNode("div", {
           class: vue.normalizeClass($options.contentClass),
@@ -312,7 +320,7 @@ this.primevue.tree = (function (utils, Ripple, vue) {
             [_directive_ripple]
           ]),
           ($options.checkboxMode)
-            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2$1, [
+            ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3$1, [
                 vue.createElementVNode("div", {
                   class: vue.normalizeClass($options.checkboxClass),
                   role: "checkbox",
@@ -321,13 +329,13 @@ this.primevue.tree = (function (utils, Ripple, vue) {
                   vue.createElementVNode("span", {
                     class: vue.normalizeClass($options.checkboxIcon)
                   }, null, 2)
-                ], 10, _hoisted_3$1)
+                ], 10, _hoisted_4$1)
               ]))
             : vue.createCommentVNode("", true),
           vue.createElementVNode("span", {
             class: vue.normalizeClass($options.icon)
           }, null, 2),
-          vue.createElementVNode("span", _hoisted_4$1, [
+          vue.createElementVNode("span", _hoisted_5$1, [
             ($props.templates[$props.node.type]||$props.templates['default'])
               ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent($props.templates[$props.node.type]||$props.templates['default']), {
                   key: 0,
@@ -337,25 +345,26 @@ this.primevue.tree = (function (utils, Ripple, vue) {
                   vue.createTextVNode(vue.toDisplayString($options.label($props.node)), 1)
                 ], 64))
           ])
-        ], 46, _hoisted_1$1),
+        ], 46, _hoisted_2$1),
         ($options.hasChildren && $options.expanded)
-          ? (vue.openBlock(), vue.createElementBlock("ul", _hoisted_5$1, [
+          ? (vue.openBlock(), vue.createElementBlock("ul", _hoisted_6, [
               (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($props.node.children, (childNode) => {
                 return (vue.openBlock(), vue.createBlock(_component_TreeNode, {
                   key: childNode.key,
                   node: childNode,
                   templates: $props.templates,
+                  level: $props.level + 1,
                   expandedKeys: $props.expandedKeys,
                   onNodeToggle: $options.onChildNodeToggle,
                   onNodeClick: $options.onChildNodeClick,
                   selectionMode: $props.selectionMode,
                   selectionKeys: $props.selectionKeys,
                   onCheckboxChange: $options.propagateUp
-                }, null, 8, ["node", "templates", "expandedKeys", "onNodeToggle", "onNodeClick", "selectionMode", "selectionKeys", "onCheckboxChange"]))
+                }, null, 8, ["node", "templates", "level", "expandedKeys", "onNodeToggle", "onNodeClick", "selectionMode", "selectionKeys", "onCheckboxChange"]))
               }), 128))
             ]))
           : vue.createCommentVNode("", true)
-      ], 2))
+      ], 10, _hoisted_1$1))
     }
 
     script$1.render = render$1;
@@ -415,6 +424,10 @@ this.primevue.tree = (function (utils, Ripple, vue) {
             scrollHeight: {
                 type: String,
                 default: null
+            },
+            level: {
+                type: Number,
+                default: 0
             }
         },
         data() {
@@ -670,18 +683,20 @@ this.primevue.tree = (function (utils, Ripple, vue) {
           style: vue.normalizeStyle({maxHeight: $props.scrollHeight})
         }, [
           vue.createElementVNode("ul", _hoisted_5, [
-            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.valueToRender, (node) => {
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.valueToRender, (node, index) => {
               return (vue.openBlock(), vue.createBlock(_component_TreeNode, {
                 key: node.key,
                 node: node,
                 templates: _ctx.$slots,
+                level: $props.level + 1,
+                index: index,
                 expandedKeys: $data.d_expandedKeys,
                 onNodeToggle: $options.onNodeToggle,
                 onNodeClick: $options.onNodeClick,
                 selectionMode: $props.selectionMode,
                 selectionKeys: $props.selectionKeys,
                 onCheckboxChange: $options.onCheckboxChange
-              }, null, 8, ["node", "templates", "expandedKeys", "onNodeToggle", "onNodeClick", "selectionMode", "selectionKeys", "onCheckboxChange"]))
+              }, null, 8, ["node", "templates", "level", "index", "expandedKeys", "onNodeToggle", "onNodeClick", "selectionMode", "selectionKeys", "onCheckboxChange"]))
             }), 128))
           ])
         ], 4)

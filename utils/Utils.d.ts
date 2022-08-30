@@ -42,9 +42,10 @@ export declare class DomHandler {
     static resolveUserAgent(): { browser: string; version: string; };
     static isVisible(el: HTMLElement): boolean;
     static invokeElementMethod(el: HTMLElement, methodName: string, args: any): void;
+    static isExist(el: HTMLElement): boolean;
     static isClient(): boolean;
-    static getFocusableElements(el: HTMLElement): any[];
-    static getFirstFocusableElement(el: HTMLElement): any;
+    static getFocusableElements(el: HTMLElement, selector?: string): any[];
+    static getFirstFocusableElement(el: HTMLElement, selector?: string): any;
     static isClickable(el: HTMLElement): boolean;
     static applyStyle(el: HTMLElement, style: any): void;
     static isIOS(): boolean;
@@ -66,6 +67,7 @@ export declare class ObjectUtils {
     static removeAccents(str: any): string;
     static isEmpty(value: any): boolean;
     static isNotEmpty(value: any): boolean;
+    static isPrintableCharacter(char: string): boolean;
 }
 
 export declare namespace ZIndexUtils {

@@ -7,16 +7,24 @@ var script = {
     props: {
 		value: null,
         modelValue: null,
+        name: {
+            type: String,
+            default: null
+        },
         disabled: {
             type: Boolean,
             default: false
         },
-        inputId: {
+        inputId: null,
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        'aria-labelledby': {
             type: String,
-            default: null
+			default: null
         },
-        inputProps: {
-            type: Object,
+        'aria-label': {
+            type: String,
             default: null
         }
     },
@@ -62,7 +70,7 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = ["id", "checked", "value"];
+const _hoisted_2 = ["id", "name", "checked", "disabled", "value", "aria-labelledby", "aria-label"];
 const _hoisted_3 = /*#__PURE__*/createElementVNode("div", { class: "p-radiobutton-icon" }, null, -1);
 const _hoisted_4 = [
   _hoisted_3
@@ -78,8 +86,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ref: "input",
         type: "radio",
         id: $props.inputId,
+        class: $props.inputClass,
+        style: $props.inputStyle,
+        name: $props.name,
         checked: $options.checked,
+        disabled: $props.disabled,
         value: $props.value,
+        "aria-labelledby": _ctx.ariaLabelledby,
+        "aria-label": _ctx.ariaLabel,
         onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
         onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args)))
       }, $props.inputProps), null, 16, _hoisted_2)

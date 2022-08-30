@@ -66,6 +66,18 @@ this.primevue.knob = (function (vue) {
             valueTemplate: {
                 type: String,
                 default: "{value}"
+            },
+            tabindex: {
+                type: Number,
+                default: 0
+            },
+            'aria-labelledby': {
+                type: String,
+    			default: null
+            },
+            'aria-label': {
+                type: String,
+                default: null
             }
         },
         methods: {
@@ -88,6 +100,11 @@ this.primevue.knob = (function (vue) {
                 let newValue = Math.round((mappedValue - this.min) / this.step) * this.step + this.min;
                 this.$emit('update:modelValue', newValue);
                 this.$emit('change', newValue);
+            },
+            updateModelValue(newValue) {
+                if (newValue > this.max) this.$emit('update:modelValue', this.max);
+                else if (newValue < this.min) this.$emit('update:modelValue', this.min);
+                else this.$emit('update:modelValue', newValue);
             },
             mapRange(x, inMin, inMax, outMin, outMax) {
                 return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
@@ -138,6 +155,49 @@ this.primevue.knob = (function (vue) {
                     const offsetX = touch.clientX - rect.left;
                     const offsetY = touch.clientY - rect.top;
                     this.updateValue(offsetX, offsetY);
+                }
+            },
+            onKeyDown(event) {
+                if (!this.disabled && !this.readonly) {
+                    switch (event.code) {
+                        case 'ArrowRight':
+                        case 'ArrowUp': {
+                            event.preventDefault();
+                            this.updateModelValue(this.modelValue + 1);
+                            break;
+                        }
+
+                        case 'ArrowLeft':
+                        case 'ArrowDown': {
+                            event.preventDefault();
+                            this.updateModelValue(this.modelValue - 1);
+                            break;
+                        }
+
+                        case 'Home': {
+                            event.preventDefault();
+                            this.$emit('update:modelValue', this.min);
+                            break;
+                        }
+
+                        case 'End': {
+                            event.preventDefault();
+                            this.$emit('update:modelValue', this.max);
+                            break;
+                        }
+
+                        case 'PageUp': {
+                            event.preventDefault();
+                            this.updateModelValue(this.modelValue + 10);
+                            break;
+                        }
+
+                        case 'PageDown': {
+                            event.preventDefault();
+                            this.updateModelValue(this.modelValue - 10);
+                            break;
+                        }
+                    }
                 }
             }
         },
@@ -201,7 +261,7 @@ this.primevue.knob = (function (vue) {
     };
     //Derived and forked from https://github.com/kramer99/vue-knob-control
 
-    const _hoisted_1 = ["width", "height"];
+    const _hoisted_1 = ["width", "height", "tabindex", "aria-valuemin", "aria-valuemax", "aria-valuenow", "aria-labelledby", "aria-label"];
     const _hoisted_2 = ["d", "stroke-width", "stroke"];
     const _hoisted_3 = ["d", "stroke-width", "stroke"];
     const _hoisted_4 = ["fill"];
@@ -212,13 +272,21 @@ this.primevue.knob = (function (vue) {
       }, [
         (vue.openBlock(), vue.createElementBlock("svg", {
           viewBox: "0 0 100 100",
+          role: "slider",
           width: $props.size,
           height: $props.size,
+          tabindex: $props.readonly || $props.disabled ? -1 : $props.tabindex,
+          "aria-valuemin": $props.min,
+          "aria-valuemax": $props.max,
+          "aria-valuenow": $props.modelValue,
+          "aria-labelledby": _ctx.ariaLabelledby,
+          "aria-label": _ctx.ariaLabel,
           onClick: _cache[0] || (_cache[0] = (...args) => ($options.onClick && $options.onClick(...args))),
-          onMousedown: _cache[1] || (_cache[1] = (...args) => ($options.onMouseDown && $options.onMouseDown(...args))),
-          onMouseup: _cache[2] || (_cache[2] = (...args) => ($options.onMouseUp && $options.onMouseUp(...args))),
-          onTouchstart: _cache[3] || (_cache[3] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
-          onTouchend: _cache[4] || (_cache[4] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args)))
+          onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
+          onMousedown: _cache[2] || (_cache[2] = (...args) => ($options.onMouseDown && $options.onMouseDown(...args))),
+          onMouseup: _cache[3] || (_cache[3] = (...args) => ($options.onMouseUp && $options.onMouseUp(...args))),
+          onTouchstart: _cache[4] || (_cache[4] = (...args) => ($options.onTouchStart && $options.onTouchStart(...args))),
+          onTouchend: _cache[5] || (_cache[5] = (...args) => ($options.onTouchEnd && $options.onTouchEnd(...args)))
         }, [
           vue.createElementVNode("path", {
             d: $options.rangePath,

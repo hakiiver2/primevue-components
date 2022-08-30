@@ -25,6 +25,14 @@ var script$1 = {
         templates: {
             type: null,
             default: null
+        },
+        level: {
+            type: Number,
+            default: null
+        },
+        index: {
+            type: Number,
+            default: null
         }
     },
     nodeTouched: false,
@@ -65,9 +73,8 @@ var script$1 = {
         onKeyDown(event) {
             const nodeElement = event.target.parentElement;
 
-            switch (event.which) {
-                //down arrow
-                case 40:
+            switch (event.code) {
+                case 'ArrowDown':
                     var listElement = nodeElement.children[1];
                     if (listElement) {
                         this.focusNode(listElement.children[0]);
@@ -84,12 +91,9 @@ var script$1 = {
                             }
                         }
                     }
-
-                    event.preventDefault();
                 break;
 
-                //up arrow
-                case 38:
+                case 'ArrowUp':
                     if (nodeElement.previousElementSibling) {
                         this.focusNode(this.findLastVisibleDescendant(nodeElement.previousElementSibling));
                     }
@@ -99,24 +103,20 @@ var script$1 = {
                             this.focusNode(parentNodeElement);
                         }
                     }
-
-                    event.preventDefault();
                 break;
 
-                //right-left arrows
-                case 37:
-                case 39:
+                case 'ArrowRight':
+                case 'ArrowLeft':
                     this.$emit('node-toggle', this.node);
-
-                    event.preventDefault();
                 break;
 
-                //enter
-                case 13:
+                case 'Enter':
+                case 'Space':
                     this.onClick(event);
-                    event.preventDefault();
                 break;
             }
+
+            event.preventDefault();
         },
         toggleCheckbox() {
             let _selectionKeys = this.selectionKeys ? {...this.selectionKeys} : {};
@@ -265,14 +265,15 @@ var script$1 = {
     }
 };
 
-const _hoisted_1$1 = ["aria-expanded"];
-const _hoisted_2$1 = {
+const _hoisted_1$1 = ["aria-label", "aria-selected", "aria-expanded", "aria-setsize", "aria-posinset", "aria-level"];
+const _hoisted_2$1 = ["aria-expanded"];
+const _hoisted_3$1 = {
   key: 0,
   class: "p-checkbox p-component"
 };
-const _hoisted_3$1 = ["aria-checked"];
-const _hoisted_4$1 = { class: "p-treenode-label" };
-const _hoisted_5$1 = {
+const _hoisted_4$1 = ["aria-checked"];
+const _hoisted_5$1 = { class: "p-treenode-label" };
+const _hoisted_6 = {
   key: 0,
   class: "p-treenode-children",
   role: "group"
@@ -283,7 +284,14 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createElementBlock("li", {
-    class: normalizeClass($options.containerClass)
+    class: normalizeClass($options.containerClass),
+    role: "treeitem",
+    "aria-label": $options.label($props.node),
+    "aria-selected": $options.selected,
+    "aria-expanded": $options.expanded,
+    "aria-setsize": $props.node.children ? $props.node.children.length : 0,
+    "aria-posinset": $props.index + 1,
+    "aria-level": $props.level
   }, [
     createElementVNode("div", {
       class: normalizeClass($options.contentClass),
@@ -308,7 +316,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
         [_directive_ripple]
       ]),
       ($options.checkboxMode)
-        ? (openBlock(), createElementBlock("div", _hoisted_2$1, [
+        ? (openBlock(), createElementBlock("div", _hoisted_3$1, [
             createElementVNode("div", {
               class: normalizeClass($options.checkboxClass),
               role: "checkbox",
@@ -317,13 +325,13 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               createElementVNode("span", {
                 class: normalizeClass($options.checkboxIcon)
               }, null, 2)
-            ], 10, _hoisted_3$1)
+            ], 10, _hoisted_4$1)
           ]))
         : createCommentVNode("", true),
       createElementVNode("span", {
         class: normalizeClass($options.icon)
       }, null, 2),
-      createElementVNode("span", _hoisted_4$1, [
+      createElementVNode("span", _hoisted_5$1, [
         ($props.templates[$props.node.type]||$props.templates['default'])
           ? (openBlock(), createBlock(resolveDynamicComponent($props.templates[$props.node.type]||$props.templates['default']), {
               key: 0,
@@ -333,25 +341,26 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               createTextVNode(toDisplayString($options.label($props.node)), 1)
             ], 64))
       ])
-    ], 46, _hoisted_1$1),
+    ], 46, _hoisted_2$1),
     ($options.hasChildren && $options.expanded)
-      ? (openBlock(), createElementBlock("ul", _hoisted_5$1, [
+      ? (openBlock(), createElementBlock("ul", _hoisted_6, [
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.node.children, (childNode) => {
             return (openBlock(), createBlock(_component_TreeNode, {
               key: childNode.key,
               node: childNode,
               templates: $props.templates,
+              level: $props.level + 1,
               expandedKeys: $props.expandedKeys,
               onNodeToggle: $options.onChildNodeToggle,
               onNodeClick: $options.onChildNodeClick,
               selectionMode: $props.selectionMode,
               selectionKeys: $props.selectionKeys,
               onCheckboxChange: $options.propagateUp
-            }, null, 8, ["node", "templates", "expandedKeys", "onNodeToggle", "onNodeClick", "selectionMode", "selectionKeys", "onCheckboxChange"]))
+            }, null, 8, ["node", "templates", "level", "expandedKeys", "onNodeToggle", "onNodeClick", "selectionMode", "selectionKeys", "onCheckboxChange"]))
           }), 128))
         ]))
       : createCommentVNode("", true)
-  ], 2))
+  ], 10, _hoisted_1$1))
 }
 
 script$1.render = render$1;
@@ -411,6 +420,10 @@ var script = {
         scrollHeight: {
             type: String,
             default: null
+        },
+        level: {
+            type: Number,
+            default: 0
         }
     },
     data() {
@@ -666,18 +679,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       style: normalizeStyle({maxHeight: $props.scrollHeight})
     }, [
       createElementVNode("ul", _hoisted_5, [
-        (openBlock(true), createElementBlock(Fragment, null, renderList($options.valueToRender, (node) => {
+        (openBlock(true), createElementBlock(Fragment, null, renderList($options.valueToRender, (node, index) => {
           return (openBlock(), createBlock(_component_TreeNode, {
             key: node.key,
             node: node,
             templates: _ctx.$slots,
+            level: $props.level + 1,
+            index: index,
             expandedKeys: $data.d_expandedKeys,
             onNodeToggle: $options.onNodeToggle,
             onNodeClick: $options.onNodeClick,
             selectionMode: $props.selectionMode,
             selectionKeys: $props.selectionKeys,
             onCheckboxChange: $options.onCheckboxChange
-          }, null, 8, ["node", "templates", "expandedKeys", "onNodeToggle", "onNodeClick", "selectionMode", "selectionKeys", "onCheckboxChange"]))
+          }, null, 8, ["node", "templates", "level", "index", "expandedKeys", "onNodeToggle", "onNodeClick", "selectionMode", "selectionKeys", "onCheckboxChange"]))
         }), 128))
       ])
     ], 4)

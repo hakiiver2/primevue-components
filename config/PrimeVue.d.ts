@@ -4,6 +4,28 @@ interface PrimeVueConfiguration {
     ripple?: boolean;
     inputStyle?: string;
     locale?: PrimeVueLocaleOptions;
+    filterMatchModeOptions?: any;
+    zIndex?: PrimeVueZIndexOptions;
+}
+
+interface PrimeVueZIndexOptions {
+    modal?: number;
+    overlay?: number;
+    menu?: number;
+    tooltip?: number;
+}
+
+interface PrimeVueLocaleAriaOptions {
+    trueLabel?: string;
+    falseLabel?: string;
+    nullLabel?: string;
+    star?: string;
+    stars?: string;
+    selectAll?: string;
+    unselectAll?: string;
+    close?: string;
+    previous?: string;
+    next?: string;
 }
 
 interface PrimeVueLocaleOptions {
@@ -39,6 +61,23 @@ interface PrimeVueLocaleOptions {
     dayNamesMin: string[];
     monthNames: string[];
     monthNamesShort: string[];
+    chooseYear?: string;
+    chooseMonth?: string;
+    chooseDate?: string;
+    prevDecade?: string;
+    nextDecade?: string;
+    prevYear?: string;
+    nextYear?: string;
+    prevMonth?: string;
+    nextMonth?: string;
+    prevHour?: string;
+    nextHour?: string;
+    prevMinute?: string;
+    nextMinute?: string;
+    prevSecond?: string;
+    nextSecond?: string;
+    am?: string;
+    pm?: string;
     today?: string;
     now?: string;
     weekHeader?: string;
@@ -49,7 +88,12 @@ interface PrimeVueLocaleOptions {
     strong?: string;
     passwordPrompt?: string;
     emptyFilterMessage?: string;
+    searchMessage?: string;
+    selectionMessage?: string;
+    emptySelectionMessage?: string;
+    emptySearchMessage?: string;
     emptyMessage?: string;
+    aria?: PrimeVueLocaleAriaOptions;
 }
 
 export declare function usePrimeVue(): { config: PrimeVueConfiguration };

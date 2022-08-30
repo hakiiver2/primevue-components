@@ -1,3 +1,4 @@
+import { ButtonHTMLAttributes, InputHTMLAttributes } from 'vue';
 import { ClassComponent, GlobalComponentConstructor, Nullable } from '../ts-helpers';
 
 type InputNumberButtonLayoutType = 'stacked' | 'horizontal' | 'vertical' | undefined;
@@ -134,25 +135,49 @@ export interface InputNumberProps {
      */
     allowEmpty?: boolean | undefined;
     /**
+     * When present, it specifies that the component should be disabled.
+     */
+    disabled?: boolean | undefined;
+    /**
      * When present, it specifies that an input field is read-only.
      */
     readonly?: boolean | undefined;
     /**
-     * Inline style of the input field.
+     * Placeholder text for the input.
      */
-    inputStyle?: any | undefined;
+    placeholder?: string | undefined;
+    /**
+     * 	Identifier of the focus input to match a label defined for the chips.
+     */
+    inputId?: string | undefined;
     /**
      * Style class of the input field.
      */
     inputClass?: any | undefined;
     /**
-     * Inline style of the component.
+     * Inline style of the input field.
      */
-    style?: any | undefined;
+    inputStyle?: any | undefined;
     /**
-     * Style class of the element.
+     * Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.
      */
-    class?: any | undefined;
+    inputProps?: InputHTMLAttributes | undefined;
+    /**
+     * Uses to pass all properties of the HTMLButtonElement to increment button inside the component.
+     */
+    incrementButtonProps?: ButtonHTMLAttributes | undefined;
+    /**
+     * Uses to pass all properties of the HTMLButtonElement to decrement button inside the component.
+     */
+    decrementButtonProps?: ButtonHTMLAttributes | undefined;
+    /**
+     * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
+     */
+    'aria-labelledby'?: string | undefined;
+    /**
+     * Establishes a string value that labels the component.
+     */
+    'aria-label'?: string | undefined;
 }
 
 export interface InputNumberSlots {

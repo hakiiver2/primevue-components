@@ -23,7 +23,17 @@ var script = {
             default: false
         },
         inputId: null,
-        inputProps: null
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     data() {
         return {
@@ -69,7 +79,7 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = ["id", "checked", "disabled"];
+const _hoisted_2 = ["id", "checked", "disabled", "aria-checked", "aria-labelledby", "aria-label"];
 const _hoisted_3 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-inputswitch-slider" }, null, -1);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -83,8 +93,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ref: "input",
         type: "checkbox",
         role: "switch",
+        class: $props.inputClass,
+        style: $props.inputStyle,
         checked: $options.checked,
         disabled: $props.disabled,
+        "aria-checked": $options.checked,
+        "aria-labelledby": _ctx.ariaLabelledby,
+        "aria-label": _ctx.ariaLabel,
         onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
         onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event)))
       }, $props.inputProps), null, 16, _hoisted_2)

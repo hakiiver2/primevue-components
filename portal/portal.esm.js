@@ -13,12 +13,17 @@ var script = {
             default: false
         }
     },
+    data() {
+        return {
+            mounted: false
+        }
+    },
+    mounted() {
+        this.mounted = DomHandler.isClient();
+    },
     computed: {
         inline() {
             return this.disabled || this.appendTo === 'self';
-        },
-        isClient() {
-            return DomHandler.isClient();
         }
     }
 };
@@ -26,7 +31,7 @@ var script = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return ($options.inline)
     ? renderSlot(_ctx.$slots, "default", { key: 0 })
-    : ($options.isClient)
+    : ($data.mounted)
       ? (openBlock(), createBlock(Teleport, {
           key: 1,
           to: $props.appendTo

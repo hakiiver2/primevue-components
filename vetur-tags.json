@@ -6,13 +6,22 @@
       "activeIndex",
       "lazy",
       "expandIcon",
-      "collapseIcon"
+      "collapseIcon",
+      "tabindex",
+      "selectOnFocus"
     ]
   },
   "AccordionTab": {
     "description": "Accordion element consists of one or more AccordionTab elements.",
     "attributes": [
       "header",
+      "headerStyle",
+      "headerClass",
+      "headerProps",
+      "headerActionProps",
+      "contentStyle",
+      "contentClass",
+      "contentProps",
       "disabled"
     ]
   },
@@ -22,6 +31,8 @@
       "modelValue",
       "suggestions",
       "field",
+      "optionLabel",
+      "optionDisabled",
       "optionGroupLabel",
       "optionGroupChildren",
       "scrollHeight",
@@ -29,18 +40,33 @@
       "dropdownMode",
       "autoHighlight",
       "multiple",
+      "placeholder",
+      "disabled",
+      "dataKey",
       "minLength",
-      "completeOnFocus",
       "delay",
       "appendTo",
+      "forceSelection",
+      "completeOnFocus",
+      "inputId",
       "inputStyle",
       "inputClass",
-      "forceSelection",
-      "class",
-      "style",
+      "inputProps",
+      "panelStyle",
       "panelClass",
+      "panelProps",
       "loadingIcon",
-      "virtualScrollerOptions"
+      "virtualScrollerOptions",
+      "autoOptionFocus",
+      "selectOnFocus",
+      "searchLocale",
+      "searchMessage",
+      "selectionMessage",
+      "emptySelectionMessage",
+      "emptySearchMessage",
+      "tabindex",
+      "aria-label",
+      "aria-labelledby"
     ]
   },
   "Avatar": {
@@ -131,10 +157,17 @@
       "showWeek",
       "manualInput",
       "appendTo",
-      "inputStyle",
+      "disabled",
+      "readonly",
+      "placeholder",
+      "id",
+      "inputId",
       "inputClass",
-      "class",
-      "style"
+      "inputStyle",
+      "inputProps",
+      "panelClass",
+      "panelStyle",
+      "panelProps"
     ]
   },
   "Carousel": {
@@ -161,17 +194,31 @@
       "options",
       "optionLabel",
       "optionValue",
+      "optionDisabled",
       "optionGroupLabel",
       "optionGroupChildren",
       "placeholder",
       "disabled",
       "dataKey",
-      "tabindex",
-      "inputId",
-      "appendTo",
+      "inputStyle",
+      "inputClass",
+      "inputProps",
+      "panelStyle",
       "panelClass",
+      "panelProps",
+      "appendTo",
       "loading",
-      "loadingIcon"
+      "loadingIcon",
+      "autoOptionFocus",
+      "selectOnFocus",
+      "searchLocale",
+      "searchMessage",
+      "selectionMessage",
+      "emptySelectionMessage",
+      "emptySearchMessage",
+      "tabindex",
+      "aria-label",
+      "aria-labelledby"
     ]
   },
   "Chart": {
@@ -191,10 +238,18 @@
       "value",
       "modelValue",
       "binary",
-      "class",
-      "style",
+      "disabled",
+      "readonly",
+      "required",
+      "tabindex",
       "trueValue",
-      "falseValue"
+      "falseValue",
+      "inputId",
+      "inputClass",
+      "inputStyle",
+      "inputProps",
+      "aria-labelledby",
+      "aria-label"
     ]
   },
   "Chip": {
@@ -215,8 +270,12 @@
       "separator",
       "addOnBlur",
       "allowDuplicate",
-      "class",
-      "style"
+      "disabled",
+      "placeholder",
+      "inputId",
+      "inputClass",
+      "inputStyle",
+      "inputProps"
     ]
   },
   "ColorPicker": {
@@ -227,12 +286,13 @@
       "inline",
       "format",
       "disabled",
-      "tabIndex",
+      "tabindex",
       "baseZIndex",
       "autoZIndex",
-      "ariaLabelledBy",
       "panelClass",
-      "appendTo"
+      "appendTo",
+      "aria-labelledby",
+      "aria-label"
     ]
   },
   "Column": {
@@ -278,6 +338,7 @@
       "alignFrozen",
       "exportable",
       "exportHeader",
+      "exportFooter",
       "hidden"
     ]
   },
@@ -461,15 +522,29 @@
       "disabled",
       "dataKey",
       "showClear",
-      "tabindex",
       "inputId",
-      "ariaLabelledBy",
-      "emptyFilterMessage",
-      "emptyMessage",
+      "inputStyle",
+      "inputClass",
+      "inputProps",
+      "panelStyle",
       "panelClass",
+      "panelProps",
+      "filterInputProps",
+      "clearIconProps",
+      "appendTo",
       "loading",
       "loadingIcon",
-      "virtualScrollerOptions"
+      "virtualScrollerOptions",
+      "autoOptionFocus",
+      "selectOnFocus",
+      "filterMessage",
+      "selectionMessage",
+      "emptySelectionMessage",
+      "emptyFilterMessage",
+      "emptyMessage",
+      "tabindex",
+      "aria-label",
+      "aria-labelledby"
     ]
   },
   "Editor": {
@@ -479,7 +554,8 @@
       "placeholder",
       "readonly",
       "formats",
-      "editorStyle"
+      "editorStyle",
+      "modules"
     ]
   },
   "Fieldset": {
@@ -611,20 +687,25 @@
       "step",
       "allowEmpty",
       "readonly",
+      "placeholder",
+      "inputId",
       "inputStyle",
       "inputClass",
-      "class",
-      "style"
+      "inputProps",
+      "incrementButtonProps",
+      "decrementButtonProps"
     ]
   },
   "InputSwitch": {
     "description": "InputSwitch is used to select a boolean value.",
     "attributes": [
       "modelValue",
-      "class",
-      "style",
       "trueValue",
-      "falseValue"
+      "falseValue",
+      "inputId",
+      "inputStyle",
+      "inputClass",
+      "inputProps"
     ]
   },
   "InputText": {
@@ -648,7 +729,10 @@
       "textColor",
       "strokeWidth",
       "showValue",
-      "valueTemplate"
+      "valueTemplate",
+      "tabindex",
+      "aria-labelledby",
+      "aria-label"
     ]
   },
   "Listbox": {
@@ -671,8 +755,18 @@
       "filterLocale",
       "filterMatchMode",
       "filterFields",
+      "filterInputProps",
+      "virtualScrollerOptions",
+      "autoOptionFocus",
+      "selectOnFocus",
+      "filterMessage",
+      "selectionMessage",
+      "emptySelectionMessage",
       "emptyFilterMessage",
-      "emptyMessage"
+      "emptyMessage",
+      "tabindex",
+      "aria-label",
+      "aria-labelledby"
     ]
   },
   "MegaMenu": {
@@ -722,30 +816,41 @@
       "optionGroupLabel",
       "optionGroupChildren",
       "scrollHeight",
+      "placeholder",
+      "disabled",
+      "inputId",
+      "inputProps",
+      "panelStyle",
+      "panelClass",
+      "panelProps",
+      "filterInputProps",
+      "closeButtonProps",
+      "dataKey",
       "filter",
       "filterPlaceholder",
       "filterLocale",
       "filterMatchMode",
       "filterFields",
-      "placeholder",
-      "disabled",
-      "tabindex",
-      "inputId",
-      "dataKey",
-      "ariaLabelledBy",
-      "emptyFilterMessage",
-      "emptyMessage",
+      "appendTo",
       "display",
-      "panelClass",
+      "selectedItemsLabel",
+      "maxSelectedLabels",
       "selectionLimit",
       "showToggleAll",
       "loading",
       "loadingIcon",
-      "maxSelectedLabels",
-      "selectedItemsLabel",
       "selectAll",
       "resetFilterOnHide",
-      "virtualScrollerOptions"
+      "virtualScrollerOptions",
+      "autoOptionFocus",
+      "filterMessage",
+      "selectionMessage",
+      "emptySelectionMessage",
+      "emptyFilterMessage",
+      "emptyMessage",
+      "tabindex",
+      "aria-label",
+      "aria-labelledby"
     ]
   },
   "OrderList": {
@@ -828,11 +933,15 @@
       "appendTo",
       "hideIcon",
       "showIcon",
+      "placeholder",
+      "inputId",
       "inputStyle",
       "inputClass",
-      "class",
-      "style",
-      "panelClass"
+      "inputProps",
+      "panelId",
+      "panelClass",
+      "panelStyle",
+      "panelProps"
     ]
   },
   "PickList": {
@@ -878,8 +987,14 @@
     "attributes": [
       "value",
       "modelValue",
-      "class",
-      "style"
+      "name",
+      "disabled",
+      "inputId",
+      "inputClass",
+      "inputStyle",
+      "inputProps",
+      "aria-labelledby",
+      "aria-label"
     ]
   },
   "rating": {
@@ -911,7 +1026,9 @@
       "optionDisabled",
       "multiple",
       "disabled",
-      "dataKey"
+      "dataKey",
+      "unselectable",
+      "aria-labelledby"
     ]
   },
   "Sidebar": {
@@ -1026,6 +1143,13 @@
     "description": "TabView element consists of one or more TabPanel elements.",
     "attributes": [
       "header",
+      "headerStyle",
+      "headerClass",
+      "headerProps",
+      "headerActionProps",
+      "contentStyle",
+      "contentClass",
+      "contentProps",
       "disabled"
     ]
   },
@@ -1034,7 +1158,11 @@
     "attributes": [
       "activeIndex",
       "lazy",
-      "scrollable"
+      "scrollable",
+      "tabindex",
+      "selectOnFocus",
+      "previousButtonProps",
+      "nextButtonProps"
     ]
   },
   "Tag": {
@@ -1098,7 +1226,13 @@
       "offIcon",
       "onLabel",
       "offLabel",
-      "iconPos"
+      "iconPos",
+      "tabindex",
+      "disabled",
+      "inputId",
+      "inputClass",
+      "inputStyle",
+      "inputProps"
     ]
   },
   "Tree": {
@@ -1129,13 +1263,16 @@
       "disabled",
       "tabindex",
       "inputId",
-      "ariaLabelledBy",
+      "inputStyle",
+      "inputClass",
       "selectionMode",
       "panelClass",
       "appendTo",
       "emptyMessage",
       "display",
-      "metaKeySelection"
+      "metaKeySelection",
+      "aria-labelledby",
+      "aria-label"
     ]
   },
   "TreeTable": {
@@ -1184,8 +1321,12 @@
     "description": "TriStateCheckbox is used to select either \"true\", \"false\" or \"null\" as the value.",
     "attributes": [
       "modelValue",
-      "class",
-      "style"
+      "disabled",
+      "tabindex",
+      "inputId",
+      "inputProps",
+      "aria-labelledby",
+      "aria-label"
     ]
   },
   "VirtualScroller": {
@@ -1206,7 +1347,8 @@
       "loaderDisabled",
       "loading",
       "showSpacer",
-      "showLoader"
+      "showLoader",
+      "tabindex"
     ]
   }
 }

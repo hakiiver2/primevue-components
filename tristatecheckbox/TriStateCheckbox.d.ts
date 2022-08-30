@@ -1,3 +1,4 @@
+import { InputHTMLAttributes } from 'vue';
 import { ClassComponent, GlobalComponentConstructor, Nullable } from '../ts-helpers';
 
 export interface TriStateCheckboxProps {
@@ -6,13 +7,29 @@ export interface TriStateCheckboxProps {
      */
     modelValue?: Nullable<boolean>;
     /**
-     * 	Inline style of the component.
+     * When present, it specifies that the component should be disabled.
      */
-    style?: any;
+    disabled?: boolean | undefined;
     /**
-     * Style class of the component.
+     * Index of the element in tabbing order.
      */
-    class?: any;
+    tabindex?: string | undefined;
+    /**
+     * Identifier of the underlying input element.
+     */
+    inputId?: string | undefined;
+    /**
+     * Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.
+     */
+    inputProps?: InputHTMLAttributes | undefined;
+    /**
+     * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
+     */
+    'aria-labelledby'?: string | undefined;
+    /**
+      * Establishes a string value that labels the component.
+      */
+    'aria-label'?: string | undefined;
 }
 
 export interface TriStateCheckboxSlots {

@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "framework": "vue",
   "name": "PrimeVue",
-  "version": "3.15.1-SNAPSHOT",
+  "version": "3.17.0-SNAPSHOT",
   "contributions": {
     "html": {
       "types-syntax": "typescript",
@@ -66,6 +66,26 @@
                 "kind": "expression",
                 "type": "string"
               }
+            },
+            {
+              "name": "tabindex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordion",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "selectOnFocus",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordion",
+              "description": "When enabled, the focused tab is activated.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
             }
           ],
           "events": [
@@ -106,6 +126,25 @@
                   "description": "Closed tab index"
                 }
               ]
+            },
+            {
+              "name": "tab-click",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordion",
+              "description": "Callback to invoke when an active tab is clicked.",
+              "arguments": [
+                {
+                  "name": "originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/accordion",
+                  "type": "object",
+                  "description": "Original event"
+                },
+                {
+                  "name": "index",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/accordion",
+                  "type": "number",
+                  "description": "Index of the clicked tab"
+                }
+              ]
             }
           ]
         },
@@ -126,6 +165,76 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "headerStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordiontab",
+              "description": "Inline style of the tab header.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "headerClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordiontab",
+              "description": "Style class of the tab header.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "headerProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordiontab",
+              "description": "Uses to pass all properties of the HTMLDivElement to the tab header.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "headerActionProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordiontab",
+              "description": "Uses to pass all properties of the HTMLAnchorElement to the focusable anchor element inside the tab header.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "contentStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordiontab",
+              "description": "Inline style of the tab content.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "contentClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordiontab",
+              "description": "Style class of the tab content.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "contentProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/accordiontab",
+              "description": "Uses to pass all properties of the HTMLDivElement to the tab content.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
               }
             },
             {
@@ -177,6 +286,26 @@
               "value": {
                 "kind": "expression",
                 "type": "any"
+              }
+            },
+            {
+              "name": "optionLabel",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Property name or getter function to use as the label of an option.",
+              "value": {
+                "kind": "expression",
+                "type": "string | function"
+              }
+            },
+            {
+              "name": "optionDisabled",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
               }
             },
             {
@@ -250,6 +379,36 @@
               }
             },
             {
+              "name": "placeholder",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Default text to display when no option is selected.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "When present, it specifies that the component should be disabled.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "dataKey",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "A property to uniquely identify an option.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "minLength",
               "default": "1",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
@@ -257,16 +416,6 @@
               "value": {
                 "kind": "expression",
                 "type": "number"
-              }
-            },
-            {
-              "name": "completeOnFocus",
-              "default": "false",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
-              "description": "Whether to run a query when input receives focus.",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
               }
             },
             {
@@ -290,13 +439,43 @@
               }
             },
             {
+              "name": "forceSelection",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "When present, autocomplete clears the manual input if it does not match of the suggestions to force only accepting values from the suggestions.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "completeOnFocus",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Whether to run a query when input receives focus.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "inputStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
               "description": "Inline style of the input field.",
               "value": {
                 "kind": "expression",
-                "type": "any"
+                "type": "object"
               }
             },
             {
@@ -310,33 +489,23 @@
               }
             },
             {
-              "name": "forceSelection",
-              "default": "false",
+              "name": "inputProps",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
-              "description": "When present, autocomplete clears the manual input if it does not match of the suggestions to force only accepting values from the suggestions.",
+              "description": "Uses to pass all properties of the HTMLInputElement/HTMLSpanElement to the focusable input element inside the component.",
               "value": {
                 "kind": "expression",
-                "type": "boolean"
+                "type": "object"
               }
             },
             {
-              "name": "class",
+              "name": "panelStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
-              "description": "Style class of the component.",
+              "description": "Inline style of the overlay panel.",
               "value": {
                 "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "style",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
-              "description": "Inline of the component.",
-              "value": {
-                "kind": "expression",
-                "type": "any"
+                "type": "object"
               }
             },
             {
@@ -347,6 +516,16 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "panelProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Uses to pass all properties of the HTMLDivElement to the overlay panel inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             },
             {
@@ -368,25 +547,151 @@
                 "kind": "expression",
                 "type": "object"
               }
+            },
+            {
+              "name": "autoOptionFocus",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Whether to focus on the first visible or selected element when the overlay panel is shown.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "selectOnFocus",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "When enabled, the focused option is selected.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "searchLocale",
+              "default": "undefined",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Locale to use in searching. The default locale is the host environment's current locale.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "searchMessage",
+              "default": "{0} results are available",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Text to be displayed in hidden accessible field when filtering returns any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "selectionMessage",
+              "default": "{0} items selected",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Text to be displayed in hidden accessible field when options are selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptySelectionMessage",
+              "default": "No selected item",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Text to be displayed in hidden accessible field when any option is not selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptySearchMessage",
+              "default": "No results found",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Text to display when filtering does not return any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Defines a string value that labels an interactive element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
             }
           ],
           "events": [
             {
-              "name": "complete",
+              "name": "change",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
-              "description": "Callback to invoke to search for suggestions.",
+              "description": "Callback to invoke on value change.",
               "arguments": [
                 {
-                  "name": "originalEvent",
+                  "name": "event.originalEvent",
                   "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
                   "type": "object",
-                  "description": "Original event"
+                  "description": "Browser event"
                 },
                 {
-                  "name": "query",
+                  "name": "event.value",
                   "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
                   "type": "string",
-                  "description": "Value to search with"
+                  "description": "Selected option value"
+                }
+              ]
+            },
+            {
+              "name": "focus",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Callback to invoke when component receives focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "blur",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Callback to invoke when component loses focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+                  "type": "object",
+                  "description": "Browser event"
                 }
               ]
             },
@@ -451,18 +756,52 @@
               "name": "clear",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
               "description": "Callback to invoke when input is cleared by the user."
+            },
+            {
+              "name": "complete",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Callback to invoke to search for suggestions.",
+              "arguments": [
+                {
+                  "name": "originalEvent",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+                  "type": "object",
+                  "description": "Original event"
+                },
+                {
+                  "name": "query",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+                  "type": "string",
+                  "description": "Value to search with"
+                }
+              ]
+            },
+            {
+              "name": "before-show",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Callback to invoke before the overlay is shown."
+            },
+            {
+              "name": "before-hide",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Callback to invoke before the overlay is hidden."
+            },
+            {
+              "name": "show",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Callback to invoke when the overlay is shown."
+            },
+            {
+              "name": "hide",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Callback to invoke when the overlay is hidden."
             }
           ],
           "slots": [
             {
-              "name": "item",
+              "name": "chip",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
-              "description": "Custom content for the item."
-            },
-            {
-              "name": "optiongroup",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
-              "description": "Custom content for the optiongroup item."
+              "description": "Custom content for the chip display."
             },
             {
               "name": "header",
@@ -475,9 +814,19 @@
               "description": "Custom content for the component footer."
             },
             {
-              "name": "chip",
+              "name": "item",
               "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
-              "description": "Custom content for the chip display."
+              "description": "Custom content for the item."
+            },
+            {
+              "name": "option",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Custom content for the item."
+            },
+            {
+              "name": "optiongroup",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/autocomplete",
+              "description": "Custom content for the optiongroup item."
             },
             {
               "name": "content",
@@ -1200,13 +1549,53 @@
               }
             },
             {
-              "name": "inputStyle",
-              "default": "null",
+              "name": "disabled",
+              "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
-              "description": "Inline style of the input field.",
+              "description": "When present, it specifies that the element should be disabled.",
               "value": {
                 "kind": "expression",
-                "type": "any"
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "readonly",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "When present, it specifies that an input field is read-only.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "placeholder",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Placeholder text for the input.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "id",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Identifier of the element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
               }
             },
             {
@@ -1220,23 +1609,53 @@
               }
             },
             {
-              "name": "class",
+              "name": "inputStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
-              "description": "Style class of the component.",
+              "description": "Inline style of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "inputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "panelClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Style class of the overlay panel.",
               "value": {
                 "kind": "expression",
                 "type": "string"
               }
             },
             {
-              "name": "style",
+              "name": "panelStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
-              "description": "Inline style of the component.",
+              "description": "Inline style of the overlay panel.",
               "value": {
                 "kind": "expression",
-                "type": "any"
+                "type": "string"
+              }
+            },
+            {
+              "name": "panelProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/calendar",
+              "description": "Uses to pass all properties of the HTMLDivElement to the overlay panel inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             }
           ],
@@ -1644,6 +2063,16 @@
               }
             },
             {
+              "name": "optionDisabled",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
               "name": "optionGroupLabel",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
@@ -1694,33 +2123,43 @@
               }
             },
             {
-              "name": "tabindex",
+              "name": "inputStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
-              "description": "Index of the element in tabbing order.",
+              "description": "Inline style of the input field.",
               "value": {
                 "kind": "expression",
-                "type": "number"
+                "type": "object"
               }
             },
             {
-              "name": "inputId",
+              "name": "inputClass",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
-              "description": "Identifier of the underlying input element.",
+              "description": "Style class of the input field.",
               "value": {
                 "kind": "expression",
                 "type": "string"
               }
             },
             {
-              "name": "appendTo",
-              "default": "body",
+              "name": "inputProps",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
-              "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
+              "description": "Uses to pass all properties of the HTMLInputElement/HTMLSpanElement to the focusable input element inside the component.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "object"
+              }
+            },
+            {
+              "name": "panelStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Inline style of the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             },
             {
@@ -1728,6 +2167,26 @@
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
               "description": "Style class of the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "panelProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Uses to pass all properties of the HTMLDivElement to the overlay panel inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "appendTo",
+              "default": "body",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -1752,6 +2211,106 @@
                 "kind": "expression",
                 "type": "string"
               }
+            },
+            {
+              "name": "autoOptionFocus",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Whether to focus on the first visible or selected element when the overlay panel is shown.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "selectOnFocus",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "When enabled, the focused option is selected/opened.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "searchLocale",
+              "default": "undefined",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Locale to use in searching. The default locale is the host environment's current locale.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "searchMessage",
+              "default": "{0} results are available",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Text to be displayed in hidden accessible field when filtering returns any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "selectionMessage",
+              "default": "{0} items selected",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Text to be displayed in hidden accessible field when options are selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptySelectionMessage",
+              "default": "No selected item",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Text to be displayed in hidden accessible field when any option is not selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptySearchMessage",
+              "default": "No results found",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Text to display when filtering does not return any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Defines a string value that labels an interactive element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
             }
           ],
           "events": [
@@ -1771,6 +2330,45 @@
                   "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
                   "type": "object",
                   "description": "Selected option value"
+                }
+              ]
+            },
+            {
+              "name": "focus",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Callback to invoke when component receives focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "blur",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Callback to invoke when component loses focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "click",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+              "description": "Callback to invoke on click.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/cascadeselect",
+                  "type": "object",
+                  "description": "Browser event"
                 }
               ]
             },
@@ -1995,23 +2593,43 @@
               }
             },
             {
-              "name": "class",
-              "default": "null",
+              "name": "disabled",
+              "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
-              "description": "Style class of the component.",
+              "description": "When present, it specifies that the element should be disabled.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "boolean"
               }
             },
             {
-              "name": "style",
-              "default": "null",
+              "name": "readonly",
+              "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
-              "description": "Inline of the component.",
+              "description": "When present, it specifies that an input field is read-only.",
               "value": {
                 "kind": "expression",
-                "type": "any"
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "When present, it specifies that the element is required.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
               }
             },
             {
@@ -2032,6 +2650,66 @@
               "value": {
                 "kind": "expression",
                 "type": "any"
+              }
+            },
+            {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Style class of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "inputStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Inline style of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "inputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/checkbox",
+              "description": "Used to define a string that labels the element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
               }
             }
           ],
@@ -2189,23 +2867,63 @@
               }
             },
             {
-              "name": "class",
+              "name": "disabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/chips",
+              "description": "When present, it specifies that the element should be disabled.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "placeholder",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/chips",
-              "description": "Style class of the component.",
+              "description": "Placeholder text for the input.",
               "value": {
                 "kind": "expression",
                 "type": "string"
               }
             },
             {
-              "name": "style",
+              "name": "inputId",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/chips",
-              "description": "Inline of the component.",
+              "description": "Identifier of the focus input to match a label defined for the chips.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/chips",
+              "description": "Style class of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/chips",
+              "description": "Inline style of the input field.",
               "value": {
                 "kind": "expression",
                 "type": "any"
+              }
+            },
+            {
+              "name": "inputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/chips",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             }
           ],
@@ -2317,7 +3035,7 @@
               }
             },
             {
-              "name": "tabIndex",
+              "name": "tabindex",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
               "description": "Index of the element in tabbing order.",
@@ -2347,16 +3065,6 @@
               }
             },
             {
-              "name": "ariaLabelledBy",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
-              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
               "name": "panelClass",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
@@ -2371,6 +3079,26 @@
               "default": "body",
               "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
               "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
+              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/colorpicker",
+              "description": "Used to define a string that labels the element.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -2819,6 +3547,16 @@
               }
             },
             {
+              "name": "exportFooter",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
+              "description": "Custom export footer of the column to be exported as CSV.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "hidden",
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/datatable",
@@ -2914,6 +3652,13 @@
                 "kind": "expression",
                 "type": "object"
               }
+            }
+          ],
+          "slots": [
+            {
+              "name": "message",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/confirmdialog",
+              "description": "Custom content for the component."
             }
           ]
         },
@@ -5466,16 +6211,6 @@
               }
             },
             {
-              "name": "tabindex",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Index of the element in tabbing order.",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
               "name": "inputId",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
@@ -5486,33 +6221,43 @@
               }
             },
             {
-              "name": "ariaLabelledBy",
+              "name": "inputStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
+              "description": "Inline style of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "inputClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Style class of the input field.",
               "value": {
                 "kind": "expression",
                 "type": "string"
               }
             },
             {
-              "name": "emptyFilterMessage",
-              "default": "No results found",
+              "name": "inputProps",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Text to display when filtering does not return any results. Defaults to value from PrimeVue locale configuration.",
+              "description": "Uses to pass all properties of the HTMLInputElement/HTMLSpanElement to the focusable input element inside the component.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "object"
               }
             },
             {
-              "name": "emptyMessage",
-              "default": "No results found",
+              "name": "panelStyle",
+              "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Text to display when there are no options available. Defaults to value from PrimeVue locale configuration.",
+              "description": "Inline style of the overlay panel.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "object"
               }
             },
             {
@@ -5520,6 +6265,46 @@
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
               "description": "Style class of the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "panelProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Uses to pass all properties of the HTMLDivElement to the overlay panel inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "filterInputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Uses to pass all properties of the HTMLInputElement to the filter input inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "clearIconProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Uses to pass all properties of the HTMLElement to the clear icon inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "appendTo",
+              "default": "body",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached. Special keywords are 'body' for document body and 'self' for the element itself.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -5554,6 +6339,106 @@
                 "kind": "expression",
                 "type": "object"
               }
+            },
+            {
+              "name": "autoOptionFocus",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Whether to focus on the first visible or selected element when the overlay panel is shown.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "selectOnFocus",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "When enabled, the focused option is selected.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "filterMessage",
+              "default": "{0} results are available",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Text to be displayed in hidden accessible field when filtering returns any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "selectionMessage",
+              "default": "{0} items selected",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Text to be displayed in hidden accessible field when options are selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptySelectionMessage",
+              "default": "No selected item",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Text to be displayed in hidden accessible field when any option is not selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptyFilterMessage",
+              "default": "No results found",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Text to display when filtering does not return any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptyMessage",
+              "default": "No results found",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Text to display when there are no options available. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Defines a string value that labels an interactive element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
             }
           ],
           "events": [
@@ -5577,9 +6462,22 @@
               ]
             },
             {
-              "name": "input",
+              "name": "focus",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Callback to invoke on value change.",
+              "description": "Callback to invoke when component receives focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "blur",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Callback to invoke when component loses focus.",
               "arguments": [
                 {
                   "name": "event",
@@ -5610,32 +6508,6 @@
               "description": "Callback to invoke when the overlay is hidden."
             },
             {
-              "name": "focus",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Callback to invoke when component receives focus.",
-              "arguments": [
-                {
-                  "name": "event",
-                  "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-                  "type": "object",
-                  "description": "Browser event"
-                }
-              ]
-            },
-            {
-              "name": "blur",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Callback to invoke when component loses focus.",
-              "arguments": [
-                {
-                  "name": "event",
-                  "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-                  "type": "object",
-                  "description": "Browser event"
-                }
-              ]
-            },
-            {
               "name": "filter",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
               "description": "Callback to invoke when the overlay is shown.",
@@ -5657,19 +6529,14 @@
           ],
           "slots": [
             {
-              "name": "option",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Custom content for the item's option"
-            },
-            {
-              "name": "optiongroup",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Custom content for the item's optiongroup"
-            },
-            {
               "name": "value",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
               "description": "Custom content for the item's value"
+            },
+            {
+              "name": "indicator",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Custom content for the dropdown indicator"
             },
             {
               "name": "header",
@@ -5680,6 +6547,16 @@
               "name": "footer",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
               "description": "Custom content for the component's footer"
+            },
+            {
+              "name": "option",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Custom content for the item's option"
+            },
+            {
+              "name": "optiongroup",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
+              "description": "Custom content for the item's optiongroup"
             },
             {
               "name": "emptyfilter",
@@ -5700,11 +6577,6 @@
               "name": "loader",
               "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
               "description": "Custom content for the virtual scroller loader items"
-            },
-            {
-              "name": "indicator",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/dropdown",
-              "description": "Custom content for the dropdown indicator"
             }
           ]
         },
@@ -5778,6 +6650,16 @@
                 "kind": "expression",
                 "type": "any"
               }
+            },
+            {
+              "name": "modules",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
+              "description": "Modules configuration, see <a href=\"http://quilljs.com/docs/modules/\">here</a> for available options.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
             }
           ],
           "events": [
@@ -5819,15 +6701,58 @@
               ]
             },
             {
-              "name": "input",
+              "name": "selection-change",
               "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
-              "description": "Callback to invoke when text of editor changes.",
+              "description": "Callback to invoke when selection of the text changes.",
               "arguments": [
                 {
-                  "name": "event",
+                  "name": "event.range",
                   "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
                   "type": "object",
+                  "description": "Representation of the selection boundaries."
+                },
+                {
+                  "name": "event.oldRange",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
+                  "type": "string",
+                  "description": "Representation of the previous selection boundaries."
+                },
+                {
+                  "name": "event.source",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
+                  "type": "string",
+                  "description": "Source of change. Will be either \"user\" or \"api\"."
+                },
+                {
+                  "name": "event.htmlValue",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
+                  "type": "string",
                   "description": "Current value as html."
+                },
+                {
+                  "name": "event.textValue",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
+                  "type": "string",
+                  "description": "Current value as text."
+                },
+                {
+                  "name": "event.instance",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
+                  "type": "object",
+                  "description": "Text editor instance."
+                }
+              ]
+            },
+            {
+              "name": "load",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
+              "description": "Callback to invoke when the quill modules are loaded.",
+              "arguments": [
+                {
+                  "name": "event.instance",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/editor",
+                  "type": "any",
+                  "description": "Quill instance"
                 }
               ]
             }
@@ -7082,6 +8007,26 @@
               }
             },
             {
+              "name": "placeholder",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+              "description": "Placeholder text for the input.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "inputStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
@@ -7102,23 +8047,33 @@
               }
             },
             {
-              "name": "class",
+              "name": "inputProps",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
-              "description": "Style class of the component.",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "object"
               }
             },
             {
-              "name": "style",
+              "name": "incrementButtonProps",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
-              "description": "Inline of the component.",
+              "description": "Uses to pass all properties of the HTMLButtonElement to increment button inside the component.",
               "value": {
                 "kind": "expression",
-                "type": "any"
+                "type": "object"
+              }
+            },
+            {
+              "name": "decrementButtonProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputnumber",
+              "description": "Uses to pass all properties of the HTMLButtonElement to decrement button inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             }
           ],
@@ -7196,26 +8151,6 @@
               }
             },
             {
-              "name": "class",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
-              "description": "Style class of the component.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "style",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
-              "description": "Inline of the component.",
-              "value": {
-                "kind": "expression",
-                "type": "any"
-              }
-            },
-            {
               "name": "trueValue",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
@@ -7233,6 +8168,46 @@
               "value": {
                 "kind": "expression",
                 "type": "any"
+              }
+            },
+            {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Inline style of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "inputClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Style class of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/inputswitch",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             }
           ],
@@ -7409,6 +8384,36 @@
               "default": "{value}",
               "doc-url": "https://primefaces.org/primevue/showcase/#/knob",
               "description": "Template string of the value.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/knob",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/knob",
+              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/knob",
+              "description": "Used to define a string that labels the element.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -7611,6 +8616,76 @@
               }
             },
             {
+              "name": "filterInputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Uses to pass all properties of the HTMLInputElement to the filter input inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "virtualScrollerOptions",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "autoOptionFocus",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Whether to focus on the first visible or selected element.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "selectOnFocus",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "When enabled, the focused option is selected.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "filterMessage",
+              "default": "{0} results are available",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Text to be displayed in hidden accessible field when filtering returns any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "selectionMessage",
+              "default": "{0} items selected",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Text to be displayed in hidden accessible field when options are selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptySelectionMessage",
+              "default": "No selected item",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Text to be displayed in hidden accessible field when any option is not selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "emptyFilterMessage",
               "default": "No results found",
               "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
@@ -7625,6 +8700,36 @@
               "default": "No results found",
               "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
               "description": "Text to display when there are no options available. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Defines a string value that labels an interactive element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Identifier of the underlying input element.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -7652,6 +8757,32 @@
               ]
             },
             {
+              "name": "focus",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Callback to invoke when component receives focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "blur",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+              "description": "Callback to invoke when component loses focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
               "name": "filter",
               "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
               "description": "Callback to invoke on filter input.",
@@ -7669,13 +8800,6 @@
                   "description": "Filter value"
                 }
               ]
-            },
-            {
-              "name": "virtualScrollerOptions",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/listbox",
-              "type": "object",
-              "default": "null",
-              "description": "Whether to use the virtualScroller feature. The properties of VirtualScroller component can be used like an object in it."
             }
           ],
           "slots": [
@@ -8083,6 +9207,106 @@
               }
             },
             {
+              "name": "placeholder",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Label to display when there are no selections.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "When present, it specifies that the component should be disabled.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "panelStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Inline style of the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "panelClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Style class of the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "panelProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Uses to pass all properties of the HTMLDivElement to the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "filterInputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Uses to pass all properties of the HTMLInputElement to the filter input inside the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "closeButtonProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Uses to pass all properties of the HTMLButtonElement to the close button inside the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "dataKey",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "A property to uniquely identify an option.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "filter",
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
@@ -8133,80 +9357,10 @@
               }
             },
             {
-              "name": "placeholder",
-              "default": "null",
+              "name": "appendTo",
+              "default": "body",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Label to display when there are no selections.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "default": "false",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "When present, it specifies that the component should be disabled.",
-              "value": {
-                "kind": "expression",
-                "type": "boolean"
-              }
-            },
-            {
-              "name": "tabindex",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Index of the element in tabbing order.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "inputId",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Identifier of the underlying input element.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "dataKey",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "A property to uniquely identify an option.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "ariaLabelledBy",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached. Special keywords are \"body\" for document body and \"self\" for the element itself.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "emptyFilterMessage",
-              "default": "No results found",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Text to display when filtering does not return any results. Defaults to value from PrimeVue locale configuration.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
-              "name": "emptyMessage",
-              "default": "No results found",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Text to display when there are no options available. Defaults to value from PrimeVue locale configuration.",
+              "description": "A valid query selector or an HTMLElement to specify where the overlay gets attached. Special keywords are 'body' for document body and 'self' for the element itself.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -8223,13 +9377,23 @@
               }
             },
             {
-              "name": "panelClass",
-              "default": "null",
+              "name": "selectedItemsLabel",
+              "default": "{0} items selected",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Style class of the overlay panel.",
+              "description": "Label to display after exceeding max selected labels.",
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "maxSelectedLabels",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Decides how many selected item labels to show at most.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
               }
             },
             {
@@ -8273,26 +9437,6 @@
               }
             },
             {
-              "name": "maxSelectedLabels",
-              "default": "null",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Decides how many selected item labels to show at most.",
-              "value": {
-                "kind": "expression",
-                "type": "number"
-              }
-            },
-            {
-              "name": "selectedItemsLabel",
-              "default": "{0} items selected",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Label to display after exceeding max selected labels.",
-              "value": {
-                "kind": "expression",
-                "type": "string"
-              }
-            },
-            {
               "name": "selectAll",
               "default": "false",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
@@ -8321,6 +9465,96 @@
                 "kind": "expression",
                 "type": "object"
               }
+            },
+            {
+              "name": "autoOptionFocus",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Whether to focus on the first visible or selected element when the overlay panel is shown.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "filterMessage",
+              "default": "{0} results are available",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Text to be displayed in hidden accessible field when filtering returns any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "selectionMessage",
+              "default": "{0} items selected",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Text to be displayed in hidden accessible field when options are selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptySelectionMessage",
+              "default": "No selected item",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Text to be displayed in hidden accessible field when any option is not selected. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptyFilterMessage",
+              "default": "No results found",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Text to display when filtering does not return any results. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emptyMessage",
+              "default": "No results found",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Text to display when there are no options available. Defaults to value from PrimeVue locale configuration.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Defines a string value that labels an interactive element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
             }
           ],
           "events": [
@@ -8340,6 +9574,32 @@
                   "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
                   "type": "array",
                   "description": "Selected option value"
+                }
+              ]
+            },
+            {
+              "name": "focus",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Callback to invoke when component receives focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+                  "type": "object",
+                  "description": "Browser event"
+                }
+              ]
+            },
+            {
+              "name": "blur",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Callback to invoke when component loses focus.",
+              "arguments": [
+                {
+                  "name": "event",
+                  "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+                  "type": "object",
+                  "description": "Browser event"
                 }
               ]
             },
@@ -8404,19 +9664,19 @@
           ],
           "slots": [
             {
-              "name": "option",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Custom content for the item's option"
-            },
-            {
-              "name": "optiongroup",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Custom content for the item's optiongroup"
-            },
-            {
               "name": "value",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
               "description": "Custom content for the item value"
+            },
+            {
+              "name": "chip",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Custom content for the chip display."
+            },
+            {
+              "name": "indicator",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Custom content for the dropdown indicator"
             },
             {
               "name": "header",
@@ -8429,6 +9689,16 @@
               "description": "Custom content for the component's footer"
             },
             {
+              "name": "option",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Custom content for the item's option"
+            },
+            {
+              "name": "optiongroup",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
+              "description": "Custom content for the item's optiongroup"
+            },
+            {
               "name": "emptyfilter",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
               "description": "Custom content when there is no filtered data to display"
@@ -8439,11 +9709,6 @@
               "description": "Custom content when there is no data to display"
             },
             {
-              "name": "chip",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Custom content for the chip display."
-            },
-            {
               "name": "content",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
               "description": "Custom content for the virtual scroller"
@@ -8452,11 +9717,6 @@
               "name": "loader",
               "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
               "description": "Custom content for the virtual scroller loader items"
-            },
-            {
-              "name": "indicator",
-              "doc-url": "https://primefaces.org/primevue/showcase/#/multiselect",
-              "description": "Custom content for the dropdown indicator"
             }
           ]
         },
@@ -9225,6 +10485,26 @@
               }
             },
             {
+              "name": "placeholder",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/password",
+              "description": "Placeholder text for the input.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/password",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
               "name": "inputStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/password",
@@ -9245,23 +10525,23 @@
               }
             },
             {
-              "name": "class",
+              "name": "inputProps",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/password",
-              "description": "Style class of the component.",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
               "value": {
                 "kind": "expression",
-                "type": "string"
+                "type": "object"
               }
             },
             {
-              "name": "style",
+              "name": "panelId",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/password",
-              "description": "Inline of the component.",
+              "description": "Identifier of the underlying overlay panel element.",
               "value": {
                 "kind": "expression",
-                "type": "any"
+                "type": "string"
               }
             },
             {
@@ -9272,6 +10552,26 @@
               "value": {
                 "kind": "expression",
                 "type": "string"
+              }
+            },
+            {
+              "name": "panelStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/password",
+              "description": "Inline style of the overlay panel.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "panelProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/password",
+              "description": "Uses to pass all properties of the HTMLDivElement to the overlay panel inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
               }
             }
           ],
@@ -9724,23 +11024,83 @@
               }
             },
             {
-              "name": "class",
+              "name": "name",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
-              "description": "Style class of the component.",
+              "description": "Name of the input element.",
               "value": {
                 "kind": "expression",
                 "type": "string"
               }
             },
             {
-              "name": "style",
+              "name": "disabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "When present, it specifies that the element should be disabled.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "inputId",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
-              "description": "Inline of the component.",
+              "description": "Identifier of the underlying input element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Style class of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Inline style of the input field.",
               "value": {
                 "kind": "expression",
                 "type": "any"
+              }
+            },
+            {
+              "name": "inputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/radiobutton",
+              "description": "Used to define a string that labels the element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
               }
             }
           ],
@@ -10017,6 +11377,26 @@
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/selectbutton",
               "description": "A property to uniquely identify an option.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "unselectable",
+              "default": "true",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/selectbutton",
+              "description": "Whether selection can be cleared.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/selectbutton",
+              "description": "Identifier of the underlying element.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -10997,6 +12377,76 @@
               }
             },
             {
+              "name": "headerStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Inline style of the tab header.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "headerClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Style class of the tab header.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "headerProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Uses to pass all properties of the HTMLLiElement to the tab header.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "headerActionProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Uses to pass all properties of the HTMLAnchorElement to the focusable anchor element inside the tab header.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "contentStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Inline style of the tab content.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "contentClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Style class of the tab content.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "contentProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Uses to pass all properties of the HTMLDivElement to the tab content.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
               "name": "disabled",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
@@ -11085,6 +12535,46 @@
               "value": {
                 "kind": "expression",
                 "type": "boolean"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "selectOnFocus",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "When enabled, the focused tab is activated.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "previousButtonProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Uses to pass all properties of the HTMLButtonElement to the previous button.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "nextButtonProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tabview",
+              "description": "Uses to pass all properties of the HTMLButtonElement to the next button.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
               }
             }
           ]
@@ -11489,6 +12979,66 @@
                 "kind": "expression",
                 "type": "string"
               }
+            },
+            {
+              "name": "tabindex",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number"
+              }
+            },
+            {
+              "name": "disabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+              "description": "When present, it specifies that the element should be disabled.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "inputId",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+              "description": "Identifier of the focus input to match a label defined for the chips.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+              "description": "Style class of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputStyle",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+              "description": "Inline style of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "inputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/togglebutton",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
             }
           ],
           "events": [
@@ -11838,10 +13388,20 @@
               }
             },
             {
-              "name": "ariaLabelledBy",
+              "name": "inputStyle",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/treeselect",
-              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+              "description": "Inline style of the input field.",
+              "value": {
+                "kind": "expression",
+                "type": "any"
+              }
+            },
+            {
+              "name": "inputClass",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/treeselect",
+              "description": "Style class of the input field.",
               "value": {
                 "kind": "expression",
                 "type": "string"
@@ -11905,6 +13465,26 @@
               "value": {
                 "kind": "expression",
                 "type": "boolean"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/treeselect",
+              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/treeselect",
+              "description": "Used to define a string that labels the element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
               }
             }
           ],
@@ -12707,23 +14287,63 @@
               }
             },
             {
-              "name": "class",
+              "name": "disabled",
+              "default": "false",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tristatecheckbox",
+              "description": "When present, it specifies that the component should be disabled.",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "tabindex",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/tristatecheckbox",
-              "description": "Style class of the component.",
+              "description": "Index of the element in tabbing order.",
               "value": {
                 "kind": "expression",
                 "type": "string"
               }
             },
             {
-              "name": "style",
+              "name": "inputId",
               "default": "null",
               "doc-url": "https://primefaces.org/primevue/showcase/#/tristatecheckbox",
-              "description": "Inline of the component.",
+              "description": "Identifier of the underlying input element.",
               "value": {
                 "kind": "expression",
-                "type": "any"
+                "type": "string"
+              }
+            },
+            {
+              "name": "inputProps",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tristatecheckbox",
+              "description": "Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              }
+            },
+            {
+              "name": "aria-labelledby",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tristatecheckbox",
+              "description": "Establishes relationships between the component and label(s) where its value should be one or more element IDs.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "aria-label",
+              "default": "null",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/tristatecheckbox",
+              "description": "Used to define a string that labels the element.",
+              "value": {
+                "kind": "expression",
+                "type": "string"
               }
             }
           ]
@@ -12895,6 +14515,16 @@
               "value": {
                 "kind": "expression",
                 "type": "boolean"
+              }
+            },
+            {
+              "name": "tabindex",
+              "default": "0",
+              "doc-url": "https://primefaces.org/primevue/showcase/#/virtualscroller",
+              "description": "Index of the element in tabbing order.",
+              "value": {
+                "kind": "expression",
+                "type": "number|string"
               }
             }
           ],

@@ -1,6 +1,9 @@
 <template>
-    <div :class="buttonClass" role="button" :tabindex="tabindex" :aria-pressed="modelValue" v-ripple
-        @click="onClick($event)" @keydown="onKeyDown($event)" @focus="onFocus($event)" @blur="onBlur($event)">
+    <div :class="buttonClass" @click="onClick($event)" v-ripple>
+        <span class="p-hidden-accessible">
+            <input type="checkbox" role="switch" :id="inputId" :class="inputClass" :style="inputStyle" :checked="modelValue" :value="modelValue" :aria-labelledby="ariaLabelledby" :aria-label="ariaLabel"
+                @focus="onFocus($event)" @blur="onBlur($event)" v-bind="inputProps">
+        </span>
         <span v-if="hasIcon" :class="iconClass"></span>
         <span class="p-button-label">{{label}}</span>
     </div>
@@ -34,7 +37,19 @@ export default {
         },
         tabindex: {
             type: Number,
-            default: 0
+            default: null
+        },
+        inputId: null,
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
         }
     },
     methods: {
@@ -43,13 +58,6 @@ export default {
                 this.$emit('update:modelValue', !this.modelValue);
                 this.$emit('change', event);
                 this.$emit('click', event);
-            }
-        },
-        onKeyDown(event) {
-            //space
-            if (event.keyCode === 32) {
-                this.onClick(event);
-                event.preventDefault();
             }
         },
         onFocus(event) {

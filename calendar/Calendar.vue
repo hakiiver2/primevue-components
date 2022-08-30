@@ -1,24 +1,26 @@
 <template>
-    <span ref="container" :class="containerClass" :style="style">
-        <input :ref="inputRef" v-if="!inline" type="text" :class="['p-inputtext p-component', inputClass]" :style="inputStyle" @input="onInput" v-bind="$attrs"
-            @focus="onFocus" @blur="onBlur" @keydown="onKeyDown" :readonly="!manualInput" inputmode="none">
-        <CalendarButton v-if="showIcon" :icon="icon" tabindex="-1" class="p-datepicker-trigger" :disabled="$attrs.disabled" @click="onButtonClick" type="button" :aria-label="inputFieldValue"/>
+    <span ref="container" :id="id" :class="containerClass">
+        <input :ref="inputRef" v-if="!inline" type="text" role="combobox" :id="inputId" :class="['p-inputtext p-component', inputClass]" :style="inputStyle" :placeholder="placeholder"
+            aria-autocomplete="none" aria-haspopup="dialog" :aria-expanded="overlayVisible" :aria-controls="panelId" :aria-labelledby="ariaLabelledby" :aria-label="ariaLabel" inputmode="none" 
+            @input="onInput" @focus="onFocus" @blur="onBlur" @keydown="onKeyDown" :readonly="!manualInput" :tabindex="0" v-bind="inputProps">
+        <CalendarButton v-if="showIcon" :icon="icon" class="p-datepicker-trigger" :disabled="disabled" @click="onButtonClick" type="button" :aria-label="$primevue.config.locale.chooseDate" aria-haspopup="dialog" :aria-expanded="overlayVisible" :aria-controls="panelId"/>
         <Portal :appendTo="appendTo" :disabled="inline">
             <transition name="p-connected-overlay" @enter="onOverlayEnter($event)" @after-enter="onOverlayEnterComplete" @after-leave="onOverlayAfterLeave" @leave="onOverlayLeave">
-                <div :ref="overlayRef" :class="panelStyleClass" v-if="inline || overlayVisible" :role="inline ? null : 'dialog'" @click="onOverlayClick" @mouseup="onOverlayMouseUp">
+                <div :ref="overlayRef" :id="panelId" :class="panelStyleClass" :style=panelStyle v-if="inline || overlayVisible" :role="inline ? null : 'dialog'" :aria-modal="inline ? null : 'true'" :aria-label="$primevue.config.locale.chooseDate"
+                    @click="onOverlayClick" @keydown="onOverlayKeyDown" @mouseup="onOverlayMouseUp" v-bind="panelProps">
                     <template v-if="!timeOnly">
                         <div class="p-datepicker-group-container">
                             <div class="p-datepicker-group" v-for="(month,groupIndex) of months" :key="month.month + month.year">
                                 <div class="p-datepicker-header">
                                     <slot name="header"></slot>
-                                    <button class="p-datepicker-prev p-link" v-show="groupIndex === 0" @click="onPrevButtonClick" type="button" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled">
+                                    <button class="p-datepicker-prev p-link" v-show="showOtherMonths ? groupIndex === 0 : false" @click="onPrevButtonClick" type="button" @keydown="onContainerButtonKeydown" v-ripple :disabled="disabled" :aria-label=" currentView === 'year' ? $primevue.config.locale.prevDecade: currentView === 'month' ? $primevue.config.locale.prevYear : $primevue.config.locale.prevMonth">
                                         <span class="p-datepicker-prev-icon pi pi-chevron-left"></span>
                                     </button>
                                     <div class="p-datepicker-title">
-                                        <button type="button" @click="switchToMonthView" @keydown="onContainerButtonKeydown" v-if="currentView === 'date'" class="p-datepicker-month p-link" :disabled="switchViewButtonDisabled">
+                                        <button type="button" @click="switchToMonthView" @keydown="onContainerButtonKeydown" v-if="currentView === 'date'" class="p-datepicker-month p-link" :disabled="switchViewButtonDisabled" :aria-label="$primevue.config.locale.chooseMonth">
                                             {{getMonthName(month.month)}}
                                         </button>
-                                        <button type="button" @click="switchToYearView" @keydown="onContainerButtonKeydown" v-if="currentView !== 'year'" class="p-datepicker-year p-link" :disabled="switchViewButtonDisabled">
+                                        <button type="button" @click="switchToYearView" @keydown="onContainerButtonKeydown" v-if="currentView !== 'year'" class="p-datepicker-year p-link" :disabled="switchViewButtonDisabled" :aria-label="$primevue.config.locale.chooseYear">
                                             {{getYear(month)}}
                                         </button>
                                         <span class="p-datepicker-decade" v-if="currentView === 'year'">
@@ -27,19 +29,19 @@
                                             </slot>
                                         </span>
                                     </div>
-                                    <button class="p-datepicker-next p-link" v-show="numberOfMonths === 1 ? true : (groupIndex === numberOfMonths - 1)"
-                                        @click="onNextButtonClick" type="button" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled">
+                                    <button class="p-datepicker-next p-link" v-show="showOtherMonths ? numberOfMonths === 1 ? true : (groupIndex === numberOfMonths - 1) : false"
+                                        @click="onNextButtonClick" type="button" @keydown="onContainerButtonKeydown" v-ripple :disabled="disabled" :aria-label=" currentView === 'year' ? $primevue.config.locale.nextDecade : currentView === 'month' ? $primevue.config.locale.nextYear : $primevue.config.locale.nextMonth">
                                         <span class="p-datepicker-next-icon pi pi-chevron-right"></span>
                                     </button>
                                 </div>
                                 <div class="p-datepicker-calendar-container" v-if="currentView ==='date'">
-                                    <table class="p-datepicker-calendar">
+                                    <table class="p-datepicker-calendar" role="grid">
                                         <thead>
                                             <tr>
                                                 <th scope="col" v-if="showWeek" class="p-datepicker-weekheader p-disabled">
                                                     <span>{{weekHeaderLabel}}</span>
                                                 </th>
-                                                <th scope="col" v-for="weekDay of weekDays" :key="weekDay">
+                                                <th scope="col" v-for="weekDay of weekDays" :key="weekDay" :abbr="weekDay">
                                                     <span>{{weekDay}}</span>
                                                 </th>
                                             </tr>
@@ -52,11 +54,14 @@
                                                         {{month.weekNumbers[i]}}
                                                     </span>
                                                 </td>
-                                                <td v-for="date of week" :key="date.day + '' + date.month" :class="{'p-datepicker-other-month': date.otherMonth, 'p-datepicker-today': date.today}">
+                                                <td v-for="date of week" :aria-label="date.day" :key="date.day + '' + date.month" :class="{'p-datepicker-other-month': date.otherMonth, 'p-datepicker-today': date.today}">
                                                     <span :class="{'p-highlight': isSelected(date), 'p-disabled': !date.selectable}" @click="onDateSelect($event, date)"
-                                                        draggable="false" @keydown="onDateCellKeydown($event,date,groupIndex)" v-ripple>
+                                                        draggable="false" @keydown="onDateCellKeydown($event,date,groupIndex)" v-ripple :aria-selected="isSelected(date)">
                                                         <slot name="date" :date="date">{{date.day}}</slot>
                                                     </span>
+                                                    <div v-if="isSelected(date)" class="p-hidden-accessible" aria-live="polite">
+                                                        {{date.day}}
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -68,23 +73,29 @@
                             <span v-for="(m,i) of monthPickerValues" :key="m" @click="onMonthSelect($event, i)" @keydown="onMonthCellKeydown($event,i)"
                                     class="p-monthpicker-month" :class="{'p-highlight': isMonthSelected(i)}" v-ripple>
                                 {{m}}
+                                <div v-if="isMonthSelected(i)" class="p-hidden-accessible" aria-live="polite">
+                                    {{m}}
+                                </div>
                             </span>
                         </div>
                         <div class="p-yearpicker" v-if="currentView === 'year'">
                             <span v-for="y of yearPickerValues" :key="y" @click="onYearSelect($event, y)" @keydown="onYearCellKeydown($event,y)"
                                     class="p-yearpicker-year" :class="{'p-highlight': isYearSelected(y)}" v-ripple>
                                 {{y}}
+                                <div v-if="isYearSelected(y)" class="p-hidden-accessible" aria-live="polite">
+                                    {{y}}
+                                </div>
                             </span>
                         </div>
                     </template>
                     <div class="p-timepicker" v-if="(showTime||timeOnly) && currentView === 'date'">
                         <div class="p-hour-picker">
-                            <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 0, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple
+                            <button class="p-link" :aria-label="$primevue.config.locale.nextHour" @mousedown="onTimePickerElementMouseDown($event, 0, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple
                                 @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 0, 1)" @keydown.space="onTimePickerElementMouseDown($event, 0, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-up"></span>
                             </button>
                             <span>{{formattedCurrentHour}}</span>
-                            <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 0, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple
+                            <button class="p-link" :aria-label="$primevue.config.locale.prevHour" @mousedown="onTimePickerElementMouseDown($event, 0, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple
                                 @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 0, -1)" @keydown.space="onTimePickerElementMouseDown($event, 0, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-down"></span>
                             </button>
@@ -93,12 +104,12 @@
                             <span>{{timeSeparator}}</span>
                         </div>
                         <div class="p-minute-picker">
-                            <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 1, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled"
+                            <button class="p-link" :aria-label="$primevue.config.locale.nextMinute" @mousedown="onTimePickerElementMouseDown($event, 1, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple :disabled="disabled"
                                 @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 1, 1)"  @keydown.space="onTimePickerElementMouseDown($event, 1, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-up"></span>
                             </button>
                         <span>{{formattedCurrentMinute}}</span>
-                            <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 1, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple :disabled="$attrs.disabled"
+                            <button class="p-link" :aria-label="$primevue.config.locale.prevMinute" @mousedown="onTimePickerElementMouseDown($event, 1, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple :disabled="disabled"
                                 @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 1, -1)" @keydown.space="onTimePickerElementMouseDown($event, 1, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-down"></span>
                             </button>
@@ -107,12 +118,12 @@
                             <span>{{timeSeparator}}</span>
                         </div>
                         <div class="p-second-picker" v-if="showSeconds">
-                            <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 2, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple  :disabled="$attrs.disabled"
+                            <button class="p-link" :aria-label="$primevue.config.locale.nextSecond" @mousedown="onTimePickerElementMouseDown($event, 2, 1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple  :disabled="disabled"
                                 @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 2, 1)" @keydown.space="onTimePickerElementMouseDown($event, 2, 1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-up"></span>
                             </button>
                             <span>{{formattedCurrentSecond}}</span>
-                            <button class="p-link" @mousedown="onTimePickerElementMouseDown($event, 2, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple  :disabled="$attrs.disabled"
+                            <button class="p-link" :aria-label="$primevue.config.locale.prevSecond" @mousedown="onTimePickerElementMouseDown($event, 2, -1)" @mouseup="onTimePickerElementMouseUp($event)" @keydown="onContainerButtonKeydown" v-ripple  :disabled="disabled"
                                 @mouseleave="onTimePickerElementMouseLeave()" @keydown.enter="onTimePickerElementMouseDown($event, 2, -1)" @keydown.space="onTimePickerElementMouseDown($event, 2, -1)" @keyup.enter="onTimePickerElementMouseUp($event)" @keyup.space="onTimePickerElementMouseUp($event)" type="button">
                                 <span class="pi pi-chevron-down"></span>
                             </button>
@@ -121,11 +132,11 @@
                             <span>{{timeSeparator}}</span>
                         </div>
                         <div class="p-ampm-picker" v-if="hourFormat=='12'">
-                            <button class="p-link" @click="toggleAMPM($event)" type="button" v-ripple :disabled="$attrs.disabled">
+                            <button class="p-link" :aria-label="$primevue.config.locale.am" @click="toggleAMPM($event)" type="button" v-ripple :disabled="disabled">
                                 <span class="pi pi-chevron-up"></span>
                             </button>
                             <span>{{pm ? 'PM' : 'AM'}}</span>
-                            <button class="p-link" @click="toggleAMPM($event)" type="button" v-ripple :disabled="$attrs.disabled">
+                            <button class="p-link" :aria-label="$primevue.config.locale.pm" @click="toggleAMPM($event)" type="button" v-ripple :disabled="disabled">
                                 <span class="pi pi-chevron-down"></span>
                             </button>
                         </div>
@@ -151,7 +162,6 @@ import Portal from 'primevue/portal';
 
 export default {
     name: 'Calendar',
-    inheritAttrs: false,
     emits: ['show', 'hide', 'input', 'month-change', 'year-change', 'date-select', 'update:modelValue', 'today-click', 'clear-click', 'focus', 'blur', 'keydown'],
     props: {
         modelValue: null,
@@ -205,10 +215,6 @@ export default {
             default: false
         },
         yearRange: {
-            type: String,
-            default: null
-        },
-        panelClass: {
             type: String,
             default: null
         },
@@ -304,10 +310,34 @@ export default {
             type: String,
             default: 'body'
         },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        readonly: {
+            type: Boolean,
+            default: false
+        },
+        placeholder: {
+            type: String,
+            default: null
+        },
+        id: null,
+        inputId: null,
         inputClass: null,
         inputStyle: null,
-        class: null,
-        style: null
+        inputProps: null,
+        panelClass: null,
+        panelStyle: null,
+        panelProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     navigationState: null,
     timePickerChange: false,
@@ -330,7 +360,7 @@ export default {
         if (this.inline) {
             this.overlay && this.overlay.setAttribute(this.attributeSelector, '');
 
-            if (!this.$attrs.disabled) {
+            if (!this.disabled) {
                 this.preventFocus = true;
                 this.initFocusableCell();
 
@@ -661,15 +691,20 @@ export default {
                 this.decrementDecade();
             }
             else {
-                if (this.currentMonth === 0) {
-                    this.currentMonth = 11;
+                if (event.shiftKey) {
                     this.decrementYear();
                 }
                 else {
-                    this.currentMonth--;
-                }
+                    if (this.currentMonth === 0) {
+                        this.currentMonth = 11;
+                        this.decrementYear();
+                    }
+                    else {
+                        this.currentMonth--;
+                    }
 
-                this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+                    this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+                }
             }
         },
         navForward(event) {
@@ -686,15 +721,20 @@ export default {
                 this.incrementDecade();
             }
             else {
-                if (this.currentMonth === 11) {
-                    this.currentMonth = 0;
+                if (event.shiftKey) {
                     this.incrementYear();
                 }
                 else {
-                    this.currentMonth++;
-                }
+                    if (this.currentMonth === 11) {
+                        this.currentMonth = 0;
+                        this.incrementYear();
+                    }
+                    else {
+                        this.currentMonth++;
+                    }
 
-                this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+                    this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+                }
             }
         },
         decrementYear() {
@@ -720,7 +760,7 @@ export default {
             event.preventDefault();
         },
         isEnabled() {
-            return !this.$attrs.disabled && !this.$attrs.readonly;
+            return !this.disabled && !this.readonly;
         },
         updateCurrentTimeMeta(date) {
             let currentHour = date.getHours();
@@ -854,7 +894,7 @@ export default {
             this.$emit('year-change', {month: this.currentMonth + 1, year: this.currentYear});
         },
         onDateSelect(event, dateMeta) {
-            if (this.$attrs.disabled || !dateMeta.selectable) {
+            if (this.disabled || !dateMeta.selectable) {
                 return;
             }
 
@@ -883,6 +923,7 @@ export default {
 
             if (this.isSingleSelection() && (!this.showTime || this.hideOnDateTimeSelect)) {
                 setTimeout(() => {
+                    this.input.focus();
                     this.overlayVisible = false;
                 }, 150);
             }
@@ -1745,9 +1786,8 @@ export default {
             const cellContent = event.currentTarget;
             const cell = cellContent.parentElement;
 
-            switch (event.which) {
-                //down arrow
-                case 40: {
+            switch (event.code) {
+                case 'ArrowDown': {
                     cellContent.tabIndex = '-1';
                     let cellIndex = DomHandler.index(cell);
                     let nextRow = cell.parentElement.nextElementSibling;
@@ -1770,8 +1810,7 @@ export default {
                     break;
                 }
 
-                //up arrow
-                case 38: {
+                case 'ArrowUp': {
                     cellContent.tabIndex = '-1';
                     let cellIndex = DomHandler.index(cell);
                     let prevRow = cell.parentElement.previousElementSibling;
@@ -1794,14 +1833,13 @@ export default {
                     break;
                 }
 
-                //left arrow
-                case 37: {
+                case 'ArrowLeft': {
                     cellContent.tabIndex = '-1';
                     let prevCell = cell.previousElementSibling;
                     if (prevCell) {
                         let focusCell = prevCell.children[0];
                         if (DomHandler.hasClass(focusCell, 'p-disabled')) {
-                            this.navigateToMonth(true, groupIndex);
+                            this.navigateToMonth(event, true, groupIndex);
                         }
                         else {
                             focusCell.tabIndex = '0';
@@ -1809,20 +1847,19 @@ export default {
                         }
                     }
                     else {
-                        this.navigateToMonth(true, groupIndex);
+                        this.navigateToMonth(event, true, groupIndex);
                     }
                     event.preventDefault();
                     break;
                 }
 
-                //right arrow
-                case 39: {
+                case 'ArrowRight': {
                     cellContent.tabIndex = '-1';
                     let nextCell = cell.nextElementSibling;
                     if (nextCell) {
                         let focusCell = nextCell.children[0];
                         if (DomHandler.hasClass(focusCell, 'p-disabled')) {
-                            this.navigateToMonth(false, groupIndex);
+                            this.navigateToMonth(event, false, groupIndex);
                         }
                         else {
                             focusCell.tabIndex = '0';
@@ -1830,33 +1867,85 @@ export default {
                         }
                     }
                     else {
-                        this.navigateToMonth(false, groupIndex);
+                        this.navigateToMonth(event, false, groupIndex);
                     }
                     event.preventDefault();
                     break;
                 }
 
-                //enter
-                //space
-                case 13:
-                case 32: {
+                case 'Enter':
+                case 'Space': {
                     this.onDateSelect(event, date);
                     event.preventDefault();
                     break;
                 }
 
-                //escape
-                case 27: {
+                case 'Escape': {
                     this.overlayVisible = false;
                     event.preventDefault();
                     break;
                 }
 
-                //tab
-                case 9: {
+                case 'Tab': {
                     if (!this.inline) {
                         this.trapFocus(event);
                     }
+                    break;
+                }
+
+                case 'Home': {
+                    cellContent.tabIndex = '-1';
+                    let currentRow = cell.parentElement;
+                    let focusCell = currentRow.children[0].children[0];
+                    if (DomHandler.hasClass(focusCell, 'p-disabled')) {
+                        this.navigateToMonth(event, true, groupIndex);
+                    }
+                    else {
+                        focusCell.tabIndex = '0';
+                        focusCell.focus();
+                    }
+
+                    event.preventDefault();
+                    break;
+                }
+
+                case 'End': {
+                    cellContent.tabIndex = '-1';
+                    let currentRow = cell.parentElement;
+                    let focusCell = currentRow.children[currentRow.children.length -1].children[0];
+                    if (DomHandler.hasClass(focusCell, 'p-disabled')) {
+                        this.navigateToMonth(event, false, groupIndex);
+                    }
+                    else {
+                        focusCell.tabIndex = '0';
+                        focusCell.focus();
+                    }
+
+                    event.preventDefault();
+                    break;
+                }
+
+                case 'PageUp': {
+                    cellContent.tabIndex = '-1';
+                    if (event.shiftKey) {
+                        this.navigationState = {backward: true};
+                        this.navBackward(event);
+                    }
+                    else this.navigateToMonth(event, true, groupIndex);
+
+                    event.preventDefault();
+                    break;
+                }
+
+                case 'PageDown': {
+                    cellContent.tabIndex = '-1';
+                    if (event.shiftKey) {
+                        this.navigationState = {backward: false};
+                        this.navForward(event);
+                    }
+                    else this.navigateToMonth(event, false, groupIndex);
+
+                    event.preventDefault();
                     break;
                 }
 
@@ -1865,7 +1954,7 @@ export default {
                 break;
             }
         },
-        navigateToMonth(prev, groupIndex) {
+        navigateToMonth(event, prev, groupIndex) {
             if (prev) {
                 if (this.numberOfMonths === 1 || (groupIndex === 0)) {
                     this.navigationState = {backward: true};
@@ -1895,14 +1984,13 @@ export default {
         onMonthCellKeydown(event, index) {
             const cell = event.currentTarget;
 
-            switch (event.which) {
-                //arrows
-                case 38:
-                case 40: {
+            switch (event.code) {
+                case 'ArrowUp':
+                case 'ArrowDown': {
                     cell.tabIndex = '-1';
                     var cells = cell.parentElement.children;
                     var cellIndex = DomHandler.index(cell);
-                    let nextCell = cells[event.which === 40 ? cellIndex + 3 : cellIndex -3];
+                    let nextCell = cells[event.code === 'ArrowDown' ? cellIndex + 3 : cellIndex -3];
                     if (nextCell) {
                         nextCell.tabIndex = '0';
                         nextCell.focus();
@@ -1911,8 +1999,7 @@ export default {
                     break;
                 }
 
-                //left arrow
-                case 37: {
+                case 'ArrowLeft': {
                     cell.tabIndex = '-1';
                     let prevCell = cell.previousElementSibling;
                     if (prevCell) {
@@ -1927,8 +2014,7 @@ export default {
                     break;
                 }
 
-                //right arrow
-                case 39: {
+                case 'ArrowRight': {
                     cell.tabIndex = '-1';
                     let nextCell = cell.nextElementSibling;
                     if (nextCell) {
@@ -1943,24 +2029,36 @@ export default {
                     break;
                 }
 
-                //enter
-                //space
-                case 13:
-                case 32: {
+                case 'PageUp': {
+                    if (event.shiftKey) return;
+                    this.navigationState = {backward: true};
+                    this.navBackward(event);
+
+                    break;
+                }
+
+                case 'PageDown': {
+                    if (event.shiftKey) return;
+                    this.navigationState = {backward: false};
+                    this.navForward(event);
+
+                    break;
+                }
+
+                case 'Enter':
+                case 'Space': {
                     this.onMonthSelect(event, index);
                     event.preventDefault();
                     break;
                 }
 
-                //escape
-                case 27: {
+                case 'Escape': {
                     this.overlayVisible = false;
                     event.preventDefault();
                     break;
                 }
 
-                //tab
-                case 9: {
+                case 'Tab': {
                     this.trapFocus(event);
                     break;
                 }
@@ -1973,14 +2071,13 @@ export default {
         onYearCellKeydown(event, index) {
             const cell = event.currentTarget;
 
-            switch (event.which) {
-                //arrows
-                case 38:
-                case 40: {
+            switch (event.code) {
+                case 'ArrowUp':
+                case 'ArrowDown':  {
                     cell.tabIndex = '-1';
                     var cells = cell.parentElement.children;
                     var cellIndex = DomHandler.index(cell);
-                    let nextCell = cells[event.which === 40 ? cellIndex + 2 : cellIndex - 2];
+                    let nextCell = cells[event.code === 'ArrowDown' ? cellIndex + 2 : cellIndex - 2];
                     if (nextCell) {
                         nextCell.tabIndex = '0';
                         nextCell.focus();
@@ -1989,8 +2086,7 @@ export default {
                     break;
                 }
 
-                //left arrow
-                case 37: {
+                case 'ArrowLeft': {
                     cell.tabIndex = '-1';
                     let prevCell = cell.previousElementSibling;
                     if (prevCell) {
@@ -2005,8 +2101,7 @@ export default {
                     break;
                 }
 
-                //right arrow
-                case 39: {
+                case 'ArrowRight': {
                     cell.tabIndex = '-1';
                     let nextCell = cell.nextElementSibling;
                     if (nextCell) {
@@ -2021,24 +2116,36 @@ export default {
                     break;
                 }
 
-                //enter
-                //space
-                case 13:
-                case 32: {
+                case 'PageUp': {
+                    if (event.shiftKey) return;
+                    this.navigationState = {backward: true};
+                    this.navBackward(event);
+
+                    break;
+                }
+
+                case 'PageDown': {
+                    if (event.shiftKey) return;
+                    this.navigationState = {backward: false};
+                    this.navForward(event);
+
+                    break;
+                }
+
+                case 'Enter':
+                case 'Space': {
                     this.onYearSelect(event, index);
                     event.preventDefault();
                     break;
                 }
 
-                //escape
-                case 27: {
+                case 'Escape': {
                     this.overlayVisible = false;
                     event.preventDefault();
                     break;
                 }
 
-                //tab
-                case 9: {
+                case 'Tab': {
                     this.trapFocus(event);
                     break;
                 }
@@ -2150,13 +2257,26 @@ export default {
                     let focusedIndex = focusableElements.indexOf(document.activeElement);
 
                     if (event.shiftKey) {
-                        if (focusedIndex == -1 || focusedIndex === 0)
+                        if (focusedIndex === -1 || focusedIndex === 0)
                             focusableElements[focusableElements.length - 1].focus();
                         else
                             focusableElements[focusedIndex - 1].focus();
                     }
                     else {
-                        if (focusedIndex == -1 || focusedIndex === (focusableElements.length - 1))
+                        if (focusedIndex === -1) {
+                            if (this.timeOnly) {
+                                focusableElements[0].focus();
+                            }
+                            else {
+                                let spanIndex = null;
+                                for (let i = 0; i < focusableElements.length; i++){
+                                    if (focusableElements[i].tagName === 'SPAN')
+                                        spanIndex = i;
+                                }
+                                focusableElements[spanIndex].focus();
+                            }
+                        }
+                        else if (focusedIndex === (focusableElements.length - 1))
                             focusableElements[0].focus();
                         else
                             focusableElements[focusedIndex + 1].focus();
@@ -2165,14 +2285,12 @@ export default {
             }
         },
         onContainerButtonKeydown(event) {
-            switch (event.which) {
-                //tab
-                case 9:
+            switch (event.code) {
+                case 'Tab':
                     this.trapFocus(event);
                 break;
 
-                //escape
-                case 27:
+                case 'Escape':
                     this.overlayVisible = false;
                     event.preventDefault();
                 break;
@@ -2215,16 +2333,19 @@ export default {
             event.target.value = this.formatValue(this.modelValue);
         },
         onKeyDown(event) {
-            if (event.keyCode === 40 && this.overlay) {
+            if (event.code === 'ArrowDown' && this.overlay) {
                 this.trapFocus(event);
             }
-            else if (event.keyCode === 27) {
+            else if (event.code === 'ArrowDown' && !this.overlay) {
+                this.overlayVisible = true;
+            }
+            else if (event.code === 'Escape') {
                 if (this.overlayVisible) {
                     this.overlayVisible = false;
                     event.preventDefault();
                 }
             }
-            else if (event.keyCode === 9) {
+            else if (event.code === 'Tab') {
                 if (this.overlay) {
                     DomHandler.getFocusableElements(this.overlay).forEach(el => el.tabIndex = '-1');
                 }
@@ -2252,6 +2373,17 @@ export default {
                     originalEvent: event,
                     target: this.$el
                 });
+            }
+        },
+        onOverlayKeyDown(event) {
+            switch (event.code) {
+                case 'Escape':
+                    this.input.focus();
+                    this.overlayVisible = false;
+                    break;
+
+                default:
+                    break;
             }
         },
         onOverlayMouseUp(event) {
@@ -2339,11 +2471,11 @@ export default {
         },
         containerClass() {
             return [
-                'p-calendar p-component p-inputwrapper', this.class,
+                'p-calendar p-component p-inputwrapper',
                 {
                     'p-calendar-w-btn': this.showIcon,
                     'p-calendar-timeonly': this.timeOnly,
-                    'p-calendar-disabled': this.$attrs.disabled,
+                    'p-calendar-disabled': this.disabled,
                     'p-inputwrapper-filled': this.modelValue,
                     'p-inputwrapper-focus': this.focused
                 }
@@ -2352,7 +2484,7 @@ export default {
         panelStyleClass() {
             return ['p-datepicker p-component', this.panelClass, {
                 'p-datepicker-inline': this.inline,
-                'p-disabled': this.$attrs.disabled,
+                'p-disabled': this.disabled,
                 'p-datepicker-timeonly': this.timeOnly,
                 'p-datepicker-multiple-month': this.numberOfMonths > 1,
                 'p-datepicker-monthpicker': (this.currentView === 'month'),
@@ -2521,7 +2653,10 @@ export default {
             return UniqueComponentId();
         },
         switchViewButtonDisabled() {
-            return this.numberOfMonths > 1 || this.$attrs.disabled;
+            return this.numberOfMonths > 1 || this.disabled;
+        },
+        panelId() {
+            return UniqueComponentId() + '_panel';
         }
     },
     components: {

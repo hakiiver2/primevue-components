@@ -1,13 +1,13 @@
 <template>
     <span :class="containerClass">
-        <INInputText ref="input" class="p-inputnumber-input" role="spinbutton" :id="inputId" :value="formattedValue" :aria-valuemin="min" :aria-valuemax="max" :aria-valuenow="modelValue" :readonly="readonly"
+        <INInputText ref="input" class="p-inputnumber-input" role="spinbutton" :id="inputId" :class="inputClass" :style="inputStyle" :value="formattedValue" :aria-valuemin="min" :aria-valuemax="max" :aria-valuenow="modelValue" :disabled="disabled" :readonly="readonly" :placeholder="placeholder" :aria-labelledby="ariaLabelledby" :aria-label="ariaLabel"
             @input="onUserInput" @keydown="onInputKeyDown" @keypress="onInputKeyPress" @paste="onPaste" @click="onInputClick" @focus="onInputFocus" @blur="onInputBlur" v-bind="inputProps"/>
         <span class="p-inputnumber-button-group" v-if="showButtons && buttonLayout === 'stacked'">
-            <INButton :class="upButtonClass" :icon="incrementButtonIcon" v-on="upButtonListeners" :disabled="disabled" v-bind="incrementButtonProps" />
-            <INButton :class="downButtonClass" :icon="decrementButtonIcon" v-on="downButtonListeners" :disabled="disabled" v-bind="decrementButtonProps" />
+            <INButton :class="upButtonClass" :icon="incrementButtonIcon" v-on="upButtonListeners" :disabled="disabled" :tabindex="-1" aria-hidden="true" v-bind="incrementButtonProps" />
+            <INButton :class="downButtonClass" :icon="decrementButtonIcon" v-on="downButtonListeners" :disabled="disabled" :tabindex="-1" aria-hidden="true" v-bind="decrementButtonProps" />
         </span>
-        <INButton :class="upButtonClass" :icon="incrementButtonIcon" v-on="upButtonListeners" v-if="showButtons && buttonLayout !== 'stacked'" :disabled="disabled" v-bind="incrementButtonProps" />
-        <INButton :class="downButtonClass" :icon="decrementButtonIcon" v-on="downButtonListeners" v-if="showButtons && buttonLayout !== 'stacked'" :disabled="disabled" v-bind="decrementButtonProps" />
+        <INButton :class="upButtonClass" :icon="incrementButtonIcon" v-on="upButtonListeners" v-if="showButtons && buttonLayout !== 'stacked'" :disabled="disabled" :tabindex="-1" aria-hidden="true" v-bind="incrementButtonProps" />
+        <INButton :class="downButtonClass" :icon="decrementButtonIcon" v-on="downButtonListeners" v-if="showButtons && buttonLayout !== 'stacked'" :disabled="disabled" :tabindex="-1" aria-hidden="true" v-bind="decrementButtonProps" />
     </span>
 </template>
 
@@ -115,10 +115,24 @@ export default {
             type: Boolean,
             default: false
         },
+        placeholder: {
+            type: String,
+            default: null
+        },
         inputId: null,
+        inputClass: null,
+        inputStyle: null,
         inputProps: null,
         incrementButtonProps: null,
-        decrementButtonProps: null
+        decrementButtonProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     numberFormat: null,
     _numeral: null,
@@ -976,7 +990,7 @@ export default {
         },
         
         upButtonClass() {
-            return ['p-inputnumber-button p-inputnumber-button-up', {
+            return ['p-inputnumber-button p-inputnumber-button-up', this.incrementButtonClass, {
                 'p-disabled': this.showButtons && this.max !== null && this.maxBoundry()
             }];
         },

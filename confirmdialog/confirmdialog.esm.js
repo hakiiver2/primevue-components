@@ -1,7 +1,7 @@
 import ConfirmationEventBus from 'primevue/confirmationeventbus';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
-import { resolveComponent, openBlock, createBlock, withCtx, normalizeClass, createCommentVNode, createElementVNode, toDisplayString } from 'vue';
+import { resolveComponent, openBlock, createBlock, withCtx, normalizeClass, createCommentVNode, createElementBlock, Fragment, createElementVNode, toDisplayString, resolveDynamicComponent } from 'vue';
 
 var script = {
     name: 'ConfirmDialog',
@@ -158,10 +158,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         : createCommentVNode("", true)
     ]),
     default: withCtx(() => [
-      createElementVNode("i", {
-        class: normalizeClass($options.iconClass)
-      }, null, 2),
-      createElementVNode("span", _hoisted_1, toDisplayString($options.message), 1)
+      (!_ctx.$slots.message)
+        ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+            createElementVNode("i", {
+              class: normalizeClass($options.iconClass)
+            }, null, 2),
+            createElementVNode("span", _hoisted_1, toDisplayString($options.message), 1)
+          ], 64))
+        : (openBlock(), createBlock(resolveDynamicComponent(_ctx.$slots.message), {
+            key: 1,
+            message: $data.confirmation
+          }, null, 8, ["message"]))
     ]),
     _: 1
   }, 8, ["visible", "header", "blockScroll", "position", "breakpoints", "closeOnEscape"]))

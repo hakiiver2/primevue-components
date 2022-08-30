@@ -1,4 +1,4 @@
-import { VNode } from 'vue';
+import { InputHTMLAttributes, VNode } from 'vue';
 import { ClassComponent, GlobalComponentConstructor } from '../ts-helpers';
 
 export interface ChipsAddEvent {
@@ -40,13 +40,37 @@ export interface ChipsProps {
      */
     separator?: string | undefined;
     /**
-     * Style class of the component input field.
+     * 	Identifier of the focus input to match a label defined for the chips.
      */
-    class?: any;
+    inputId?: string | undefined;
     /**
-     * Inline style of the component.
+     * Style class of the input field.
      */
-    style?: any;
+    inputClass?: any | undefined;
+    /**
+     * Inline style of the input field.
+     */
+    inputStyle?: any | undefined;
+    /**
+     * Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.
+     */
+    inputProps?: InputHTMLAttributes | undefined;
+    /**
+     * When present, it specifies that the element should be disabled.
+     */
+    disabled?: boolean | undefined;
+    /**
+     * Placeholder text for the input.
+     */
+    placeholder?: string | undefined;
+    /**
+     * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
+     */
+    'aria-labelledby'?: string | undefined;
+    /**
+     * Establishes a string value that labels the component.
+     */
+    'aria-label'?: string | undefined;
 }
 
 export interface ChipsSlots {
@@ -68,15 +92,15 @@ export declare type ChipsEmits = {
      * @param {*} value - New value.
      */
     'update:modelValue': (value: any[]) => void;
-     /**
-      * Callback to invoke when a chip is added.
-      * @param {ChipsAddEvent} event - Custom add event.
-      */
+    /**
+     * Callback to invoke when a chip is added.
+     * @param {ChipsAddEvent} event - Custom add event.
+     */
     'add': (event: ChipsAddEvent) => void;
-     /**
-      * Callback to invoke when a chip is removed.
-      * @param {ChipsRemoveEvent} event - Custom remove event.
-      */
+    /**
+     * Callback to invoke when a chip is removed.
+     * @param {ChipsRemoveEvent} event - Custom remove event.
+     */
     'remove': (event: ChipsRemoveEvent) => void;
 }
 

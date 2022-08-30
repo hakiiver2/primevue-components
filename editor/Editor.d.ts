@@ -24,6 +24,40 @@ export interface EditorTextChangeEvent {
     instance: any;
 }
 
+export interface EditorSelectionChangeEvent {
+    /**
+     * Current value as html.
+     */
+    htmlValue: string;
+    /**
+     * Current value as text.
+     */
+    textValue: any;
+    /**
+     * Representation of the selection boundaries.
+     */
+    range: any;
+    /**
+     * Representation of the previous selection boundaries.
+     */
+    oldRange: any;
+    /**
+     * Source of change. Will be either 'user' or 'api'.
+     */
+    source: string;
+    /**
+     * Text editor instance.
+     */
+    instance: any;
+}
+
+export interface EditorLoadEvent {
+    /**
+     * Text editor instance.
+     */
+    instance: any;
+}
+
 export interface EditorProps {
     /**
      * Value of the content.
@@ -45,6 +79,10 @@ export interface EditorProps {
      * Inline style of the container.
      */
     editorStyle?: any;
+    /**
+     * Modules configuration, see [here](https://quilljs.com/docs/modules/) for available options.
+     */
+    modules?: any;
 }
 
 export interface EditorSlots {
@@ -65,6 +103,16 @@ export declare type EditorEmits = {
      * @param {EditorTextChangeEvent} event - Custom text change event.
      */
     'text-change': (event: EditorTextChangeEvent) => void;
+    /**
+     * Callback to invoke when selection of the text changes.
+     * @param {EditorSelectionChangeEvent} event - Custom selection change event.
+     */
+    'selection-change': (event: EditorSelectionChangeEvent) => void;
+    /**
+     * Callback to invoke when the quill modules are loaded.
+     * @param {EditorLoadEvent} event - Custom load event.
+     */
+    'load': (event: EditorLoadEvent) => void;
 }
 
 declare class Editor extends ClassComponent<EditorProps, EditorSlots, EditorEmits> { }

@@ -169,6 +169,10 @@ this.primevue.column = (function () {
                 type: String,
                 default: null
             },
+            exportFooter: {
+                type: String,
+                default: null
+            },
             filterMatchMode: {
                 type: String,
                 default: null

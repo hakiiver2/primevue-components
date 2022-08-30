@@ -172,41 +172,37 @@ this.primevue.slider = (function (utils, vue) {
             },
             onKeyDown(event, index) {
                 this.handleIndex = index;
-                switch (event.which) {
-                    //down and left
-                    case 40:
-                    case 37:
+                switch (event.code) {
+                    case 'ArrowDown':
+                    case 'ArrowLeft':
                         this.decrementValue(event, index);
                         event.preventDefault();
                     break;
 
-                    //up and right
-                    case 38:
-                    case 39:
+                    case 'ArrowUp':
+                    case 'ArrowRight':
                         this.incrementValue(event, index);
                         event.preventDefault();
                     break;
 
-                    //page down
-                    case 34:
+                    case 'PageDown':
                         this.decrementValue(event, index, true);
                         event.preventDefault();
                     break;
 
-                    //page up
-                    case 33:
+                    case 'PageUp':
                         this.incrementValue(event, index, true);
                         event.preventDefault();
                     break;
 
-                    //home
-                    case 36:
+                    case 'Home':
                         this.updateModel(event, this.min);
+                        event.preventDefault();
                     break;
 
-                    //end
-                    case 35:
+                    case 'End':
                         this.updateModel(event, this.max);
+                        event.preventDefault();
                     break;
                 }
             },
@@ -380,7 +376,7 @@ this.primevue.slider = (function (utils, vue) {
               onTouchmove: _cache[6] || (_cache[6] = $event => ($options.onDrag($event))),
               onTouchend: _cache[7] || (_cache[7] = $event => ($options.onDragEnd($event))),
               onMousedown: _cache[8] || (_cache[8] = $event => ($options.onMouseDown($event, 0))),
-              onKeydown: _cache[9] || (_cache[9] = $event => ($options.onKeyDown($event))),
+              onKeydown: _cache[9] || (_cache[9] = $event => ($options.onKeyDown($event, 0))),
               tabindex: $props.tabindex,
               role: "slider",
               "aria-valuemin": $props.min,

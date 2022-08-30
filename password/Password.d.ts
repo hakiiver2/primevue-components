@@ -1,17 +1,13 @@
-import { VNode, InputHTMLAttributes } from 'vue';
+import { VNode, InputHTMLAttributes, HTMLAttributes } from 'vue';
 import { ClassComponent, GlobalComponentConstructor, Nullable } from '../ts-helpers';
 
-type PasswordAppendToType = 'body' | 'self' | string | undefined;
+type PasswordAppendToType = 'body' | 'self' | string | undefined | HTMLElement;
 
 export interface PasswordProps extends InputHTMLAttributes {
     /**
      * Value of the component.
      */
     modelValue?: Nullable<string>;
-    /**
-     * Identifier of the underlying input element.
-     */
-    inputId?: string | undefined;
     /**
      * Text to prompt password entry. Defaults to PrimeVue Locale configuration.
      */
@@ -64,25 +60,53 @@ export interface PasswordProps extends InputHTMLAttributes {
      */
     showIcon?: string | undefined;
     /**
+     * When present, it specifies that the component should be disabled.
+     */
+    disabled?: boolean | undefined;
+    /**
+     * Placeholder text for the input.
+     */
+    placeholder?: string | undefined;
+    /**
+     * Identifier of the underlying input element.
+     */
+    inputId?: string | undefined;
+    /**
      * Inline style of the input field.
      */
-    inputStyle?: any;
+    inputStyle?: any | undefined;
     /**
      * Style class of the input field.
      */
-    inputClass?: any;
+    inputClass?: any | undefined;
     /**
-     * Inline style of the component.
+     * Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.
      */
-    style?: any;
+    inputProps?: InputHTMLAttributes | undefined;
     /**
-     * Style class of the component input field.
+     * Identifier of the underlying overlay panel element.
      */
-    class?: any;
+    panelId?: string | undefined;
     /**
      * Style class of the overlay panel.
      */
-    panelClass?: any;
+    panelClass?: any | undefined;
+    /**
+     * Inline style of the overlay panel.
+     */
+    panelStyle?: any | undefined;
+    /**
+     * Uses to pass all properties of the HTMLDivElement to the overlay panel inside the component.
+     */
+    panelProps?: HTMLAttributes | undefined;
+    /**
+     * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
+     */
+    'aria-labelledby'?: string | undefined;
+    /**
+     * Establishes a string value that labels the component.
+     */
+    'aria-label'?: string | undefined;
 }
 
 export interface PasswordSlots {

@@ -8,6 +8,10 @@ var script = {
         value: null,
         modelValue: null,
         binary: Boolean,
+        name: {
+            type: String,
+            default: null
+        },
         trueValue: {
             type: null,
             default: true
@@ -20,8 +24,30 @@ var script = {
             type: Boolean,
             default: false
         },
+        readonly: {
+            type: Boolean,
+            default: false
+        },
+        required: {
+            type: Boolean,
+            default: false
+        },
+        tabindex: {
+            type: Number,
+            default: null
+        },
         inputId: null,
-        inputProps: null
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     data() {
         return {
@@ -75,7 +101,7 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = ["id", "value", "checked", "disabled"];
+const _hoisted_2 = ["id", "value", "name", "checked", "tabindex", "disabled", "readonly", "required", "aria-labelledby", "aria-label"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock("div", {
@@ -88,8 +114,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ref: "input",
         type: "checkbox",
         value: $props.value,
+        class: $props.inputClass,
+        style: $props.inputStyle,
+        name: $props.name,
         checked: $options.checked,
+        tabindex: $props.tabindex,
         disabled: $props.disabled,
+        readonly: $props.readonly,
+        required: $props.required,
+        "aria-labelledby": _ctx.ariaLabelledby,
+        "aria-label": _ctx.ariaLabel,
         onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
         onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event)))
       }, $props.inputProps), null, 16, _hoisted_2)

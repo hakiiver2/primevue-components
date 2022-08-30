@@ -166,10 +166,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         : vue.createCommentVNode("", true)
     ]),
     default: vue.withCtx(() => [
-      vue.createElementVNode("i", {
-        class: vue.normalizeClass($options.iconClass)
-      }, null, 2),
-      vue.createElementVNode("span", _hoisted_1, vue.toDisplayString($options.message), 1)
+      (!_ctx.$slots.message)
+        ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
+            vue.createElementVNode("i", {
+              class: vue.normalizeClass($options.iconClass)
+            }, null, 2),
+            vue.createElementVNode("span", _hoisted_1, vue.toDisplayString($options.message), 1)
+          ], 64))
+        : (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.$slots.message), {
+            key: 1,
+            message: $data.confirmation
+          }, null, 8, ["message"]))
     ]),
     _: 1
   }, 8, ["visible", "header", "blockScroll", "position", "breakpoints", "closeOnEscape"]))

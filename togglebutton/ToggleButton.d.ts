@@ -1,3 +1,4 @@
+import { InputHTMLAttributes } from 'vue';
 import { ClassComponent, GlobalComponentConstructor } from '../ts-helpers';
 
 type ToggleButtonType = 'left' | 'right' | undefined;
@@ -31,6 +32,38 @@ export interface ToggleButtonProps {
      * Default value is 'left'.
      */
     iconPos?: ToggleButtonType;
+    /**
+     * When present, it specifies that the element should be disabled.
+     */
+    disabled?: boolean | undefined;
+    /**
+     * Index of the element in tabbing order.
+     */
+    tabindex?: string | undefined;
+    /**
+     * 	Identifier of the focus input to match a label defined for the chips.
+     */
+    inputId?: string | undefined;
+    /**
+     * Style class of the input field.
+     */
+    inputClass?: any | undefined;
+    /**
+     * Inline style of the input field.
+     */
+    inputStyle?: any | undefined;
+    /**
+     * Uses to pass all properties of the HTMLInputElement to the focusable input element inside the component.
+     */
+    inputProps?: InputHTMLAttributes | undefined;
+    /**
+     * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
+     */
+    'aria-labelledby'?: string | undefined;
+    /**
+     * Establishes a string value that labels the component.
+     */
+    'aria-label'?: string | undefined;
 }
 
 export interface ToggleButtonSlots {

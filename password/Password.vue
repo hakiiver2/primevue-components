@@ -1,13 +1,15 @@
 <template>
     <div :class="containerClass">
-        <PInputText ref="input" :id="inputId" :type="inputType" :value="modelValue" @input="onInput" @focus="onFocus" @blur="onBlur" @keyup="onKeyUp" v-bind="inputProps" />
+        <PInputText ref="input" :id="inputId" :type="inputType" :class="inputClass" :style="inputStyle" :value="modelValue" :aria-labelledby="ariaLabelledby" :aria-label="ariaLabel"
+            :aria-controls="(panelProps&&panelProps.id)||panelId||panelUniqueId" :aria-expanded="overlayVisible" :aria-haspopup="true" :placeholder="placeholder"
+            @input="onInput" @focus="onFocus" @blur="onBlur" @keyup="onKeyUp" v-bind="inputProps" />
         <i v-if="toggleMask" :class="toggleIconClass" @click="onMaskToggle" />
         <span class="p-hidden-accessible" aria-live="polite">
             {{infoText}}
         </span>
         <Portal :appendTo="appendTo">
             <transition name="p-connected-overlay" @enter="onOverlayEnter" @leave="onOverlayLeave" @after-leave="onOverlayAfterLeave">
-                <div :ref="overlayRef" :class="panelStyleClass" v-if="overlayVisible" @click="onOverlayClick">
+                <div :ref="overlayRef" :id="panelId||panelUniqueId" :class="panelStyleClass" :style="panelStyle" v-if="overlayVisible" @click="onOverlayClick" v-bind="panelProps">
                     <slot name="header"></slot>
                     <slot name="content">
                         <div class="p-password-meter">
@@ -23,7 +25,7 @@
 </template>
 
 <script>
-import {ConnectedOverlayScrollHandler,DomHandler,ZIndexUtils} from 'primevue/utils';
+import {ConnectedOverlayScrollHandler,DomHandler,ZIndexUtils,UniqueComponentId} from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import InputText from 'primevue/inputtext';
 import Portal from 'primevue/portal';
@@ -33,10 +35,6 @@ export default {
     emits: ['update:modelValue', 'change', 'focus', 'blur'],
     props: {
         modelValue: String,
-        inputId: {
-            type: String,
-            default: null
-        },
         promptLabel: {
             type: String,
             default: null
@@ -81,12 +79,30 @@ export default {
             type: String,
             default: 'pi pi-eye'
         },
-        panelClass: String,
         disabled: {
             type: Boolean,
             default: false
         },
-        inputProps: null
+        placeholder: {
+            type: String,
+            default: null
+        },
+        inputId: null,
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        panelId: null,
+        panelClass: null,
+        panelStyle: null,
+        panelProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     data() {
         return {
@@ -312,6 +328,9 @@ export default {
         },
         promptText() {
             return this.promptLabel || this.$primevue.config.locale.passwordPrompt;
+        },
+        panelUniqueId() {
+            return UniqueComponentId() + '_panel';
         }
     },
     components: {

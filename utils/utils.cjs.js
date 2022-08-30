@@ -5,19 +5,25 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var DomHandler = {
 
     innerWidth(el) {
-        let width = el.offsetWidth;
-        let style = getComputedStyle(el);
+        if (el) {
+            let width = el.offsetWidth;
+            let style = getComputedStyle(el);
 
-        width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-        return width;
+            width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+            return width;
+        }
+        return 0;
     },
 
     width(el) {
-        let width = el.offsetWidth;
-        let style = getComputedStyle(el);
+        if (el) {
+            let width = el.offsetWidth;
+            let style = getComputedStyle(el);
 
-        width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-        return width;
+            width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+            return width;
+        }
+        return 0;
     },
 
     getWindowScrollTop() {
@@ -41,9 +47,7 @@ var DomHandler = {
 
             return width;
         }
-        else {
-            return 0;
-        }
+        return 0;
     },
 
     getOuterHeight(el, margin) {
@@ -57,9 +61,7 @@ var DomHandler = {
 
             return height;
         }
-        else {
-            return 0;
-        }
+        return 0;
     },
 
     getClientHeight(el, margin) {
@@ -72,9 +74,8 @@ var DomHandler = {
             }
 
             return height;
-        } else {
-            return 0;
         }
+        return 0;
     },
 
     getViewport() {
@@ -85,56 +86,71 @@ var DomHandler = {
             w = win.innerWidth || e.clientWidth || g.clientWidth,
             h = win.innerHeight || e.clientHeight || g.clientHeight;
 
-        return {width: w, height: h};
+        return { width: w, height: h };
     },
 
     getOffset(el) {
-        var rect = el.getBoundingClientRect();
+        if (el) {
+            let rect = el.getBoundingClientRect();
+
+            return {
+                top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
+                left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0),
+            };
+        }
 
         return {
-            top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
-            left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0),
+            top: 'auto',
+            left: 'auto'
         };
     },
 
     index(element) {
-        let children = element.parentNode.childNodes;
-        let num = 0;
-        for (var i = 0; i < children.length; i++) {
-            if (children[i] === element) return num;
-            if (children[i].nodeType === 1) num++;
+        if (element) {
+            let children = element.parentNode.childNodes;
+            let num = 0;
+            for (let i = 0; i < children.length; i++) {
+                if (children[i] === element) return num;
+                if (children[i].nodeType === 1) num++;
+            }
         }
         return -1;
     },
 
     addMultipleClasses(element, className) {
-        if (element.classList) {
-            let styles = className.split(' ');
-            for (let i = 0; i < styles.length; i++) {
-                element.classList.add(styles[i]);
-            }
+        if (element && className) {
+            if (element.classList) {
+                let styles = className.split(' ');
+                for (let i = 0; i < styles.length; i++) {
+                    element.classList.add(styles[i]);
+                }
 
-        }
-        else {
-            let styles = className.split(' ');
-            for (let i = 0; i < styles.length; i++) {
-                element.className += ' ' + styles[i];
+            }
+            else {
+                let styles = className.split(' ');
+                for (let i = 0; i < styles.length; i++) {
+                    element.className += ' ' + styles[i];
+                }
             }
         }
     },
 
     addClass(element, className) {
-        if (element.classList)
-            element.classList.add(className);
-        else
-            element.className += ' ' + className;
+        if (element && className) {
+            if (element.classList)
+                element.classList.add(className);
+            else
+                element.className += ' ' + className;
+        }
     },
 
     removeClass(element, className) {
-        if (element.classList)
-            element.classList.remove(className);
-        else
-            element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        if (element && className) {
+            if (element.classList)
+                element.classList.remove(className);
+            else
+                element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
     },
 
     hasClass(element, className) {
@@ -149,99 +165,112 @@ var DomHandler = {
     },
 
     find(element, selector) {
-        return element.querySelectorAll(selector);
+        return element ? element.querySelectorAll(selector) : [];
     },
 
     findSingle(element, selector) {
-        return element.querySelector(selector);
+        if (element) {
+            return element.querySelector(selector);
+        }
+        return null;
     },
 
     getHeight(el) {
-        let height = el.offsetHeight;
-        let style = getComputedStyle(el);
+        if (el) {
+            let height = el.offsetHeight;
+            let style = getComputedStyle(el);
 
-        height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+            height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
 
-        return height;
+            return height;
+        }
+        return 0;
     },
 
     getWidth(el) {
-        let width = el.offsetWidth;
-        let style = getComputedStyle(el);
+        if (el) {
+            let width = el.offsetWidth;
+            let style = getComputedStyle(el);
 
-        width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+            width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
 
-        return width;
+            return width;
+        }
+        return 0;
     },
 
     absolutePosition(element, target) {
-        let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
-        let elementOuterHeight = elementDimensions.height;
-        let elementOuterWidth = elementDimensions.width;
-        let targetOuterHeight = target.offsetHeight;
-        let targetOuterWidth = target.offsetWidth;
-        let targetOffset = target.getBoundingClientRect();
-        let windowScrollTop = this.getWindowScrollTop();
-        let windowScrollLeft = this.getWindowScrollLeft();
-        let viewport = this.getViewport();
-        let top, left;
+        if (element) {
+            let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
+            let elementOuterHeight = elementDimensions.height;
+            let elementOuterWidth = elementDimensions.width;
+            let targetOuterHeight = target.offsetHeight;
+            let targetOuterWidth = target.offsetWidth;
+            let targetOffset = target.getBoundingClientRect();
+            let windowScrollTop = this.getWindowScrollTop();
+            let windowScrollLeft = this.getWindowScrollLeft();
+            let viewport = this.getViewport();
+            let top, left;
 
-        if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
-            top = targetOffset.top + windowScrollTop - elementOuterHeight;
-            element.style.transformOrigin = 'bottom';
+            if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
+                top = targetOffset.top + windowScrollTop - elementOuterHeight;
+                element.style.transformOrigin = 'bottom';
 
-            if (top < 0) {
-                top = windowScrollTop;
+                if (top < 0) {
+                    top = windowScrollTop;
+                }
             }
-        }
-        else {
-            top = targetOuterHeight + targetOffset.top + windowScrollTop;
-            element.style.transformOrigin = 'top';
-        }
+            else {
+                top = targetOuterHeight + targetOffset.top + windowScrollTop;
+                element.style.transformOrigin = 'top';
+            }
 
-        if (targetOffset.left + elementOuterWidth > viewport.width)
-            left = Math.max(0, targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth);
-        else
-            left = targetOffset.left + windowScrollLeft;
+            if (targetOffset.left + elementOuterWidth > viewport.width)
+                left = Math.max(0, targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth);
+            else
+                left = targetOffset.left + windowScrollLeft;
 
-        element.style.top = top + 'px';
-        element.style.left = left + 'px';
+            element.style.top = top + 'px';
+            element.style.left = left + 'px';
+        }
     },
 
     relativePosition(element, target) {
-        let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
-        const targetHeight = target.offsetHeight;
-        const targetOffset = target.getBoundingClientRect();
-        const viewport = this.getViewport();
-        let top, left;
+        if (element) {
+            let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
+            const targetHeight = target.offsetHeight;
+            const targetOffset = target.getBoundingClientRect();
+            const viewport = this.getViewport();
+            let top, left;
 
-        if ((targetOffset.top + targetHeight + elementDimensions.height) > viewport.height) {
-            top = -1 * (elementDimensions.height);
-            element.style.transformOrigin = 'bottom';
-            if (targetOffset.top + top < 0) {
-                top = -1 * targetOffset.top;
+            if ((targetOffset.top + targetHeight + elementDimensions.height) > viewport.height) {
+                top = -1 * (elementDimensions.height);
+                element.style.transformOrigin = 'bottom';
+                if (targetOffset.top + top < 0) {
+                    top = -1 * targetOffset.top;
+                }
             }
-        }
-        else {
-            top = targetHeight;
-            element.style.transformOrigin = 'top';
-        }
+            else {
+                top = targetHeight;
+                element.style.transformOrigin = 'top';
+            }
 
-        if (elementDimensions.width > viewport.width) {
-            // element wider then viewport and cannot fit on screen (align at left side of viewport)
-            left = targetOffset.left * -1;
-        }
-        else if ((targetOffset.left + elementDimensions.width) > viewport.width) {
-            // element wider then viewport but can be fit on screen (align at right side of viewport)
-            left = (targetOffset.left + elementDimensions.width - viewport.width) * -1;
-        }
-        else {
-            // element fits on screen (align with target)
-            left = 0;
-        }
+            if (elementDimensions.width > viewport.width) {
+                // element wider then viewport and cannot fit on screen (align at left side of viewport)
+                left = targetOffset.left * -1;
+            }
+            else if ((targetOffset.left + elementDimensions.width) > viewport.width) {
+                // element wider then viewport but can be fit on screen (align at right side of viewport)
+                left = (targetOffset.left + elementDimensions.width - viewport.width) * -1;
+            }
+            else {
+                // element fits on screen (align with target)
+                left = 0;
+            }
 
-        element.style.top = top + 'px';
-        element.style.left = left + 'px';
+            element.style.top = top + 'px';
+            element.style.left = left + 'px';
+        }
     },
 
     getParents(element, parents = []) {
@@ -281,71 +310,84 @@ var DomHandler = {
     },
 
     getHiddenElementOuterHeight(element) {
-        element.style.visibility = 'hidden';
-        element.style.display = 'block';
-        let elementHeight = element.offsetHeight;
-        element.style.display = 'none';
-        element.style.visibility = 'visible';
+        if (element) {
+            element.style.visibility = 'hidden';
+            element.style.display = 'block';
+            let elementHeight = element.offsetHeight;
+            element.style.display = 'none';
+            element.style.visibility = 'visible';
 
-        return elementHeight;
+            return elementHeight;
+        }
+        return 0;
     },
 
     getHiddenElementOuterWidth(element) {
-        element.style.visibility = 'hidden';
-        element.style.display = 'block';
-        let elementWidth = element.offsetWidth;
-        element.style.display = 'none';
-        element.style.visibility = 'visible';
+        if (element) {
+            element.style.visibility = 'hidden';
+            element.style.display = 'block';
+            let elementWidth = element.offsetWidth;
+            element.style.display = 'none';
+            element.style.visibility = 'visible';
 
-        return elementWidth;
+            return elementWidth;
+        }
+        return 0;
     },
 
     getHiddenElementDimensions(element) {
-        var dimensions = {};
-        element.style.visibility = 'hidden';
-        element.style.display = 'block';
-        dimensions.width = element.offsetWidth;
-        dimensions.height = element.offsetHeight;
-        element.style.display = 'none';
-        element.style.visibility = 'visible';
+        if (element) {
+            let dimensions = {};
+            element.style.visibility = 'hidden';
+            element.style.display = 'block';
+            dimensions.width = element.offsetWidth;
+            dimensions.height = element.offsetHeight;
+            element.style.display = 'none';
+            element.style.visibility = 'visible';
 
-        return dimensions;
+            return dimensions;
+        }
+        return 0;
     },
 
     fadeIn(element, duration) {
-        element.style.opacity = 0;
+        if (element) {
+            element.style.opacity = 0;
 
-        var last = +new Date();
-        var opacity = 0;
-        var tick = function () {
-            opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
-            element.style.opacity = opacity;
-            last = +new Date();
+            let last = +new Date();
+            let opacity = 0;
+            let tick = function () {
+                opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
+                element.style.opacity = opacity;
+                last = +new Date();
 
-            if (+opacity < 1) {
-                (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
-            }
-        };
+                if (+opacity < 1) {
+                    (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+                }
+            };
 
-        tick();
+            tick();
+        }
     },
 
     fadeOut(element, ms) {
-        var opacity = 1,
-            interval = 50,
-            duration = ms,
-            gap = interval / duration;
+        if (element) {
+            let opacity = 1,
+                interval = 50,
+                duration = ms,
+                gap = interval / duration;
 
-        let fading = setInterval(() => {
-            opacity -= gap;
+            let fading = setInterval(() => {
+                opacity -= gap;
 
-            if (opacity <= 0) {
-                opacity = 0;
-                clearInterval(fading);
-            }
+                if (opacity <= 0) {
+                    opacity = 0;
+                    clearInterval(fading);
+                }
 
-            element.style.opacity = opacity;
-        }, interval);
+                element.style.opacity = opacity;
+            }, interval);
+        }
     },
 
     getUserAgent() {
@@ -353,9 +395,9 @@ var DomHandler = {
     },
 
     appendChild(element, target) {
-        if(this.isElement(target))
+        if (this.isElement(target))
             target.appendChild(element);
-        else if(target.el && target.elElement)
+        else if (target.el && target.elElement)
             target.elElement.appendChild(element);
         else
             throw new Error('Cannot append ' + target + ' to ' + element);
@@ -382,14 +424,14 @@ var DomHandler = {
     },
 
     clearSelection() {
-        if(window.getSelection) {
-            if(window.getSelection().empty) {
+        if (window.getSelection) {
+            if (window.getSelection().empty) {
                 window.getSelection().empty();
-            } else if(window.getSelection().removeAllRanges && window.getSelection().rangeCount > 0 && window.getSelection().getRangeAt(0).getClientRects().length > 0) {
+            } else if (window.getSelection().removeAllRanges && window.getSelection().rangeCount > 0 && window.getSelection().getRangeAt(0).getClientRects().length > 0) {
                 window.getSelection().removeAllRanges();
             }
         }
-        else if(document['selection'] && document['selection'].empty) {
+        else if (document['selection'] && document['selection'].empty) {
             try {
                 document['selection'].empty();
             } catch(error) {
@@ -399,7 +441,7 @@ var DomHandler = {
     },
 
     calculateScrollbarWidth() {
-        if(this.calculatedScrollbarWidth != null)
+        if (this.calculatedScrollbarWidth != null)
             return this.calculatedScrollbarWidth;
 
         let scrollDiv = document.createElement("div");
@@ -415,7 +457,7 @@ var DomHandler = {
     },
 
     getBrowser() {
-        if(!this.browser) {
+        if (!this.browser) {
             let matched = this.resolveUserAgent();
             this.browser = {};
 
@@ -450,24 +492,30 @@ var DomHandler = {
     },
 
     isVisible(element) {
-        return element.offsetParent != null;
+        return element && element.offsetParent != null;
     },
 
     invokeElementMethod(element, methodName, args) {
         (element)[methodName].apply(element, args);
     },
 
+    isExist(element) {
+        return element !== null && typeof element !== 'undefined' && element.nodeName && element.parentNode;
+    },
+
     isClient() {
         return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
     },
 
-    getFocusableElements(element) {
-        let focusableElements = this.find(element, `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
-                [href][clientHeight][clientWidth]:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
-                input:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]), select:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
-                textarea:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]), [tabIndex]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
-                [contenteditable]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])`
-            );
+    getFocusableElements(element, selector = '') {
+        let focusableElements = this.find(element, `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector},
+                [href][clientHeight][clientWidth]:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector},
+                input:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector},
+                select:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector},
+                textarea:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector},
+                [tabIndex]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector},
+                [contenteditable]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector}`
+        );
 
         let visibleFocusableElements = [];
         for (let focusableElement of focusableElements) {
@@ -478,8 +526,8 @@ var DomHandler = {
         return visibleFocusableElements;
     },
 
-    getFirstFocusableElement(element) {
-        const focusableElements = this.getFocusableElements(element);
+    getFirstFocusableElement(element, selector) {
+        const focusableElements = this.getFocusableElements(element, selector);
         return focusableElements.length > 0 ? focusableElements[0] : null;
     },
 
@@ -793,8 +841,30 @@ var ObjectUtils = {
 
     isNotEmpty(value) {
         return !this.isEmpty(value);
-    }
+    },
 
+    isPrintableCharacter(char = '') {
+        return this.isNotEmpty(char) && char.length === 1 && char.match(/\S| /);
+    },
+
+    /**
+     * Firefox-v103 does not currently support the "findLastIndex" method. It is stated that this method will be supported with Firefox-v104.
+     * https://caniuse.com/mdn-javascript_builtins_array_findlastindex
+     */
+    findLastIndex(arr, callback) {
+        let index = -1;
+
+        if (this.isNotEmpty(arr)) {
+            try {
+                index = arr.findLastIndex(callback);
+            }
+            catch {
+                index = arr.lastIndexOf([...arr].reverse().find(callback));
+            }
+        }
+
+        return index;
+    }
 };
 
 function handler() {

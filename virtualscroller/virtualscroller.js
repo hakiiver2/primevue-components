@@ -61,6 +61,10 @@ this.primevue.virtualscroller = (function (vue) {
             showLoader: {
                 type: Boolean,
                 default: false
+            },
+            tabindex: {
+                type: Number,
+                default: 0
             }
         },
         data() {
@@ -540,7 +544,8 @@ this.primevue.virtualscroller = (function (vue) {
         }
     };
 
-    const _hoisted_1 = {
+    const _hoisted_1 = ["tabindex"];
+    const _hoisted_2 = {
       key: 1,
       class: "p-virtualscroller-loading-icon pi pi-spinner pi-spin"
     };
@@ -551,7 +556,7 @@ this.primevue.virtualscroller = (function (vue) {
             key: 0,
             ref: $options.elementRef,
             class: vue.normalizeClass($options.containerClass),
-            tabindex: 0,
+            tabindex: $props.tabindex,
             style: vue.normalizeStyle($props.style),
             onScroll: _cache[0] || (_cache[0] = (...args) => ($options.onScroll && $options.onScroll(...args)))
           }, [
@@ -604,10 +609,10 @@ this.primevue.virtualscroller = (function (vue) {
                           options: $options.getLoaderOptions(index, $options.isBoth() && { numCols: _ctx.d_numItemsInViewport.cols })
                         })
                       }), 128))
-                    : (vue.openBlock(), vue.createElementBlock("i", _hoisted_1))
+                    : (vue.openBlock(), vue.createElementBlock("i", _hoisted_2))
                 ], 2))
               : vue.createCommentVNode("", true)
-          ], 38))
+          ], 46, _hoisted_1))
         : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
             vue.renderSlot(_ctx.$slots, "default"),
             vue.renderSlot(_ctx.$slots, "content", {

@@ -1,4 +1,4 @@
-import { ObjectUtils } from 'primevue/utils';
+import { DomHandler, ObjectUtils } from 'primevue/utils';
 import Ripple from 'primevue/ripple';
 import { resolveDirective, openBlock, createElementBlock, normalizeClass, Fragment, renderList, withDirectives, renderSlot, createElementVNode, toDisplayString } from 'vue';
 
@@ -12,10 +12,36 @@ var script = {
         optionValue: null,
         optionDisabled: null,
 		multiple: Boolean,
+        unselectable: {
+            type: Boolean,
+            default: true
+        },
         disabled: Boolean,
-        dataKey: null
+        dataKey: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        }
+    },
+    data() {
+        return {
+            focusedIndex: 0
+        }
+    },
+    mounted() {
+        this.defaultTabIndexes();
     },
     methods: {
+        defaultTabIndexes() {
+            let opts = DomHandler.find(this.$refs.container, '.p-button');
+            let firstHighlight = DomHandler.findSingle(this.$refs.container, '.p-highlight');
+
+            for (let i = 0; i < opts.length; i++) {
+                if ((DomHandler.hasClass(opts[i], 'p-highlight') && ObjectUtils.equals(opts[i], firstHighlight)) || (firstHighlight === null && i == 0)) {
+                    this.focusedIndex = i;
+                }
+            }
+        },
         getOptionLabel(option) {
             return this.optionLabel ? ObjectUtils.resolveFieldData(option, this.optionLabel) : option;
         },
@@ -28,16 +54,20 @@ var script = {
         isOptionDisabled(option) {
             return this.optionDisabled ? ObjectUtils.resolveFieldData(option, this.optionDisabled) : false;
         },
-        onOptionSelect(event, option) {
+        onOptionSelect(event, option, index) {
             if (this.disabled || this.isOptionDisabled(option)) {
                 return;
             }
 
             let selected = this.isSelected(option);
+            if (selected && !this.unselectable) {
+                return;
+            }
+
             let optionValue = this.getOptionValue(option);
             let newValue;
 
-            if(this.multiple) {
+            if (this.multiple) {
                 if (selected)
                     newValue = this.modelValue.filter(val => !ObjectUtils.equals(val, optionValue, this.equalityKey));
                 else
@@ -47,15 +77,9 @@ var script = {
                 newValue = selected ? null : optionValue;
             }
 
+            this.focusedIndex = index;
             this.$emit('update:modelValue', newValue);
             this.$emit('change', {event: event, value: newValue});
-        },
-        onKeydown(event, option) {
-            //space
-            if (event.which === 32) {
-                this.onOptionSelect(event, option);
-                event.preventDefault();
-            }
         },
         isSelected(option) {
             let selected = false;
@@ -77,11 +101,56 @@ var script = {
 
             return selected;
         },
+        onKeydown(event, option, index) {
+            switch (event.code) {
+                case 'Space': {
+                    this.onOptionSelect(event, option, index);
+                    event.preventDefault();
+                    break;
+                }
+
+                case 'ArrowDown':
+                case 'ArrowRight': {
+                    this.changeTabIndexes(event, 'next');
+                    event.preventDefault();
+                    break;
+                }
+
+                case 'ArrowUp':
+                case 'ArrowLeft': {
+                    this.changeTabIndexes(event, 'prev');
+                    event.preventDefault();
+                    break;
+                }
+            }
+        },
+        changeTabIndexes(event, direction) {
+            let firstTabableChild, index;
+            for (let i = 0; i <= this.$refs.container.children.length - 1; i++) {
+                if (this.$refs.container.children[i].getAttribute('tabindex') === '0')
+                    firstTabableChild = {elem: this.$refs.container.children[i], index: i};
+            }
+
+            if (direction === 'prev') {
+                if (firstTabableChild.index === 0) index = this.$refs.container.children.length - 1;
+                else index = firstTabableChild.index - 1;
+            }
+            else {
+                if (firstTabableChild.index === this.$refs.container.children.length - 1) index = 0;
+                else index = firstTabableChild.index + 1;
+            }
+
+            this.focusedIndex = index;
+            this.$refs.container.children[index].focus();
+        },
         onFocus(event) {
             this.$emit('focus', event);
         },
-        onBlur(event) {
-            this.$emit('blur', event);
+        onBlur(event, option) {
+            if (event.target && event.relatedTarget && event.target.parentElement !== event.relatedTarget.parentElement) {
+                this.defaultTabIndexes();
+            }
+            this.$emit('blur', event, option);
         },
         getButtonClass(option) {
             return ['p-button p-component', {
@@ -105,40 +174,44 @@ var script = {
     }
 };
 
-const _hoisted_1 = ["aria-label", "aria-pressed", "tabindex", "onClick", "onKeydown"];
-const _hoisted_2 = { class: "p-button-label" };
+const _hoisted_1 = ["aria-labelledby"];
+const _hoisted_2 = ["tabindex", "aria-label", "role", "aria-checked", "aria-disabled", "onClick", "onKeydown", "onBlur"];
+const _hoisted_3 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return (openBlock(), createElementBlock("div", {
+    ref: "container",
     class: normalizeClass($options.containerClass),
-    role: "group"
+    role: "group",
+    "aria-labelledby": _ctx.ariaLabelledby
   }, [
     (openBlock(true), createElementBlock(Fragment, null, renderList($props.options, (option, i) => {
       return withDirectives((openBlock(), createElementBlock("div", {
         key: $options.getOptionRenderKey(option),
+        tabindex: i === $data.focusedIndex ? '0' : '-1',
         "aria-label": $options.getOptionLabel(option),
-        role: "button",
-        "aria-pressed": $options.isSelected(option),
-        class: normalizeClass($options.getButtonClass(option)),
-        tabindex: $options.isOptionDisabled(option) ? null : '0',
-        onClick: $event => ($options.onOptionSelect($event, option)),
-        onKeydown: $event => ($options.onKeydown($event, option)),
+        role: $props.multiple ? 'checkbox' : 'radio',
+        "aria-checked": $options.isSelected(option),
+        "aria-disabled": $props.optionDisabled,
+        class: normalizeClass($options.getButtonClass(option, i)),
+        onClick: $event => ($options.onOptionSelect($event, option, i)),
+        onKeydown: $event => ($options.onKeydown($event, option, i)),
         onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
-        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event)))
+        onBlur: $event => ($options.onBlur($event, option))
       }, [
         renderSlot(_ctx.$slots, "option", {
           option: option,
           index: i
         }, () => [
-          createElementVNode("span", _hoisted_2, toDisplayString($options.getOptionLabel(option)), 1)
+          createElementVNode("span", _hoisted_3, toDisplayString($options.getOptionLabel(option)), 1)
         ])
-      ], 42, _hoisted_1)), [
+      ], 42, _hoisted_2)), [
         [_directive_ripple]
       ])
     }), 128))
-  ], 2))
+  ], 10, _hoisted_1))
 }
 
 script.render = render;

@@ -1,4 +1,4 @@
-import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
+import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler, UniqueComponentId } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import InputText from 'primevue/inputtext';
 import Portal from 'primevue/portal';
@@ -9,10 +9,6 @@ var script = {
     emits: ['update:modelValue', 'change', 'focus', 'blur'],
     props: {
         modelValue: String,
-        inputId: {
-            type: String,
-            default: null
-        },
         promptLabel: {
             type: String,
             default: null
@@ -57,12 +53,30 @@ var script = {
             type: String,
             default: 'pi pi-eye'
         },
-        panelClass: String,
         disabled: {
             type: Boolean,
             default: false
         },
-        inputProps: null
+        placeholder: {
+            type: String,
+            default: null
+        },
+        inputId: null,
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        panelId: null,
+        panelClass: null,
+        panelStyle: null,
+        panelProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     data() {
         return {
@@ -288,6 +302,9 @@ var script = {
         },
         promptText() {
             return this.promptLabel || this.$primevue.config.locale.passwordPrompt;
+        },
+        panelUniqueId() {
+            return UniqueComponentId() + '_panel';
         }
     },
     components: {
@@ -300,8 +317,9 @@ const _hoisted_1 = {
   class: "p-hidden-accessible",
   "aria-live": "polite"
 };
-const _hoisted_2 = { class: "p-password-meter" };
-const _hoisted_3 = { class: "p-password-info" };
+const _hoisted_2 = ["id"];
+const _hoisted_3 = { class: "p-password-meter" };
+const _hoisted_4 = { class: "p-password-info" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PInputText = resolveComponent("PInputText");
@@ -314,12 +332,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ref: "input",
       id: $props.inputId,
       type: $options.inputType,
+      class: $props.inputClass,
+      style: $props.inputStyle,
       value: $props.modelValue,
+      "aria-labelledby": _ctx.ariaLabelledby,
+      "aria-label": _ctx.ariaLabel,
+      "aria-controls": ($props.panelProps&&$props.panelProps.id)||$props.panelId||$options.panelUniqueId,
+      "aria-expanded": $data.overlayVisible,
+      "aria-haspopup": true,
+      placeholder: $props.placeholder,
       onInput: $options.onInput,
       onFocus: $options.onFocus,
       onBlur: $options.onBlur,
       onKeyup: $options.onKeyUp
-    }, $props.inputProps), null, 16, ["id", "type", "value", "onInput", "onFocus", "onBlur", "onKeyup"]),
+    }, $props.inputProps), null, 16, ["id", "type", "class", "style", "value", "aria-labelledby", "aria-label", "aria-controls", "aria-expanded", "placeholder", "onInput", "onFocus", "onBlur", "onKeyup"]),
     ($props.toggleMask)
       ? (openBlock(), createElementBlock("i", {
           key: 0,
@@ -338,24 +364,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, {
           default: withCtx(() => [
             ($data.overlayVisible)
-              ? (openBlock(), createElementBlock("div", {
+              ? (openBlock(), createElementBlock("div", mergeProps({
                   key: 0,
                   ref: $options.overlayRef,
-                  class: normalizeClass($options.panelStyleClass),
+                  id: $props.panelId||$options.panelUniqueId,
+                  class: $options.panelStyleClass,
+                  style: $props.panelStyle,
                   onClick: _cache[1] || (_cache[1] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args)))
-                }, [
+                }, $props.panelProps), [
                   renderSlot(_ctx.$slots, "header"),
                   renderSlot(_ctx.$slots, "content", {}, () => [
-                    createElementVNode("div", _hoisted_2, [
+                    createElementVNode("div", _hoisted_3, [
                       createElementVNode("div", {
                         class: normalizeClass($options.strengthClass),
                         style: normalizeStyle({'width': $data.meter ? $data.meter.width : ''})
                       }, null, 6)
                     ]),
-                    createElementVNode("div", _hoisted_3, toDisplayString($data.infoText), 1)
+                    createElementVNode("div", _hoisted_4, toDisplayString($data.infoText), 1)
                   ]),
                   renderSlot(_ctx.$slots, "footer")
-                ], 2))
+                ], 16, _hoisted_2))
               : createCommentVNode("", true)
           ]),
           _: 3

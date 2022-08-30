@@ -102,10 +102,24 @@ var script = {
             type: Boolean,
             default: false
         },
+        placeholder: {
+            type: String,
+            default: null
+        },
         inputId: null,
+        inputClass: null,
+        inputStyle: null,
         inputProps: null,
         incrementButtonProps: null,
-        decrementButtonProps: null
+        decrementButtonProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     numberFormat: null,
     _numeral: null,
@@ -960,7 +974,7 @@ var script = {
         },
         
         upButtonClass() {
-            return ['p-inputnumber-button p-inputnumber-button-up', {
+            return ['p-inputnumber-button p-inputnumber-button-up', this.incrementButtonClass, {
                 'p-disabled': this.showButtons && this.max !== null && this.maxBoundry()
             }];
         },
@@ -1018,14 +1032,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, [
     createVNode(_component_INInputText, mergeProps({
       ref: "input",
-      class: "p-inputnumber-input",
+      class: ["p-inputnumber-input", $props.inputClass],
       role: "spinbutton",
       id: $props.inputId,
+      style: $props.inputStyle,
       value: $options.formattedValue,
       "aria-valuemin": $props.min,
       "aria-valuemax": $props.max,
       "aria-valuenow": $props.modelValue,
+      disabled: $props.disabled,
       readonly: $props.readonly,
+      placeholder: $props.placeholder,
+      "aria-labelledby": _ctx.ariaLabelledby,
+      "aria-label": _ctx.ariaLabel,
       onInput: $options.onUserInput,
       onKeydown: $options.onInputKeyDown,
       onKeypress: $options.onInputKeyPress,
@@ -1033,17 +1052,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: $options.onInputClick,
       onFocus: $options.onInputFocus,
       onBlur: $options.onInputBlur
-    }, $props.inputProps), null, 16, ["id", "value", "aria-valuemin", "aria-valuemax", "aria-valuenow", "readonly", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
+    }, $props.inputProps), null, 16, ["id", "class", "style", "value", "aria-valuemin", "aria-valuemax", "aria-valuenow", "disabled", "readonly", "placeholder", "aria-labelledby", "aria-label", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
     ($props.showButtons && $props.buttonLayout === 'stacked')
       ? (openBlock(), createElementBlock("span", _hoisted_1, [
           createVNode(_component_INButton, mergeProps({
             class: $options.upButtonClass,
             icon: $props.incrementButtonIcon
-          }, toHandlers($options.upButtonListeners), { disabled: $props.disabled }, $props.incrementButtonProps), null, 16, ["class", "icon", "disabled"]),
+          }, toHandlers($options.upButtonListeners), {
+            disabled: $props.disabled,
+            tabindex: -1,
+            "aria-hidden": "true"
+          }, $props.incrementButtonProps), null, 16, ["class", "icon", "disabled"]),
           createVNode(_component_INButton, mergeProps({
             class: $options.downButtonClass,
             icon: $props.decrementButtonIcon
-          }, toHandlers($options.downButtonListeners), { disabled: $props.disabled }, $props.decrementButtonProps), null, 16, ["class", "icon", "disabled"])
+          }, toHandlers($options.downButtonListeners), {
+            disabled: $props.disabled,
+            tabindex: -1,
+            "aria-hidden": "true"
+          }, $props.decrementButtonProps), null, 16, ["class", "icon", "disabled"])
         ]))
       : createCommentVNode("", true),
     ($props.showButtons && $props.buttonLayout !== 'stacked')
@@ -1051,14 +1078,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           key: 1,
           class: $options.upButtonClass,
           icon: $props.incrementButtonIcon
-        }, toHandlers($options.upButtonListeners), { disabled: $props.disabled }, $props.incrementButtonProps), null, 16, ["class", "icon", "disabled"]))
+        }, toHandlers($options.upButtonListeners), {
+          disabled: $props.disabled,
+          tabindex: -1,
+          "aria-hidden": "true"
+        }, $props.incrementButtonProps), null, 16, ["class", "icon", "disabled"]))
       : createCommentVNode("", true),
     ($props.showButtons && $props.buttonLayout !== 'stacked')
       ? (openBlock(), createBlock(_component_INButton, mergeProps({
           key: 2,
           class: $options.downButtonClass,
           icon: $props.decrementButtonIcon
-        }, toHandlers($options.downButtonListeners), { disabled: $props.disabled }, $props.decrementButtonProps), null, 16, ["class", "icon", "disabled"]))
+        }, toHandlers($options.downButtonListeners), {
+          disabled: $props.disabled,
+          tabindex: -1,
+          "aria-hidden": "true"
+        }, $props.decrementButtonProps), null, 16, ["class", "icon", "disabled"]))
       : createCommentVNode("", true)
   ], 2))
 }

@@ -167,6 +167,10 @@ var script = {
             type: String,
             default: null
         },
+        exportFooter: {
+            type: String,
+            default: null
+        },
         filterMatchMode: {
             type: String,
             default: null

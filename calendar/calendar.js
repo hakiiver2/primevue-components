@@ -11,7 +11,6 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
 
     var script = {
         name: 'Calendar',
-        inheritAttrs: false,
         emits: ['show', 'hide', 'input', 'month-change', 'year-change', 'date-select', 'update:modelValue', 'today-click', 'clear-click', 'focus', 'blur', 'keydown'],
         props: {
             modelValue: null,
@@ -65,10 +64,6 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 default: false
             },
             yearRange: {
-                type: String,
-                default: null
-            },
-            panelClass: {
                 type: String,
                 default: null
             },
@@ -164,10 +159,34 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 type: String,
                 default: 'body'
             },
+            disabled: {
+                type: Boolean,
+                default: false
+            },
+            readonly: {
+                type: Boolean,
+                default: false
+            },
+            placeholder: {
+                type: String,
+                default: null
+            },
+            id: null,
+            inputId: null,
             inputClass: null,
             inputStyle: null,
-            class: null,
-            style: null
+            inputProps: null,
+            panelClass: null,
+            panelStyle: null,
+            panelProps: null,
+            'aria-labelledby': {
+                type: String,
+    			default: null
+            },
+            'aria-label': {
+                type: String,
+                default: null
+            }
         },
         navigationState: null,
         timePickerChange: false,
@@ -190,7 +209,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             if (this.inline) {
                 this.overlay && this.overlay.setAttribute(this.attributeSelector, '');
 
-                if (!this.$attrs.disabled) {
+                if (!this.disabled) {
                     this.preventFocus = true;
                     this.initFocusableCell();
 
@@ -521,15 +540,20 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                     this.decrementDecade();
                 }
                 else {
-                    if (this.currentMonth === 0) {
-                        this.currentMonth = 11;
+                    if (event.shiftKey) {
                         this.decrementYear();
                     }
                     else {
-                        this.currentMonth--;
-                    }
+                        if (this.currentMonth === 0) {
+                            this.currentMonth = 11;
+                            this.decrementYear();
+                        }
+                        else {
+                            this.currentMonth--;
+                        }
 
-                    this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+                        this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+                    }
                 }
             },
             navForward(event) {
@@ -546,15 +570,20 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                     this.incrementDecade();
                 }
                 else {
-                    if (this.currentMonth === 11) {
-                        this.currentMonth = 0;
+                    if (event.shiftKey) {
                         this.incrementYear();
                     }
                     else {
-                        this.currentMonth++;
-                    }
+                        if (this.currentMonth === 11) {
+                            this.currentMonth = 0;
+                            this.incrementYear();
+                        }
+                        else {
+                            this.currentMonth++;
+                        }
 
-                    this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+                        this.$emit('month-change', {month: this.currentMonth + 1, year: this.currentYear});
+                    }
                 }
             },
             decrementYear() {
@@ -580,7 +609,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 event.preventDefault();
             },
             isEnabled() {
-                return !this.$attrs.disabled && !this.$attrs.readonly;
+                return !this.disabled && !this.readonly;
             },
             updateCurrentTimeMeta(date) {
                 let currentHour = date.getHours();
@@ -714,7 +743,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 this.$emit('year-change', {month: this.currentMonth + 1, year: this.currentYear});
             },
             onDateSelect(event, dateMeta) {
-                if (this.$attrs.disabled || !dateMeta.selectable) {
+                if (this.disabled || !dateMeta.selectable) {
                     return;
                 }
 
@@ -743,6 +772,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
 
                 if (this.isSingleSelection() && (!this.showTime || this.hideOnDateTimeSelect)) {
                     setTimeout(() => {
+                        this.input.focus();
                         this.overlayVisible = false;
                     }, 150);
                 }
@@ -1605,9 +1635,8 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 const cellContent = event.currentTarget;
                 const cell = cellContent.parentElement;
 
-                switch (event.which) {
-                    //down arrow
-                    case 40: {
+                switch (event.code) {
+                    case 'ArrowDown': {
                         cellContent.tabIndex = '-1';
                         let cellIndex = utils.DomHandler.index(cell);
                         let nextRow = cell.parentElement.nextElementSibling;
@@ -1630,8 +1659,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         break;
                     }
 
-                    //up arrow
-                    case 38: {
+                    case 'ArrowUp': {
                         cellContent.tabIndex = '-1';
                         let cellIndex = utils.DomHandler.index(cell);
                         let prevRow = cell.parentElement.previousElementSibling;
@@ -1654,14 +1682,13 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         break;
                     }
 
-                    //left arrow
-                    case 37: {
+                    case 'ArrowLeft': {
                         cellContent.tabIndex = '-1';
                         let prevCell = cell.previousElementSibling;
                         if (prevCell) {
                             let focusCell = prevCell.children[0];
                             if (utils.DomHandler.hasClass(focusCell, 'p-disabled')) {
-                                this.navigateToMonth(true, groupIndex);
+                                this.navigateToMonth(event, true, groupIndex);
                             }
                             else {
                                 focusCell.tabIndex = '0';
@@ -1669,20 +1696,19 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                             }
                         }
                         else {
-                            this.navigateToMonth(true, groupIndex);
+                            this.navigateToMonth(event, true, groupIndex);
                         }
                         event.preventDefault();
                         break;
                     }
 
-                    //right arrow
-                    case 39: {
+                    case 'ArrowRight': {
                         cellContent.tabIndex = '-1';
                         let nextCell = cell.nextElementSibling;
                         if (nextCell) {
                             let focusCell = nextCell.children[0];
                             if (utils.DomHandler.hasClass(focusCell, 'p-disabled')) {
-                                this.navigateToMonth(false, groupIndex);
+                                this.navigateToMonth(event, false, groupIndex);
                             }
                             else {
                                 focusCell.tabIndex = '0';
@@ -1690,38 +1716,90 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                             }
                         }
                         else {
-                            this.navigateToMonth(false, groupIndex);
+                            this.navigateToMonth(event, false, groupIndex);
                         }
                         event.preventDefault();
                         break;
                     }
 
-                    //enter
-                    //space
-                    case 13:
-                    case 32: {
+                    case 'Enter':
+                    case 'Space': {
                         this.onDateSelect(event, date);
                         event.preventDefault();
                         break;
                     }
 
-                    //escape
-                    case 27: {
+                    case 'Escape': {
                         this.overlayVisible = false;
                         event.preventDefault();
                         break;
                     }
 
-                    //tab
-                    case 9: {
+                    case 'Tab': {
                         if (!this.inline) {
                             this.trapFocus(event);
                         }
                         break;
                     }
+
+                    case 'Home': {
+                        cellContent.tabIndex = '-1';
+                        let currentRow = cell.parentElement;
+                        let focusCell = currentRow.children[0].children[0];
+                        if (utils.DomHandler.hasClass(focusCell, 'p-disabled')) {
+                            this.navigateToMonth(event, true, groupIndex);
+                        }
+                        else {
+                            focusCell.tabIndex = '0';
+                            focusCell.focus();
+                        }
+
+                        event.preventDefault();
+                        break;
+                    }
+
+                    case 'End': {
+                        cellContent.tabIndex = '-1';
+                        let currentRow = cell.parentElement;
+                        let focusCell = currentRow.children[currentRow.children.length -1].children[0];
+                        if (utils.DomHandler.hasClass(focusCell, 'p-disabled')) {
+                            this.navigateToMonth(event, false, groupIndex);
+                        }
+                        else {
+                            focusCell.tabIndex = '0';
+                            focusCell.focus();
+                        }
+
+                        event.preventDefault();
+                        break;
+                    }
+
+                    case 'PageUp': {
+                        cellContent.tabIndex = '-1';
+                        if (event.shiftKey) {
+                            this.navigationState = {backward: true};
+                            this.navBackward(event);
+                        }
+                        else this.navigateToMonth(event, true, groupIndex);
+
+                        event.preventDefault();
+                        break;
+                    }
+
+                    case 'PageDown': {
+                        cellContent.tabIndex = '-1';
+                        if (event.shiftKey) {
+                            this.navigationState = {backward: false};
+                            this.navForward(event);
+                        }
+                        else this.navigateToMonth(event, false, groupIndex);
+
+                        event.preventDefault();
+                        break;
+                    }
                 }
             },
-            navigateToMonth(prev, groupIndex) {
+            navigateToMonth(event, prev, groupIndex) {
                 if (prev) {
                     if (this.numberOfMonths === 1 || (groupIndex === 0)) {
                         this.navigationState = {backward: true};
@@ -1751,14 +1829,13 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             onMonthCellKeydown(event, index) {
                 const cell = event.currentTarget;
 
-                switch (event.which) {
-                    //arrows
-                    case 38:
-                    case 40: {
+                switch (event.code) {
+                    case 'ArrowUp':
+                    case 'ArrowDown': {
                         cell.tabIndex = '-1';
                         var cells = cell.parentElement.children;
                         var cellIndex = utils.DomHandler.index(cell);
-                        let nextCell = cells[event.which === 40 ? cellIndex + 3 : cellIndex -3];
+                        let nextCell = cells[event.code === 'ArrowDown' ? cellIndex + 3 : cellIndex -3];
                         if (nextCell) {
                             nextCell.tabIndex = '0';
                             nextCell.focus();
@@ -1767,8 +1844,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         break;
                     }
 
-                    //left arrow
-                    case 37: {
+                    case 'ArrowLeft': {
                         cell.tabIndex = '-1';
                         let prevCell = cell.previousElementSibling;
                         if (prevCell) {
@@ -1783,8 +1859,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         break;
                     }
 
-                    //right arrow
-                    case 39: {
+                    case 'ArrowRight': {
                         cell.tabIndex = '-1';
                         let nextCell = cell.nextElementSibling;
                         if (nextCell) {
@@ -1799,24 +1874,36 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         break;
                     }
 
-                    //enter
-                    //space
-                    case 13:
-                    case 32: {
+                    case 'PageUp': {
+                        if (event.shiftKey) return;
+                        this.navigationState = {backward: true};
+                        this.navBackward(event);
+
+                        break;
+                    }
+
+                    case 'PageDown': {
+                        if (event.shiftKey) return;
+                        this.navigationState = {backward: false};
+                        this.navForward(event);
+
+                        break;
+                    }
+
+                    case 'Enter':
+                    case 'Space': {
                         this.onMonthSelect(event, index);
                         event.preventDefault();
                         break;
                     }
 
-                    //escape
-                    case 27: {
+                    case 'Escape': {
                         this.overlayVisible = false;
                         event.preventDefault();
                         break;
                     }
 
-                    //tab
-                    case 9: {
+                    case 'Tab': {
                         this.trapFocus(event);
                         break;
                     }
@@ -1825,14 +1912,13 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             onYearCellKeydown(event, index) {
                 const cell = event.currentTarget;
 
-                switch (event.which) {
-                    //arrows
-                    case 38:
-                    case 40: {
+                switch (event.code) {
+                    case 'ArrowUp':
+                    case 'ArrowDown':  {
                         cell.tabIndex = '-1';
                         var cells = cell.parentElement.children;
                         var cellIndex = utils.DomHandler.index(cell);
-                        let nextCell = cells[event.which === 40 ? cellIndex + 2 : cellIndex - 2];
+                        let nextCell = cells[event.code === 'ArrowDown' ? cellIndex + 2 : cellIndex - 2];
                         if (nextCell) {
                             nextCell.tabIndex = '0';
                             nextCell.focus();
@@ -1841,8 +1927,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         break;
                     }
 
-                    //left arrow
-                    case 37: {
+                    case 'ArrowLeft': {
                         cell.tabIndex = '-1';
                         let prevCell = cell.previousElementSibling;
                         if (prevCell) {
@@ -1857,8 +1942,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         break;
                     }
 
-                    //right arrow
-                    case 39: {
+                    case 'ArrowRight': {
                         cell.tabIndex = '-1';
                         let nextCell = cell.nextElementSibling;
                         if (nextCell) {
@@ -1873,24 +1957,36 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         break;
                     }
 
-                    //enter
-                    //space
-                    case 13:
-                    case 32: {
+                    case 'PageUp': {
+                        if (event.shiftKey) return;
+                        this.navigationState = {backward: true};
+                        this.navBackward(event);
+
+                        break;
+                    }
+
+                    case 'PageDown': {
+                        if (event.shiftKey) return;
+                        this.navigationState = {backward: false};
+                        this.navForward(event);
+
+                        break;
+                    }
+
+                    case 'Enter':
+                    case 'Space': {
                         this.onYearSelect(event, index);
                         event.preventDefault();
                         break;
                     }
 
-                    //escape
-                    case 27: {
+                    case 'Escape': {
                         this.overlayVisible = false;
                         event.preventDefault();
                         break;
                     }
 
-                    //tab
-                    case 9: {
+                    case 'Tab': {
                         this.trapFocus(event);
                         break;
                     }
@@ -1998,13 +2094,26 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         let focusedIndex = focusableElements.indexOf(document.activeElement);
 
                         if (event.shiftKey) {
-                            if (focusedIndex == -1 || focusedIndex === 0)
+                            if (focusedIndex === -1 || focusedIndex === 0)
                                 focusableElements[focusableElements.length - 1].focus();
                             else
                                 focusableElements[focusedIndex - 1].focus();
                         }
                         else {
-                            if (focusedIndex == -1 || focusedIndex === (focusableElements.length - 1))
+                            if (focusedIndex === -1) {
+                                if (this.timeOnly) {
+                                    focusableElements[0].focus();
+                                }
+                                else {
+                                    let spanIndex = null;
+                                    for (let i = 0; i < focusableElements.length; i++){
+                                        if (focusableElements[i].tagName === 'SPAN')
+                                            spanIndex = i;
+                                    }
+                                    focusableElements[spanIndex].focus();
+                                }
+                            }
+                            else if (focusedIndex === (focusableElements.length - 1))
                                 focusableElements[0].focus();
                             else
                                 focusableElements[focusedIndex + 1].focus();
@@ -2013,14 +2122,12 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 }
             },
             onContainerButtonKeydown(event) {
-                switch (event.which) {
-                    //tab
-                    case 9:
+                switch (event.code) {
+                    case 'Tab':
                         this.trapFocus(event);
                     break;
 
-                    //escape
-                    case 27:
+                    case 'Escape':
                         this.overlayVisible = false;
                         event.preventDefault();
                     break;
@@ -2059,16 +2166,19 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 event.target.value = this.formatValue(this.modelValue);
             },
             onKeyDown(event) {
-                if (event.keyCode === 40 && this.overlay) {
+                if (event.code === 'ArrowDown' && this.overlay) {
                     this.trapFocus(event);
                 }
-                else if (event.keyCode === 27) {
+                else if (event.code === 'ArrowDown' && !this.overlay) {
+                    this.overlayVisible = true;
+                }
+                else if (event.code === 'Escape') {
                     if (this.overlayVisible) {
                         this.overlayVisible = false;
                         event.preventDefault();
                     }
                 }
-                else if (event.keyCode === 9) {
+                else if (event.code === 'Tab') {
                     if (this.overlay) {
                         utils.DomHandler.getFocusableElements(this.overlay).forEach(el => el.tabIndex = '-1');
                     }
@@ -2096,6 +2206,14 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                         originalEvent: event,
                         target: this.$el
                     });
+                }
+            },
+            onOverlayKeyDown(event) {
+                switch (event.code) {
+                    case 'Escape':
+                        this.input.focus();
+                        this.overlayVisible = false;
+                        break;
                 }
             },
             onOverlayMouseUp(event) {
@@ -2183,11 +2301,11 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             },
             containerClass() {
                 return [
-                    'p-calendar p-component p-inputwrapper', this.class,
+                    'p-calendar p-component p-inputwrapper',
                     {
                         'p-calendar-w-btn': this.showIcon,
                         'p-calendar-timeonly': this.timeOnly,
-                        'p-calendar-disabled': this.$attrs.disabled,
+                        'p-calendar-disabled': this.disabled,
                         'p-inputwrapper-filled': this.modelValue,
                         'p-inputwrapper-focus': this.focused
                     }
@@ -2196,7 +2314,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             panelStyleClass() {
                 return ['p-datepicker p-component', this.panelClass, {
                     'p-datepicker-inline': this.inline,
-                    'p-disabled': this.$attrs.disabled,
+                    'p-disabled': this.disabled,
                     'p-datepicker-timeonly': this.timeOnly,
                     'p-datepicker-multiple-month': this.numberOfMonths > 1,
                     'p-datepicker-monthpicker': (this.currentView === 'month'),
@@ -2365,7 +2483,10 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 return utils.UniqueComponentId();
             },
             switchViewButtonDisabled() {
-                return this.numberOfMonths > 1 || this.$attrs.disabled;
+                return this.numberOfMonths > 1 || this.disabled;
+            },
+            panelId() {
+                return utils.UniqueComponentId() + '_panel';
             }
         },
         components: {
@@ -2377,119 +2498,142 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
         }
     };
 
-    const _hoisted_1 = ["readonly"];
-    const _hoisted_2 = ["role"];
-    const _hoisted_3 = { class: "p-datepicker-group-container" };
-    const _hoisted_4 = { class: "p-datepicker-header" };
-    const _hoisted_5 = ["disabled"];
-    const _hoisted_6 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-datepicker-prev-icon pi pi-chevron-left" }, null, -1);
-    const _hoisted_7 = [
-      _hoisted_6
+    const _hoisted_1 = ["id"];
+    const _hoisted_2 = ["id", "placeholder", "aria-expanded", "aria-controls", "aria-labelledby", "aria-label", "readonly"];
+    const _hoisted_3 = ["id", "role", "aria-modal", "aria-label"];
+    const _hoisted_4 = { class: "p-datepicker-group-container" };
+    const _hoisted_5 = { class: "p-datepicker-header" };
+    const _hoisted_6 = ["disabled", "aria-label"];
+    const _hoisted_7 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-datepicker-prev-icon pi pi-chevron-left" }, null, -1);
+    const _hoisted_8 = [
+      _hoisted_7
     ];
-    const _hoisted_8 = { class: "p-datepicker-title" };
-    const _hoisted_9 = ["disabled"];
-    const _hoisted_10 = ["disabled"];
-    const _hoisted_11 = {
+    const _hoisted_9 = { class: "p-datepicker-title" };
+    const _hoisted_10 = ["disabled", "aria-label"];
+    const _hoisted_11 = ["disabled", "aria-label"];
+    const _hoisted_12 = {
       key: 2,
       class: "p-datepicker-decade"
     };
-    const _hoisted_12 = ["disabled"];
-    const _hoisted_13 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-datepicker-next-icon pi pi-chevron-right" }, null, -1);
-    const _hoisted_14 = [
-      _hoisted_13
+    const _hoisted_13 = ["disabled", "aria-label"];
+    const _hoisted_14 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-datepicker-next-icon pi pi-chevron-right" }, null, -1);
+    const _hoisted_15 = [
+      _hoisted_14
     ];
-    const _hoisted_15 = {
+    const _hoisted_16 = {
       key: 0,
       class: "p-datepicker-calendar-container"
     };
-    const _hoisted_16 = { class: "p-datepicker-calendar" };
     const _hoisted_17 = {
+      class: "p-datepicker-calendar",
+      role: "grid"
+    };
+    const _hoisted_18 = {
       key: 0,
       scope: "col",
       class: "p-datepicker-weekheader p-disabled"
     };
-    const _hoisted_18 = {
+    const _hoisted_19 = ["abbr"];
+    const _hoisted_20 = {
       key: 0,
       class: "p-datepicker-weeknumber"
     };
-    const _hoisted_19 = { class: "p-disabled" };
-    const _hoisted_20 = {
+    const _hoisted_21 = { class: "p-disabled" };
+    const _hoisted_22 = {
       key: 0,
       style: {"visibility":"hidden"}
     };
-    const _hoisted_21 = ["onClick", "onKeydown"];
-    const _hoisted_22 = {
+    const _hoisted_23 = ["aria-label"];
+    const _hoisted_24 = ["onClick", "onKeydown", "aria-selected"];
+    const _hoisted_25 = {
+      key: 0,
+      class: "p-hidden-accessible",
+      "aria-live": "polite"
+    };
+    const _hoisted_26 = {
       key: 0,
       class: "p-monthpicker"
     };
-    const _hoisted_23 = ["onClick", "onKeydown"];
-    const _hoisted_24 = {
+    const _hoisted_27 = ["onClick", "onKeydown"];
+    const _hoisted_28 = {
+      key: 0,
+      class: "p-hidden-accessible",
+      "aria-live": "polite"
+    };
+    const _hoisted_29 = {
       key: 1,
       class: "p-yearpicker"
     };
-    const _hoisted_25 = ["onClick", "onKeydown"];
-    const _hoisted_26 = {
+    const _hoisted_30 = ["onClick", "onKeydown"];
+    const _hoisted_31 = {
+      key: 0,
+      class: "p-hidden-accessible",
+      "aria-live": "polite"
+    };
+    const _hoisted_32 = {
       key: 1,
       class: "p-timepicker"
     };
-    const _hoisted_27 = { class: "p-hour-picker" };
-    const _hoisted_28 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-up" }, null, -1);
-    const _hoisted_29 = [
-      _hoisted_28
-    ];
-    const _hoisted_30 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-down" }, null, -1);
-    const _hoisted_31 = [
-      _hoisted_30
-    ];
-    const _hoisted_32 = { class: "p-separator" };
-    const _hoisted_33 = { class: "p-minute-picker" };
-    const _hoisted_34 = ["disabled"];
+    const _hoisted_33 = { class: "p-hour-picker" };
+    const _hoisted_34 = ["aria-label"];
     const _hoisted_35 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-up" }, null, -1);
     const _hoisted_36 = [
       _hoisted_35
     ];
-    const _hoisted_37 = ["disabled"];
+    const _hoisted_37 = ["aria-label"];
     const _hoisted_38 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-down" }, null, -1);
     const _hoisted_39 = [
       _hoisted_38
     ];
-    const _hoisted_40 = {
-      key: 0,
-      class: "p-separator"
-    };
-    const _hoisted_41 = {
-      key: 1,
-      class: "p-second-picker"
-    };
-    const _hoisted_42 = ["disabled"];
+    const _hoisted_40 = { class: "p-separator" };
+    const _hoisted_41 = { class: "p-minute-picker" };
+    const _hoisted_42 = ["aria-label", "disabled"];
     const _hoisted_43 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-up" }, null, -1);
     const _hoisted_44 = [
       _hoisted_43
     ];
-    const _hoisted_45 = ["disabled"];
+    const _hoisted_45 = ["aria-label", "disabled"];
     const _hoisted_46 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-down" }, null, -1);
     const _hoisted_47 = [
       _hoisted_46
     ];
     const _hoisted_48 = {
-      key: 2,
+      key: 0,
       class: "p-separator"
     };
     const _hoisted_49 = {
-      key: 3,
-      class: "p-ampm-picker"
+      key: 1,
+      class: "p-second-picker"
     };
-    const _hoisted_50 = ["disabled"];
+    const _hoisted_50 = ["aria-label", "disabled"];
     const _hoisted_51 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-up" }, null, -1);
     const _hoisted_52 = [
       _hoisted_51
     ];
-    const _hoisted_53 = ["disabled"];
+    const _hoisted_53 = ["aria-label", "disabled"];
     const _hoisted_54 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-down" }, null, -1);
     const _hoisted_55 = [
       _hoisted_54
     ];
     const _hoisted_56 = {
+      key: 2,
+      class: "p-separator"
+    };
+    const _hoisted_57 = {
+      key: 3,
+      class: "p-ampm-picker"
+    };
+    const _hoisted_58 = ["aria-label", "disabled"];
+    const _hoisted_59 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-up" }, null, -1);
+    const _hoisted_60 = [
+      _hoisted_59
+    ];
+    const _hoisted_61 = ["aria-label", "disabled"];
+    const _hoisted_62 = /*#__PURE__*/vue.createElementVNode("span", { class: "pi pi-chevron-down" }, null, -1);
+    const _hoisted_63 = [
+      _hoisted_62
+    ];
+    const _hoisted_64 = {
       key: 2,
       class: "p-datepicker-buttonbar"
     };
@@ -2501,36 +2645,47 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
 
       return (vue.openBlock(), vue.createElementBlock("span", {
         ref: "container",
-        class: vue.normalizeClass($options.containerClass),
-        style: vue.normalizeStyle($props.style)
+        id: $props.id,
+        class: vue.normalizeClass($options.containerClass)
       }, [
         (!$props.inline)
           ? (vue.openBlock(), vue.createElementBlock("input", vue.mergeProps({
               key: 0,
               ref: $options.inputRef,
               type: "text",
+              role: "combobox",
+              id: $props.inputId,
               class: ['p-inputtext p-component', $props.inputClass],
               style: $props.inputStyle,
-              onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args)))
-            }, _ctx.$attrs, {
+              placeholder: $props.placeholder,
+              "aria-autocomplete": "none",
+              "aria-haspopup": "dialog",
+              "aria-expanded": $data.overlayVisible,
+              "aria-controls": $options.panelId,
+              "aria-labelledby": _ctx.ariaLabelledby,
+              "aria-label": _ctx.ariaLabel,
+              inputmode: "none",
+              onInput: _cache[0] || (_cache[0] = (...args) => ($options.onInput && $options.onInput(...args))),
               onFocus: _cache[1] || (_cache[1] = (...args) => ($options.onFocus && $options.onFocus(...args))),
               onBlur: _cache[2] || (_cache[2] = (...args) => ($options.onBlur && $options.onBlur(...args))),
               onKeydown: _cache[3] || (_cache[3] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
               readonly: !$props.manualInput,
-              inputmode: "none"
-            }), null, 16, _hoisted_1))
+              tabindex: 0
+            }, $props.inputProps), null, 16, _hoisted_2))
           : vue.createCommentVNode("", true),
         ($props.showIcon)
           ? (vue.openBlock(), vue.createBlock(_component_CalendarButton, {
               key: 1,
               icon: $props.icon,
-              tabindex: "-1",
               class: "p-datepicker-trigger",
-              disabled: _ctx.$attrs.disabled,
+              disabled: $props.disabled,
               onClick: $options.onButtonClick,
               type: "button",
-              "aria-label": $options.inputFieldValue
-            }, null, 8, ["icon", "disabled", "onClick", "aria-label"]))
+              "aria-label": _ctx.$primevue.config.locale.chooseDate,
+              "aria-haspopup": "dialog",
+              "aria-expanded": $data.overlayVisible,
+              "aria-controls": $options.panelId
+            }, null, 8, ["icon", "disabled", "onClick", "aria-label", "aria-expanded", "aria-controls"]))
           : vue.createCommentVNode("", true),
         vue.createVNode(_component_Portal, {
           appendTo: $props.appendTo,
@@ -2539,42 +2694,48 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
           default: vue.withCtx(() => [
             vue.createVNode(vue.Transition, {
               name: "p-connected-overlay",
-              onEnter: _cache[67] || (_cache[67] = $event => ($options.onOverlayEnter($event))),
+              onEnter: _cache[68] || (_cache[68] = $event => ($options.onOverlayEnter($event))),
               onAfterEnter: $options.onOverlayEnterComplete,
               onAfterLeave: $options.onOverlayAfterLeave,
               onLeave: $options.onOverlayLeave
             }, {
               default: vue.withCtx(() => [
                 ($props.inline || $data.overlayVisible)
-                  ? (vue.openBlock(), vue.createElementBlock("div", {
+                  ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({
                       key: 0,
                       ref: $options.overlayRef,
-                      class: vue.normalizeClass($options.panelStyleClass),
+                      id: $options.panelId,
+                      class: $options.panelStyleClass,
+                      style: $props.panelStyle,
                       role: $props.inline ? null : 'dialog',
+                      "aria-modal": $props.inline ? null : 'true',
+                      "aria-label": _ctx.$primevue.config.locale.chooseDate,
                       onClick: _cache[65] || (_cache[65] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
-                      onMouseup: _cache[66] || (_cache[66] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
-                    }, [
+                      onKeydown: _cache[66] || (_cache[66] = (...args) => ($options.onOverlayKeyDown && $options.onOverlayKeyDown(...args))),
+                      onMouseup: _cache[67] || (_cache[67] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
+                    }, $props.panelProps), [
                       (!$props.timeOnly)
                         ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
-                            vue.createElementVNode("div", _hoisted_3, [
+                            vue.createElementVNode("div", _hoisted_4, [
                               (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.months, (month, groupIndex) => {
                                 return (vue.openBlock(), vue.createElementBlock("div", {
                                   class: "p-datepicker-group",
                                   key: month.month + month.year
                                 }, [
-                                  vue.createElementVNode("div", _hoisted_4, [
+                                  vue.createElementVNode("div", _hoisted_5, [
                                     vue.renderSlot(_ctx.$slots, "header"),
                                     vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                       class: "p-datepicker-prev p-link",
                                       onClick: _cache[4] || (_cache[4] = (...args) => ($options.onPrevButtonClick && $options.onPrevButtonClick(...args))),
                                       type: "button",
                                       onKeydown: _cache[5] || (_cache[5] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                                      disabled: _ctx.$attrs.disabled
-                                    }, _hoisted_7, 40, _hoisted_5)), [
-                                      [vue.vShow, groupIndex === 0],
+                                      disabled: $props.disabled,
+                                      "aria-label":  $data.currentView === 'year' ? _ctx.$primevue.config.locale.prevDecade: $data.currentView === 'month' ? _ctx.$primevue.config.locale.prevYear : _ctx.$primevue.config.locale.prevMonth
+                                    }, _hoisted_8, 40, _hoisted_6)), [
+                                      [vue.vShow, $props.showOtherMonths ? groupIndex === 0 : false],
                                       [_directive_ripple]
                                     ]),
-                                    vue.createElementVNode("div", _hoisted_8, [
+                                    vue.createElementVNode("div", _hoisted_9, [
                                       ($data.currentView === 'date')
                                         ? (vue.openBlock(), vue.createElementBlock("button", {
                                             key: 0,
@@ -2582,8 +2743,9 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                             onClick: _cache[6] || (_cache[6] = (...args) => ($options.switchToMonthView && $options.switchToMonthView(...args))),
                                             onKeydown: _cache[7] || (_cache[7] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
                                             class: "p-datepicker-month p-link",
-                                            disabled: $options.switchViewButtonDisabled
-                                          }, vue.toDisplayString($options.getMonthName(month.month)), 41, _hoisted_9))
+                                            disabled: $options.switchViewButtonDisabled,
+                                            "aria-label": _ctx.$primevue.config.locale.chooseMonth
+                                          }, vue.toDisplayString($options.getMonthName(month.month)), 41, _hoisted_10))
                                         : vue.createCommentVNode("", true),
                                       ($data.currentView !== 'year')
                                         ? (vue.openBlock(), vue.createElementBlock("button", {
@@ -2592,11 +2754,12 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                             onClick: _cache[8] || (_cache[8] = (...args) => ($options.switchToYearView && $options.switchToYearView(...args))),
                                             onKeydown: _cache[9] || (_cache[9] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
                                             class: "p-datepicker-year p-link",
-                                            disabled: $options.switchViewButtonDisabled
-                                          }, vue.toDisplayString($options.getYear(month)), 41, _hoisted_10))
+                                            disabled: $options.switchViewButtonDisabled,
+                                            "aria-label": _ctx.$primevue.config.locale.chooseYear
+                                          }, vue.toDisplayString($options.getYear(month)), 41, _hoisted_11))
                                         : vue.createCommentVNode("", true),
                                       ($data.currentView === 'year')
-                                        ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_11, [
+                                        ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_12, [
                                             vue.renderSlot(_ctx.$slots, "decade", { years: $options.yearPickerValues }, () => [
                                               vue.createTextVNode(vue.toDisplayString($options.yearPickerValues[0]) + " - " + vue.toDisplayString($options.yearPickerValues[$options.yearPickerValues.length - 1]), 1)
                                             ])
@@ -2608,29 +2771,31 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                       onClick: _cache[10] || (_cache[10] = (...args) => ($options.onNextButtonClick && $options.onNextButtonClick(...args))),
                                       type: "button",
                                       onKeydown: _cache[11] || (_cache[11] = (...args) => ($options.onContainerButtonKeydown && $options.onContainerButtonKeydown(...args))),
-                                      disabled: _ctx.$attrs.disabled
-                                    }, _hoisted_14, 40, _hoisted_12)), [
-                                      [vue.vShow, $props.numberOfMonths === 1 ? true : (groupIndex === $props.numberOfMonths - 1)],
+                                      disabled: $props.disabled,
+                                      "aria-label":  $data.currentView === 'year' ? _ctx.$primevue.config.locale.nextDecade : $data.currentView === 'month' ? _ctx.$primevue.config.locale.nextYear : _ctx.$primevue.config.locale.nextMonth
+                                    }, _hoisted_15, 40, _hoisted_13)), [
+                                      [vue.vShow, $props.showOtherMonths ? $props.numberOfMonths === 1 ? true : (groupIndex === $props.numberOfMonths - 1) : false],
                                       [_directive_ripple]
                                     ])
                                   ]),
                                   ($data.currentView ==='date')
-                                    ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_15, [
-                                        vue.createElementVNode("table", _hoisted_16, [
+                                    ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_16, [
+                                        vue.createElementVNode("table", _hoisted_17, [
                                           vue.createElementVNode("thead", null, [
                                             vue.createElementVNode("tr", null, [
                                               ($props.showWeek)
-                                                ? (vue.openBlock(), vue.createElementBlock("th", _hoisted_17, [
+                                                ? (vue.openBlock(), vue.createElementBlock("th", _hoisted_18, [
                                                     vue.createElementVNode("span", null, vue.toDisplayString($options.weekHeaderLabel), 1)
                                                   ]))
                                                 : vue.createCommentVNode("", true),
                                               (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.weekDays, (weekDay) => {
                                                 return (vue.openBlock(), vue.createElementBlock("th", {
                                                   scope: "col",
-                                                  key: weekDay
+                                                  key: weekDay,
+                                                  abbr: weekDay
                                                 }, [
                                                   vue.createElementVNode("span", null, vue.toDisplayString(weekDay), 1)
-                                                ]))
+                                                ], 8, _hoisted_19))
                                               }), 128))
                                             ])
                                           ]),
@@ -2640,10 +2805,10 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                                 key: week[0].day + '' + week[0].month
                                               }, [
                                                 ($props.showWeek)
-                                                  ? (vue.openBlock(), vue.createElementBlock("td", _hoisted_18, [
-                                                      vue.createElementVNode("span", _hoisted_19, [
+                                                  ? (vue.openBlock(), vue.createElementBlock("td", _hoisted_20, [
+                                                      vue.createElementVNode("span", _hoisted_21, [
                                                         (month.weekNumbers[i] < 10)
-                                                          ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_20, "0"))
+                                                          ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_22, "0"))
                                                           : vue.createCommentVNode("", true),
                                                         vue.createTextVNode(" " + vue.toDisplayString(month.weekNumbers[i]), 1)
                                                       ])
@@ -2651,6 +2816,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                                   : vue.createCommentVNode("", true),
                                                 (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(week, (date) => {
                                                   return (vue.openBlock(), vue.createElementBlock("td", {
+                                                    "aria-label": date.day,
                                                     key: date.day + '' + date.month,
                                                     class: vue.normalizeClass({'p-datepicker-other-month': date.otherMonth, 'p-datepicker-today': date.today})
                                                   }, [
@@ -2658,15 +2824,19 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                                       class: vue.normalizeClass({'p-highlight': $options.isSelected(date), 'p-disabled': !date.selectable}),
                                                       onClick: $event => ($options.onDateSelect($event, date)),
                                                       draggable: "false",
-                                                      onKeydown: $event => ($options.onDateCellKeydown($event,date,groupIndex))
+                                                      onKeydown: $event => ($options.onDateCellKeydown($event,date,groupIndex)),
+                                                      "aria-selected": $options.isSelected(date)
                                                     }, [
                                                       vue.renderSlot(_ctx.$slots, "date", { date: date }, () => [
                                                         vue.createTextVNode(vue.toDisplayString(date.day), 1)
                                                       ])
-                                                    ], 42, _hoisted_21)), [
+                                                    ], 42, _hoisted_24)), [
                                                       [_directive_ripple]
-                                                    ])
-                                                  ], 2))
+                                                    ]),
+                                                    ($options.isSelected(date))
+                                                      ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_25, vue.toDisplayString(date.day), 1))
+                                                      : vue.createCommentVNode("", true)
+                                                  ], 10, _hoisted_23))
                                                 }), 128))
                                               ]))
                                             }), 128))
@@ -2678,7 +2848,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                               }), 128))
                             ]),
                             ($data.currentView === 'month')
-                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_22, [
+                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_26, [
                                   (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.monthPickerValues, (m, i) => {
                                     return vue.withDirectives((vue.openBlock(), vue.createElementBlock("span", {
                                       key: m,
@@ -2686,15 +2856,18 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                       onKeydown: $event => ($options.onMonthCellKeydown($event,i)),
                                       class: vue.normalizeClass(["p-monthpicker-month", {'p-highlight': $options.isMonthSelected(i)}])
                                     }, [
-                                      vue.createTextVNode(vue.toDisplayString(m), 1)
-                                    ], 42, _hoisted_23)), [
+                                      vue.createTextVNode(vue.toDisplayString(m) + " ", 1),
+                                      ($options.isMonthSelected(i))
+                                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_28, vue.toDisplayString(m), 1))
+                                        : vue.createCommentVNode("", true)
+                                    ], 42, _hoisted_27)), [
                                       [_directive_ripple]
                                     ])
                                   }), 128))
                                 ]))
                               : vue.createCommentVNode("", true),
                             ($data.currentView === 'year')
-                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_24, [
+                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_29, [
                                   (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList($options.yearPickerValues, (y) => {
                                     return vue.withDirectives((vue.openBlock(), vue.createElementBlock("span", {
                                       key: y,
@@ -2702,8 +2875,11 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                       onKeydown: $event => ($options.onYearCellKeydown($event,y)),
                                       class: vue.normalizeClass(["p-yearpicker-year", {'p-highlight': $options.isYearSelected(y)}])
                                     }, [
-                                      vue.createTextVNode(vue.toDisplayString(y), 1)
-                                    ], 42, _hoisted_25)), [
+                                      vue.createTextVNode(vue.toDisplayString(y) + " ", 1),
+                                      ($options.isYearSelected(y))
+                                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_31, vue.toDisplayString(y), 1))
+                                        : vue.createCommentVNode("", true)
+                                    ], 42, _hoisted_30)), [
                                       [_directive_ripple]
                                     ])
                                   }), 128))
@@ -2712,10 +2888,11 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                           ], 64))
                         : vue.createCommentVNode("", true),
                       (($props.showTime||$props.timeOnly) && $data.currentView === 'date')
-                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_26, [
-                            vue.createElementVNode("div", _hoisted_27, [
+                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_32, [
+                            vue.createElementVNode("div", _hoisted_33, [
                               vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                 class: "p-link",
+                                "aria-label": _ctx.$primevue.config.locale.nextHour,
                                 onMousedown: _cache[12] || (_cache[12] = $event => ($options.onTimePickerElementMouseDown($event, 0, 1))),
                                 onMouseup: _cache[13] || (_cache[13] = $event => ($options.onTimePickerElementMouseUp($event))),
                                 onKeydown: [
@@ -2729,12 +2906,13 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                   _cache[19] || (_cache[19] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                                 ],
                                 type: "button"
-                              }, _hoisted_29, 32)), [
+                              }, _hoisted_36, 40, _hoisted_34)), [
                                 [_directive_ripple]
                               ]),
                               vue.createElementVNode("span", null, vue.toDisplayString($options.formattedCurrentHour), 1),
                               vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                 class: "p-link",
+                                "aria-label": _ctx.$primevue.config.locale.prevHour,
                                 onMousedown: _cache[20] || (_cache[20] = $event => ($options.onTimePickerElementMouseDown($event, 0, -1))),
                                 onMouseup: _cache[21] || (_cache[21] = $event => ($options.onTimePickerElementMouseUp($event))),
                                 onKeydown: [
@@ -2748,16 +2926,17 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                   _cache[27] || (_cache[27] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                                 ],
                                 type: "button"
-                              }, _hoisted_31, 32)), [
+                              }, _hoisted_39, 40, _hoisted_37)), [
                                 [_directive_ripple]
                               ])
                             ]),
-                            vue.createElementVNode("div", _hoisted_32, [
+                            vue.createElementVNode("div", _hoisted_40, [
                               vue.createElementVNode("span", null, vue.toDisplayString($props.timeSeparator), 1)
                             ]),
-                            vue.createElementVNode("div", _hoisted_33, [
+                            vue.createElementVNode("div", _hoisted_41, [
                               vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                 class: "p-link",
+                                "aria-label": _ctx.$primevue.config.locale.nextMinute,
                                 onMousedown: _cache[28] || (_cache[28] = $event => ($options.onTimePickerElementMouseDown($event, 1, 1))),
                                 onMouseup: _cache[29] || (_cache[29] = $event => ($options.onTimePickerElementMouseUp($event))),
                                 onKeydown: [
@@ -2765,19 +2944,20 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                   _cache[32] || (_cache[32] = vue.withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["enter"])),
                                   _cache[33] || (_cache[33] = vue.withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, 1)), ["space"]))
                                 ],
-                                disabled: _ctx.$attrs.disabled,
+                                disabled: $props.disabled,
                                 onMouseleave: _cache[31] || (_cache[31] = $event => ($options.onTimePickerElementMouseLeave())),
                                 onKeyup: [
                                   _cache[34] || (_cache[34] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
                                   _cache[35] || (_cache[35] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                                 ],
                                 type: "button"
-                              }, _hoisted_36, 40, _hoisted_34)), [
+                              }, _hoisted_44, 40, _hoisted_42)), [
                                 [_directive_ripple]
                               ]),
                               vue.createElementVNode("span", null, vue.toDisplayString($options.formattedCurrentMinute), 1),
                               vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                 class: "p-link",
+                                "aria-label": _ctx.$primevue.config.locale.prevMinute,
                                 onMousedown: _cache[36] || (_cache[36] = $event => ($options.onTimePickerElementMouseDown($event, 1, -1))),
                                 onMouseup: _cache[37] || (_cache[37] = $event => ($options.onTimePickerElementMouseUp($event))),
                                 onKeydown: [
@@ -2785,26 +2965,27 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                   _cache[40] || (_cache[40] = vue.withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["enter"])),
                                   _cache[41] || (_cache[41] = vue.withKeys($event => ($options.onTimePickerElementMouseDown($event, 1, -1)), ["space"]))
                                 ],
-                                disabled: _ctx.$attrs.disabled,
+                                disabled: $props.disabled,
                                 onMouseleave: _cache[39] || (_cache[39] = $event => ($options.onTimePickerElementMouseLeave())),
                                 onKeyup: [
                                   _cache[42] || (_cache[42] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
                                   _cache[43] || (_cache[43] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                                 ],
                                 type: "button"
-                              }, _hoisted_39, 40, _hoisted_37)), [
+                              }, _hoisted_47, 40, _hoisted_45)), [
                                 [_directive_ripple]
                               ])
                             ]),
                             ($props.showSeconds)
-                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_40, [
+                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_48, [
                                   vue.createElementVNode("span", null, vue.toDisplayString($props.timeSeparator), 1)
                                 ]))
                               : vue.createCommentVNode("", true),
                             ($props.showSeconds)
-                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_41, [
+                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_49, [
                                   vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                     class: "p-link",
+                                    "aria-label": _ctx.$primevue.config.locale.nextSecond,
                                     onMousedown: _cache[44] || (_cache[44] = $event => ($options.onTimePickerElementMouseDown($event, 2, 1))),
                                     onMouseup: _cache[45] || (_cache[45] = $event => ($options.onTimePickerElementMouseUp($event))),
                                     onKeydown: [
@@ -2812,19 +2993,20 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                       _cache[48] || (_cache[48] = vue.withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["enter"])),
                                       _cache[49] || (_cache[49] = vue.withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, 1)), ["space"]))
                                     ],
-                                    disabled: _ctx.$attrs.disabled,
+                                    disabled: $props.disabled,
                                     onMouseleave: _cache[47] || (_cache[47] = $event => ($options.onTimePickerElementMouseLeave())),
                                     onKeyup: [
                                       _cache[50] || (_cache[50] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
                                       _cache[51] || (_cache[51] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                                     ],
                                     type: "button"
-                                  }, _hoisted_44, 40, _hoisted_42)), [
+                                  }, _hoisted_52, 40, _hoisted_50)), [
                                     [_directive_ripple]
                                   ]),
                                   vue.createElementVNode("span", null, vue.toDisplayString($options.formattedCurrentSecond), 1),
                                   vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                     class: "p-link",
+                                    "aria-label": _ctx.$primevue.config.locale.prevSecond,
                                     onMousedown: _cache[52] || (_cache[52] = $event => ($options.onTimePickerElementMouseDown($event, 2, -1))),
                                     onMouseup: _cache[53] || (_cache[53] = $event => ($options.onTimePickerElementMouseUp($event))),
                                     onKeydown: [
@@ -2832,40 +3014,42 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                                       _cache[56] || (_cache[56] = vue.withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["enter"])),
                                       _cache[57] || (_cache[57] = vue.withKeys($event => ($options.onTimePickerElementMouseDown($event, 2, -1)), ["space"]))
                                     ],
-                                    disabled: _ctx.$attrs.disabled,
+                                    disabled: $props.disabled,
                                     onMouseleave: _cache[55] || (_cache[55] = $event => ($options.onTimePickerElementMouseLeave())),
                                     onKeyup: [
                                       _cache[58] || (_cache[58] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["enter"])),
                                       _cache[59] || (_cache[59] = vue.withKeys($event => ($options.onTimePickerElementMouseUp($event)), ["space"]))
                                     ],
                                     type: "button"
-                                  }, _hoisted_47, 40, _hoisted_45)), [
+                                  }, _hoisted_55, 40, _hoisted_53)), [
                                     [_directive_ripple]
                                   ])
                                 ]))
                               : vue.createCommentVNode("", true),
                             ($props.hourFormat=='12')
-                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_48, [
+                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_56, [
                                   vue.createElementVNode("span", null, vue.toDisplayString($props.timeSeparator), 1)
                                 ]))
                               : vue.createCommentVNode("", true),
                             ($props.hourFormat=='12')
-                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_49, [
+                              ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_57, [
                                   vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                     class: "p-link",
+                                    "aria-label": _ctx.$primevue.config.locale.am,
                                     onClick: _cache[60] || (_cache[60] = $event => ($options.toggleAMPM($event))),
                                     type: "button",
-                                    disabled: _ctx.$attrs.disabled
-                                  }, _hoisted_52, 8, _hoisted_50)), [
+                                    disabled: $props.disabled
+                                  }, _hoisted_60, 8, _hoisted_58)), [
                                     [_directive_ripple]
                                   ]),
                                   vue.createElementVNode("span", null, vue.toDisplayString($data.pm ? 'PM' : 'AM'), 1),
                                   vue.withDirectives((vue.openBlock(), vue.createElementBlock("button", {
                                     class: "p-link",
+                                    "aria-label": _ctx.$primevue.config.locale.pm,
                                     onClick: _cache[61] || (_cache[61] = $event => ($options.toggleAMPM($event))),
                                     type: "button",
-                                    disabled: _ctx.$attrs.disabled
-                                  }, _hoisted_55, 8, _hoisted_53)), [
+                                    disabled: $props.disabled
+                                  }, _hoisted_63, 8, _hoisted_61)), [
                                     [_directive_ripple]
                                   ])
                                 ]))
@@ -2873,7 +3057,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                           ]))
                         : vue.createCommentVNode("", true),
                       ($props.showButtonBar)
-                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_56, [
+                        ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_64, [
                             ($props.timeOnly)
                               ? (vue.openBlock(), vue.createBlock(_component_CalendarButton, {
                                   key: 0,
@@ -2901,7 +3085,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                           ]))
                         : vue.createCommentVNode("", true),
                       vue.renderSlot(_ctx.$slots, "footer")
-                    ], 42, _hoisted_2))
+                    ], 16, _hoisted_3))
                   : vue.createCommentVNode("", true)
               ]),
               _: 3
@@ -2909,7 +3093,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
           ]),
           _: 3
         }, 8, ["appendTo", "disabled"])
-      ], 6))
+      ], 10, _hoisted_1))
     }
 
     function styleInject(css, ref) {

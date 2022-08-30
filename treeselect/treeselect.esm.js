@@ -1,13 +1,13 @@
-import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler } from 'primevue/utils';
+import { ZIndexUtils, DomHandler, ConnectedOverlayScrollHandler, UniqueComponentId } from 'primevue/utils';
 import OverlayEventBus from 'primevue/overlayeventbus';
 import Tree from 'primevue/tree';
 import Ripple from 'primevue/ripple';
 import Portal from 'primevue/portal';
-import { resolveComponent, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, Fragment, createTextVNode, toDisplayString, renderList, createCommentVNode, createVNode, withCtx, Transition, normalizeStyle } from 'vue';
+import { resolveComponent, openBlock, createElementBlock, normalizeClass, createElementVNode, mergeProps, renderSlot, Fragment, createTextVNode, toDisplayString, renderList, createCommentVNode, createVNode, withCtx, Transition, normalizeStyle } from 'vue';
 
 var script = {
     name: 'TreeSelect',
-    emits: ['update:modelValue', 'before-show', 'before-hide', 'change', 'show', 'hide', 'node-select', 'node-unselect', 'node-expand', 'node-collapse'],
+    emits: ['update:modelValue', 'before-show', 'before-hide', 'change', 'show', 'hide', 'node-select', 'node-unselect', 'node-expand', 'node-collapse', 'focus', 'blur'],
     props: {
         modelValue: null,
         options: Array,
@@ -18,8 +18,6 @@ var script = {
 		placeholder: String,
 		disabled: Boolean,
         tabindex: String,
-        inputId: String,
-        ariaLabelledBy: null,
         selectionMode: {
             type: String,
             default: 'single'
@@ -28,6 +26,7 @@ var script = {
             type: String,
             default: null
         },
+        panelProps: null,
         appendTo: {
             type: String,
             default: 'body'
@@ -43,6 +42,18 @@ var script = {
         metaKeySelection: {
             type: Boolean,
             default: true
+        },
+        inputId: String,
+        inputClass: String,
+        inputStyle: null,
+        inputProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
         }
     },
     watch: {
@@ -96,12 +107,15 @@ var script = {
         hide() {
             this.$emit('before-hide');
             this.overlayVisible = false;
+            this.$refs.focusInput.focus();
         },
-        onFocus() {
+        onFocus(event) {
             this.focused = true;
+            this.$emit('focus', event);
         },
-        onBlur() {
+        onBlur(event) {
             this.focused = false;
+            this.$emit('blur', event);
         },
         onClick(event) {
             if (!this.disabled && (!this.overlay || !this.overlay.contains(event.target)) && !DomHandler.hasClass(event.target, 'p-treeselect-close')) {
@@ -132,35 +146,40 @@ var script = {
             this.expandedKeys = keys;
         },
         onKeyDown(event) {
-            switch(event.which) {
-                //down
-                case 40:
-                    if (!this.overlayVisible && event.altKey) {
-                        this.show();
-                        event.preventDefault();
+            switch(event.code) {
+                case 'Down':
+                case 'ArrowDown':
+                    if (this.overlayVisible) {
+                        if (DomHandler.findSingle(this.overlay, '.p-highlight')) {
+                            DomHandler.findSingle(this.overlay, '.p-highlight').focus();
+                        }
+                        else DomHandler.findSingle(this.overlay, '.p-treenode').children[0].focus();
                     }
+                    else {
+                        this.show();
+                    }
+
+                    event.preventDefault();
                 break;
 
-                //space
-                case 32:
-                    if (!this.overlayVisible) {
-                        this.show();
-                        event.preventDefault();
+                case 'Space':
+                case 'Enter':
+                    if (this.overlayVisible) {
+                        this.hide();
                     }
+                    else {
+                        this.show();
+                    }
+
+                    event.preventDefault();
                 break;
 
-                //enter and escape
-                case 13:
-                case 27:
+                case 'Escape':
+                case 'Tab':
                     if (this.overlayVisible) {
                         this.hide();
                         event.preventDefault();
                     }
-                break;
-
-                //tab
-                case 9:
-                    this.hide();
                 break;
             }
         },
@@ -366,6 +385,9 @@ var script = {
         },
         emptyOptions() {
             return !this.options || this.options.length === 0;
+        },
+        listId() {
+            return UniqueComponentId() + '_list';
         }
     },
     components: {
@@ -378,10 +400,10 @@ var script = {
 };
 
 const _hoisted_1 = { class: "p-hidden-accessible" };
-const _hoisted_2 = ["id", "disabled", "tabindex", "aria-expanded", "aria-labelledby"];
+const _hoisted_2 = ["id", "disabled", "tabindex", "aria-labelledby", "aria-label", "aria-expanded", "aria-controls"];
 const _hoisted_3 = { class: "p-treeselect-label-container" };
 const _hoisted_4 = { class: "p-treeselect-token-label" };
-const _hoisted_5 = { class: "p-treeselect-trigger" };
+const _hoisted_5 = ["aria-expanded"];
 const _hoisted_6 = /*#__PURE__*/createElementVNode("span", { class: "p-treeselect-trigger-icon pi pi-chevron-down" }, null, -1);
 const _hoisted_7 = {
   key: 0,
@@ -398,21 +420,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[6] || (_cache[6] = (...args) => ($options.onClick && $options.onClick(...args)))
   }, [
     createElementVNode("div", _hoisted_1, [
-      createElementVNode("input", {
+      createElementVNode("input", mergeProps({
         ref: "focusInput",
         type: "text",
-        role: "listbox",
+        role: "combobox",
         id: $props.inputId,
+        class: $props.inputClass,
+        style: $props.inputStyle,
         readonly: "",
         disabled: $props.disabled,
-        onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-        onBlur: _cache[1] || (_cache[1] = (...args) => ($options.onBlur && $options.onBlur(...args))),
-        onKeydown: _cache[2] || (_cache[2] = (...args) => ($options.onKeyDown && $options.onKeyDown(...args))),
-        tabindex: $props.tabindex,
-        "aria-haspopup": "true",
+        tabindex: !$props.disabled ? $props.tabindex : -1,
+        "aria-labelledby": _ctx.ariaLabelledby,
+        "aria-label": _ctx.ariaLabel,
+        "aria-haspopup": "tree",
         "aria-expanded": $data.overlayVisible,
-        "aria-labelledby": $props.ariaLabelledBy
-      }, null, 40, _hoisted_2)
+        "aria-controls": $options.listId,
+        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event))),
+        onKeydown: _cache[2] || (_cache[2] = $event => ($options.onKeyDown($event)))
+      }, $props.inputProps), null, 16, _hoisted_2)
     ]),
     createElementVNode("div", _hoisted_3, [
       createElementVNode("div", {
@@ -446,11 +472,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       ], 2)
     ]),
-    createElementVNode("div", _hoisted_5, [
+    createElementVNode("div", {
+      class: "p-treeselect-trigger",
+      role: "button",
+      "aria-haspopup": "tree",
+      "aria-expanded": $data.overlayVisible
+    }, [
       renderSlot(_ctx.$slots, "indicator", {}, () => [
         _hoisted_6
       ])
-    ]),
+    ], 8, _hoisted_5),
     createVNode(_component_Portal, { appendTo: $props.appendTo }, {
       default: withCtx(() => [
         createVNode(Transition, {
@@ -461,12 +492,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, {
           default: withCtx(() => [
             ($data.overlayVisible)
-              ? (openBlock(), createElementBlock("div", {
+              ? (openBlock(), createElementBlock("div", mergeProps({
                   key: 0,
                   ref: $options.overlayRef,
                   onClick: _cache[5] || (_cache[5] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
-                  class: normalizeClass($options.panelStyleClass)
-                }, [
+                  class: $options.panelStyleClass
+                }, $props.panelProps), [
                   renderSlot(_ctx.$slots, "header", {
                     value: $props.modelValue,
                     options: $props.options
@@ -476,6 +507,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     style: normalizeStyle({'max-height': $props.scrollHeight})
                   }, [
                     createVNode(_component_TSTree, {
+                      id: $options.listId,
                       value: $props.options,
                       selectionMode: $props.selectionMode,
                       "onUpdate:selectionKeys": $options.onSelectionChange,
@@ -486,8 +518,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       onNodeExpand: _cache[3] || (_cache[3] = $event => (_ctx.$emit('node-expand', $event))),
                       onNodeCollapse: _cache[4] || (_cache[4] = $event => (_ctx.$emit('node-collapse', $event))),
                       onNodeSelect: $options.onNodeSelect,
-                      onNodeUnselect: $options.onNodeUnselect
-                    }, null, 8, ["value", "selectionMode", "onUpdate:selectionKeys", "selectionKeys", "expandedKeys", "onUpdate:expandedKeys", "metaKeySelection", "onNodeSelect", "onNodeUnselect"]),
+                      onNodeUnselect: $options.onNodeUnselect,
+                      level: 0
+                    }, null, 8, ["id", "value", "selectionMode", "onUpdate:selectionKeys", "selectionKeys", "expandedKeys", "onUpdate:expandedKeys", "metaKeySelection", "onNodeSelect", "onNodeUnselect"]),
                     ($options.emptyOptions)
                       ? (openBlock(), createElementBlock("div", _hoisted_7, [
                           renderSlot(_ctx.$slots, "empty", {}, () => [
@@ -500,7 +533,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     value: $props.modelValue,
                     options: $props.options
                   })
-                ], 2))
+                ], 16))
               : createCommentVNode("", true)
           ]),
           _: 3

@@ -43,10 +43,6 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, Portal, vue) {
                 type: Number,
                 default: 0
             },
-            ariaLabelledBy: {
-                type: String,
-                default: null
-            },
             appendTo: {
                 type: String,
                 default: 'body'
@@ -556,7 +552,7 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, Portal, vue) {
         }
     };
 
-    const _hoisted_1 = ["tabindex", "disabled", "aria-labelledby"];
+    const _hoisted_1 = ["tabindex", "disabled"];
     const _hoisted_2 = { class: "p-colorpicker-content" };
     const _hoisted_3 = { class: "p-colorpicker-color" };
 
@@ -577,8 +573,7 @@ this.primevue.colorpicker = (function (utils, OverlayEventBus, Portal, vue) {
               tabindex: $props.tabindex,
               disabled: $props.disabled,
               onClick: _cache[0] || (_cache[0] = (...args) => ($options.onInputClick && $options.onInputClick(...args))),
-              onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onInputKeydown && $options.onInputKeydown(...args))),
-              "aria-labelledby": $props.ariaLabelledBy
+              onKeydown: _cache[1] || (_cache[1] = (...args) => ($options.onInputKeydown && $options.onInputKeydown(...args)))
             }, null, 42, _hoisted_1))
           : vue.createCommentVNode("", true),
         vue.createVNode(_component_Portal, {

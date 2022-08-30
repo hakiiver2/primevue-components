@@ -1,7 +1,7 @@
 <template>
     <div :class="containerClass" @click="onClick($event)">
         <div class="p-hidden-accessible">
-            <input :id="inputId" ref="input" type="checkbox" role="switch" :checked="checked" :disabled="disabled"
+            <input :id="inputId" ref="input" type="checkbox" role="switch" :class="inputClass" :style="inputStyle" :checked="checked" :disabled="disabled" :aria-checked="checked" :aria-labelledby="ariaLabelledby" :aria-label="ariaLabel"
                 @focus="onFocus($event)" @blur="onBlur($event)" v-bind="inputProps">
         </div>
         <span class="p-inputswitch-slider"></span>
@@ -30,7 +30,17 @@ export default {
             default: false
         },
         inputId: null,
-        inputProps: null
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     data() {
         return {

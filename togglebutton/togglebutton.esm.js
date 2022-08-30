@@ -1,5 +1,5 @@
 import Ripple from 'primevue/ripple';
-import { resolveDirective, withDirectives, openBlock, createElementBlock, normalizeClass, createCommentVNode, createElementVNode, toDisplayString } from 'vue';
+import { resolveDirective, withDirectives, openBlock, createElementBlock, normalizeClass, createElementVNode, mergeProps, createCommentVNode, toDisplayString } from 'vue';
 
 var script = {
     name: 'ToggleButton',
@@ -26,7 +26,19 @@ var script = {
         },
         tabindex: {
             type: Number,
-            default: 0
+            default: null
+        },
+        inputId: null,
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
         }
     },
     methods: {
@@ -35,13 +47,6 @@ var script = {
                 this.$emit('update:modelValue', !this.modelValue);
                 this.$emit('change', event);
                 this.$emit('click', event);
-            }
-        },
-        onKeyDown(event) {
-            //space
-            if (event.keyCode === 32) {
-                this.onClick(event);
-                event.preventDefault();
             }
         },
         onFocus(event) {
@@ -85,30 +90,40 @@ var script = {
     }
 };
 
-const _hoisted_1 = ["tabindex", "aria-pressed"];
-const _hoisted_2 = { class: "p-button-label" };
+const _hoisted_1 = { class: "p-hidden-accessible" };
+const _hoisted_2 = ["id", "checked", "value", "aria-labelledby", "aria-label"];
+const _hoisted_3 = { class: "p-button-label" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _directive_ripple = resolveDirective("ripple");
 
   return withDirectives((openBlock(), createElementBlock("div", {
     class: normalizeClass($options.buttonClass),
-    role: "button",
-    tabindex: $props.tabindex,
-    "aria-pressed": $props.modelValue,
-    onClick: _cache[0] || (_cache[0] = $event => ($options.onClick($event))),
-    onKeydown: _cache[1] || (_cache[1] = $event => ($options.onKeyDown($event))),
-    onFocus: _cache[2] || (_cache[2] = $event => ($options.onFocus($event))),
-    onBlur: _cache[3] || (_cache[3] = $event => ($options.onBlur($event)))
+    onClick: _cache[2] || (_cache[2] = $event => ($options.onClick($event)))
   }, [
+    createElementVNode("span", _hoisted_1, [
+      createElementVNode("input", mergeProps({
+        type: "checkbox",
+        role: "switch",
+        id: $props.inputId,
+        class: $props.inputClass,
+        style: $props.inputStyle,
+        checked: $props.modelValue,
+        value: $props.modelValue,
+        "aria-labelledby": _ctx.ariaLabelledby,
+        "aria-label": _ctx.ariaLabel,
+        onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
+        onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event)))
+      }, $props.inputProps), null, 16, _hoisted_2)
+    ]),
     ($options.hasIcon)
       ? (openBlock(), createElementBlock("span", {
           key: 0,
           class: normalizeClass($options.iconClass)
         }, null, 2))
       : createCommentVNode("", true),
-    createElementVNode("span", _hoisted_2, toDisplayString($options.label), 1)
-  ], 42, _hoisted_1)), [
+    createElementVNode("span", _hoisted_3, toDisplayString($options.label), 1)
+  ], 2)), [
     [_directive_ripple]
   ])
 }

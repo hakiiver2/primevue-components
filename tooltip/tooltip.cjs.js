@@ -302,12 +302,16 @@ const Tooltip = {
             target.$_ptooltipClass = null;
             target.$_ptooltipFitContent = true;
         }
-        else {
-            target.$_ptooltipValue = options.value.value;
-            target.$_ptooltipDisabled = options.value.disabled || false;
-            target.$_ptooltipEscape = options.value.escape || false;
-            target.$_ptooltipClass = options.value.class;
-            target.$_ptooltipFitContent = options.value.fitContent || true;
+        else if (typeof options.value === 'object' && options.value) {
+            if (options.value.value === undefined || options.value.value === null || (typeof options.value.value === 'string' && options.value.value.trim() === '')) return;
+            else {
+                /* eslint-disable */
+                target.$_ptooltipValue = options.value.value;
+                target.$_ptooltipDisabled = !!options.value.disabled === options.value.disabled ? options.value.disabled : false;
+                target.$_ptooltipEscape = !!options.value.escape === options.value.escape ? options.value.escape : false;
+                target.$_ptooltipClass = options.value.class;
+                target.$_ptooltipFitContent = !!options.value.fitContent === options.value.fitContent ? options.value.fitContent : true;
+            }
         }
 
         target.$_ptooltipZIndex = options.instance.$primevue && options.instance.$primevue.config && options.instance.$primevue.config.zIndex.tooltip;
@@ -336,11 +340,16 @@ const Tooltip = {
             target.$_ptooltipEscape = false;
             target.$_ptooltipClass = null;
         }
-        else {
-            target.$_ptooltipValue = options.value.value;
-            target.$_ptooltipDisabled = options.value.disabled || false;
-            target.$_ptooltipEscape = options.value.escape || false;
-            target.$_ptooltipClass = options.value.class;
+        else if (typeof options.value === 'object' && options.value) {
+            if (options.value.value === undefined || options.value.value === null || (typeof options.value.value === 'string' && options.value.value.trim() === '')) return;
+            else {
+                /* eslint-disable */
+                target.$_ptooltipValue = options.value.value;
+                target.$_ptooltipDisabled = !!options.value.disabled === options.value.disabled ? options.value.disabled : false;
+                target.$_ptooltipEscape = !!options.value.escape === options.value.escape ? options.value.escape : false;
+                target.$_ptooltipClass = options.value.class;
+                target.$_ptooltipFitContent = !!options.value.fitContent === options.value.fitContent ? options.value.fitContent : true;
+            }
         }
     }
 };

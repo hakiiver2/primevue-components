@@ -59,6 +59,10 @@ var script = {
         showLoader: {
             type: Boolean,
             default: false
+        },
+        tabindex: {
+            type: Number,
+            default: 0
         }
     },
     data() {
@@ -538,7 +542,8 @@ var script = {
     }
 };
 
-const _hoisted_1 = {
+const _hoisted_1 = ["tabindex"];
+const _hoisted_2 = {
   key: 1,
   class: "p-virtualscroller-loading-icon pi pi-spinner pi-spin"
 };
@@ -549,7 +554,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 0,
         ref: $options.elementRef,
         class: normalizeClass($options.containerClass),
-        tabindex: 0,
+        tabindex: $props.tabindex,
         style: normalizeStyle($props.style),
         onScroll: _cache[0] || (_cache[0] = (...args) => ($options.onScroll && $options.onScroll(...args)))
       }, [
@@ -602,10 +607,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       options: $options.getLoaderOptions(index, $options.isBoth() && { numCols: _ctx.d_numItemsInViewport.cols })
                     })
                   }), 128))
-                : (openBlock(), createElementBlock("i", _hoisted_1))
+                : (openBlock(), createElementBlock("i", _hoisted_2))
             ], 2))
           : createCommentVNode("", true)
-      ], 38))
+      ], 46, _hoisted_1))
     : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
         renderSlot(_ctx.$slots, "default"),
         renderSlot(_ctx.$slots, "content", {

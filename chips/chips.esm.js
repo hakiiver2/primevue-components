@@ -1,9 +1,9 @@
-import { openBlock, createElementBlock, normalizeClass, normalizeStyle, createElementVNode, Fragment, renderList, renderSlot, toDisplayString, mergeProps } from 'vue';
+import { UniqueComponentId } from 'primevue/utils';
+import { openBlock, createElementBlock, normalizeClass, createElementVNode, Fragment, renderList, renderSlot, toDisplayString, mergeProps } from 'vue';
 
 var script = {
     name: 'Chips',
-    inheritAttrs: false,
-    emits: ['update:modelValue', 'add', 'remove'],
+    emits: ['update:modelValue', 'add', 'remove', 'focus', 'blur'],
     props: {
         modelValue: {
             type: Array,
@@ -25,13 +25,33 @@ var script = {
             type: Boolean,
             default: true
         },
-        class: null,
-        style: null
+        placeholder: {
+            type: String,
+            default: null
+        },
+        inputId: null,
+        inputClass: null,
+        inputStyle: null,
+        inputProps: null,
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        'aria-labelledby': {
+            type: String,
+			default: null
+        },
+        'aria-label': {
+            type: String,
+            default: null
+        }
     },
     data() {
         return {
+            id: UniqueComponentId(),
             inputValue: null,
-            focused: false
+            focused: false,
+            focusedIndex: null
         };
     },
     methods: {
@@ -40,37 +60,53 @@ var script = {
         },
         onInput(event) {
             this.inputValue = event.target.value;
+            this.focusedIndex = null;
         },
-        onFocus() {
+        onFocus(event) {
             this.focused = true;
+            this.focusedIndex = null;
+            this.$emit('focus', event);
         },
         onBlur(event) {
             this.focused = false;
+            this.focusedIndex = null;
             if (this.addOnBlur) {
                 this.addItem(event, event.target.value, false);
             }
+            this.$emit('blur', event);
         },
         onKeyDown(event) {
             const inputValue = event.target.value;
 
-            switch(event.which) {
-                //backspace
-                case 8:
+            switch(event.code) {
+                case 'Backspace':
                     if (inputValue.length === 0 && this.modelValue && this.modelValue.length > 0) {
-                        this.removeItem(event, this.modelValue.length - 1);
+                        if (this.focusedIndex !== null) {
+                            this.removeItem(event, this.focusedIndex);
+                        }
+                        else this.removeItem(event, this.modelValue.length - 1);
                     }
                 break;
 
-                //enter
-                case 13:
+                case 'Enter':
                     if (inputValue && inputValue.trim().length && !this.maxedOut) {
                         this.addItem(event, inputValue, true);
                     }
                 break;
 
+                case 'ArrowLeft':
+                    if (inputValue.length === 0 && this.modelValue && this.modelValue.length > 0) {
+                        this.$refs.container.focus();
+                    }
+                break;
+
+                case 'ArrowRight':
+                    event.stopPropagation();
+                break;
+
                 default:
                     if (this.separator) {
-                        if (this.separator === ',' && (event.which === 188 || event.which === 110)) {
+                        if (this.separator === ',' && event.key === ',') {
                             this.addItem(event, inputValue, true);
                         }
                     }
@@ -87,6 +123,51 @@ var script = {
                     value = [...value, ...pastedValues];
                     this.updateModel(event, value, true);
                 }
+            }
+        },
+        onContainerFocus() {
+            this.focused = true;
+        },
+        onContainerBlur() {
+            this.focusedIndex = -1;
+            this.focused = false;
+        },
+        onContainerKeyDown(event) {
+            switch (event.code) {
+                case 'ArrowLeft':
+                    this.onArrowLeftKeyOn(event);
+                    break;
+
+                case 'ArrowRight':
+                    this.onArrowRightKeyOn(event);
+                    break;
+
+                case 'Backspace':
+                    this.onBackspaceKeyOn(event);
+                    break;
+            }
+        },
+        onArrowLeftKeyOn() {
+            if (this.inputValue.length === 0 && this.modelValue && this.modelValue.length > 0) {
+                this.focusedIndex = this.focusedIndex === null ? this.modelValue.length - 1 : this.focusedIndex - 1;
+                if (this.focusedIndex < 0) this.focusedIndex = 0;
+            }
+        },
+        onArrowRightKeyOn() {
+            if (this.inputValue.length === 0 && this.modelValue && this.modelValue.length > 0) {
+
+                if (this.focusedIndex === this.modelValue.length - 1) {
+                    this.focusedIndex = null;
+                    this.$refs.input.focus();
+                }
+                else {
+                    this.focusedIndex++;
+                }
+            }
+        },
+        onBackspaceKeyOn(event) {
+            if (this.focusedIndex !== null) {
+                this.removeItem(event, this.focusedIndex);
             }
         },
         updateModel(event, value, preventDefault) {
@@ -112,12 +193,14 @@ var script = {
             }
         },
         removeItem(event, index) {
-            if (this.$attrs.disabled) {
+            if (this.disabled) {
                 return;
             }
 
             let values = [...this.modelValue];
             const removedItem = values.splice(index, 1);
+            this.focusedIndex = null;
+            this.$refs.input.focus();
             this.$emit('update:modelValue', values);
             this.$emit('remove', {
                 originalEvent: event,
@@ -130,57 +213,86 @@ var script = {
             return this.max && this.modelValue && this.max === this.modelValue.length;
         },
         containerClass() {
-            return ['p-chips p-component p-inputwrapper', this.class, {
+            return ['p-chips p-component p-inputwrapper', {
+                'p-disabled': this.disabled,
+                'p-focus': this.focused,
                 'p-inputwrapper-filled': ((this.modelValue && this.modelValue.length) || (this.inputValue && this.inputValue.length)),
                 'p-inputwrapper-focus': this.focused
             }];
+        },
+        focusedOptionId() {
+            return this.focusedIndex !== null ? `${this.id}_chips_item_${this.focusedIndex}` : null;
         }
     }
 };
 
-const _hoisted_1 = { class: "p-chips-token-label" };
-const _hoisted_2 = ["onClick"];
-const _hoisted_3 = { class: "p-chips-input-token" };
-const _hoisted_4 = ["disabled"];
+const _hoisted_1 = ["aria-labelledby", "aria-label", "aria-activedescendant"];
+const _hoisted_2 = ["id", "aria-label", "aria-setsize", "aria-posinset"];
+const _hoisted_3 = { class: "p-chips-token-label" };
+const _hoisted_4 = ["onClick"];
+const _hoisted_5 = {
+  class: "p-chips-input-token",
+  role: "option"
+};
+const _hoisted_6 = ["id", "disabled", "placeholder"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock("div", {
-    class: normalizeClass($options.containerClass),
-    style: normalizeStyle($props.style)
+    class: normalizeClass($options.containerClass)
   }, [
     createElementVNode("ul", {
-      class: normalizeClass(['p-inputtext p-chips-multiple-container', {'p-disabled': _ctx.$attrs.disabled, 'p-focus': $data.focused}]),
-      onClick: _cache[5] || (_cache[5] = $event => ($options.onWrapperClick()))
+      ref: "container",
+      class: "p-inputtext p-chips-multiple-container",
+      tabindex: "-1",
+      role: "listbox",
+      "aria-orientation": "horizontal",
+      "aria-labelledby": _ctx.ariaLabelledby,
+      "aria-label": _ctx.ariaLabel,
+      "aria-activedescendant": $data.focused ? $options.focusedOptionId : undefined,
+      onClick: _cache[5] || (_cache[5] = $event => ($options.onWrapperClick())),
+      onFocus: _cache[6] || (_cache[6] = (...args) => ($options.onContainerFocus && $options.onContainerFocus(...args))),
+      onBlur: _cache[7] || (_cache[7] = (...args) => ($options.onContainerBlur && $options.onContainerBlur(...args))),
+      onKeydown: _cache[8] || (_cache[8] = (...args) => ($options.onContainerKeyDown && $options.onContainerKeyDown(...args)))
     }, [
       (openBlock(true), createElementBlock(Fragment, null, renderList($props.modelValue, (val, i) => {
         return (openBlock(), createElementBlock("li", {
           key: `${i}_${val}`,
-          class: "p-chips-token"
+          id: $data.id + '_chips_item_' + i,
+          role: "option",
+          class: normalizeClass(['p-chips-token', {'p-focus': $data.focusedIndex === i}]),
+          "aria-label": val,
+          "aria-selected": true,
+          "aria-setsize": $props.modelValue.length,
+          "aria-posinset": i + 1
         }, [
           renderSlot(_ctx.$slots, "chip", { value: val }, () => [
-            createElementVNode("span", _hoisted_1, toDisplayString(val), 1)
+            createElementVNode("span", _hoisted_3, toDisplayString(val), 1)
           ]),
           createElementVNode("span", {
             class: "p-chips-token-icon pi pi-times-circle",
-            onClick: $event => ($options.removeItem($event, i))
-          }, null, 8, _hoisted_2)
-        ]))
+            onClick: $event => ($options.removeItem($event, i)),
+            "aria-hidden": "true"
+          }, null, 8, _hoisted_4)
+        ], 10, _hoisted_2))
       }), 128)),
-      createElementVNode("li", _hoisted_3, [
+      createElementVNode("li", _hoisted_5, [
         createElementVNode("input", mergeProps({
           ref: "input",
-          type: "text"
-        }, _ctx.$attrs, {
-          onFocus: _cache[0] || (_cache[0] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+          type: "text",
+          id: $props.inputId,
+          class: $props.inputClass,
+          style: $props.inputStyle,
+          disabled: $props.disabled || $options.maxedOut,
+          placeholder: $props.placeholder,
+          onFocus: _cache[0] || (_cache[0] = $event => ($options.onFocus($event))),
           onBlur: _cache[1] || (_cache[1] = $event => ($options.onBlur($event))),
           onInput: _cache[2] || (_cache[2] = (...args) => ($options.onInput && $options.onInput(...args))),
           onKeydown: _cache[3] || (_cache[3] = $event => ($options.onKeyDown($event))),
-          onPaste: _cache[4] || (_cache[4] = $event => ($options.onPaste($event))),
-          disabled: _ctx.$attrs.disabled || $options.maxedOut
-        }), null, 16, _hoisted_4)
+          onPaste: _cache[4] || (_cache[4] = $event => ($options.onPaste($event)))
+        }, $props.inputProps), null, 16, _hoisted_6)
       ])
-    ], 2)
-  ], 6))
+    ], 40, _hoisted_1)
+  ], 2))
 }
 
 function styleInject(css, ref) {

@@ -168,7 +168,7 @@ this.primevue.overlaypanel = (function (utils, OverlayEventBus, Ripple, Portal, 
                 }
             },
             bindOutsideClickListener() {
-                if (!this.outsideClickListener) {
+                if (!this.outsideClickListener && utils.DomHandler.isClient()) {
                     this.outsideClickListener = (event) => {
                         if (this.visible && !this.selfClick && !this.isTargetClicked(event)) {
                             this.visible = false;
