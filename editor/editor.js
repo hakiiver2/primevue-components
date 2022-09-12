@@ -65,7 +65,6 @@ this.primevue.editor = (function (QuillImageDropAndPaste, utils, vue) {
             let modules = {
                 toolbar: toolbar,
             };
-            console.log(this.quillImageDropAndPaste);
             if(this.quillImageDropAndPaste) {
                 modules.imageDropAndPaste = {
                     handler: this.quillImageDropAndPaste
@@ -92,7 +91,6 @@ this.primevue.editor = (function (QuillImageDropAndPaste, utils, vue) {
                 import('quill')
                     .then((module) => {
                         if (module && utils.DomHandler.isExist(this.$refs.editorElement)) {
-                            console.log(module);
                             if (module.default) {
                                 module.default.register('modules/imageDropAndPaste', QuillImageDropAndPaste__default["default"]);
                                 // webpack

@@ -85,7 +85,6 @@ var script = {
         let modules = {
             toolbar: toolbar,
         };
-        console.log(this.quillImageDropAndPaste);
         if(this.quillImageDropAndPaste) {
             modules.imageDropAndPaste = {
                 handler: this.quillImageDropAndPaste
@@ -112,7 +111,6 @@ var script = {
             Promise.resolve().then(function () { return /*#__PURE__*/_interopNamespace(require('quill')); })
                 .then((module) => {
                     if (module && utils.DomHandler.isExist(this.$refs.editorElement)) {
-                        console.log(module);
                         if (module.default) {
                             module.default.register('modules/imageDropAndPaste', QuillImageDropAndPaste__default["default"]);
                             // webpack

@@ -112,7 +112,6 @@ export default {
         let modules = {
             toolbar: toolbar,
         }
-        console.log(this.quillImageDropAndPaste)
         if(this.quillImageDropAndPaste) {
             modules.imageDropAndPaste = {
                 handler: this.quillImageDropAndPaste
@@ -139,7 +138,6 @@ export default {
             import('quill')
                 .then((module) => {
                     if (module && DomHandler.isExist(this.$refs.editorElement)) {
-                        console.log(module)
                         if (module.default) {
                             module.default.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
                             // webpack

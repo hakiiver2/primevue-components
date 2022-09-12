@@ -145,6 +145,7 @@
                         <CalendarButton v-if="timeOnly" type="button" :label="nowLabel" @click="onNowButtonClick($event)" class="p-button-text" @keydown="onContainerButtonKeydown"/>
                         <CalendarButton v-else type="button" :label="todayLabel" @click="onTodayButtonClick($event)" class="p-button-text" @keydown="onContainerButtonKeydown"/>
                         <CalendarButton type="button" :label="clearLabel" @click="onClearButtonClick($event)" class="p-button-text" @keydown="onContainerButtonKeydown"/>
+                        <CalendarButton type="button" :label="saveLabel" @click="onSaveButtonClick($event)" class="" @keydown="onContainerButtonKeydown"/>
                     </div>
                     <slot name="footer"></slot>
                 </div>
@@ -1207,6 +1208,12 @@ export default {
             this.updateModel(null);
             this.overlayVisible = false;
             this.$emit('clear-click', event);
+            event.preventDefault();
+        },
+        onSaveButtonClick(event) {
+            this.onTimePickerElementMouseUp(event)
+            this.overlayVisible = false;
+
             event.preventDefault();
         },
         onTimePickerElementMouseDown(event, type, direction) {
@@ -2642,6 +2649,9 @@ export default {
         },
         clearLabel() {
             return this.$primevue.config.locale.clear;
+        },
+        saveLabel() {
+            return "Save";
         },
         weekHeaderLabel() {
             return this.$primevue.config.locale.weekHeader;

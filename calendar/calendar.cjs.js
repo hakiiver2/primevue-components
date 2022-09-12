@@ -1063,6 +1063,12 @@ var script = {
             this.$emit('clear-click', event);
             event.preventDefault();
         },
+        onSaveButtonClick(event) {
+            this.onTimePickerElementMouseUp(event);
+            this.overlayVisible = false;
+
+            event.preventDefault();
+        },
         onTimePickerElementMouseDown(event, type, direction) {
             if (this.isEnabled()) {
                 this.repeat(event, null, type, direction);
@@ -2478,6 +2484,9 @@ var script = {
         clearLabel() {
             return this.$primevue.config.locale.clear;
         },
+        saveLabel() {
+            return "Save";
+        },
         weekHeaderLabel() {
             return this.$primevue.config.locale.weekHeader;
         },
@@ -2699,7 +2708,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       default: vue.withCtx(() => [
         vue.createVNode(vue.Transition, {
           name: "p-connected-overlay",
-          onEnter: _cache[68] || (_cache[68] = $event => ($options.onOverlayEnter($event))),
+          onEnter: _cache[69] || (_cache[69] = $event => ($options.onOverlayEnter($event))),
           onAfterEnter: $options.onOverlayEnterComplete,
           onAfterLeave: $options.onOverlayAfterLeave,
           onLeave: $options.onOverlayLeave
@@ -2715,9 +2724,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   role: $props.inline ? null : 'dialog',
                   "aria-modal": $props.inline ? null : 'true',
                   "aria-label": _ctx.$primevue.config.locale.chooseDate,
-                  onClick: _cache[65] || (_cache[65] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
-                  onKeydown: _cache[66] || (_cache[66] = (...args) => ($options.onOverlayKeyDown && $options.onOverlayKeyDown(...args))),
-                  onMouseup: _cache[67] || (_cache[67] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
+                  onClick: _cache[66] || (_cache[66] = (...args) => ($options.onOverlayClick && $options.onOverlayClick(...args))),
+                  onKeydown: _cache[67] || (_cache[67] = (...args) => ($options.onOverlayKeyDown && $options.onOverlayKeyDown(...args))),
+                  onMouseup: _cache[68] || (_cache[68] = (...args) => ($options.onOverlayMouseUp && $options.onOverlayMouseUp(...args)))
                 }, $props.panelProps), [
                   (!$props.timeOnly)
                     ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
@@ -3085,6 +3094,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           label: $options.clearLabel,
                           onClick: _cache[64] || (_cache[64] = $event => ($options.onClearButtonClick($event))),
                           class: "p-button-text",
+                          onKeydown: $options.onContainerButtonKeydown
+                        }, null, 8, ["label", "onKeydown"]),
+                        vue.createVNode(_component_CalendarButton, {
+                          type: "button",
+                          label: $options.saveLabel,
+                          onClick: _cache[65] || (_cache[65] = $event => ($options.onSaveButtonClick($event))),
+                          class: "",
                           onKeydown: $options.onContainerButtonKeydown
                         }, null, 8, ["label", "onKeydown"])
                       ]))
