@@ -3087,13 +3087,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           class: "p-button-text",
                           onKeydown: $options.onContainerButtonKeydown
                         }, null, 8, ["label", "onKeydown"]),
-                        createVNode(_component_CalendarButton, {
-                          type: "button",
-                          label: $options.saveLabel,
-                          onClick: _cache[65] || (_cache[65] = $event => ($options.onSaveButtonClick($event))),
-                          class: "",
-                          onKeydown: $options.onContainerButtonKeydown
-                        }, null, 8, ["label", "onKeydown"])
+                        ($props.timeOnly)
+                          ? (openBlock(), createBlock(_component_CalendarButton, {
+                              key: 2,
+                              type: "button",
+                              label: $options.saveLabel,
+                              onClick: _cache[65] || (_cache[65] = $event => ($options.onSaveButtonClick($event))),
+                              class: "",
+                              onKeydown: $options.onContainerButtonKeydown
+                            }, null, 8, ["label", "onKeydown"]))
+                          : createCommentVNode("", true)
                       ]))
                     : createCommentVNode("", true),
                   renderSlot(_ctx.$slots, "footer")

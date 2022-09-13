@@ -3096,13 +3096,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           class: "p-button-text",
                           onKeydown: $options.onContainerButtonKeydown
                         }, null, 8, ["label", "onKeydown"]),
-                        vue.createVNode(_component_CalendarButton, {
-                          type: "button",
-                          label: $options.saveLabel,
-                          onClick: _cache[65] || (_cache[65] = $event => ($options.onSaveButtonClick($event))),
-                          class: "",
-                          onKeydown: $options.onContainerButtonKeydown
-                        }, null, 8, ["label", "onKeydown"])
+                        ($props.timeOnly)
+                          ? (vue.openBlock(), vue.createBlock(_component_CalendarButton, {
+                              key: 2,
+                              type: "button",
+                              label: $options.saveLabel,
+                              onClick: _cache[65] || (_cache[65] = $event => ($options.onSaveButtonClick($event))),
+                              class: "",
+                              onKeydown: $options.onContainerButtonKeydown
+                            }, null, 8, ["label", "onKeydown"]))
+                          : vue.createCommentVNode("", true)
                       ]))
                     : vue.createCommentVNode("", true),
                   vue.renderSlot(_ctx.$slots, "footer")
