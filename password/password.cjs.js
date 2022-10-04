@@ -53,6 +53,10 @@ var script = {
             type: Boolean,
             default: false
         },
+        defaultMasked: {
+            type: Boolean,
+            default: false
+        },
         hideIcon: {
             type: String,
             default: 'pi pi-eye-slash'
@@ -92,7 +96,7 @@ var script = {
             meter: null,
             infoText: null,
             focused: false,
-            unmasked: false
+            unmasked: this.defaultMasked
         };
     },
     mediumCheckRegExp: null,

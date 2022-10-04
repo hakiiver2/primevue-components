@@ -49,6 +49,10 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
                 type: Boolean,
                 default: false
             },
+            defaultMasked: {
+                type: Boolean,
+                default: false
+            },
             hideIcon: {
                 type: String,
                 default: 'pi pi-eye-slash'
@@ -88,7 +92,7 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
                 meter: null,
                 infoText: null,
                 focused: false,
-                unmasked: false
+                unmasked: this.defaultMasked
             };
         },
         mediumCheckRegExp: null,
