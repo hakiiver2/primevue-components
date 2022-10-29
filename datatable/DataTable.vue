@@ -8,7 +8,7 @@
         <div class="p-datatable-header" v-if="$slots.header">
             <slot name="header"></slot>
         </div>
-        <DTPaginator v-if="paginatorTop" :rows="d_rows" :first="d_first" :totalRecords="totalRecordsLength" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions"
+        <DTPaginator v-if="paginatorTop" ref="dtPaginator" :rows="d_rows" :first="d_first" :totalRecords="totalRecordsLength" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions"
                 :currentPageReportTemplate="currentPageReportTemplate" class="p-paginator-top" @page="onPage($event)" :alwaysShow="alwaysShowPaginator">
             <template #start v-if="$slots.paginatorstart">
                 <slot name="paginatorstart"></slot>
@@ -50,10 +50,14 @@
                             :virtualScrollerContentProps="slotProps" :isVirtualScrollerDisabled="virtualScrollerDisabled" />
                         <DTTableFooter :columnGroup="footerColumnGroup" :columns="slotProps.columns" />
                     </table>
+                    <div class="" v-if="$slots.additionTable">
+                        <slot name="additionTable">
+                        </slot>
+                    </div>
                 </template>
             </DTVirtualScroller>
         </div>
-        <DTPaginator v-if="paginatorBottom" :rows="d_rows" :first="d_first" :totalRecords="totalRecordsLength" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions" 
+        <DTPaginator v-if="paginatorBottom" ref="dtPaginator" :rows="d_rows" :first="d_first" :totalRecords="totalRecordsLength" :pageLinkSize="pageLinkSize" :template="paginatorTemplate" :rowsPerPageOptions="rowsPerPageOptions" 
                 @mouseover="mouseover"
                 @mousedown="mousedown"
                 @touchstart="touchstart"

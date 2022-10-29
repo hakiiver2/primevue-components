@@ -84,7 +84,8 @@ const defaultOptions = {
             close: 'Close',
             previous: 'Previous',
             next: 'Next'
-        }
+        },
+        save: 'Save'
     },
     filterMatchModeOptions: {
         text: [

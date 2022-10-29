@@ -2485,7 +2485,7 @@ var script = {
             return this.$primevue.config.locale.clear;
         },
         saveLabel() {
-            return "Save";
+            return this.$primevue.config.locale.save;
         },
         weekHeaderLabel() {
             return this.$primevue.config.locale.weekHeader;

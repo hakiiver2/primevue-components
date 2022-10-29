@@ -542,7 +542,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
       class: "p-column-filter-row-items"
     };
     const _hoisted_6$3 = ["onClick", "onKeydown", "tabindex"];
-    const _hoisted_7$1 = /*#__PURE__*/vue.createElementVNode("li", { class: "p-column-filter-separator" }, null, -1);
+    const _hoisted_7$2 = /*#__PURE__*/vue.createElementVNode("li", { class: "p-column-filter-separator" }, null, -1);
     const _hoisted_8 = {
       key: 0,
       class: "p-column-filter-operator"
@@ -632,7 +632,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                                 tabindex: i === 0 ? '0' : null
                               }, vue.toDisplayString(matchMode.label), 43, _hoisted_6$3))
                             }), 128)),
-                            _hoisted_7$1,
+                            _hoisted_7$2,
                             vue.createElementVNode("li", {
                               class: "p-column-filter-row-item",
                               onClick: _cache[4] || (_cache[4] = $event => ($options.clearFilter())),
@@ -1872,7 +1872,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
       _hoisted_4$2
     ];
     const _hoisted_6$2 = /*#__PURE__*/vue.createElementVNode("span", { class: "p-row-editor-cancel-icon pi pi-fw pi-times" }, null, -1);
-    const _hoisted_7 = [
+    const _hoisted_7$1 = [
       _hoisted_6$2
     ];
 
@@ -2001,7 +2001,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                                     class: "p-row-editor-cancel p-link",
                                     onClick: _cache[5] || (_cache[5] = (...args) => ($options.onRowEditCancel && $options.onRowEditCancel(...args))),
                                     type: "button"
-                                  }, _hoisted_7)), [
+                                  }, _hoisted_7$1)), [
                                     [_directive_ripple]
                                   ])
                                 : vue.createCommentVNode("", true)
@@ -4751,21 +4751,25 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
       class: "p-datatable-header"
     };
     const _hoisted_3 = {
+      key: 0,
+      class: ""
+    };
+    const _hoisted_4 = {
       key: 4,
       class: "p-datatable-footer"
     };
-    const _hoisted_4 = {
+    const _hoisted_5 = {
       ref: "resizeHelper",
       class: "p-column-resizer-helper",
       style: {"display":"none"}
     };
-    const _hoisted_5 = {
+    const _hoisted_6 = {
       key: 5,
       ref: "reorderIndicatorUp",
       class: "pi pi-arrow-down p-datatable-reorder-indicator-up",
       style: {"position":"absolute","display":"none"}
     };
-    const _hoisted_6 = {
+    const _hoisted_7 = {
       key: 6,
       ref: "reorderIndicatorDown",
       class: "pi pi-arrow-up p-datatable-reorder-indicator-down",
@@ -4802,6 +4806,7 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
         ($options.paginatorTop)
           ? (vue.openBlock(), vue.createBlock(_component_DTPaginator, {
               key: 2,
+              ref: "dtPaginator",
               rows: $data.d_rows,
               first: $data.d_first,
               totalRecords: $options.totalRecordsLength,
@@ -4994,14 +4999,20 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
                   columnGroup: $options.footerColumnGroup,
                   columns: slotProps.columns
                 }, null, 8, ["columnGroup", "columns"])
-              ], 6)
+              ], 6),
+              (_ctx.$slots.additionTable)
+                ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
+                    vue.renderSlot(_ctx.$slots, "additionTable")
+                  ]))
+                : vue.createCommentVNode("", true)
             ]),
-            _: 1
+            _: 3
           }, 16, ["items", "columns", "style", "disabled"])
         ], 4),
         ($options.paginatorBottom)
           ? (vue.openBlock(), vue.createBlock(_component_DTPaginator, {
               key: 3,
+              ref: "dtPaginator",
               rows: $data.d_rows,
               first: $data.d_first,
               totalRecords: $options.totalRecordsLength,
@@ -5037,16 +5048,16 @@ this.primevue.datatable = (function (utils, api, Paginator, VirtualScroller, vue
             ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMouseover", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "alwaysShow"]))
           : vue.createCommentVNode("", true),
         (_ctx.$slots.footer)
-          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3, [
+          ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_4, [
               vue.renderSlot(_ctx.$slots, "footer")
             ]))
           : vue.createCommentVNode("", true),
-        vue.createElementVNode("div", _hoisted_4, null, 512),
-        ($props.reorderableColumns)
-          ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_5, null, 512))
-          : vue.createCommentVNode("", true),
+        vue.createElementVNode("div", _hoisted_5, null, 512),
         ($props.reorderableColumns)
           ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_6, null, 512))
+          : vue.createCommentVNode("", true),
+        ($props.reorderableColumns)
+          ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_7, null, 512))
           : vue.createCommentVNode("", true)
       ], 2))
     }

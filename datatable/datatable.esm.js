@@ -539,7 +539,7 @@ const _hoisted_5$3 = {
   class: "p-column-filter-row-items"
 };
 const _hoisted_6$3 = ["onClick", "onKeydown", "tabindex"];
-const _hoisted_7$1 = /*#__PURE__*/createElementVNode("li", { class: "p-column-filter-separator" }, null, -1);
+const _hoisted_7$2 = /*#__PURE__*/createElementVNode("li", { class: "p-column-filter-separator" }, null, -1);
 const _hoisted_8 = {
   key: 0,
   class: "p-column-filter-operator"
@@ -629,7 +629,7 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
                             tabindex: i === 0 ? '0' : null
                           }, toDisplayString(matchMode.label), 43, _hoisted_6$3))
                         }), 128)),
-                        _hoisted_7$1,
+                        _hoisted_7$2,
                         createElementVNode("li", {
                           class: "p-column-filter-row-item",
                           onClick: _cache[4] || (_cache[4] = $event => ($options.clearFilter())),
@@ -1869,7 +1869,7 @@ const _hoisted_5$2 = [
   _hoisted_4$2
 ];
 const _hoisted_6$2 = /*#__PURE__*/createElementVNode("span", { class: "p-row-editor-cancel-icon pi pi-fw pi-times" }, null, -1);
-const _hoisted_7 = [
+const _hoisted_7$1 = [
   _hoisted_6$2
 ];
 
@@ -1998,7 +1998,7 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
                                 class: "p-row-editor-cancel p-link",
                                 onClick: _cache[5] || (_cache[5] = (...args) => ($options.onRowEditCancel && $options.onRowEditCancel(...args))),
                                 type: "button"
-                              }, _hoisted_7)), [
+                              }, _hoisted_7$1)), [
                                 [_directive_ripple]
                               ])
                             : createCommentVNode("", true)
@@ -4748,21 +4748,25 @@ const _hoisted_2 = {
   class: "p-datatable-header"
 };
 const _hoisted_3 = {
+  key: 0,
+  class: ""
+};
+const _hoisted_4 = {
   key: 4,
   class: "p-datatable-footer"
 };
-const _hoisted_4 = {
+const _hoisted_5 = {
   ref: "resizeHelper",
   class: "p-column-resizer-helper",
   style: {"display":"none"}
 };
-const _hoisted_5 = {
+const _hoisted_6 = {
   key: 5,
   ref: "reorderIndicatorUp",
   class: "pi pi-arrow-down p-datatable-reorder-indicator-up",
   style: {"position":"absolute","display":"none"}
 };
-const _hoisted_6 = {
+const _hoisted_7 = {
   key: 6,
   ref: "reorderIndicatorDown",
   class: "pi pi-arrow-up p-datatable-reorder-indicator-down",
@@ -4799,6 +4803,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ($options.paginatorTop)
       ? (openBlock(), createBlock(_component_DTPaginator, {
           key: 2,
+          ref: "dtPaginator",
           rows: $data.d_rows,
           first: $data.d_first,
           totalRecords: $options.totalRecordsLength,
@@ -4991,14 +4996,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               columnGroup: $options.footerColumnGroup,
               columns: slotProps.columns
             }, null, 8, ["columnGroup", "columns"])
-          ], 6)
+          ], 6),
+          (_ctx.$slots.additionTable)
+            ? (openBlock(), createElementBlock("div", _hoisted_3, [
+                renderSlot(_ctx.$slots, "additionTable")
+              ]))
+            : createCommentVNode("", true)
         ]),
-        _: 1
+        _: 3
       }, 16, ["items", "columns", "style", "disabled"])
     ], 4),
     ($options.paginatorBottom)
       ? (openBlock(), createBlock(_component_DTPaginator, {
           key: 3,
+          ref: "dtPaginator",
           rows: $data.d_rows,
           first: $data.d_first,
           totalRecords: $options.totalRecordsLength,
@@ -5034,16 +5045,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]), 1032, ["rows", "first", "totalRecords", "pageLinkSize", "template", "rowsPerPageOptions", "onMouseover", "onMousedown", "onTouchstart", "onTouchmove", "onTouchend", "currentPageReportTemplate", "alwaysShow"]))
       : createCommentVNode("", true),
     (_ctx.$slots.footer)
-      ? (openBlock(), createElementBlock("div", _hoisted_3, [
+      ? (openBlock(), createElementBlock("div", _hoisted_4, [
           renderSlot(_ctx.$slots, "footer")
         ]))
       : createCommentVNode("", true),
-    createElementVNode("div", _hoisted_4, null, 512),
-    ($props.reorderableColumns)
-      ? (openBlock(), createElementBlock("span", _hoisted_5, null, 512))
-      : createCommentVNode("", true),
+    createElementVNode("div", _hoisted_5, null, 512),
     ($props.reorderableColumns)
       ? (openBlock(), createElementBlock("span", _hoisted_6, null, 512))
+      : createCommentVNode("", true),
+    ($props.reorderableColumns)
+      ? (openBlock(), createElementBlock("span", _hoisted_7, null, 512))
       : createCommentVNode("", true)
   ], 2))
 }

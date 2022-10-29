@@ -1,6 +1,6 @@
 <template>
     <div :class="containerClass">
-        <PInputText ref="input" :id="inputId" :type="inputType" :class="inputClass" :style="inputStyle" :value="modelValue" :aria-labelledby="ariaLabelledby" :aria-label="ariaLabel"
+        <PInputText ref="input" :id="inputId" :type="inputType" :class="inputFieldClass" :style="inputStyle" :value="modelValue" :aria-labelledby="ariaLabelledby" :aria-label="ariaLabel"
             :aria-controls="(panelProps&&panelProps.id)||panelId||panelUniqueId" :aria-expanded="overlayVisible" :aria-haspopup="true" :placeholder="placeholder"
             @input="onInput" @focus="onFocus" @blur="onBlur" @keyup="onKeyUp" v-bind="inputProps" />
         <i v-if="toggleMask" :class="toggleIconClass" @click="onMaskToggle" />
@@ -299,9 +299,13 @@ export default {
             }];
         },
         inputFieldClass() {
-            return ['p-password-input', {
-                'p-disabled': this.disabled
-            }];
+            return [
+                'p-password-input', 
+                this.inputClass,
+                {
+                    'p-disabled': this.disabled
+                }
+            ];
         },
         panelStyleClass() {
             return ['p-password-panel p-component', this.panelClass, {

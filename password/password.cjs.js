@@ -281,9 +281,13 @@ var script = {
             }];
         },
         inputFieldClass() {
-            return ['p-password-input', {
-                'p-disabled': this.disabled
-            }];
+            return [
+                'p-password-input', 
+                this.inputClass,
+                {
+                    'p-disabled': this.disabled
+                }
+            ];
         },
         panelStyleClass() {
             return ['p-password-panel p-component', this.panelClass, {
@@ -344,7 +348,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ref: "input",
       id: $props.inputId,
       type: $options.inputType,
-      class: $props.inputClass,
+      class: $options.inputFieldClass,
       style: $props.inputStyle,
       value: $props.modelValue,
       "aria-labelledby": _ctx.ariaLabelledby,
