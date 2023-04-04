@@ -5,12 +5,6 @@ var Dialog = require('primevue/dialog');
 var Button = require('primevue/button');
 var vue = require('vue');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var ConfirmationEventBus__default = /*#__PURE__*/_interopDefaultLegacy(ConfirmationEventBus);
-var Dialog__default = /*#__PURE__*/_interopDefaultLegacy(Dialog);
-var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
-
 var script = {
     name: 'ConfirmDialog',
     props: {
@@ -44,12 +38,12 @@ var script = {
             this.visible = false;
             this.confirmation = null;
         };
-        ConfirmationEventBus__default["default"].on('confirm', this.confirmListener);
-        ConfirmationEventBus__default["default"].on('close', this.closeListener);
+        ConfirmationEventBus.on('confirm', this.confirmListener);
+        ConfirmationEventBus.on('close', this.closeListener);
     },
     beforeUnmount() {
-        ConfirmationEventBus__default["default"].off('confirm', this.confirmListener);
-        ConfirmationEventBus__default["default"].off('close', this.closeListener);
+        ConfirmationEventBus.off('confirm', this.confirmListener);
+        ConfirmationEventBus.off('close', this.closeListener);
     },
     methods: {
         accept() {
@@ -121,8 +115,8 @@ var script = {
         }
     },
     components: {
-        'CDialog': Dialog__default["default"],
-        'CDButton': Button__default["default"]
+        'CDialog': Dialog,
+        'CDButton': Button
     }
 };
 

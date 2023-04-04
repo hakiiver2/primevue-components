@@ -2,13 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Portal) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
-    var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-    var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
-    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
     var script$1 = {
         name: 'Menuitem',
         inheritAttrs: false,
@@ -49,8 +42,8 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
             }
         },
         directives: {
-            'ripple': Ripple__default["default"],
-            'tooltip': Tooltip__default["default"]
+            'ripple': Ripple,
+            'tooltip': Tooltip
         }
     };
 
@@ -330,7 +323,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
                 this.container = el;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default["default"].emit('overlay-click', {
+                OverlayEventBus.emit('overlay-click', {
                     originalEvent: event,
                     target: this.target
                 });
@@ -347,7 +340,7 @@ this.primevue.menu = (function (utils, OverlayEventBus, Ripple, Tooltip, vue, Po
         },
         components: {
             'Menuitem': script$1,
-            'Portal': Portal__default["default"]
+            'Portal': Portal
         }
     };
 

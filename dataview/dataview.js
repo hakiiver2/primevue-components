@@ -2,10 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.dataview = (function (utils, Paginator, vue) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var Paginator__default = /*#__PURE__*/_interopDefaultLegacy(Paginator);
-
     var script = {
         name: 'DataView',
         emits: ['update:first', 'update:rows', 'page'],
@@ -199,7 +195,7 @@ this.primevue.dataview = (function (utils, Paginator, vue) {
             }
         },
         components: {
-            'DVPaginator': Paginator__default["default"]
+            'DVPaginator': Paginator
         }
     };
 

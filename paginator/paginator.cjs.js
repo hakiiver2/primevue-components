@@ -5,12 +5,6 @@ var Ripple = require('primevue/ripple');
 var Dropdown = require('primevue/dropdown');
 var InputNumber = require('primevue/inputnumber');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-var Dropdown__default = /*#__PURE__*/_interopDefaultLegacy(Dropdown);
-var InputNumber__default = /*#__PURE__*/_interopDefaultLegacy(InputNumber);
-
 var script$9 = {
         name: 'CurrentPageReport',
 		inheritAttrs: false,
@@ -77,7 +71,7 @@ var script$8 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -109,7 +103,7 @@ var script$7 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -141,7 +135,7 @@ var script$6 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -180,7 +174,7 @@ var script$5 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -218,7 +212,7 @@ var script$4 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -266,7 +260,7 @@ var script$3 = {
         }
     },
     components: {
-        'RPPDropdown': Dropdown__default["default"]
+        'RPPDropdown': Dropdown
     }
 };
 
@@ -310,7 +304,7 @@ var script$2 = {
         }
     },
     components: {
-        'JTPDropdown': Dropdown__default["default"]
+        'JTPDropdown': Dropdown
     }
 };
 
@@ -345,7 +339,7 @@ var script$1 = {
         }
     },
     components: {
-        'JTPInput': InputNumber__default["default"]
+        'JTPInput': InputNumber
     }
 };
 

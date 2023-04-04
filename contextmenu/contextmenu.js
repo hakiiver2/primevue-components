@@ -2,11 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.contextmenu = (function (utils, Ripple, vue, Portal) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
     var script$1 = {
         name: 'ContextMenuSub',
         emits: ['leaf-click'],
@@ -134,7 +129,7 @@ this.primevue.contextmenu = (function (utils, Ripple, vue, Portal) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple
         }
     };
 
@@ -463,7 +458,7 @@ this.primevue.contextmenu = (function (utils, Ripple, vue, Portal) {
         },
         components: {
             'ContextMenuSub': script$1,
-            'Portal': Portal__default["default"]
+            'Portal': Portal
         }
     };
 

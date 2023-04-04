@@ -26,6 +26,10 @@ var script = {
         'aria-label': {
             type: String,
             default: null
+        },
+        clearable: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -37,6 +41,10 @@ var script = {
         onClick(event) {
             if (!this.disabled) {
                 this.$emit('click', event);
+                if (this.clearable && this.checked) {
+                    this.$emit('update:modelValue', null);
+                    return
+                }
                 this.$emit('update:modelValue', this.value);
                 this.$refs.input.focus();
 

@@ -2,11 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-    var VirtualScroller__default = /*#__PURE__*/_interopDefaultLegacy(VirtualScroller);
-
     var script = {
         name: 'Listbox',
         emits: ['update:modelValue', 'change', 'focus', 'blur', 'filter'],
@@ -640,10 +635,10 @@ this.primevue.listbox = (function (utils, api, Ripple, VirtualScroller, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple
         },
         components: {
-            'VirtualScroller': VirtualScroller__default["default"]
+            'VirtualScroller': VirtualScroller
         }
     };
 

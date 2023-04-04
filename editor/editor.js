@@ -2,14 +2,10 @@ this.primevue = this.primevue || {};
 this.primevue.editor = (function (QuillImageDropAndPaste, utils, vue) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var QuillImageDropAndPaste__default = /*#__PURE__*/_interopDefaultLegacy(QuillImageDropAndPaste);
-
     const QuillJS = (function () {
         try {
             const windowQuill = window.Quill;
-            windowQuill.register('modules/imageDropAndPaste', QuillImageDropAndPaste__default["default"]);
+            windowQuill.register('modules/imageDropAndPaste', QuillImageDropAndPaste);
             return windowQuill;
         } catch {
             return null;
@@ -92,11 +88,11 @@ this.primevue.editor = (function (QuillImageDropAndPaste, utils, vue) {
                     .then((module) => {
                         if (module && utils.DomHandler.isExist(this.$refs.editorElement)) {
                             if (module.default) {
-                                module.default.register('modules/imageDropAndPaste', QuillImageDropAndPaste__default["default"]);
+                                module.default.register('modules/imageDropAndPaste', QuillImageDropAndPaste);
                                 // webpack
                                 this.quill = new module.default(this.$refs.editorElement, configuration);
                             } else {
-                                module.register('modules/imageDropAndPaste', QuillImageDropAndPaste__default["default"]);
+                                module.register('modules/imageDropAndPaste', QuillImageDropAndPaste);
                                 // parceljs
                                 this.quill = new module(this.$refs.editorElement, configuration);
                             }

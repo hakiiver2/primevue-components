@@ -2,10 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.image = (function (utils, Portal, vue) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
     var script = {
         name: 'Image',
         inheritAttrs: false,
@@ -132,7 +128,7 @@ this.primevue.image = (function (utils, Portal, vue) {
             }
         },
         components: {
-            'Portal': Portal__default["default"]
+            'Portal': Portal
         }
     };
 

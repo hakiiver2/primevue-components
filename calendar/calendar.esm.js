@@ -111,6 +111,10 @@ var script = {
             type: Boolean,
             default: false
         },
+        showSaveButton: {
+            type: Boolean,
+            default: false
+        },
         hourFormat: {
             type: String,
             default: '24'
@@ -3087,7 +3091,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           class: "p-button-text",
                           onKeydown: $options.onContainerButtonKeydown
                         }, null, 8, ["label", "onKeydown"]),
-                        ($props.timeOnly)
+                        ($props.timeOnly || $props.showSaveButton)
                           ? (openBlock(), createBlock(_component_CalendarButton, {
                               key: 2,
                               type: "button",

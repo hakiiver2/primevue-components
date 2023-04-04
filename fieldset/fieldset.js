@@ -2,10 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.fieldset = (function (utils, Ripple, vue) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-
     var script = {
         name: 'Fieldset',
         emits: ['update:collapsed', 'toggle'],
@@ -46,7 +42,7 @@ this.primevue.fieldset = (function (utils, Ripple, vue) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple
         }
     };
 

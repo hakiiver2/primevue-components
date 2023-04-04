@@ -6,11 +6,6 @@ var Ripple = require('primevue/ripple');
 var vue = require('vue');
 var Paginator = require('primevue/paginator');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-var Paginator__default = /*#__PURE__*/_interopDefaultLegacy(Paginator);
-
 var script$4 = {
     name: 'BodyCell',
     emits: ['node-toggle','checkbox-toggle'],
@@ -141,7 +136,7 @@ var script$4 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -1612,7 +1607,7 @@ var script = {
     },
     components: {
         'TTRow': script$3,
-        'TTPaginator': Paginator__default["default"],
+        'TTPaginator': Paginator,
         'TTHeaderCell': script$2,
         'TTFooterCell': script$1
     }

@@ -6,12 +6,6 @@ var Tooltip = require('primevue/tooltip');
 var utils = require('primevue/utils');
 var vue = require('vue');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
-
 var script = {
     name: 'SpeedDial',
     emits: ['click', 'show', 'hide'],
@@ -246,11 +240,11 @@ var script = {
         }
     },
     components: {
-        'SDButton': Button__default["default"]
+        'SDButton': Button
     },
     directives: {
-        'ripple': Ripple__default["default"],
-        'tooltip': Tooltip__default["default"]
+        'ripple': Ripple,
+        'tooltip': Tooltip
     }
 };
 

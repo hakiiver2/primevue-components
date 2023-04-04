@@ -4,11 +4,6 @@ var InputText = require('primevue/inputtext');
 var Button = require('primevue/button');
 var vue = require('vue');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var InputText__default = /*#__PURE__*/_interopDefaultLegacy(InputText);
-var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
-
 var script = {
     name: 'InputNumber',
     emits: ['update:modelValue', 'input', 'focus', 'blur'],
@@ -1020,8 +1015,8 @@ var script = {
         }
     },
     components: {
-        'INInputText': InputText__default["default"],
-        'INButton': Button__default["default"]
+        'INInputText': InputText,
+        'INButton': Button
     }
 };
 

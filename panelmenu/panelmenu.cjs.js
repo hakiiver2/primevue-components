@@ -4,10 +4,6 @@ var Tooltip = require('primevue/tooltip');
 var vue = require('vue');
 var utils = require('primevue/utils');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
-
 var script$1 = {
     name: 'PanelMenuSub',
     emits: ['item-toggle'],
@@ -97,7 +93,7 @@ var script$1 = {
         }
     },
     directives: {
-        "tooltip": Tooltip__default["default"]                                                                                                                                                                            
+        "tooltip": Tooltip                                                                                                                                                                            
     }
 };
 
@@ -345,7 +341,7 @@ var script = {
         }
     },
     directives: {
-        "tooltip": Tooltip__default["default"]                                                                                                                                                                            
+        "tooltip": Tooltip                                                                                                                                                                            
     }
 };
 

@@ -6,12 +6,6 @@ var Ripple = require('primevue/ripple');
 var vue = require('vue');
 var Portal = require('primevue/portal');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
 var script$1 = {
     name: 'CascadeSelectSub',
     emits: ['option-change'],
@@ -86,7 +80,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -452,7 +446,7 @@ var script = {
             this.$emit('click', event);
         },
         onOverlayClick(event) {
-            OverlayEventBus__default["default"].emit('overlay-click', {
+            OverlayEventBus.emit('overlay-click', {
                 originalEvent: event,
                 target: this.$el
             });
@@ -884,7 +878,7 @@ var script = {
     },
     components: {
         'CascadeSelectSub': script$1,
-        'Portal': Portal__default["default"]
+        'Portal': Portal
     }
 };
 

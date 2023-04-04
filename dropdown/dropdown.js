@@ -2,13 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, VirtualScroller, Portal, vue) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
-    var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-    var VirtualScroller__default = /*#__PURE__*/_interopDefaultLegacy(VirtualScroller);
-    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
     var script = {
         name: 'Dropdown',
         emits: ['update:modelValue', 'change', 'focus', 'blur', 'before-show', 'before-hide', 'show', 'hide', 'filter'],
@@ -392,7 +385,7 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
                 }
             },
             onOverlayClick(event) {
-                OverlayEventBus__default["default"].emit('overlay-click', {
+                OverlayEventBus.emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -808,11 +801,11 @@ this.primevue.dropdown = (function (utils, OverlayEventBus, api, Ripple, Virtual
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple
         },
         components: {
-            'VirtualScroller': VirtualScroller__default["default"],
-            'Portal': Portal__default["default"]
+            'VirtualScroller': VirtualScroller,
+            'Portal': Portal
         }
     };
 

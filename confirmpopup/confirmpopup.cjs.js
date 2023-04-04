@@ -7,13 +7,6 @@ var Button = require('primevue/button');
 var Portal = require('primevue/portal');
 var vue = require('vue');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var ConfirmationEventBus__default = /*#__PURE__*/_interopDefaultLegacy(ConfirmationEventBus);
-var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
-var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
-var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
 var script = {
     name: 'ConfirmPopup',
     inheritAttrs: false,
@@ -53,12 +46,12 @@ var script = {
             this.visible = false;
             this.confirmation = null;
         };
-        ConfirmationEventBus__default["default"].on('confirm', this.confirmListener);
-        ConfirmationEventBus__default["default"].on('close', this.closeListener);
+        ConfirmationEventBus.on('confirm', this.confirmListener);
+        ConfirmationEventBus.on('close', this.closeListener);
     },
     beforeUnmount() {
-        ConfirmationEventBus__default["default"].off('confirm', this.confirmListener);
-        ConfirmationEventBus__default["default"].off('close', this.closeListener);
+        ConfirmationEventBus.off('confirm', this.confirmListener);
+        ConfirmationEventBus.off('close', this.closeListener);
 
         this.unbindOutsideClickListener();
         if (this.scrollHandler) {
@@ -178,7 +171,7 @@ var script = {
             this.container = el;
         },
         onOverlayClick(event) {
-            OverlayEventBus__default["default"].emit('overlay-click', {
+            OverlayEventBus.emit('overlay-click', {
                 originalEvent: event,
                 target: this.target
             });
@@ -220,8 +213,8 @@ var script = {
         }
     },
     components: {
-        'CPButton': Button__default["default"],
-        'Portal': Portal__default["default"]
+        'CPButton': Button,
+        'Portal': Portal
     }
 };
 

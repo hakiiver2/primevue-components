@@ -200,7 +200,7 @@ export default {
                     if (fieldFilter.operator)
                         return !this.isFilterBlank(fieldFilter.constraints[0].value);
                     else
-                        return !this.isFilterBlank(fieldFilter.value);
+                        return !this.isFilterBlank(fieldFilter.value) || fieldFilter.target;
                 }
             }
 

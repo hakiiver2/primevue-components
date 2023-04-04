@@ -7,13 +7,6 @@ var utils = require('primevue/utils');
 var Ripple = require('primevue/ripple');
 var vue = require('vue');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
-var ProgressBar__default = /*#__PURE__*/_interopDefaultLegacy(ProgressBar);
-var Message__default = /*#__PURE__*/_interopDefaultLegacy(Message);
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-
 var script = {
     name: 'FileUpload',
     emits: ['select', 'uploader', 'before-upload', 'progress', 'upload', 'error', 'before-send', 'clear', 'remove'],
@@ -438,12 +431,12 @@ var script = {
         }
     },
     components: {
-        'FileUploadButton': Button__default["default"],
-        'FileUploadProgressBar': ProgressBar__default["default"],
-        'FileUploadMessage': Message__default["default"]
+        'FileUploadButton': Button,
+        'FileUploadProgressBar': ProgressBar,
+        'FileUploadMessage': Message
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 

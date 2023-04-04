@@ -5,11 +5,6 @@ var Ripple = require('primevue/ripple');
 var vue = require('vue');
 var Portal = require('primevue/portal');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
 var script$4 = {
     name: 'GalleriaItem',
     emits: ['start-slideshow', 'stop-slideshow', 'update:activeIndex'],
@@ -136,7 +131,7 @@ var script$4 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -622,7 +617,7 @@ var script$3 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -843,7 +838,7 @@ var script$1 = {
         'GalleriaItemSlot': script$2
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -1096,7 +1091,7 @@ var script = {
     },
     components: {
         'GalleriaContent': script$1,
-        'Portal': Portal__default["default"]
+        'Portal': Portal
     }
 };
 

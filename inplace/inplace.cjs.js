@@ -3,10 +3,6 @@
 var Button = require('primevue/button');
 var vue = require('vue');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
-
 var script = {
     name: 'Inplace',
     emits: ['open', 'close', 'update:active'],
@@ -59,7 +55,7 @@ var script = {
         }
     },
     components: {
-        'IPButton': Button__default["default"]
+        'IPButton': Button
     }
 };
 

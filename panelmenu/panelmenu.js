@@ -2,10 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.panelmenu = (function (Tooltip, vue, utils) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
-
     var script$1 = {
         name: 'PanelMenuSub',
         emits: ['item-toggle'],
@@ -95,7 +91,7 @@ this.primevue.panelmenu = (function (Tooltip, vue, utils) {
             }
         },
         directives: {
-            "tooltip": Tooltip__default["default"]                                                                                                                                                                            
+            "tooltip": Tooltip                                                                                                                                                                            
         }
     };
 
@@ -343,7 +339,7 @@ this.primevue.panelmenu = (function (Tooltip, vue, utils) {
             }
         },
         directives: {
-            "tooltip": Tooltip__default["default"]                                                                                                                                                                            
+            "tooltip": Tooltip                                                                                                                                                                            
         }
     };
 

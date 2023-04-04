@@ -4,10 +4,6 @@ var utils = require('primevue/utils');
 var Ripple = require('primevue/ripple');
 var vue = require('vue');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-
 var script$1 = {
     name: 'TreeNode',
     emits: ['node-toggle', 'node-click', 'checkbox-change'],
@@ -267,7 +263,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 

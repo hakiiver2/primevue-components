@@ -16,8 +16,6 @@ this.primevue.usetoast = (function (exports, vue) {
     exports.PrimeVueToastSymbol = PrimeVueToastSymbol;
     exports.useToast = useToast;
 
-    Object.defineProperty(exports, '__esModule', { value: true });
-
     return exports;
 
 })({}, Vue);

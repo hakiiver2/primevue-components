@@ -203,7 +203,7 @@ var script$9 = {
                     if (fieldFilter.operator)
                         return !this.isFilterBlank(fieldFilter.constraints[0].value);
                     else
-                        return !this.isFilterBlank(fieldFilter.value);
+                        return !this.isFilterBlank(fieldFilter.value) || fieldFilter.target;
                 }
             }
 

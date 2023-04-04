@@ -2,13 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Portal, vue) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
-    var Button__default = /*#__PURE__*/_interopDefaultLegacy(Button);
-    var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
     var script = {
         name: 'Calendar',
         emits: ['show', 'hide', 'input', 'month-change', 'year-change', 'date-select', 'update:modelValue', 'today-click', 'clear-click', 'focus', 'blur', 'keydown'],
@@ -112,6 +105,10 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                 default: false
             },
             timeOnly: {
+                type: Boolean,
+                default: false
+            },
+            showSaveButton: {
                 type: Boolean,
                 default: false
             },
@@ -2208,7 +2205,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             },
             onOverlayClick(event) {
                 if (!this.inline) {
-                    OverlayEventBus__default["default"].emit('overlay-click', {
+                    OverlayEventBus.emit('overlay-click', {
                         originalEvent: event,
                         target: this.$el
                     });
@@ -2499,11 +2496,11 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
             }
         },
         components: {
-            'CalendarButton': Button__default["default"],
-            'Portal': Portal__default["default"]
+            'CalendarButton': Button,
+            'Portal': Portal
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple
         }
     };
 
@@ -3091,7 +3088,7 @@ this.primevue.calendar = (function (utils, OverlayEventBus, Button, Ripple, Port
                               class: "p-button-text",
                               onKeydown: $options.onContainerButtonKeydown
                             }, null, 8, ["label", "onKeydown"]),
-                            ($props.timeOnly)
+                            ($props.timeOnly || $props.showSaveButton)
                               ? (vue.openBlock(), vue.createBlock(_component_CalendarButton, {
                                   key: 2,
                                   type: "button",

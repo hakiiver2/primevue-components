@@ -2,11 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.treetable = (function (utils, api, Ripple, vue, Paginator) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-    var Paginator__default = /*#__PURE__*/_interopDefaultLegacy(Paginator);
-
     var script$4 = {
         name: 'BodyCell',
         emits: ['node-toggle','checkbox-toggle'],
@@ -137,7 +132,7 @@ this.primevue.treetable = (function (utils, api, Ripple, vue, Paginator) {
             }
         },
         directives: {
-            'ripple': Ripple__default["default"]
+            'ripple': Ripple
         }
     };
 
@@ -1608,7 +1603,7 @@ this.primevue.treetable = (function (utils, api, Ripple, vue, Paginator) {
         },
         components: {
             'TTRow': script$3,
-            'TTPaginator': Paginator__default["default"],
+            'TTPaginator': Paginator,
             'TTHeaderCell': script$2,
             'TTFooterCell': script$1
         }

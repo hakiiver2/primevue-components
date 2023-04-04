@@ -16,8 +16,6 @@ this.primevue.useconfirm = (function (exports, vue) {
     exports.PrimeVueConfirmSymbol = PrimeVueConfirmSymbol;
     exports.useConfirm = useConfirm;
 
-    Object.defineProperty(exports, '__esModule', { value: true });
-
     return exports;
 
 })({}, Vue);

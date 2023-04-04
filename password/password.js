@@ -2,12 +2,6 @@ this.primevue = this.primevue || {};
 this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, vue) {
     'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    var OverlayEventBus__default = /*#__PURE__*/_interopDefaultLegacy(OverlayEventBus);
-    var InputText__default = /*#__PURE__*/_interopDefaultLegacy(InputText);
-    var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
     var script = {
         name: 'Password',
         emits: ['update:modelValue', 'change', 'focus', 'blur'],
@@ -262,7 +256,7 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
                 this.unmasked = !this.unmasked;
             },
             onOverlayClick(event) {
-                OverlayEventBus__default["default"].emit('overlay-click', {
+                OverlayEventBus.emit('overlay-click', {
                     originalEvent: event,
                     target: this.$el
                 });
@@ -320,8 +314,8 @@ this.primevue.password = (function (utils, OverlayEventBus, InputText, Portal, v
             }
         },
         components: {
-            'PInputText': InputText__default["default"],
-            'Portal': Portal__default["default"]
+            'PInputText': InputText,
+            'Portal': Portal
         }
     };
 

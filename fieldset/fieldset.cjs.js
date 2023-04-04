@@ -4,10 +4,6 @@ var utils = require('primevue/utils');
 var Ripple = require('primevue/ripple');
 var vue = require('vue');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-
 var script = {
     name: 'Fieldset',
     emits: ['update:collapsed', 'toggle'],
@@ -48,7 +44,7 @@ var script = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 

@@ -5,11 +5,6 @@ var Ripple = require('primevue/ripple');
 var vue = require('vue');
 var Portal = require('primevue/portal');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var Ripple__default = /*#__PURE__*/_interopDefaultLegacy(Ripple);
-var Portal__default = /*#__PURE__*/_interopDefaultLegacy(Portal);
-
 var script$1 = {
     name: 'ContextMenuSub',
     emits: ['leaf-click'],
@@ -137,7 +132,7 @@ var script$1 = {
         }
     },
     directives: {
-        'ripple': Ripple__default["default"]
+        'ripple': Ripple
     }
 };
 
@@ -466,7 +461,7 @@ var script = {
     },
     components: {
         'ContextMenuSub': script$1,
-        'Portal': Portal__default["default"]
+        'Portal': Portal
     }
 };
 
